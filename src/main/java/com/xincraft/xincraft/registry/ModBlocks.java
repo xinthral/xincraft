@@ -5,7 +5,9 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.block.DetectionRailBlock;
+import com.xincraft.xincraft.block.HoneyRailBlock;
+import com.xincraft.xincraft.block.BouncyRailBlock;
+import com.xincraft.xincraft.block.InspectorRailBlock;
 import com.xincraft.xincraft.block.EnderRailBlock;
 import com.xincraft.xincraft.block.ModPoweredRailBlock;
 import net.minecraft.world.item.DyeColor;
@@ -101,10 +103,34 @@ public final class ModBlocks {
         true
     );
 
+    // Holds minecarts at half their normal top speed, slowing fast carts and pushing slow ones
+    // (see entity.TinRailMinecartBehavior). In ModTags.HONEY_RAILS.
+    public static final RegistryObject<Block> HONEY_RAIL = registerBlock(
+        "honey_rail",
+        HoneyRailBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .strength(0.7F)
+            .sound(SoundType.HONEY_BLOCK),
+        true
+    );
+
+    // Launches minecarts upward, higher the stronger its redstone signal
+    // (see entity.TinRailMinecartBehavior). In ModTags.BOUNCY_RAILS.
+    public static final RegistryObject<Block> BOUNCY_RAIL = registerBlock(
+        "bouncy_rail",
+        BouncyRailBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .strength(0.7F)
+            .sound(SoundType.SLIME_BLOCK),
+        true
+    );
+
     // Gives a redstone signal whose strength depends on the type of minecart on it
-    public static final RegistryObject<Block> DETECTION_RAIL = registerBlock(
-        "detection_rail",
-        DetectionRailBlock::new,
+    public static final RegistryObject<Block> INSPECTOR_RAIL = registerBlock(
+        "inspector_rail",
+        InspectorRailBlock::new,
         BlockBehaviour.Properties.of()
             .noCollision()
             .strength(0.7F)

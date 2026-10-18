@@ -2,6 +2,7 @@ package com.xincraft.xincraft;
 
 import com.mojang.logging.LogUtils;
 import com.xincraft.xincraft.entity.TinRailMinecartBehavior;
+import com.xincraft.xincraft.registry.ModBiomeModifiers;
 import com.xincraft.xincraft.registry.ModBlockEntities;
 import com.xincraft.xincraft.registry.ModBlocks;
 import com.xincraft.xincraft.registry.ModCreativeModeTabs;
@@ -41,6 +42,7 @@ public final class XincraftMod {
         ModMenuTypes.MENU_TYPES.register(modBusGroup);
         ModDataComponents.COMPONENTS.register(modBusGroup);
         ModCreativeModeTabs.TABS.register(modBusGroup);
+        ModBiomeModifiers.SERIALIZERS.register(modBusGroup);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

@@ -1,0 +1,340 @@
+{
+  "variants": {
+    "power=0,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_raised_ne",
+      "y": 90
+    },
+    "power=0,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_raised_ne"
+    },
+    "power=0,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_raised_sw"
+    },
+    "power=0,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_raised_sw",
+      "y": 90
+    },
+    "power=0,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail",
+      "y": 90
+    },
+    "power=0,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail"
+    },
+    "power=1,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=1,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=1,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=1,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=1,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=1,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=2,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=2,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=2,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=2,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=2,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=2,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=3,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=3,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=3,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=3,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=3,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=3,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=4,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=4,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=4,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=4,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=4,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=4,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=5,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=5,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=5,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=5,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=5,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=5,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=6,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=6,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=6,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=6,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=6,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=6,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=7,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=7,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=7,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=7,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=7,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=7,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=8,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=8,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=8,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=8,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=8,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=8,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=9,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=9,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=9,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=9,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=9,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=9,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=10,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=10,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=10,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=10,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=10,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=10,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=11,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=11,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=11,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=11,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=11,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=11,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=12,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=12,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=12,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=12,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=12,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=12,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=13,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=13,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=13,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=13,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=13,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=13,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=14,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=14,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=14,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=14,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=14,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=14,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    },
+    "power=15,shape=ascending_east": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne",
+      "y": 90
+    },
+    "power=15,shape=ascending_north": {
+      "model": "xincraft:block/bouncy_rail_on_raised_ne"
+    },
+    "power=15,shape=ascending_south": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw"
+    },
+    "power=15,shape=ascending_west": {
+      "model": "xincraft:block/bouncy_rail_on_raised_sw",
+      "y": 90
+    },
+    "power=15,shape=east_west": {
+      "model": "xincraft:block/bouncy_rail_on",
+      "y": 90
+    },
+    "power=15,shape=north_south": {
+      "model": "xincraft:block/bouncy_rail_on"
+    }
+  }
+}

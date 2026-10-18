@@ -32,16 +32,16 @@ import net.minecraft.world.phys.AABB;
 
 // A detector rail whose redstone signal depends on which kind of minecart is on it, rather than
 // always 15. The strength for each cart type comes from the entity type tags
-// xincraft:detection_rail_signal/<1-15> (see ModTags.detectionRailSignal); untagged carts give 0.
+// xincraft:inspector_rail_signal/<1-15> (see ModTags.inspectorRailSignal); untagged carts give 0.
 // Otherwise it behaves like vanilla's DetectorRailBlock, which this is adapted from.
-public class DetectionRailBlock extends BaseRailBlock {
-    public static final MapCodec<DetectionRailBlock> CODEC = simpleCodec(DetectionRailBlock::new);
+public class InspectorRailBlock extends BaseRailBlock {
+    public static final MapCodec<InspectorRailBlock> CODEC = simpleCodec(InspectorRailBlock::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
     // While powered, how often to check whether the cart has left (same as the detector rail)
     private static final int PRESSED_CHECK_PERIOD = 20;
 
-    public DetectionRailBlock(BlockBehaviour.Properties properties) {
+    public InspectorRailBlock(BlockBehaviour.Properties properties) {
         super(true, properties);
         registerDefaultState(stateDefinition.any()
             .setValue(SHAPE, RailShape.NORTH_SOUTH)
@@ -50,14 +50,14 @@ public class DetectionRailBlock extends BaseRailBlock {
     }
 
     @Override
-    protected MapCodec<DetectionRailBlock> codec() {
+    protected MapCodec<InspectorRailBlock> codec() {
         return CODEC;
     }
 
-    // The signal strength a cart produces, from the highest detection_rail_signal tag its type is in
+    // The signal strength a cart produces, from the highest inspector_rail_signal tag its type is in
     public static int signalFor(AbstractMinecart cart) {
         for (int signal = 15; signal > 0; signal--) {
-            if (cart.is(ModTags.detectionRailSignal(signal))) {
+            if (cart.is(ModTags.inspectorRailSignal(signal))) {
                 return signal;
             }
         }

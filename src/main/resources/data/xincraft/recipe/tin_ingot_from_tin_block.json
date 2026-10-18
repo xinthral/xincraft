@@ -3,7 +3,7 @@
   "category": "misc",
   "group": "tin_ingot",
   "ingredients": [
-    "xincraft:tin_block"
+    "#c:storage_blocks/tin"
   ],
   "result": {
     "id": "xincraft:tin_ingot",

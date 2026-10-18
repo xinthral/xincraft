@@ -49,11 +49,13 @@
   "entity.xincraft.ender_minecart": "Ender Minecart",
   "block.xincraft.tin_rail": "Tin Rail",
   "block.xincraft.tin_powered_rail": "Tin Powered Rail",
+  "block.xincraft.honey_rail": "Honey Rail",
+  "block.xincraft.bouncy_rail": "Bouncy Rail",
   "item.xincraft.locomotive_cart": "Locomotive Cart",
   "entity.xincraft.locomotive_cart": "Locomotive Cart",
   "item.xincraft.minecart_frame": "Minecart Frame",
   "block.xincraft.tin_ore": "Tin Ore",
   "block.xincraft.deepslate_tin_ore": "Deepslate Tin Ore",
   "item.xincraft.raw_tin": "Raw Tin",
-  "block.xincraft.detection_rail": "Detection Rail"
+  "block.xincraft.inspector_rail": "Inspector Rail"
 }

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "xincraft:item/detection_rail"
+    "model": "xincraft:item/bouncy_rail"
   }
 }

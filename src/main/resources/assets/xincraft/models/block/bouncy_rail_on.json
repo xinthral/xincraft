@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/rail_flat",
   "textures": {
-    "rail": "xincraft:block/detection_rail_on"
+    "rail": "xincraft:block/bouncy_rail_on"
   }
 }

@@ -12,7 +12,9 @@ A Minecraft Forge mod that adds tin, quieter rails, and teleporting ender rails.
 - [Tin Rails](#tin-rails)
 - [Padded Rails](#padded-rails)
 - [Padded Powered Rails](#padded-powered-rails)
-- [Detection Rail](#detection-rail)
+- [Honey Rail](#honey-rail)
+- [Bouncy Rail](#bouncy-rail)
+- [Inspector Rail](#inspector-rail)
 - [Ender Rails](#ender-rails)
 - [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
@@ -38,6 +40,8 @@ All of the mod's items are in the **Xincraft** creative tab.
 
 Tin ore generates in every Overworld biome, a little less often than copper: up to 12 veins of up to 9 blocks per chunk, between Y −32 and Y 96, most common around Y 32. Below the stone layer it appears as Deepslate Tin Ore.
 
+If another mod in your pack already generates tin, you can turn this mod's tin ore off with `tin.generateOre` in `config/xincraft-common.toml`. The change takes effect the next time a world is loaded, and only in chunks generated after that.
+
 Mining tin ore drops one Raw Tin, more with Fortune; Silk Touch drops the ore block itself.
 
 ### Recipes
@@ -53,7 +57,7 @@ Tin armor gives 2 / 5 / 4 / 1 armor points (helmet / chestplate / leggings / boo
 
 **Full set bonus:** wearing all four pieces of tin armor gives **Fire Resistance**, 5 seconds at a time, renewed every 5 seconds while the full set stays on. Take any piece off and it wears off within 5 seconds. Longer Fire Resistance, such as from a potion, isn't cut short.
 
-Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_materials/tin`, `c:storage_blocks/tin`), so other mods' machines and recipes recognize it.
+Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_materials/tin`, `c:storage_blocks/tin`), so other mods' machines and recipes recognize it. It works the other way too: every recipe here that uses tin, and repairing tin armor, accepts tin from any mod that uses these tags.
 
 ## Tin Rails
 
@@ -66,7 +70,9 @@ Fast rails. A minecart on a tin rail can travel **twice as fast** as on any othe
 
 Tin Powered Rails boost and brake carts just like vanilla powered rails, and pass power along a line that mixes tin and vanilla powered rails. A line of Tin Rails with Tin Powered Rails spaced along it lets carts build up to, and hold, the higher speed.
 
-> The speed boost only works with the default minecart physics. Carts are also more likely to fly off sharp corners at high speed, so give fast lines gentle curves or slow carts down before a turn.
+Carts automatically ease down to normal speed for corners, starting one block before the curve, so they don't fly off the outside of the turn. They speed back up on the next straight without needing another powered rail.
+
+> The speed boost only works with the default minecart physics.
 
 ## Padded Rails
 
@@ -90,13 +96,51 @@ Powered rails with the same muffling. They boost carts when powered and brake th
 
 As with padded rails, both wools must be the same color, and there are 16 colors.
 
-## Detection Rail
+## Honey Rail
+
+A speed-limiting rail. A minecart on a honey rail is held at **half its normal top speed** (configurable): a faster cart is slowed straight down to it, and a slower cart is pushed up to it, so carts keep moving instead of stopping. No redstone is needed. Use them before sharp corners, through stations, or anywhere carts should take it slow.
+
+**Recipe** (shaped):
+
+| | | |
+| --- | --- | --- |
+| Honey Bottle | Tin Powered Rail | Honey Bottle |
+| Honey Block | Tin Powered Rail | Honey Block |
+| Honey Bottle | Tin Powered Rail | Honey Bottle |
+
+→ 3 Honey Rails. The empty glass bottles are given back.
+
+Like powered rails, honey rails can slope but not curve. A cart that's completely stopped on a honey rail stays put; give it a push and it'll carry on at the slower speed.
+
+> The speed handling only works with the default minecart physics.
+
+## Bouncy Rail
+
+A launch rail. When it's powered, a minecart rolling over it is thrown into the air and keeps its forward speed, so it sails over a gap or up onto a higher track. The **strength of the redstone signal** sets the height. At full power (15) a cart rises about **8 blocks** (configurable), and each level lower takes off about half a block less. With no power it's an ordinary rail.
+
+**Recipe** (shaped):
+
+| | | |
+| --- | --- | --- |
+| Slimeball | Tin Powered Rail | Slimeball |
+| Slime Block | Tin Powered Rail | Slime Block |
+| Slimeball | Tin Powered Rail | Slimeball |
+
+→ 3 Bouncy Rails.
+
+Any signal strength works, so you can set the height with a comparator, a target block, or redstone dust run a few blocks before it reaches the rail. The rail's slime pads light up whenever it's powered. Unlike powered rails, a bouncy rail doesn't pass power on to the next one; each rail reads its own signal.
+
+On the way up, a cart ignores any rails it passes. From the top of the arc it can land on rails again. A cart that's stopped on a bouncy rail stays put rather than bouncing in place. Like other flying minecarts, a launched cart slowly loses speed to air drag.
+
+> The launch only works with the default minecart physics.
+
+## Inspector Rail
 
 A detector rail that tells minecarts apart. Instead of always giving a full-strength signal, it outputs a redstone signal whose strength depends on the type of minecart on it, so a comparator or a line of redstone dust can sort carts.
 
 **Recipe** (shapeless):
 
-> 1 Detector Rail + 1 Comparator → 1 Detection Rail
+> 1 Detector Rail + 1 Comparator → 1 Inspector Rail
 
 | Minecart | Signal |
 | --- | --- |
@@ -109,7 +153,7 @@ A detector rail that tells minecarts apart. Instead of always giving a full-stre
 
 Any other minecart (for example from another mod) gives 0, the same as an empty rail, until it's added to one of the signal tags below. If several carts are on the rail at once, it outputs the strongest signal. Like the detector rail, it strongly powers the block beneath it, powers adjacent powered rails, keeps its signal for up to a second after a cart leaves, and lets a comparator read how full a container cart on it is.
 
-**Adding cart types:** the signal for each cart type comes from the entity type tags `xincraft:detection_rail_signal/1` through `/15`, in `data/xincraft/tags/entity_type/detection_rail_signal/`. To give a new cart a signal, add its ID to the tag file for that strength (creating the file if it doesn't exist yet). A datapack can do the same to add carts from other mods.
+**Adding cart types:** the signal for each cart type comes from the entity type tags `xincraft:inspector_rail_signal/1` through `/15`, in `data/xincraft/tags/entity_type/inspector_rail_signal/`. To give a new cart a signal, add its ID to the tag file for that strength (creating the file if it doesn't exist yet). A datapack can do the same to add carts from other mods.
 
 ## Ender Rails
 
@@ -260,7 +304,7 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, data components, tags, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the detection rail, and the ender rail |
+| `.../block/` | Powered rail variants (padded, tin), the inspector rail, and the ender rail |
 | `.../item/` | Ender rail item (attuning and glint), tin armor set bonus |
 | `.../entity/` | Ender minecart, locomotive cart, and the minecart physics that speed carts up on tin rails |
 | `.../inventory/` | Locomotive cart menu (slots and burn progress) |

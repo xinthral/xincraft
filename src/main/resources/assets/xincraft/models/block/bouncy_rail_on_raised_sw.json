@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_rail_raised_sw",
   "textures": {
-    "rail": "xincraft:block/detection_rail"
+    "rail": "xincraft:block/bouncy_rail_on"
   }
 }

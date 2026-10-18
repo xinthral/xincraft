@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:honey_bottle",
+    "R": "xincraft:tin_powered_rail",
+    "H": "minecraft:honey_block"
+  },
+  "pattern": [
+    "BRB",
+    "HRH",
+    "BRB"
+  ],
+  "result": {
+    "id": "xincraft:honey_rail",
+    "count": 3
+  }
+}

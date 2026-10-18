@@ -1,5 +1,5 @@
 {
-  "type": "forge:add_features",
+  "type": "xincraft:tin_ore",
   "biomes": "#minecraft:is_overworld",
   "features": "xincraft:ore_tin",
   "step": "underground_ores"

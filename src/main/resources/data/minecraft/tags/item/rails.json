@@ -4,6 +4,8 @@
     "xincraft:ender_rail",
     "xincraft:tin_rail",
     "xincraft:tin_powered_rail",
-    "xincraft:detection_rail"
+    "xincraft:inspector_rail",
+    "xincraft:honey_rail",
+    "xincraft:bouncy_rail"
   ]
 }

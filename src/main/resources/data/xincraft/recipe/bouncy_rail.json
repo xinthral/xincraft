@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:slime_ball",
+    "R": "xincraft:tin_powered_rail",
+    "S": "minecraft:slime_block"
+  },
+  "pattern": [
+    "BRB",
+    "SRS",
+    "BRB"
+  ],
+  "result": {
+    "id": "xincraft:bouncy_rail",
+    "count": 3
+  }
+}

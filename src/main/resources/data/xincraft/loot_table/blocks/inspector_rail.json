@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "xincraft:detection_rail"
+          "name": "xincraft:inspector_rail"
         }
       ],
       "conditions": [
@@ -16,5 +16,5 @@
       ]
     }
   ],
-  "random_sequence": "xincraft:blocks/detection_rail"
+  "random_sequence": "xincraft:blocks/inspector_rail"
 }

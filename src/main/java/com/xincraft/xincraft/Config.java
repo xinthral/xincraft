@@ -12,8 +12,11 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
+    private static final ForgeConfigSpec.BooleanValue GENERATE_TIN_ORE;
     private static final ForgeConfigSpec.DoubleValue PADDED_RAIL_VOLUME;
     private static final ForgeConfigSpec.DoubleValue TIN_RAIL_SPEED_MULTIPLIER;
+    private static final ForgeConfigSpec.DoubleValue HONEY_RAIL_SPEED_MULTIPLIER;
+    private static final ForgeConfigSpec.DoubleValue BOUNCY_RAIL_MAX_HEIGHT;
     private static final ForgeConfigSpec.DoubleValue LOCOMOTIVE_FUEL_MULTIPLIER;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
@@ -21,6 +24,13 @@ public class Config {
     private static final ForgeConfigSpec.BooleanValue ENDER_RAIL_ALLOW_ANY_MINECART;
 
     static {
+        BUILDER.comment("Tin").push("tin");
+        GENERATE_TIN_ORE = BUILDER
+                .comment("Whether tin ore generates in the Overworld. Turn off if another mod already generates tin.",
+                        "Takes effect the next time a world is loaded, and only in chunks generated after that.")
+                .define("generateOre", true);
+        BUILDER.pop();
+
         BUILDER.comment("Padded rails and padded powered rails").push("paddedRails");
         PADDED_RAIL_VOLUME = BUILDER
                 .comment("Volume multiplier applied to minecart sounds while the cart is on a padded rail (0 = silent, 1 = vanilla)")
@@ -31,6 +41,18 @@ public class Config {
         TIN_RAIL_SPEED_MULTIPLIER = BUILDER
                 .comment("How many times faster minecarts can travel on tin rails than on other rails (1 = same as vanilla)")
                 .defineInRange("speedMultiplier", 2.0, 1.0, 3.0);
+        BUILDER.pop();
+
+        BUILDER.comment("Honey rails").push("honeyRails");
+        HONEY_RAIL_SPEED_MULTIPLIER = BUILDER
+                .comment("Speed minecarts are held at on honey rails, as a fraction of their normal top speed (1 = full speed)")
+                .defineInRange("speedMultiplier", 0.5, 0.05, 1.0);
+        BUILDER.pop();
+
+        BUILDER.comment("Bouncy rails").push("bouncyRails");
+        BOUNCY_RAIL_MAX_HEIGHT = BUILDER
+                .comment("Roughly how many blocks high a bouncy rail launches a minecart at full redstone power (15); weaker signals launch proportionally lower")
+                .defineInRange("maxLaunchHeight", 8.0, 1.0, 64.0);
         BUILDER.pop();
 
         BUILDER.comment("Locomotive cart").push("locomotiveCart");
@@ -59,8 +81,11 @@ public class Config {
 
     // Cached copies of the values above, refreshed whenever the config loads or reloads.
     // Initialized to the same defaults so they're usable before the config has loaded.
+    public static boolean generateTinOre = true;
     public static float paddedRailVolume = 0.2F;
     public static double tinRailSpeedMultiplier = 2.0;
+    public static double honeyRailSpeedMultiplier = 0.5;
+    public static double bouncyRailMaxHeight = 8.0;
     public static double locomotiveFuelMultiplier = 8.0;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
@@ -79,8 +104,11 @@ public class Config {
     }
 
     private static void refresh() {
+        generateTinOre = GENERATE_TIN_ORE.get();
         paddedRailVolume = PADDED_RAIL_VOLUME.get().floatValue();
         tinRailSpeedMultiplier = TIN_RAIL_SPEED_MULTIPLIER.get();
+        honeyRailSpeedMultiplier = HONEY_RAIL_SPEED_MULTIPLIER.get();
+        bouncyRailMaxHeight = BOUNCY_RAIL_MAX_HEIGHT.get();
         locomotiveFuelMultiplier = LOCOMOTIVE_FUEL_MULTIPLIER.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
