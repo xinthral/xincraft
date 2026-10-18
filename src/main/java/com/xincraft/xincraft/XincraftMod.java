@@ -1,7 +1,7 @@
 package com.xincraft.xincraft;
 
 import com.mojang.logging.LogUtils;
-import com.xincraft.xincraft.entity.TinRailMinecartBehavior;
+import com.xincraft.xincraft.entity.XincraftMinecartBehavior;
 import com.xincraft.xincraft.registry.ModBiomeModifiers;
 import com.xincraft.xincraft.registry.ModBlockEntities;
 import com.xincraft.xincraft.registry.ModBlocks;
@@ -53,7 +53,7 @@ public final class XincraftMod {
         LOGGER.info("HELLO FROM COMMON SETUP");
 
         // Common setup runs in parallel with other mods; swap the minecart physics on the main thread
-        event.enqueueWork(TinRailMinecartBehavior::install);
+        event.enqueueWork(XincraftMinecartBehavior::install);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

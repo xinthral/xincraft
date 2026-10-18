@@ -61,7 +61,7 @@ Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_ma
 
 ## Tin Rails
 
-Fast rails. A minecart on a straight tin rail can travel **twice as fast** as on any other rail (configurable). Once it rolls back onto ordinary rails it's limited to normal speed again.
+Fast rails. A minecart on straight tin rails, slopes included, can travel **twice as fast** as on any other rail (configurable). Once it rolls back onto ordinary rails it's limited to normal speed again.
 
 | Rail | Recipe | Makes |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ Fast rails. A minecart on a straight tin rail can travel **twice as fast** as on
 
 Tin Powered Rails boost and brake carts just like vanilla powered rails, and pass power along a line that mixes tin and vanilla powered rails. A line of Tin Rails with Tin Powered Rails spaced along it lets carts build up to, and hold, the higher speed.
 
-Carts automatically ease down to normal speed for corners, starting one block before the curve, so they don't fly off the outside of the turn. They speed back up on the next straight without needing another powered rail.
+Carts automatically ease down to normal speed for corners, starting one block before the curve, so they don't fly off the outside of the turn. They speed back up on the next straight without needing another powered rail. Hills don't slow them: carts climb and descend at full tin speed.
 
 > The speed boost only works with the default minecart physics.
 
@@ -284,7 +284,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | --- | --- | --- | --- |
 | `tin.generateOre` | `true` | true / false | Whether tin ore generates in the Overworld. Turn it off if another mod already generates tin. Takes effect the next time a world is loaded, and only in chunks generated after that |
 | `paddedRails.volume` | `0.2` | 0.0 – 1.0 | Volume of minecart sounds on padded rails (0 = silent, 1 = vanilla volume) |
-| `tinRails.speedMultiplier` | `2.0` | 1.0 – 3.0 | How many times faster minecarts can travel on straight tin rails than on other rails |
+| `tinRails.speedMultiplier` | `2.0` | 1.0 – 3.0 | How many times faster minecarts can travel on straight tin rails (slopes included) than on other rails |
 | `honeyRails.speedMultiplier` | `0.5` | 0.05 – 1.0 | Speed minecarts are held at on honey rails, as a fraction of their normal top speed |
 | `bouncyRails.maxLaunchHeight` | `8.0` | 1.0 – 64.0 | Roughly how many blocks high a bouncy rail launches a cart at full redstone power (15). Weaker signals launch proportionally lower |
 | `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
@@ -318,7 +318,7 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, and the creative tab |
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
 | `.../item/` | Ender rail item (attuning and glint), tin armor set bonus |
-| `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`TinRailMinecartBehavior`) |
+| `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config |
 | `.../inventory/` | Locomotive cart menu (slots and burn progress) |
 | `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen |

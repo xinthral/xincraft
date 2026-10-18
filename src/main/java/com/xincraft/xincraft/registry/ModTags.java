@@ -25,17 +25,17 @@ public final class ModTags {
     public static final TagKey<Block> PADDED_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "padded_rails"));
 
-    // xincraft:tin_rails - rails on which minecarts can go faster (see entity.TinRailMinecartBehavior)
+    // xincraft:tin_rails - rails on which minecarts can go faster (see entity.XincraftMinecartBehavior)
     public static final TagKey<Block> TIN_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "tin_rails"));
 
     // xincraft:honey_rails - rails that hold minecarts at a reduced, steady speed
-    // (see entity.TinRailMinecartBehavior)
+    // (see entity.XincraftMinecartBehavior)
     public static final TagKey<Block> HONEY_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "honey_rails"));
 
     // xincraft:bouncy_rails - rails that launch minecarts upward when powered
-    // (see entity.TinRailMinecartBehavior)
+    // (see entity.XincraftMinecartBehavior)
     public static final TagKey<Block> BOUNCY_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "bouncy_rails"));
 

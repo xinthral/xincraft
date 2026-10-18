@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 // A straight rail (like the powered rail, it can slope but not curve) that holds minecarts at a
 // steady, reduced speed: faster carts are slowed to it and slower ones are pushed up to it, with no
 // redstone needed. The block itself is plain; the speed handling lives in
-// entity.TinRailMinecartBehavior, keyed off ModTags.HONEY_RAILS.
+// entity.XincraftMinecartBehavior, keyed off ModTags.HONEY_RAILS.
 public class HoneyRailBlock extends BaseRailBlock {
     public static final MapCodec<HoneyRailBlock> CODEC = simpleCodec(HoneyRailBlock::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;

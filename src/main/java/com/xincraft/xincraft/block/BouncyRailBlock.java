@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 
 // A straight rail that launches minecarts into the air, higher the stronger the redstone signal
 // it receives (0 = an ordinary rail). The block only tracks that signal strength in POWER; the
-// launch itself lives in entity.TinRailMinecartBehavior, keyed off ModTags.BOUNCY_RAILS.
+// launch itself lives in entity.XincraftMinecartBehavior, keyed off ModTags.BOUNCY_RAILS.
 public class BouncyRailBlock extends BaseRailBlock {
     public static final MapCodec<BouncyRailBlock> CODEC = simpleCodec(BouncyRailBlock::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;

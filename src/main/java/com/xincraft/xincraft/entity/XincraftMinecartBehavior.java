@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.OldMinecartBehavior;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -17,18 +19,21 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 // Vanilla's default minecart physics, plus the mod's special rails:
-// - tin rails raise the speed cap on straight track, easing back to normal for corners;
+// - tin rails raise the speed cap on straight track (slopes included), easing back to normal for
+//   corners;
 // - honey rails hold carts at a reduced speed;
 // - powered bouncy rails launch carts into the air.
 // Forge's per-rail speed hook (BaseRailBlock#getRailMaxSpeed) isn't consulted by the default
 // physics in this version, so the cap is changed here instead. Every kind of cart (furnace
-// minecarts included) scales from vanilla's own cap, so their relative speeds hold. Despite the
-// name, which predates the honey and bouncy rails, this is the mod's one minecart physics class.
-public class TinRailMinecartBehavior extends OldMinecartBehavior {
+// minecarts included) scales from vanilla's own cap, so their relative speeds hold.
+public class XincraftMinecartBehavior extends OldMinecartBehavior {
     // Speed a honey rail adds each tick to a cart below its target speed (same as a powered rail)
     private static final double HONEY_RAIL_BOOST = 0.06;
     // Below this a cart counts as stopped, with no direction to push it in (same as a powered rail)
     private static final double STOPPED_SPEED = 0.01;
+    // Longest single move a cart makes along the track: vanilla's normal speed cap, which its rail
+    // following is built around (see moveMinecartOnRail)
+    private static final double MAX_STEP = 0.4;
     // A flying minecart's gravity and the share of its speed it keeps each tick (vanilla's and
     // Forge's defaults), used to work out how hard to launch a cart to reach a given height
     private static final double GRAVITY = 0.04;
@@ -38,7 +43,7 @@ public class TinRailMinecartBehavior extends OldMinecartBehavior {
     // cut it down mid-flight (e.g. off a tin rail); 0 when the cart isn't in a bounce
     private double launchSpeed = 0.0;
 
-    public TinRailMinecartBehavior(AbstractMinecart minecart) {
+    public XincraftMinecartBehavior(AbstractMinecart minecart) {
         super(minecart);
     }
 
@@ -48,7 +53,7 @@ public class TinRailMinecartBehavior extends OldMinecartBehavior {
         var previous = AbstractMinecart.getBehaviorFactory();
         AbstractMinecart.setBehaviorFactory((cart, level) -> {
             var behavior = previous.apply(cart, level);
-            return behavior.getClass() == OldMinecartBehavior.class ? new TinRailMinecartBehavior(cart) : behavior;
+            return behavior.getClass() == OldMinecartBehavior.class ? new XincraftMinecartBehavior(cart) : behavior;
         });
     }
 
@@ -61,27 +66,92 @@ public class TinRailMinecartBehavior extends OldMinecartBehavior {
         return Math.max(max, launchSpeed);
     }
 
-    // Tin speed only applies on straight track. A tick's movement is one straight step that's then
-    // snapped back onto the rail, and at tin speed a step through a curve can cut across into the
-    // diagonal block, which has no rail, so the cart flies off. Carts move at the normal cap from
-    // one block before a curve until they're past it. Their velocity isn't reduced, only how far
-    // they move each tick, so they're back up to tin speed on the next straight.
+    // Tin speed only applies on straight track. Even split into steps (see moveMinecartOnRail), a
+    // fast cart moves in straight lines, and through a curve that can cut across into the diagonal
+    // block, which has no rail, so the cart flies off. So carts move at the normal cap from one
+    // block before a curve until they're past it. Their velocity isn't reduced, only how far they
+    // move each tick, so they're back up to tin speed on the next straight.
     private boolean canGoTinSpeed(ServerLevel level) {
         BlockPos pos = minecart.getCurrentBlockPosOrRailBelow();
         BlockState state = level.getBlockState(pos);
-        if (!state.is(ModTags.TIN_RAILS) || isCurve(level, state, pos)) {
+        if (!state.is(ModTags.TIN_RAILS) || isCurve(railShape(level, state, pos))) {
             return false;
         }
         BlockPos ahead = railAhead(level, pos);
-        return ahead == null || !isCurve(level, level.getBlockState(ahead), ahead);
+        return ahead == null || !isCurve(railShape(level, level.getBlockState(ahead), ahead));
     }
 
-    private boolean isCurve(ServerLevel level, BlockState state, BlockPos pos) {
-        if (!(state.getBlock() instanceof BaseRailBlock rail)) {
-            return false;
+    private @Nullable RailShape railShape(ServerLevel level, BlockState state, BlockPos pos) {
+        return state.getBlock() instanceof BaseRailBlock rail ? rail.getRailDirection(state, level, pos, minecart) : null;
+    }
+
+    private static boolean isCurve(@Nullable RailShape shape) {
+        return shape != null && shape != RailShape.NORTH_SOUTH && shape != RailShape.EAST_WEST && !shape.isSlope();
+    }
+
+    // Vanilla moves the cart in one straight step per tick, at the height of the rail it started the
+    // tick on (for a slope, the top of the slope's block). Any longer than the normal cap and that
+    // step can reach two blocks ahead on a climb, into the solid block holding up a later slope rail,
+    // and the collision stops the cart dead. So longer moves are split into steps of at most
+    // MAX_STEP, and whenever the cart crosses into the next block it's moved to the height vanilla
+    // would have used had it started the tick on the rail there.
+    @Override
+    protected void moveMinecartOnRail(ServerLevel level) {
+        if (getMaxSpeed(level) <= MAX_STEP) {
+            super.moveMinecartOnRail(level);
+            return;
         }
-        RailShape shape = rail.getRailDirection(state, level, pos, minecart);
-        return shape != RailShape.NORTH_SOUTH && shape != RailShape.EAST_WEST && !shape.isSlope();
+        // The same move vanilla makes. AbstractMinecart#getMaxSpeed, which some carts lower (the
+        // furnace minecart halves it), is protected; Forge's air speed cap returns it unless a mod
+        // has set its own.
+        double cap = minecart.getMaxSpeedAirLateral();
+        double scale = minecart.isVehicle() ? 0.75 : 1.0;
+        Vec3 velocity = getDeltaMovement();
+        Vec3 move = new Vec3(Mth.clamp(scale * velocity.x, -cap, cap), 0.0, Mth.clamp(scale * velocity.z, -cap, cap));
+        int steps = Mth.ceil(move.horizontalDistance() / MAX_STEP);
+        if (steps <= 1) {
+            minecart.move(MoverType.SELF, move);
+            return;
+        }
+        Vec3 step = move.scale(1.0 / steps);
+        BlockPos start = minecart.getCurrentBlockPosOrRailBelow();
+        BlockPos rail = start;
+        for (int i = 0; i < steps; i++) {
+            minecart.move(MoverType.SELF, step);
+            if (minecart.horizontalCollision) {
+                return;
+            }
+            int x = Mth.floor(minecart.getX());
+            int z = Mth.floor(minecart.getZ());
+            if (x == rail.getX() && z == rail.getZ()) {
+                continue;
+            }
+            BlockPos next = findRail(level, x, Mth.floor(minecart.getY()), z);
+            if (next == null) {
+                // Off the end of the track: make the rest of the move in one go, as vanilla would
+                minecart.move(MoverType.SELF, step.scale(steps - i - 1));
+                return;
+            }
+            rail = next;
+            RailShape shape = railShape(level, level.getBlockState(rail), rail);
+            minecart.setPos(minecart.getX(), rail.getY() + (shape != null && shape.isSlope() ? 1 : 0), minecart.getZ());
+        }
+        if (!rail.equals(start)) {
+            // Vanilla's adjustments after the move find the rail from one block above it
+            minecart.setPos(minecart.getX(), rail.getY() + 1, minecart.getZ());
+        }
+    }
+
+    // The rail in the given column at the cart's height or up to two blocks below (the next rail
+    // down a descent is two below the height a cart on a slope moves at)
+    private static @Nullable BlockPos findRail(ServerLevel level, int x, int y, int z) {
+        for (int dy = 0; dy >= -2; dy--) {
+            BlockPos pos = new BlockPos(x, y + dy, z);
+            if (BaseRailBlock.isRail(level.getBlockState(pos))) {
+                return pos;
+            }
+        }
+        return null;
     }
 
     // The next block in the direction of travel, or the block below it when that's where the rail
