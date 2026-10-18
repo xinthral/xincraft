@@ -19,6 +19,7 @@ A Minecraft Forge mod that adds tin, plus a set of rails: fast tin rails, quiet 
 - [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
+- [Tin Spyglass](#tin-spyglass)
 - [Configuration](#configuration)
 - [Building from source](#building-from-source)
 
@@ -248,6 +249,22 @@ Ways to open it:
 
 > Like the other powered features, the engine only works with the default minecart physics.
 
+## Tin Spyglass
+
+A spyglass with a night-vision lens. Looking through it lets you see in the dark as if you had Night Vision, and tints the view green. The effect stops as soon as you lower it, and it never shows an effect icon. If you already have Night Vision from a potion, the spyglass leaves it alone.
+
+**Recipe** (shaped, the spyglass recipe with Tin Ingots in place of Copper Ingots):
+
+| | | |
+| --- | --- | --- |
+| | Amethyst Shard | |
+| | Tin Ingot | |
+| | Tin Ingot | |
+
+→ 1 Tin Spyglass
+
+It zooms, sounds, and counts for advancements exactly like a normal spyglass, because it is one: a vanilla spyglass marked with the `xincraft:tin_lens` component. To give it its tin look, the mod replaces the vanilla spyglass's item model definition (`assets/minecraft/items/spyglass.json`) with one that picks the tin model when that component is set. A resource pack that retextures the spyglass can override this, in which case the tin spyglass looks like a normal one but still works.
+
 ---
 
 ## Configuration
@@ -317,10 +334,10 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, and the creative tab |
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
-| `.../item/` | Ender rail item (attuning and glint), tin armor set bonus |
+| `.../item/` | Ender rail item (attuning and glint), tin armor set bonus, tin spyglass night vision |
 | `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config |
 | `.../inventory/` | Locomotive cart menu (slots and burn progress) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

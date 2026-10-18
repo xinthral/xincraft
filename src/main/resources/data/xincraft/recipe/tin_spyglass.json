@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:amethyst_shard",
+    "X": "#c:ingots/tin"
+  },
+  "pattern": [
+    " # ",
+    " X ",
+    " X "
+  ],
+  "result": {
+    "id": "minecraft:spyglass",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "item.xincraft.tin_spyglass"
+      },
+      "xincraft:tin_lens": {}
+    }
+  }
+}

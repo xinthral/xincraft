@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.registry;
 
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.item.TinSpyglass;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,8 +18,12 @@ public final class ModCreativeModeTabs {
         .withTabsBefore(CreativeModeTabs.COMBAT)
         .icon(() -> ModItems.TIN_INGOT.get().getDefaultInstance())
         // Every item the mod registers (block items included), in registration order, so new
-        // items show up here without having to be added by hand
-        .displayItems((_, output) -> ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get())))
+        // items show up here without having to be added by hand, plus the tin spyglass, which is
+        // a vanilla spyglass with a component rather than an item of its own
+        .displayItems((_, output) -> {
+            ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get()));
+            output.accept(TinSpyglass.create());
+        })
         .build());
 
     private ModCreativeModeTabs() {}
