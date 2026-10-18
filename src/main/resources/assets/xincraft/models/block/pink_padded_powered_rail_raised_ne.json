@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_rail_raised_ne",
+  "textures": {
+    "rail": "xincraft:block/pink_padded_powered_rail"
+  }
+}

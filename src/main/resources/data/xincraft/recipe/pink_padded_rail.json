@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "padded_rail",
+  "ingredients": [
+    "minecraft:pink_wool",
+    "minecraft:pink_wool",
+    "minecraft:rail"
+  ],
+  "result": {
+    "id": "xincraft:pink_padded_rail",
+    "count": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/rail_flat",
+  "textures": {
+    "rail": "xincraft:block/cyan_padded_rail"
+  }
+}

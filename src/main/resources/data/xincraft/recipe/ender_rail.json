@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:powered_rail",
+    "minecraft:powered_rail",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "xincraft:ender_rail",
+    "count": 2
+  }
+}

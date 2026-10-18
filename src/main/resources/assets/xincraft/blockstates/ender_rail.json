@@ -1,0 +1,88 @@
+{
+  "variants": {
+    "glowing=false,linked=false,shape=ascending_east": {
+      "model": "xincraft:block/ender_rail_raised_ne",
+      "y": 90
+    },
+    "glowing=false,linked=false,shape=ascending_north": {
+      "model": "xincraft:block/ender_rail_raised_ne"
+    },
+    "glowing=false,linked=false,shape=ascending_south": {
+      "model": "xincraft:block/ender_rail_raised_sw"
+    },
+    "glowing=false,linked=false,shape=ascending_west": {
+      "model": "xincraft:block/ender_rail_raised_sw",
+      "y": 90
+    },
+    "glowing=false,linked=false,shape=east_west": {
+      "model": "xincraft:block/ender_rail",
+      "y": 90
+    },
+    "glowing=false,linked=false,shape=north_south": {
+      "model": "xincraft:block/ender_rail"
+    },
+    "glowing=false,linked=true,shape=ascending_east": {
+      "model": "xincraft:block/ender_rail_on_raised_ne",
+      "y": 90
+    },
+    "glowing=false,linked=true,shape=ascending_north": {
+      "model": "xincraft:block/ender_rail_on_raised_ne"
+    },
+    "glowing=false,linked=true,shape=ascending_south": {
+      "model": "xincraft:block/ender_rail_on_raised_sw"
+    },
+    "glowing=false,linked=true,shape=ascending_west": {
+      "model": "xincraft:block/ender_rail_on_raised_sw",
+      "y": 90
+    },
+    "glowing=false,linked=true,shape=east_west": {
+      "model": "xincraft:block/ender_rail_on",
+      "y": 90
+    },
+    "glowing=false,linked=true,shape=north_south": {
+      "model": "xincraft:block/ender_rail_on"
+    },
+    "glowing=true,linked=false,shape=ascending_east": {
+      "model": "xincraft:block/ender_rail_glow_raised_ne",
+      "y": 90
+    },
+    "glowing=true,linked=false,shape=ascending_north": {
+      "model": "xincraft:block/ender_rail_glow_raised_ne"
+    },
+    "glowing=true,linked=false,shape=ascending_south": {
+      "model": "xincraft:block/ender_rail_glow_raised_sw"
+    },
+    "glowing=true,linked=false,shape=ascending_west": {
+      "model": "xincraft:block/ender_rail_glow_raised_sw",
+      "y": 90
+    },
+    "glowing=true,linked=false,shape=east_west": {
+      "model": "xincraft:block/ender_rail_glow",
+      "y": 90
+    },
+    "glowing=true,linked=false,shape=north_south": {
+      "model": "xincraft:block/ender_rail_glow"
+    },
+    "glowing=true,linked=true,shape=ascending_east": {
+      "model": "xincraft:block/ender_rail_glow_raised_ne",
+      "y": 90
+    },
+    "glowing=true,linked=true,shape=ascending_north": {
+      "model": "xincraft:block/ender_rail_glow_raised_ne"
+    },
+    "glowing=true,linked=true,shape=ascending_south": {
+      "model": "xincraft:block/ender_rail_glow_raised_sw"
+    },
+    "glowing=true,linked=true,shape=ascending_west": {
+      "model": "xincraft:block/ender_rail_glow_raised_sw",
+      "y": 90
+    },
+    "glowing=true,linked=true,shape=east_west": {
+      "model": "xincraft:block/ender_rail_glow",
+      "y": 90
+    },
+    "glowing=true,linked=true,shape=north_south": {
+      "model": "xincraft:block/ender_rail_glow"
+    }
+  }
+}

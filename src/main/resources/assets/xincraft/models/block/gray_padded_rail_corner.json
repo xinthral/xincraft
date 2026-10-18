@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/rail_curved",
+  "textures": {
+    "rail": "xincraft:block/gray_padded_rail_corner"
+  }
+}

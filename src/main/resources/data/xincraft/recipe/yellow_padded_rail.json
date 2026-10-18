@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "padded_rail",
+  "ingredients": [
+    "minecraft:yellow_wool",
+    "minecraft:yellow_wool",
+    "minecraft:rail"
+  ],
+  "result": {
+    "id": "xincraft:yellow_padded_rail",
+    "count": 1
+  }
+}

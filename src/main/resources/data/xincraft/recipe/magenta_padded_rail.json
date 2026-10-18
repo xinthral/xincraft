@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "padded_rail",
+  "ingredients": [
+    "minecraft:magenta_wool",
+    "minecraft:magenta_wool",
+    "minecraft:rail"
+  ],
+  "result": {
+    "id": "xincraft:magenta_padded_rail",
+    "count": 1
+  }
+}

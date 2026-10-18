@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/rail_flat",
+  "textures": {
+    "rail": "xincraft:block/lime_padded_powered_rail_on"
+  }
+}

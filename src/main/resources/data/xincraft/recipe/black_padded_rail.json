@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "padded_rail",
+  "ingredients": [
+    "minecraft:black_wool",
+    "minecraft:black_wool",
+    "minecraft:rail"
+  ],
+  "result": {
+    "id": "xincraft:black_padded_rail",
+    "count": 1
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "xincraft:tin"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "xincraft:tin"
+      }
+    ]
+  }
+}

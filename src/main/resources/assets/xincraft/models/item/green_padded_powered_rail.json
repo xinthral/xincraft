@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "xincraft:block/green_padded_powered_rail"
+  }
+}
