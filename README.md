@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, and teleporting ender rails.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, and teleporting ender rails.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -9,6 +9,7 @@ A Minecraft Forge mod that adds tin, plus a set of rails: fast tin rails, quiet 
 ## Contents
 
 - [Tin](#tin)
+- [Bronze](#bronze)
 - [Tin Rails](#tin-rails)
 - [Padded Rails](#padded-rails)
 - [Padded Powered Rails](#padded-powered-rails)
@@ -58,11 +59,29 @@ Tin armor gives 2 / 5 / 4 / 1 armor points (helmet / chestplate / leggings / boo
 
 Tin armor takes **armor trims** like vanilla armor: any trim pattern in any trim material, at a smithing table. The trim shows on the armor when worn and on its inventory icon.
 
-Tin ingots are also a **trim material**, giving a cool gray trim on any armor (a darker shade on tin armor, so it stands out). For the trim to show on vanilla armor's inventory icons, the mod adds a tin case to vanilla's armor item model files (`assets/minecraft/items/`). A resource pack or mod that replaces those files hides tin trims on the icons only; they still show when worn. Only this mod's tin ingot works as the material, since each trim material comes from a specific item.
+Tin ingots are also a **trim material**, giving a dark, almost black gray trim on any armor (darker still on tin armor). For the trim to show on vanilla armor's inventory icons, the mod adds a tin case to vanilla's armor item model files (`assets/minecraft/items/`). A resource pack or mod that replaces those files hides tin trims on the icons only; they still show when worn. Only this mod's tin ingot works as the material, since each trim material comes from a specific item.
 
 **Full set bonus:** wearing all four pieces of tin armor gives **Fire Resistance**, 5 seconds at a time, renewed every 5 seconds while the full set stays on. Take any piece off and it wears off within 5 seconds. Longer Fire Resistance, such as from a potion, isn't cut short.
 
 Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_materials/tin`, `c:storage_blocks/tin`), so other mods' machines and recipes recognize it. It works the other way too: every recipe here that uses tin, and repairing tin armor, accepts tin from any mod that uses these tags.
+
+### Reinforced Armor Trim
+
+A dark edging along every edge of the armor, like metal banding on reinforced gear, in a deep shade of the trim material's color. It pairs especially well with tin.
+
+The **Reinforced Armor Trim Smithing Template** is found in abandoned mineshaft chests (10% of chests). Duplicate it like a vanilla template: 7 Diamonds around the template and a Cobblestone makes 2.
+
+## Bronze
+
+An alloy of copper and tin.
+
+| Item | Recipe | Makes |
+| --- | --- | --- |
+| Raw Bronze | 3 Raw Copper + 1 Raw Tin, shapeless | 4 |
+| Bronze Ingot | Smelt or blast Raw Bronze | 1 |
+| Block of Bronze | 9 Bronze Ingots (and back into 9 ingots) | 1 |
+
+Bronze is a muted golden orange, and the Block of Bronze has copper's polished shine. It needs a stone pickaxe or better to mine. Bronze uses the common `c:` tags (`c:raw_materials/bronze`, `c:ingots/bronze`, `c:storage_blocks/bronze`), and the raw bronze recipe accepts any mod's raw copper and raw tin.
 
 ## Tin Rails
 
@@ -340,7 +359,7 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
 | `.../item/` | Ender rail item (attuning and glint), tin armor set bonus, tin spyglass night vision |
 | `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
-| `.../world/` | The biome modifier that adds tin ore, unless turned off in the config |
+| `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart menu (slots and burn progress) |
 | `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |

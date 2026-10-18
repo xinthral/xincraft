@@ -47,6 +47,18 @@ public final class ModBlocks {
         true
     );
 
+    // As hard as tin and iron blocks, with copper's sound
+    public static final RegistryObject<Block> BRONZE_BLOCK = registerBlock(
+        "bronze_block",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_ORANGE)
+            .strength(5.0F, 6.0F)
+            .sound(SoundType.COPPER)
+            .requiresCorrectToolForDrops(),
+        true
+    );
+
     // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier,
     // world.TinOreBiomeModifier) unless Config.generateTinOre is off, and drop raw tin. Properties
     // match vanilla's iron ores.

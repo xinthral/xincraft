@@ -7,6 +7,8 @@ import com.xincraft.xincraft.item.EnderRailItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MinecartItem;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SmithingTemplateItem;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
@@ -39,6 +41,13 @@ public final class ModItems {
     public static final RegistryObject<Item> TIN_INGOT =
         registerItem("tin_ingot", Item::new, () -> new Item.Properties().trimMaterial(ModTrimMaterials.TIN));
 
+    // Bronze: 3 raw copper and 1 raw tin craft into 4 raw bronze, which smelts into bronze ingots
+    public static final RegistryObject<Item> RAW_BRONZE =
+        registerItem("raw_bronze", Item::new, Item.Properties::new);
+
+    public static final RegistryObject<Item> BRONZE_INGOT =
+        registerItem("bronze_ingot", Item::new, Item.Properties::new);
+
     public static final RegistryObject<Item> TIN_HELMET = registerItem("tin_helmet", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.HELMET));
     public static final RegistryObject<Item> TIN_CHESTPLATE = registerItem("tin_chestplate", Item::new,
@@ -47,6 +56,12 @@ public final class ModItems {
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.LEGGINGS));
     public static final RegistryObject<Item> TIN_BOOTS = registerItem("tin_boots", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.BOOTS));
+
+    // Applies the reinforced armor trim (data/xincraft/trim_pattern/reinforced.json); found in
+    // mineshaft chests (world.ReinforcedTrimLoot)
+    public static final RegistryObject<Item> REINFORCED_ARMOR_TRIM_SMITHING_TEMPLATE = registerItem(
+        "reinforced_armor_trim_smithing_template", SmithingTemplateItem::createArmorTrimTemplate,
+        () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final RegistryObject<Item> ENDER_RAIL = registerItem("ender_rail",
         properties -> new EnderRailItem(ModBlocks.ENDER_RAIL.get(), properties),

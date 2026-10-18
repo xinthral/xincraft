@@ -2,6 +2,7 @@
   "values": [
     "xincraft:tin_ore",
     "xincraft:deepslate_tin_ore",
-    "xincraft:tin_block"
+    "xincraft:tin_block",
+    "xincraft:bronze_block"
   ]
 }

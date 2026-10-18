@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smithing_trim",
+  "addition": "#minecraft:trim_materials",
+  "base": "#minecraft:trimmable_armor",
+  "pattern": "xincraft:reinforced",
+  "template": "xincraft:reinforced_armor_trim_smithing_template"
+}
