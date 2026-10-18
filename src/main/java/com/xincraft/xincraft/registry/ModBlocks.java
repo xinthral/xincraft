@@ -47,8 +47,9 @@ public final class ModBlocks {
         true
     );
 
-    // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier)
-    // and drop raw tin. Properties match vanilla's iron ores.
+    // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier,
+    // world.TinOreBiomeModifier) unless Config.generateTinOre is off, and drop raw tin. Properties
+    // match vanilla's iron ores.
     public static final RegistryObject<Block> TIN_ORE = registerBlock(
         "tin_ore",
         Block::new,
@@ -81,8 +82,8 @@ public final class ModBlocks {
     public static final Map<DyeColor, RegistryObject<Block>> PADDED_POWERED_RAILS =
         registerColored("padded_powered_rail", ModPoweredRailBlock::new);
 
-    // Tin rails let minecarts travel faster than on other rails (see entity.TinRailMinecartBehavior).
-    // Both are in ModTags.TIN_RAILS.
+    // Tin rails let minecarts travel faster than on other rails on straight track, slowing to the
+    // normal cap for corners (see entity.TinRailMinecartBehavior). Both are in ModTags.TIN_RAILS.
     public static final RegistryObject<Block> TIN_RAIL = registerBlock(
         "tin_rail",
         RailBlock::new,
@@ -103,8 +104,8 @@ public final class ModBlocks {
         true
     );
 
-    // Holds minecarts at half their normal top speed, slowing fast carts and pushing slow ones
-    // (see entity.TinRailMinecartBehavior). In ModTags.HONEY_RAILS.
+    // Holds minecarts at a reduced speed (half by default, Config.honeyRailSpeedMultiplier), slowing
+    // fast carts and pushing slow ones (see entity.TinRailMinecartBehavior). In ModTags.HONEY_RAILS.
     public static final RegistryObject<Block> HONEY_RAIL = registerBlock(
         "honey_rail",
         HoneyRailBlock::new,
@@ -115,8 +116,8 @@ public final class ModBlocks {
         true
     );
 
-    // Launches minecarts upward, higher the stronger its redstone signal
-    // (see entity.TinRailMinecartBehavior). In ModTags.BOUNCY_RAILS.
+    // Launches minecarts upward, higher the stronger its redstone signal, up to
+    // Config.bouncyRailMaxHeight (see entity.TinRailMinecartBehavior). In ModTags.BOUNCY_RAILS.
     public static final RegistryObject<Block> BOUNCY_RAIL = registerBlock(
         "bouncy_rail",
         BouncyRailBlock::new,
@@ -127,7 +128,7 @@ public final class ModBlocks {
         true
     );
 
-    // Gives a redstone signal whose strength depends on the type of minecart on it
+    // Inspector rail: gives a redstone signal whose strength depends on the type of minecart on it
     public static final RegistryObject<Block> INSPECTOR_RAIL = registerBlock(
         "inspector_rail",
         InspectorRailBlock::new,

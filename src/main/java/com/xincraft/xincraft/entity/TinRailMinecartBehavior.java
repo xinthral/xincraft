@@ -16,12 +16,14 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// Vanilla's default minecart physics, except that the speed cap is raised while the cart is on a
-// tin rail, carts on a honey rail are held at a reduced speed, and powered bouncy rails launch
-// carts into the air. Forge's per-rail speed hook
-// (BaseRailBlock#getRailMaxSpeed) isn't consulted by the default physics in this version, so we
-// raise the cap here instead. Every other kind of cart (furnace minecarts included) scales from
-// vanilla's own cap, so their relative speeds hold.
+// Vanilla's default minecart physics, plus the mod's special rails:
+// - tin rails raise the speed cap on straight track, easing back to normal for corners;
+// - honey rails hold carts at a reduced speed;
+// - powered bouncy rails launch carts into the air.
+// Forge's per-rail speed hook (BaseRailBlock#getRailMaxSpeed) isn't consulted by the default
+// physics in this version, so the cap is changed here instead. Every kind of cart (furnace
+// minecarts included) scales from vanilla's own cap, so their relative speeds hold. Despite the
+// name, which predates the honey and bouncy rails, this is the mod's one minecart physics class.
 public class TinRailMinecartBehavior extends OldMinecartBehavior {
     // Speed a honey rail adds each tick to a cart below its target speed (same as a powered rail)
     private static final double HONEY_RAIL_BOOST = 0.06;

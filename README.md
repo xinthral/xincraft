@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin, quieter rails, and teleporting ender rails.
+A Minecraft Forge mod that adds tin, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, and teleporting ender rails.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -61,7 +61,7 @@ Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_ma
 
 ## Tin Rails
 
-Fast rails. A minecart on a tin rail can travel **twice as fast** as on any other rail (configurable). Once it rolls back onto ordinary rails it's limited to normal speed again.
+Fast rails. A minecart on a straight tin rail can travel **twice as fast** as on any other rail (configurable). Once it rolls back onto ordinary rails it's limited to normal speed again.
 
 | Rail | Recipe | Makes |
 | --- | --- | --- |
@@ -244,7 +244,7 @@ Ways to open it:
 - **Staying going:** once moving, it keeps driving whichever way it's going, around curves and up slopes, for as long as there's fuel.
 - **Stopping:** an **unpowered powered rail** brings it to a stop, the same way it stops any minecart. Power the rail to set off again. It also stops if it runs into something or reaches the end of the track.
 - **Fuel use:** a new fuel item is only lit when the cart is trying to move, so a parked locomotive doesn't eat its fuel. An item that's already burning keeps burning down while parked, like in a furnace.
-- **Speed:** it drives at the normal minecart speed cap, and at the higher speed on [Tin Rails](#tin-rails).
+- **Speed:** it drives at the normal minecart speed cap, at the higher speed on straight [Tin Rails](#tin-rails), and at the slower speed on [Honey Rails](#honey-rail).
 
 > Like the other powered features, the engine only works with the default minecart physics.
 
@@ -252,14 +252,23 @@ Ways to open it:
 
 ## Configuration
 
-Xincraft's settings live in `config/xincraft-common.toml`. The file is created the first time the game starts, with a comment and the allowed range for each value. Changes made while the game is running take effect immediately.
+Xincraft's settings live in `config/xincraft-common.toml`. The file is created the first time the game starts, with a comment and the allowed range for each value. Changes made while the game is running take effect immediately, except `tin.generateOre` (see below).
 
 ```toml
+[tin]
+	generateOre = true
+
 [paddedRails]
 	volume = 0.2
 
 [tinRails]
 	speedMultiplier = 2.0
+
+[honeyRails]
+	speedMultiplier = 0.5
+
+[bouncyRails]
+	maxLaunchHeight = 8.0
 
 [locomotiveCart]
 	fuelMultiplier = 8.0
@@ -273,15 +282,18 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 
 | Setting | Default | Range | What it does |
 | --- | --- | --- | --- |
+| `tin.generateOre` | `true` | true / false | Whether tin ore generates in the Overworld. Turn it off if another mod already generates tin. Takes effect the next time a world is loaded, and only in chunks generated after that |
 | `paddedRails.volume` | `0.2` | 0.0 – 1.0 | Volume of minecart sounds on padded rails (0 = silent, 1 = vanilla volume) |
-| `tinRails.speedMultiplier` | `2.0` | 1.0 – 3.0 | How many times faster minecarts can travel on tin rails than on other rails |
+| `tinRails.speedMultiplier` | `2.0` | 1.0 – 3.0 | How many times faster minecarts can travel on straight tin rails than on other rails |
+| `honeyRails.speedMultiplier` | `0.5` | 0.05 – 1.0 | Speed minecarts are held at on honey rails, as a fraction of their normal top speed |
+| `bouncyRails.maxLaunchHeight` | `8.0` | 1.0 – 64.0 | Roughly how many blocks high a bouncy rail launches a cart at full redstone power (15). Weaker signals launch proportionally lower |
 | `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
 | `enderRails.maxDistance` | `64` | 1 – 30,000,000 | Furthest apart, in blocks, two ender rails can be and still link. Lowering it stops existing links that are now too long from teleporting, without unlinking them |
 | `enderRails.cooldownSeconds` | `3.0` | 0.0 – 3600.0 | Seconds a cart must wait after teleporting before it can teleport again |
 | `enderRails.maxTeleportsPerSecond` | `20` | 0 – 1000 | Most ender rail teleports allowed across the whole server in any one second (0 = no limit) |
 | `enderRails.allowOtherMinecarts` | `false` | true / false | Let minecarts other than the Ender Minecart (vanilla carts and other mods' carts) teleport on ender rails |
 
-On a dedicated server, the server's config file controls ender rail behavior. `paddedRails.volume` is read by each player's own game.
+On a dedicated server, the server's config file controls everything except `paddedRails.volume`, which is read by each player's own game.
 
 ---
 
@@ -303,10 +315,11 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | Path | Contents |
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
-| `.../registry/` | Registration of blocks, items, block entities, entities, data components, tags, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the inspector rail, and the ender rail |
+| `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, and the creative tab |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
 | `.../item/` | Ender rail item (attuning and glint), tin armor set bonus |
-| `.../entity/` | Ender minecart, locomotive cart, and the minecart physics that speed carts up on tin rails |
+| `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`TinRailMinecartBehavior`) |
+| `.../world/` | The biome modifier that adds tin ore, unless turned off in the config |
 | `.../inventory/` | Locomotive cart menu (slots and burn progress) |
 | `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
