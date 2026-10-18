@@ -1,0 +1,10 @@
+{
+  "asset_name": "tin",
+  "description": {
+    "color": "#B2B5BD",
+    "translate": "trim_material.xincraft.tin"
+  },
+  "override_armor_assets": {
+    "xincraft:tin": "tin_darker"
+  }
+}

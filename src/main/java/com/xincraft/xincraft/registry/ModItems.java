@@ -37,7 +37,7 @@ public final class ModItems {
         registerItem("raw_tin", Item::new, Item.Properties::new);
 
     public static final RegistryObject<Item> TIN_INGOT =
-        registerItem("tin_ingot", Item::new, Item.Properties::new);
+        registerItem("tin_ingot", Item::new, () -> new Item.Properties().trimMaterial(ModTrimMaterials.TIN));
 
     public static final RegistryObject<Item> TIN_HELMET = registerItem("tin_helmet", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.HELMET));

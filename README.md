@@ -56,6 +56,10 @@ Mining tin ore drops one Raw Tin, more with Fortune; Silk Touch drops the ore bl
 
 Tin armor gives 2 / 5 / 4 / 1 armor points (helmet / chestplate / leggings / boots), has a durability multiplier of 13 (copper is 11, iron is 15), and an enchantability of 10. Repair it with tin ingots in an anvil.
 
+Tin armor takes **armor trims** like vanilla armor: any trim pattern in any trim material, at a smithing table. The trim shows on the armor when worn and on its inventory icon.
+
+Tin ingots are also a **trim material**, giving a cool gray trim on any armor (a darker shade on tin armor, so it stands out). For the trim to show on vanilla armor's inventory icons, the mod adds a tin case to vanilla's armor item model files (`assets/minecraft/items/`). A resource pack or mod that replaces those files hides tin trims on the icons only; they still show when worn. Only this mod's tin ingot works as the material, since each trim material comes from a specific item.
+
 **Full set bonus:** wearing all four pieces of tin armor gives **Fire Resistance**, 5 seconds at a time, renewed every 5 seconds while the full set stays on. Take any piece off and it wears off within 5 seconds. Longer Fire Resistance, such as from a potion, isn't cut short.
 
 Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_materials/tin`, `c:storage_blocks/tin`), so other mods' machines and recipes recognize it. It works the other way too: every recipe here that uses tin, and repairing tin armor, accepts tin from any mod that uses these tags.
@@ -332,7 +336,7 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | Path | Contents |
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
-| `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, and the creative tab |
+| `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
 | `.../item/` | Ender rail item (attuning and glint), tin armor set bonus, tin spyglass night vision |
 | `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
