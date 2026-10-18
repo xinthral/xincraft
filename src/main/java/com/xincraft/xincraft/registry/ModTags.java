@@ -1,9 +1,12 @@
 package com.xincraft.xincraft.registry;
 
+import java.util.List;
+import java.util.stream.IntStream;
 import com.xincraft.xincraft.XincraftMod;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -25,6 +28,18 @@ public final class ModTags {
     // xincraft:tin_rails - rails on which minecarts can go faster (see entity.TinRailMinecartBehavior)
     public static final TagKey<Block> TIN_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "tin_rails"));
+
+    // xincraft:detection_rail_signal/1 to /15 - minecart entity types and the redstone signal the
+    // detection rail gives for them (see block.DetectionRailBlock). Add a new cart type by listing
+    // it in the tag for its signal strength.
+    private static final List<TagKey<EntityType<?>>> DETECTION_RAIL_SIGNALS = IntStream.rangeClosed(0, 15)
+        .mapToObj(signal -> TagKey.create(Registries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(XincraftMod.MODID, "detection_rail_signal/" + signal)))
+        .toList();
+
+    public static TagKey<EntityType<?>> detectionRailSignal(int signal) {
+        return DETECTION_RAIL_SIGNALS.get(signal);
+    }
 
     private ModTags() {}
 }

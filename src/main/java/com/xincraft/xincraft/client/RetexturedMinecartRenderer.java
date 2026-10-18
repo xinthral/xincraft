@@ -36,26 +36,29 @@ import net.minecraftforge.fml.common.Mod;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.Nullable;
 
-// Draws the ender minecart as a vanilla minecart with its own texture. Vanilla's minecart
+// Draws the mod's minecarts as vanilla minecarts with their own textures. Vanilla's minecart
 // renderer hardcodes its texture, so we hand it a collector that swaps the texture on the way
 // through and passes everything else along untouched.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
-public class EnderMinecartRenderer extends MinecartRenderer {
-    private static final Identifier TEXTURE =
-        Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/entity/ender_minecart.png");
+public class RetexturedMinecartRenderer extends MinecartRenderer {
+    private final Identifier texture;
 
-    public EnderMinecartRenderer(EntityRendererProvider.Context context) {
+    public RetexturedMinecartRenderer(EntityRendererProvider.Context context, String texture) {
         super(context, ModelLayers.MINECART);
+        this.texture = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/entity/" + texture + ".png");
     }
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntityTypes.ENDER_MINECART.get(), EnderMinecartRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.ENDER_MINECART.get(),
+            context -> new RetexturedMinecartRenderer(context, "ender_minecart"));
+        event.registerEntityRenderer(ModEntityTypes.LOCOMOTIVE_CART.get(),
+            context -> new RetexturedMinecartRenderer(context, "locomotive_cart"));
     }
 
     @Override
     public void submit(MinecartRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-        super.submit(state, poseStack, new Retextured(collector, model, model.renderType(TEXTURE)), camera);
+        super.submit(state, poseStack, new Retextured(collector, model, model.renderType(texture)), camera);
     }
 
     // Every submitModel overload funnels into the abstract one, so that's the only place the

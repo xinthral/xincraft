@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.block.DetectionRailBlock;
 import com.xincraft.xincraft.block.EnderRailBlock;
 import com.xincraft.xincraft.block.ModPoweredRailBlock;
 import net.minecraft.world.item.DyeColor;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,6 +45,31 @@ public final class ModBlocks {
         true
     );
 
+    // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier)
+    // and drop raw tin. Properties match vanilla's iron ores.
+    public static final RegistryObject<Block> TIN_ORE = registerBlock(
+        "tin_ore",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(3.0F, 3.0F),
+        true
+    );
+
+    public static final RegistryObject<Block> DEEPSLATE_TIN_ORE = registerBlock(
+        "deepslate_tin_ore",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.DEEPSLATE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(4.5F, 3.0F)
+            .sound(SoundType.DEEPSLATE),
+        true
+    );
+
     // One padded rail per wool colour (e.g. red_padded_rail): plain rails whose minecart sounds
     // are muffled client-side (see client.PaddedRailSounds). Every one is in ModTags.PADDED_RAILS.
     public static final Map<DyeColor, RegistryObject<Block>> PADDED_RAILS =
@@ -67,6 +94,17 @@ public final class ModBlocks {
     public static final RegistryObject<Block> TIN_POWERED_RAIL = registerBlock(
         "tin_powered_rail",
         ModPoweredRailBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .strength(0.7F)
+            .sound(SoundType.METAL),
+        true
+    );
+
+    // Gives a redstone signal whose strength depends on the type of minecart on it
+    public static final RegistryObject<Block> DETECTION_RAIL = registerBlock(
+        "detection_rail",
+        DetectionRailBlock::new,
         BlockBehaviour.Properties.of()
             .noCollision()
             .strength(0.7F)

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:detector_rail",
+    "minecraft:comparator"
+  ],
+  "result": {
+    "id": "xincraft:detection_rail",
+    "count": 1
+  }
+}

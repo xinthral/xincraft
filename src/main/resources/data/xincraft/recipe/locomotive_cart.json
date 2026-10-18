@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:minecart_frame",
+    "minecraft:blast_furnace",
+    "minecraft:chest"
+  ],
+  "result": {
+    "id": "xincraft:locomotive_cart",
+    "count": 1
+  }
+}

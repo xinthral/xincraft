@@ -7,6 +7,7 @@ import com.xincraft.xincraft.registry.ModBlocks;
 import com.xincraft.xincraft.registry.ModCreativeModeTabs;
 import com.xincraft.xincraft.registry.ModDataComponents;
 import com.xincraft.xincraft.registry.ModEntityTypes;
+import com.xincraft.xincraft.registry.ModMenuTypes;
 import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,6 +38,7 @@ public final class XincraftMod {
         ModItems.ITEMS.register(modBusGroup);
         ModBlockEntities.BLOCK_ENTITIES.register(modBusGroup);
         ModEntityTypes.ENTITY_TYPES.register(modBusGroup);
+        ModMenuTypes.MENU_TYPES.register(modBusGroup);
         ModDataComponents.COMPONENTS.register(modBusGroup);
         ModCreativeModeTabs.TABS.register(modBusGroup);
 

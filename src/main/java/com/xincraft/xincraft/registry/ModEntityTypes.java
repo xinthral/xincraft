@@ -2,6 +2,7 @@ package com.xincraft.xincraft.registry;
 
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.EnderMinecart;
+import com.xincraft.xincraft.entity.LocomotiveCart;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,6 +21,14 @@ public final class ModEntityTypes {
             .passengerAttachments(0.1875F)
             .clientTrackingRange(8)
             .build(ENTITY_TYPES.key("ender_minecart")));
+
+    public static final RegistryObject<EntityType<LocomotiveCart>> LOCOMOTIVE_CART = ENTITY_TYPES.register("locomotive_cart",
+        () -> EntityType.Builder.<LocomotiveCart>of(LocomotiveCart::new, MobCategory.MISC)
+            .noLootTable()
+            .sized(0.98F, 0.7F)
+            .passengerAttachments(0.1875F)
+            .clientTrackingRange(8)
+            .build(ENTITY_TYPES.key("locomotive_cart")));
 
     private ModEntityTypes() {}
 }

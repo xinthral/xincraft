@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "tin_ingot",
+  "ingredients": [
+    "xincraft:tin_block"
+  ],
+  "result": {
+    "id": "xincraft:tin_ingot",
+    "count": 9
+  }
+}

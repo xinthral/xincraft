@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "group": "tin_ingot",
+  "experience": 0.7,
+  "ingredient": "#c:ores/tin",
+  "result": {
+    "id": "xincraft:tin_ingot"
+  }
+}

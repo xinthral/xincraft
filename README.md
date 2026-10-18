@@ -12,8 +12,11 @@ A Minecraft Forge mod that adds tin, quieter rails, and teleporting ender rails.
 - [Tin Rails](#tin-rails)
 - [Padded Rails](#padded-rails)
 - [Padded Powered Rails](#padded-powered-rails)
+- [Detection Rail](#detection-rail)
 - [Ender Rails](#ender-rails)
+- [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
+- [Locomotive Cart](#locomotive-cart)
 - [Configuration](#configuration)
 - [Building from source](#building-from-source)
 
@@ -25,13 +28,32 @@ All of the mod's items are in the **Xincraft** creative tab.
 
 | Item | Notes |
 | --- | --- |
-| Tin Ingot | Also tagged `c:ingots/tin` so other mods recognize it |
-| Block of Tin | Storage block; needs a pickaxe to drop |
+| Tin Ore, Deepslate Tin Ore | Generate underground in the Overworld; need a stone pickaxe or better |
+| Raw Tin | Dropped by tin ore |
+| Tin Ingot | Smelted from raw tin or tin ore |
+| Block of Tin | Storage block for 9 tin ingots; needs a stone pickaxe or better |
 | Tin Helmet, Chestplate, Leggings, Boots | Armor between copper and iron |
+
+### Finding tin
+
+Tin ore generates in every Overworld biome, a little less often than copper: up to 12 veins of up to 9 blocks per chunk, between Y −32 and Y 96, most common around Y 32. Below the stone layer it appears as Deepslate Tin Ore.
+
+Mining tin ore drops one Raw Tin, more with Fortune; Silk Touch drops the ore block itself.
+
+### Recipes
+
+| Result | Recipe |
+| --- | --- |
+| Tin Ingot | Smelt or blast Raw Tin, Tin Ore, or Deepslate Tin Ore |
+| Block of Tin | 9 Tin Ingots |
+| 9 Tin Ingots | 1 Block of Tin |
+| Tin Helmet, Chestplate, Leggings, Boots | Same shapes as iron armor, with Tin Ingots (5 / 8 / 7 / 4 ingots) |
 
 Tin armor gives 2 / 5 / 4 / 1 armor points (helmet / chestplate / leggings / boots), has a durability multiplier of 13 (copper is 11, iron is 15), and an enchantability of 10. Repair it with tin ingots in an anvil.
 
-> Tin currently has no crafting recipes or ore, so it's only available from the creative tab.
+**Full set bonus:** wearing all four pieces of tin armor gives **Fire Resistance**, 5 seconds at a time, renewed every 5 seconds while the full set stays on. Take any piece off and it wears off within 5 seconds. Longer Fire Resistance, such as from a potion, isn't cut short.
+
+Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_materials/tin`, `c:storage_blocks/tin`), so other mods' machines and recipes recognize it.
 
 ## Tin Rails
 
@@ -67,6 +89,27 @@ Powered rails with the same muffling. They boost carts when powered and brake th
 > 2 Wool + 1 Powered Rail → 1 Padded Powered Rail
 
 As with padded rails, both wools must be the same color, and there are 16 colors.
+
+## Detection Rail
+
+A detector rail that tells minecarts apart. Instead of always giving a full-strength signal, it outputs a redstone signal whose strength depends on the type of minecart on it, so a comparator or a line of redstone dust can sort carts.
+
+**Recipe** (shapeless):
+
+> 1 Detector Rail + 1 Comparator → 1 Detection Rail
+
+| Minecart | Signal |
+| --- | --- |
+| Minecart | 1 |
+| Minecart with Hopper | 3 |
+| Minecart with Chest, Minecart with Furnace | 6 |
+| Locomotive Cart | 9 |
+| Ender Minecart | 12 |
+| Minecart with TNT | 15 |
+
+Any other minecart (for example from another mod) gives 0, the same as an empty rail, until it's added to one of the signal tags below. If several carts are on the rail at once, it outputs the strongest signal. Like the detector rail, it strongly powers the block beneath it, powers adjacent powered rails, keeps its signal for up to a second after a cart leaves, and lets a comparator read how full a container cart on it is.
+
+**Adding cart types:** the signal for each cart type comes from the entity type tags `xincraft:detection_rail_signal/1` through `/15`, in `data/xincraft/tags/entity_type/detection_rail_signal/`. To give a new cart a signal, add its ID to the tag file for that strength (creating the file if it doesn't exist yet). A datapack can do the same to add carts from other mods.
 
 ## Ender Rails
 
@@ -107,13 +150,59 @@ To keep servers stable, there's also a server-wide limit on how many teleports c
 
 > Teleporting only works with the default minecart physics, not Minecraft's experimental minecart physics.
 
+## Minecart Frame
+
+A bare tin minecart frame, the base for the mod's special minecarts.
+
+**Recipe** (shaped, in the vanilla minecart's shape):
+
+| | | |
+| --- | --- | --- |
+| Tin Ingot | | Tin Ingot |
+| Tin Ingot | Tin Ingot | Tin Ingot |
+
+> 5 Tin Ingots → 1 Minecart Frame
+
 ## Ender Minecart
 
 A rideable minecart on ender wheels, and the only cart that can teleport on ender rails (unless the configuration allows other minecarts). It handles like a normal minecart in every other way.
 
 **Recipe** (shapeless):
 
-> 1 Minecart + 4 Ender Pearls → 1 Ender Minecart
+> 1 Minecart Frame + 4 Ender Pearls → 1 Ender Minecart
+
+## Locomotive Cart
+
+A rideable minecart with its own engine. While it has fuel burning, it drives itself forward, like a furnace minecart you can sit in.
+
+**Recipe** (shapeless):
+
+> 1 Minecart Frame + 1 Blast Furnace + 1 Chest → 1 Locomotive Cart
+
+### Inventory
+
+The cart has two slots:
+
+- **Fuel slot**, with a furnace-style flame above it showing how much of the current fuel is left. It takes anything that burns in a furnace, and each item burns **8 times as long** as it would in a furnace (configurable). A lava bucket leaves its empty bucket behind, just like in a furnace.
+- **Storage slot**, a single slot for carrying anything.
+
+Ways to open it:
+
+- **Shift + right-click** the cart.
+- **Press your inventory key** while riding it (like a chest boat or donkey).
+
+**Hoppers** above the track fill the cart as it passes underneath, like chest and hopper minecarts. Fuel goes into the fuel slot first; anything else, or extra fuel once the fuel slot is full, goes into the storage slot. Hoppers can't pull fuel back out of the cart (only empty buckets).
+
+### Driving
+
+- **Right-click** to get in.
+- **Getting going:** while stopped, press a movement key to set off in that direction. A cart without a rider sets off when pushed.
+- **Staying going:** once moving, it keeps driving whichever way it's going, around curves and up slopes, for as long as there's fuel.
+- **Stopping:** an **unpowered powered rail** brings it to a stop, the same way it stops any minecart. Power the rail to set off again. It also stops if it runs into something or reaches the end of the track.
+- **Fuel use:** a new fuel item is only lit when the cart is trying to move, so a parked locomotive doesn't eat its fuel. An item that's already burning keeps burning down while parked, like in a furnace.
+- **Speed:** it drives at the normal minecart speed cap, and at the higher speed on [Tin Rails](#tin-rails).
+
+> Like the other powered features, the engine only works with the default minecart physics.
 
 ---
 
@@ -128,6 +217,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 [tinRails]
 	speedMultiplier = 2.0
 
+[locomotiveCart]
+	fuelMultiplier = 8.0
+
 [enderRails]
 	maxDistance = 64
 	cooldownSeconds = 3.0
@@ -139,6 +231,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | --- | --- | --- | --- |
 | `paddedRails.volume` | `0.2` | 0.0 – 1.0 | Volume of minecart sounds on padded rails (0 = silent, 1 = vanilla volume) |
 | `tinRails.speedMultiplier` | `2.0` | 1.0 – 3.0 | How many times faster minecarts can travel on tin rails than on other rails |
+| `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
 | `enderRails.maxDistance` | `64` | 1 – 30,000,000 | Furthest apart, in blocks, two ender rails can be and still link. Lowering it stops existing links that are now too long from teleporting, without unlinking them |
 | `enderRails.cooldownSeconds` | `3.0` | 0.0 – 3600.0 | Seconds a cart must wait after teleporting before it can teleport again |
 | `enderRails.maxTeleportsPerSecond` | `20` | 0 – 1000 | Most ender rail teleports allowed across the whole server in any one second (0 = no limit) |
@@ -167,9 +260,10 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, data components, tags, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin) and the ender rail |
-| `.../item/` | Ender rail item (attuning and glint) |
-| `.../entity/` | Ender minecart, and the minecart physics that speed carts up on tin rails |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, ender minecart renderer |
+| `.../block/` | Powered rail variants (padded, tin), the detection rail, and the ender rail |
+| `.../item/` | Ender rail item (attuning and glint), tin armor set bonus |
+| `.../entity/` | Ender minecart, locomotive cart, and the minecart physics that speed carts up on tin rails |
+| `.../inventory/` | Locomotive cart menu (slots and burn progress) |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
-| `src/main/resources/data/` | Recipes, loot tables, and tags |
+| `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

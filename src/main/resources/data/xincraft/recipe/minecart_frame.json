@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "#c:ingots/tin"
+  },
+  "pattern": [
+    "X X",
+    "XXX"
+  ],
+  "result": {
+    "id": "xincraft:minecart_frame",
+    "count": 1
+  }
+}

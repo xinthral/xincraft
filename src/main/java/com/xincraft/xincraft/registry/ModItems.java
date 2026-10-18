@@ -33,6 +33,9 @@ public final class ModItems {
             new Item.Properties().useBlockDescriptionPrefix().setId(ITEMS.key(name))));
     }
 
+    public static final RegistryObject<Item> RAW_TIN =
+        registerItem("raw_tin", Item::new, Item.Properties::new);
+
     public static final RegistryObject<Item> TIN_INGOT =
         registerItem("tin_ingot", Item::new, Item.Properties::new);
 
@@ -49,8 +52,16 @@ public final class ModItems {
         properties -> new EnderRailItem(ModBlocks.ENDER_RAIL.get(), properties),
         () -> new Item.Properties().useBlockDescriptionPrefix());
 
+    // Crafting ingredient for the mod's special minecarts (ender minecart, locomotive cart)
+    public static final RegistryObject<Item> MINECART_FRAME =
+        registerItem("minecart_frame", Item::new, Item.Properties::new);
+
     public static final RegistryObject<Item> ENDER_MINECART = registerItem("ender_minecart",
         properties -> new MinecartItem(ModEntityTypes.ENDER_MINECART.get(), properties),
+        () -> new Item.Properties().stacksTo(1));
+
+    public static final RegistryObject<Item> LOCOMOTIVE_CART = registerItem("locomotive_cart",
+        properties -> new MinecartItem(ModEntityTypes.LOCOMOTIVE_CART.get(), properties),
         () -> new Item.Properties().stacksTo(1));
 
     private ModItems() {}
