@@ -27,13 +27,13 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
 
     // Client side: the real slots and burn data are filled in by syncing from the server
     public LocomotiveCartMenu(int containerId, Inventory inventory) {
-        this(containerId, inventory, new SimpleContainer(LocomotiveCart.SLOT_COUNT), new SimpleContainerData(1));
+        this(containerId, inventory, new SimpleContainer(LocomotiveCart.SLOT_COUNT), new SimpleContainerData(LocomotiveCart.DATA_COUNT));
     }
 
     public LocomotiveCartMenu(int containerId, Inventory inventory, Container container, ContainerData data) {
         super(ModMenuTypes.LOCOMOTIVE_CART.get(), containerId);
         checkContainerSize(container, LocomotiveCart.SLOT_COUNT);
-        checkContainerDataCount(data, 1);
+        checkContainerDataCount(data, LocomotiveCart.DATA_COUNT);
         this.container = container;
         this.data = data;
         this.level = inventory.player.level();
@@ -52,6 +52,19 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
 
     public boolean isLit() {
         return data.get(0) > 0;
+    }
+
+    // Whether the cart has the energy upgrade, so the screen shows its energy bar
+    public boolean hasEnergyUpgrade() {
+        return data.get(5) != 0;
+    }
+
+    public int getEnergy() {
+        return data.get(1) | data.get(2) << 15;
+    }
+
+    public int getEnergyCapacity() {
+        return data.get(3) | data.get(4) << 15;
     }
 
     private boolean isFuel(ItemStack stack) {

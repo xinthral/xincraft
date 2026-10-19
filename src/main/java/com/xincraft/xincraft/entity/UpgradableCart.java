@@ -7,6 +7,6 @@ public interface UpgradableCart {
 
     // Upgrades for one kind of cart (e.g. the sculk sensor's music cue) only go on that cart
     default boolean accepts(CartUpgrade upgrade) {
-        return !upgrade.jingleCartOnly();
+        return upgrade.fitsOnly() == null || upgrade.fitsOnly().isInstance(this);
     }
 }

@@ -3,6 +3,8 @@ package com.xincraft.xincraft.entity;
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
 import com.xincraft.xincraft.registry.ModItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -28,17 +30,25 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.PoweredRailBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
+import org.jspecify.annotations.Nullable;
 
 // A rideable minecart that drives itself forward while it has fuel burning, like a furnace
 // minecart you can sit in. It has a fuel slot (anything that burns in a furnace, lasting
 // Config.locomotiveFuelMultiplier times as long) and one storage slot, both reachable by
 // shift-right-clicking the cart, pressing the inventory key while riding, or a hopper above it.
-// Takes upgrades (see CartUpgrades).
+// Takes upgrades (see CartUpgrades). With the energy upgrade it also stores Forge Energy, charged
+// from energy blocks under the track (or by anything that hands energy to entities), and runs on
+// that before burning any fuel.
 public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
@@ -51,10 +61,19 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private static final double PUSH = 0.25;
     // Below this horizontal speed (squared) the cart counts as stopped
     private static final double STOPPED_SPEED_SQR = 1.0E-4;
+    // Most Forge Energy the energy upgrade takes in per tick, from blocks or anything else
+    private static final int MAX_ENERGY_RECEIVE = 1_000;
+    // Menu data entries: burn left, then stored energy and capacity (each split in two, as menu
+    // data travels as 16-bit numbers), then whether the energy upgrade is fitted
+    public static final int DATA_COUNT = 6;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
     private int litTime;
     private int litDuration;
+    private int energy;
+    // Whether the engine is running on energy this tick
+    private boolean electric;
+    private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> new Battery());
     // Horizontal unit vector the engine drives along; zero while parked, so no fuel is used
     private Vec3 heading = Vec3.ZERO;
 
@@ -63,7 +82,14 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
-            return litTime > 0 ? Math.max(1, (int) ((long) litTime * 1000 / Math.max(1, litDuration))) : 0;
+            return switch (index) {
+                case 0 -> litTime > 0 ? Math.max(1, (int) ((long) litTime * 1000 / Math.max(1, litDuration))) : 0;
+                case 1 -> energy & 0x7FFF;
+                case 2 -> energy >>> 15;
+                case 3 -> energyCapacity() & 0x7FFF;
+                case 4 -> energyCapacity() >>> 15;
+                default -> upgrades.has(CartUpgrade.ENERGY) ? 1 : 0;
+            };
         }
 
         @Override
@@ -71,7 +97,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
 
         @Override
         public int getCount() {
-            return 1;
+            return DATA_COUNT;
         }
     };
 
@@ -95,6 +121,10 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return entityData.get(DATA_LIT);
     }
 
+    private static int energyCapacity() {
+        return Config.locomotiveEnergyCapacity;
+    }
+
     @Override
     public void tick() {
         if (level() instanceof ServerLevel serverLevel) {
@@ -102,14 +132,52 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
             if (litTime > 0) {
                 litTime--;
             }
-            if (litTime <= 0 && heading.lengthSqr() > 0) {
+            electric = false;
+            if (upgrades.has(CartUpgrade.ENERGY)) {
+                chargeFromTrack(serverLevel);
+                // Runs on energy whenever it has some, saving fuel for when it runs out
+                if (litTime <= 0 && heading.lengthSqr() > 0 && energy >= Config.locomotiveEnergyPerTick) {
+                    energy -= Config.locomotiveEnergyPerTick;
+                    electric = true;
+                }
+            }
+            if (litTime <= 0 && !electric && heading.lengthSqr() > 0) {
                 burnFuel(serverLevel);
             }
             entityData.set(DATA_LIT, litTime > 0);
+            if (electric && random.nextInt(4) == 0) {
+                serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 0.6, getZ(), 2, 0.3, 0.1, 0.3, 0.0);
+            }
         }
         super.tick();
         if (isLit() && random.nextInt(4) == 0) {
             level().addParticle(ParticleTypes.LARGE_SMOKE, getX(), getY() + 0.8, getZ(), 0.0, 0.0, 0.0);
+        }
+    }
+
+    // Draws energy from whatever's under the cart that gives it out: the rail itself (for other
+    // mods' charging rails), then the block beneath the rail (e.g. a battery)
+    private void chargeFromTrack(ServerLevel level) {
+        if (energy >= energyCapacity()) {
+            return;
+        }
+        BlockPos rail = getCurrentBlockPosOrRailBelow();
+        drawFrom(level, rail, null);
+        drawFrom(level, rail.below(), Direction.UP);
+    }
+
+    private void drawFrom(ServerLevel level, BlockPos pos, @Nullable Direction side) {
+        int space = Math.min(MAX_ENERGY_RECEIVE, energyCapacity() - energy);
+        if (space <= 0) {
+            return;
+        }
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity != null) {
+            blockEntity.getCapability(ForgeCapabilities.ENERGY, side).ifPresent(source -> {
+                if (source.canExtract()) {
+                    energy += source.extractEnergy(space, false);
+                }
+            });
         }
     }
 
@@ -158,7 +226,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     // Same engine force as the furnace minecart, applied along the heading
     @Override
     protected Vec3 applyNaturalSlowdown(Vec3 deltaMovement) {
-        if (litTime > 0 && heading.lengthSqr() > 0) {
+        if ((litTime > 0 || electric) && heading.lengthSqr() > 0) {
             deltaMovement = deltaMovement.multiply(0.8, 0.0, 0.8).add(heading.scale(PUSH));
             if (isInWater()) {
                 deltaMovement = deltaMovement.scale(0.1);
@@ -244,6 +312,67 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return new LocomotiveCartMenu(containerId, inventory, this, data);
     }
 
+    // The energy upgrade's storage, for other mods' cables, chargers and the like
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
+        if (capability == ForgeCapabilities.ENERGY && isAlive() && upgrades.has(CartUpgrade.ENERGY)) {
+            return energyCap.cast();
+        }
+        return super.getCapability(capability, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        energyCap.invalidate();
+    }
+
+    @Override
+    public void reviveCaps() {
+        super.reviveCaps();
+        energyCap = LazyOptional.of(() -> new Battery());
+    }
+
+    // Takes energy in only; nothing can draw it back out. Takes nothing once the upgrade is removed.
+    private class Battery implements IEnergyStorage {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if (!canReceive()) {
+                return 0;
+            }
+            int received = Math.max(0, Math.min(Math.min(maxReceive, MAX_ENERGY_RECEIVE), energyCapacity() - energy));
+            if (!simulate) {
+                energy += received;
+            }
+            return received;
+        }
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            return 0;
+        }
+
+        @Override
+        public int getEnergyStored() {
+            return energy;
+        }
+
+        @Override
+        public int getMaxEnergyStored() {
+            return energyCapacity();
+        }
+
+        @Override
+        public boolean canExtract() {
+            return false;
+        }
+
+        @Override
+        public boolean canReceive() {
+            return upgrades.has(CartUpgrade.ENERGY) && isAlive();
+        }
+    }
+
     @Override
     protected Item getDropItem() {
         return ModItems.LOCOMOTIVE_CART.get();
@@ -259,6 +388,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         super.addAdditionalSaveData(output);
         output.putInt("LitTime", litTime);
         output.putInt("LitDuration", litDuration);
+        output.putInt("Energy", energy);
         output.putDouble("HeadingX", heading.x);
         output.putDouble("HeadingZ", heading.z);
         upgrades.save(output);
@@ -269,6 +399,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         super.readAdditionalSaveData(input);
         litTime = input.getIntOr("LitTime", 0);
         litDuration = input.getIntOr("LitDuration", 0);
+        energy = input.getIntOr("Energy", 0);
         heading = new Vec3(input.getDoubleOr("HeadingX", 0.0), 0.0, input.getDoubleOr("HeadingZ", 0.0));
         upgrades.load(input);
     }

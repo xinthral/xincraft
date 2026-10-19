@@ -24,8 +24,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 // The upgrades fitted to one minecart, and what they do. Upgrades are fitted by using the upgrade
-// item on the cart and snipped off one at a time with shears; each can be fitted once, and the
-// cart drops them when broken. The installed set is synced to clients (as flags in an int the cart
+// item on the cart and snipped off one at a time with shears, most recently fitted first; each can
+// be fitted once, and the cart drops them when broken. The installed set is synced to clients (as flags in an int the cart
 // defines) so they can show the upgrades on the cart.
 public final class CartUpgrades {
     // How far ahead of the cart a shrieker clears the track, plus a little more the faster it goes
@@ -40,6 +40,8 @@ public final class CartUpgrades {
 
     private final AbstractMinecart cart;
     private final EntityDataAccessor<Integer> data;
+    // Server side: the fitted upgrades in the order they went on, so shears take off the newest
+    private final List<CartUpgrade> fitOrder = new ArrayList<>();
     private int shriekCooldown;
 
     public CartUpgrades(AbstractMinecart cart, EntityDataAccessor<Integer> data) {
@@ -63,8 +65,8 @@ public final class CartUpgrades {
         cart.getEntityData().set(data, bits);
     }
 
-    // Fits an upgrade item, or snips the last fitted upgrade off with shears. PASS for anything
-    // else, so the cart can carry on with its own interaction.
+    // Fits an upgrade item, or snips the most recently fitted upgrade off with shears, handing it
+    // back. PASS for anything else, so the cart can carry on with its own interaction.
     public InteractionResult interact(UpgradableCart owner, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean server = !cart.level().isClientSide();
@@ -79,6 +81,7 @@ public final class CartUpgrades {
             }
             if (server) {
                 set(bits() | upgrade.bit());
+                fitOrder.add(upgrade);
                 stack.consume(1, player);
                 cart.playSound(SoundEvents.SMITHING_TABLE_USE, 1.0F, 1.0F);
             }
@@ -86,16 +89,31 @@ public final class CartUpgrades {
         }
         if (stack.is(Items.SHEARS) && bits() != 0) {
             if (server && cart.level() instanceof ServerLevel level) {
-                List<CartUpgrade> installed = installed();
-                CartUpgrade last = installed.get(installed.size() - 1);
+                CartUpgrade last = newest();
                 set(bits() & ~last.bit());
-                cart.spawnAtLocation(level, new ItemStack(last.item()));
+                fitOrder.remove(last);
+                ItemStack removed = new ItemStack(last.item());
+                player.sendOverlayMessage(Component.translatable("message.xincraft.upgrade_removed", removed.getHoverName()));
+                if (!player.getInventory().add(removed)) {
+                    cart.spawnAtLocation(level, removed);
+                }
                 stack.hurtAndBreak(1, player, hand);
                 cart.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
             }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    // The most recently fitted upgrade still on the cart
+    private CartUpgrade newest() {
+        fitOrder.removeIf(upgrade -> !has(upgrade));
+        for (CartUpgrade upgrade : installed()) {
+            if (!fitOrder.contains(upgrade)) {
+                fitOrder.add(upgrade);
+            }
+        }
+        return fitOrder.get(fitOrder.size() - 1);
     }
 
     // Called when the cart is broken
@@ -106,15 +124,21 @@ public final class CartUpgrades {
     }
 
     public void save(ValueOutput output) {
-        output.putString("Upgrades", installed().stream().map(CartUpgrade::id).collect(Collectors.joining(",")));
+        // In the order they were fitted
+        newest();
+        output.putString("Upgrades", fitOrder.stream().map(CartUpgrade::id).collect(Collectors.joining(",")));
     }
 
     public void load(ValueInput input) {
         List<String> ids = new ArrayList<>(Arrays.asList(input.getStringOr("Upgrades", "").split(",")));
         int bits = 0;
-        for (CartUpgrade upgrade : CartUpgrade.values()) {
-            if (ids.contains(upgrade.id())) {
-                bits |= upgrade.bit();
+        fitOrder.clear();
+        for (String id : ids) {
+            for (CartUpgrade upgrade : CartUpgrade.values()) {
+                if (upgrade.id().equals(id) && !fitOrder.contains(upgrade)) {
+                    fitOrder.add(upgrade);
+                    bits |= upgrade.bit();
+                }
             }
         }
         set(bits);

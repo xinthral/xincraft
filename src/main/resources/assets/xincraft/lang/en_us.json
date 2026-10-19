@@ -76,5 +76,9 @@
   "item.xincraft.sculk_sensor_upgrade": "Sculk Sensor Upgrade",
   "item.xincraft.sculk_sensor_upgrade.desc": "Jingle Cart upgrade: only plays while a player is nearby",
   "message.xincraft.upgrade_not_accepted": "This upgrade doesn't fit this cart",
-  "message.xincraft.upgrade_already_fitted": "This cart already has that upgrade"
+  "message.xincraft.upgrade_already_fitted": "This cart already has that upgrade",
+  "item.xincraft.energy_upgrade": "Energy Upgrade",
+  "item.xincraft.energy_upgrade.desc": "Locomotive Cart upgrade: stores Forge Energy (FE) and runs on it before burning fuel",
+  "container.xincraft.locomotive_cart.energy": "%s / %s FE",
+  "message.xincraft.upgrade_removed": "Removed %s"
 }

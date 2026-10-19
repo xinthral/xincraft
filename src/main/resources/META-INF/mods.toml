@@ -10,16 +10,16 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="xincraft"
-version="1.0.0"
+version="${mod_version}"
 displayName="Xincraft"
 #updateJSONURL="https://example.com/updates.json" #optional
 #displayURL="https://example.com/" #optional
 #logoFile="xincraft.png" #optional
 #credits="" #optional
-authors="jjhassel" #optional
+authors="Xinthral" #optional
 #displayTest="MATCH_VERSION" #optional, default=MATCH_VERSION when not clientSideOnly, else IGNORE_ALL_VERSION
 
-description='''Xincraft mod.'''
+description='''Minecarts are fun, but loud. Time to under-engineer it.'''
 
 [[dependencies.xincraft]] #recommended
     modId="forge"

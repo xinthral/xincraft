@@ -99,6 +99,8 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.SHRIEKER, properties), Item.Properties::new);
     public static final RegistryObject<Item> SCULK_SENSOR_UPGRADE = registerItem("sculk_sensor_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.SCULK_SENSOR, properties), Item.Properties::new);
+    public static final RegistryObject<Item> ENERGY_UPGRADE = registerItem("energy_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.ENERGY, properties), Item.Properties::new);
 
     private ModItems() {}
 }

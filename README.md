@@ -261,6 +261,8 @@ The cart has two slots:
 - **Fuel slot**, with a furnace-style flame above it showing how much of the current fuel is left. It takes anything that burns in a furnace, and each item burns **8 times as long** as it would in a furnace (configurable). A lava bucket leaves its empty bucket behind, just like in a furnace.
 - **Storage slot**, a single slot for carrying anything.
 
+With the [Energy Upgrade](#energy-upgrade) fitted, the screen also shows a red energy bar left of the fuel slot.
+
 Ways to open it:
 
 - **Shift + right-click** the cart.
@@ -272,7 +274,7 @@ Ways to open it:
 
 - **Right-click** to get in.
 - **Getting going:** while stopped, press a movement key to set off in that direction. A cart without a rider sets off when pushed.
-- **Staying going:** once moving, it keeps driving whichever way it's going, around curves and up slopes, for as long as there's fuel.
+- **Staying going:** once moving, it keeps driving whichever way it's going, around curves and up slopes, for as long as there's fuel (or stored energy, with the [Energy Upgrade](#energy-upgrade)).
 - **Stopping:** an **unpowered powered rail** brings it to a stop, the same way it stops any minecart. Power the rail to set off again. It also stops if it runs into something or reaches the end of the track.
 - **Fuel use:** a new fuel item is only lit when the cart is trying to move, so a parked locomotive doesn't eat its fuel. An item that's already burning keeps burning down while parked, like in a furnace.
 - **Speed:** it drives at the normal minecart speed cap, at the higher speed on straight [Tin Rails](#tin-rails), and at the slower speed on [Honey Rails](#honey-rail).
@@ -291,22 +293,38 @@ A minecart carrying a jukebox that plays music discs as it rolls along, the musi
 - **It plays while it's moving.** The song starts when the cart sets off and stops shortly after it comes to a halt. A song can't be resumed partway, so it starts from the top each time the cart sets off again. As long as it keeps rolling, the song loops.
 - It's as loud as a jukebox and uses the **Jukebox/Note Blocks** volume slider.
 - If you come within earshot partway through a song, you'll hear the cart from the next time it starts the song.
+- **Hoppers load and unload it**, like a chest minecart: a hopper feeding into the rail puts a disc in, and a hopper under the rail takes it out. It only takes discs, one at a time.
+- On a **detector rail**, a comparator reads a full signal when it has a disc in, and none when it's empty.
 - Breaking the cart drops the disc.
 
 ## Cart Upgrades
 
 Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and jingle cart) and show as small blocks on the cart's rim.
 
-- **Fit an upgrade** by right-clicking the cart with it. Each upgrade can be fitted once per cart.
-- **Remove upgrades** with **shears**: each right-click snips off the last one fitted and drops it.
+> [!IMPORTANT]
+> **Removing upgrades: use shears.**
+> Hold **shears** and **right-click the cart**. Each click snips off **one** upgrade, the **most recently fitted** first, and puts it back in your inventory (a message above the hotbar says which). With two fitted, click once for the newer one and again for the other. An empty hand or shift + right-click won't remove them.
+
+- **Fit an upgrade** by right-clicking the cart with it. Each upgrade can be fitted once per cart, and only on the carts it fits (see the table); otherwise a message says why.
 - Breaking the cart drops its upgrades.
 
 | Upgrade | Recipe | Fits | Effect |
 | --- | --- | --- | --- |
 | Shrieker Upgrade | Sculk Shrieker surrounded by 4 Tin Ingots (one on each side) | Any Xincraft cart | Clears the track ahead: mobs and players in the cart's path are shoved off to the side with a shriek before the cart reaches them. The cart never picks them up and is never slowed by them (it still bumps into other minecarts). |
-| Sculk Sensor Upgrade | Sculk Sensor surrounded by 4 Tin Ingots (one on each side) | Jingle Cart | The cart only plays while a player is within 16 blocks. |
+| Sculk Sensor Upgrade | Sculk Sensor surrounded by 4 Tin Ingots (one on each side) | Jingle Cart | The cart only plays while a player is within 32 blocks. |
+| Energy Upgrade | Block of Redstone surrounded by 4 Tin Ingots (one on each side) | Locomotive Cart | The cart stores Forge Energy (FE) and runs on it, only burning fuel once the energy runs out. See below. |
 
 > The shrieker, like the other powered features, only works with the default minecart physics.
+
+### Energy Upgrade
+
+For modpacks with Forge Energy (FE) mods. A locomotive cart with the energy upgrade holds up to **100,000 FE** and uses **20 FE per tick** while driving, about 4 minutes of driving on a full charge.
+
+- **Charging:** the cart draws up to 1,000 FE per tick from an energy block (a battery, energy cell, generator and so on) **under the rail** it's on, the way a hopper under the rail empties a chest minecart. It also takes energy from another mod's charging rail, or from anything else that hands energy to entities. Energy can't be drawn back out.
+- **Running:** while it has enough energy, the engine runs on that, throwing off sparks instead of smoke. It only burns fuel from its fuel slot once the energy runs out, and a fuel item that's already lit burns out before it switches back.
+- **Energy bar:** the cart's inventory screen shows the charge as a red bar left of the fuel slot. Hover over it for the exact amount.
+- The stored energy stays with the cart if the upgrade is removed, but the cart can't use it or charge until the upgrade is fitted again. Breaking the cart loses it.
+- The capacity and energy per tick can be changed in the config (`energyCapacity` and `energyPerTick` under `locomotiveCart`).
 
 ## Tin Spyglass
 
@@ -348,6 +366,8 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 
 [locomotiveCart]
 	fuelMultiplier = 8.0
+	energyCapacity = 100000
+	energyPerTick = 20
 
 [enderRails]
 	maxDistance = 64
@@ -364,6 +384,8 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `honeyRails.speedMultiplier` | `0.5` | 0.05 – 1.0 | Speed minecarts are held at on honey rails, as a fraction of their normal top speed |
 | `bouncyRails.maxLaunchHeight` | `8.0` | 1.0 – 64.0 | Roughly how many blocks high a bouncy rail launches a cart at full redstone power (15). Weaker signals launch proportionally lower |
 | `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
+| `locomotiveCart.energyCapacity` | `100000` | 1,000 – 100,000,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade can store |
+| `locomotiveCart.energyPerTick` | `20` | 1 – 100,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade uses each tick while driving |
 | `enderRails.maxDistance` | `64` | 1 – 30,000,000 | Furthest apart, in blocks, two ender rails can be and still link. Lowering it stops existing links that are now too long from teleporting, without unlinking them |
 | `enderRails.cooldownSeconds` | `3.0` | 0.0 – 3600.0 | Seconds a cart must wait after teleporting before it can teleport again |
 | `enderRails.maxTeleportsPerSecond` | `20` | 0 – 1000 | Most ender rail teleports allowed across the whole server in any one second (0 = no limit) |
@@ -379,12 +401,14 @@ Requires a JDK 25. Gradle downloads everything else.
 
 | Command | What it does |
 | --- | --- |
-| `./gradlew build` | Builds the mod jar into `build/libs/` |
+| `./gradlew build` | Builds the mod jar into `build/libs/`, named with the mod version |
 | `./gradlew runClient` | Starts the game with the mod loaded (uses the `run/` folder) |
 | `./gradlew runServer` | Starts a dedicated server with the mod loaded |
 | `./gradlew runGameTestServer` | Starts a headless server, runs the game tests, and exits; a quick way to check that the mod loads cleanly |
 
 On Windows, use `gradlew.bat` in place of `./gradlew`.
+
+The mod version is set in one place, `mod_version` in `gradle.properties`. The build uses it for the jar's name and fills it into `mods.toml`, so change it there only.
 
 ### Project layout
 
@@ -396,7 +420,7 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items |
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
-| `.../inventory/` | Locomotive cart menu (slots and burn progress) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen, jingle cart music, tin spyglass tint |
+| `.../inventory/` | Locomotive cart menu (slots, burn progress, and stored energy) |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,13 +27,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.ticks.ContainerSingleItem;
 
 // A minecart carrying a jukebox. Right-click with a music disc to put it in, and right-click again
 // to take it out. It plays the disc while it's rolling, the music following the cart along the
 // track, and starts the song over each time it sets off again (a song can't be resumed partway).
 // It loops the song for as long as it keeps moving. With a sculk sensor upgrade, it only plays
-// while a player is within earshot.
-public class JingleCart extends AbstractMinecart implements UpgradableCart {
+// while a player is within earshot. Like a jukebox, it holds its disc as a one-slot container, so
+// hoppers (and hopper minecarts) can load and unload it, and a detector rail's comparator signal
+// shows whether it has a disc.
+public class JingleCart extends AbstractMinecart implements UpgradableCart, ContainerSingleItem {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> DATA_DISC = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.ITEM_STACK);
     // Which play-through of the song is under way, so clients can tell a new one from the one
@@ -47,7 +51,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart {
     // Pause before the song plays again from the top
     private static final int LOOP_PAUSE_TICKS = 20;
     // Earshot for the sculk sensor upgrade: plays while a player is within this many blocks
-    private static final double SENSOR_RANGE = 16.0;
+    private static final double SENSOR_RANGE = 32.0;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
     private int stillTicks = STOP_DELAY_TICKS;
@@ -74,19 +78,64 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart {
         return upgrades;
     }
 
-    // Every upgrade fits the jingle cart, including the ones only it can use
-    @Override
-    public boolean accepts(CartUpgrade upgrade) {
-        return true;
-    }
-
     public ItemStack getDisc() {
         return entityData.get(DATA_DISC);
     }
 
+    // Putting the same disc back (as a hopper does when it can't take it after all) leaves the song
+    // playing; a different disc stops it
     private void setDisc(ItemStack disc) {
+        boolean changed = !ItemStack.matches(getDisc(), disc);
         entityData.set(DATA_DISC, disc);
-        entityData.set(DATA_SESSION, 0);
+        if (changed) {
+            entityData.set(DATA_SESSION, 0);
+        }
+    }
+
+    // The container: one slot holding the disc
+
+    @Override
+    public ItemStack getTheItem() {
+        return getDisc();
+    }
+
+    // Hands over the disc itself rather than splitting the synced stack in place
+    @Override
+    public ItemStack splitTheItem(int count) {
+        ItemStack disc = getDisc();
+        setDisc(ItemStack.EMPTY);
+        return disc;
+    }
+
+    @Override
+    public void setTheItem(ItemStack stack) {
+        setDisc(stack);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return JukeboxSong.fromStack(stack).isPresent() && getDisc().isEmpty();
+    }
+
+    // Only lets a hopper take the disc when it has room for it, so a full hopper doesn't keep pulling
+    // the disc out and putting it back
+    @Override
+    public boolean canTakeItem(Container into, int slot, ItemStack stack) {
+        return into.hasAnyMatching(ItemStack::isEmpty);
+    }
+
+    @Override
+    public void setChanged() {
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return !isRemoved() && player.isWithinEntityInteractionRange(getBoundingBox(), 4.0);
     }
 
     public Optional<Holder<JukeboxSong>> getSong() {

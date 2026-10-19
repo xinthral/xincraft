@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_yellow_wool": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:yellow_wool"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_powered_rail": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:powered_rail"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:yellow_padded_powered_rail"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_yellow_wool",
+      "has_powered_rail"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:yellow_padded_powered_rail"
+    ]
+  }
+}

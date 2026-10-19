@@ -18,6 +18,8 @@ public class Config {
     private static final ForgeConfigSpec.DoubleValue HONEY_RAIL_SPEED_MULTIPLIER;
     private static final ForgeConfigSpec.DoubleValue BOUNCY_RAIL_MAX_HEIGHT;
     private static final ForgeConfigSpec.DoubleValue LOCOMOTIVE_FUEL_MULTIPLIER;
+    private static final ForgeConfigSpec.IntValue LOCOMOTIVE_ENERGY_CAPACITY;
+    private static final ForgeConfigSpec.IntValue LOCOMOTIVE_ENERGY_PER_TICK;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_PER_SECOND;
@@ -59,6 +61,12 @@ public class Config {
         LOCOMOTIVE_FUEL_MULTIPLIER = BUILDER
                 .comment("How many times longer fuel burns in a locomotive cart than in a furnace")
                 .defineInRange("fuelMultiplier", 8.0, 1.0, 64.0);
+        LOCOMOTIVE_ENERGY_CAPACITY = BUILDER
+                .comment("How much Forge Energy (FE) a locomotive cart with the energy upgrade can store")
+                .defineInRange("energyCapacity", 100_000, 1_000, 100_000_000);
+        LOCOMOTIVE_ENERGY_PER_TICK = BUILDER
+                .comment("How much Forge Energy (FE) a locomotive cart with the energy upgrade uses each tick while driving")
+                .defineInRange("energyPerTick", 20, 1, 100_000);
         BUILDER.pop();
 
         BUILDER.comment("Ender rails").push("enderRails");
@@ -87,6 +95,8 @@ public class Config {
     public static double honeyRailSpeedMultiplier = 0.5;
     public static double bouncyRailMaxHeight = 8.0;
     public static double locomotiveFuelMultiplier = 8.0;
+    public static int locomotiveEnergyCapacity = 100_000;
+    public static int locomotiveEnergyPerTick = 20;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
@@ -110,6 +120,8 @@ public class Config {
         honeyRailSpeedMultiplier = HONEY_RAIL_SPEED_MULTIPLIER.get();
         bouncyRailMaxHeight = BOUNCY_RAIL_MAX_HEIGHT.get();
         locomotiveFuelMultiplier = LOCOMOTIVE_FUEL_MULTIPLIER.get();
+        locomotiveEnergyCapacity = LOCOMOTIVE_ENERGY_CAPACITY.get();
+        locomotiveEnergyPerTick = LOCOMOTIVE_ENERGY_PER_TICK.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
         enderRailMaxTeleportsPerSecond = ENDER_RAIL_MAX_PER_SECOND.get();
