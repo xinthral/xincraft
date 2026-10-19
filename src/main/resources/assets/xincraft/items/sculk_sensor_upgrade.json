@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "xincraft:item/sculk_sensor_upgrade"
+  }
+}

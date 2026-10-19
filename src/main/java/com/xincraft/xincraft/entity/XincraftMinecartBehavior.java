@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.OldMinecartBehavior;
@@ -23,6 +24,7 @@ import org.jspecify.annotations.Nullable;
 //   corners;
 // - honey rails hold carts at a reduced speed;
 // - powered bouncy rails launch carts into the air.
+// It also runs the shrieker upgrade (see CartUpgrades).
 // Forge's per-rail speed hook (BaseRailBlock#getRailMaxSpeed) isn't consulted by the default
 // physics in this version, so the cap is changed here instead. Every kind of cart (furnace
 // minecarts included) scales from vanilla's own cap, so their relative speeds hold.
@@ -167,6 +169,23 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         return level.getBlockState(ahead.below()).is(BlockTags.RAILS) ? ahead.below() : ahead;
     }
 
+    // A cart with a shrieker upgrade clears the track ahead instead of picking up whatever it hits,
+    // and is never slowed by anything but other minecarts, which it still bumps as vanilla does
+    @Override
+    public boolean pushAndPickupEntities() {
+        if (!(minecart instanceof UpgradableCart cart) || !cart.upgrades().has(CartUpgrade.SHRIEKER)
+                || !(level() instanceof ServerLevel level)) {
+            return super.pushAndPickupEntities();
+        }
+        cart.upgrades().clearTrackAhead(level);
+        for (Entity entity : level.getEntities(minecart, minecart.getBoundingBox().inflate(0.2, 0.0, 0.2))) {
+            if (entity instanceof AbstractMinecart && entity.isPushable() && !minecart.hasPassenger(entity)) {
+                entity.push(minecart);
+            }
+        }
+        return false;
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -214,16 +233,25 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
     }
 
     // Throws the cart upward hard enough to rise about (power / 15) of the configured maximum
-    // height, keeping its forward velocity. A stopped cart isn't launched, or it would bounce in
-    // place forever.
+    // height, keeping the forward speed it was moving at. A stopped cart isn't launched, or it
+    // would bounce in place forever.
     private void launch(ServerLevel level, int power) {
         Vec3 movement = getDeltaMovement();
-        double speed = movement.horizontalDistance();
-        if (speed < STOPPED_SPEED) {
+        if (movement.horizontalDistance() < STOPPED_SPEED) {
             return;
         }
-        setDeltaMovement(movement.x, launchVelocity(Config.bouncyRailMaxHeight * power / 15.0), movement.z);
-        launchSpeed = speed;
+        // A cart's velocity can build up well past the speed cap (to 2 blocks a tick on a long line
+        // of powered rails) while the cap holds how far it actually moves. In the air nothing would
+        // hold it back, so it's thrown forward at the speed it was really moving along the rail:
+        // the same clamped move vanilla makes (see moveMinecartOnRail), with any earlier bounce's
+        // speed cleared from the cap first.
+        launchSpeed = 0.0;
+        double cap = minecart.getMaxSpeedAirLateral();
+        double scale = minecart.isVehicle() ? 0.75 : 1.0;
+        double x = Mth.clamp(scale * movement.x, -cap, cap);
+        double z = Mth.clamp(scale * movement.z, -cap, cap);
+        setDeltaMovement(x, launchVelocity(Config.bouncyRailMaxHeight * power / 15.0), z);
+        launchSpeed = Math.sqrt(x * x + z * z);
         minecart.setCanUseRail(false);
         // Otherwise its first tick in the air would treat it as rolling along the ground and halve its speed
         minecart.setOnGround(false);

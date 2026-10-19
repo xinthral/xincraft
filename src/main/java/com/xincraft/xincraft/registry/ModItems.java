@@ -3,6 +3,8 @@ package com.xincraft.xincraft.registry;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.entity.CartUpgrade;
+import com.xincraft.xincraft.item.CartUpgradeItem;
 import com.xincraft.xincraft.item.EnderRailItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -48,6 +50,15 @@ public final class ModItems {
     public static final RegistryObject<Item> BRONZE_INGOT =
         registerItem("bronze_ingot", Item::new, Item.Properties::new);
 
+    public static final RegistryObject<Item> BRONZE_HELMET = registerItem("bronze_helmet", Item::new,
+        () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.HELMET));
+    public static final RegistryObject<Item> BRONZE_CHESTPLATE = registerItem("bronze_chestplate", Item::new,
+        () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.CHESTPLATE));
+    public static final RegistryObject<Item> BRONZE_LEGGINGS = registerItem("bronze_leggings", Item::new,
+        () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.LEGGINGS));
+    public static final RegistryObject<Item> BRONZE_BOOTS = registerItem("bronze_boots", Item::new,
+        () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.BOOTS));
+
     public static final RegistryObject<Item> TIN_HELMET = registerItem("tin_helmet", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.HELMET));
     public static final RegistryObject<Item> TIN_CHESTPLATE = registerItem("tin_chestplate", Item::new,
@@ -78,6 +89,16 @@ public final class ModItems {
     public static final RegistryObject<Item> LOCOMOTIVE_CART = registerItem("locomotive_cart",
         properties -> new MinecartItem(ModEntityTypes.LOCOMOTIVE_CART.get(), properties),
         () -> new Item.Properties().stacksTo(1));
+
+    public static final RegistryObject<Item> JINGLE_CART = registerItem("jingle_cart",
+        properties -> new MinecartItem(ModEntityTypes.JINGLE_CART.get(), properties),
+        () -> new Item.Properties().stacksTo(1));
+
+    // Minecart upgrades (see entity.CartUpgrades)
+    public static final RegistryObject<Item> SHRIEKER_UPGRADE = registerItem("shrieker_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.SHRIEKER, properties), Item.Properties::new);
+    public static final RegistryObject<Item> SCULK_SENSOR_UPGRADE = registerItem("sculk_sensor_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.SCULK_SENSOR, properties), Item.Properties::new);
 
     private ModItems() {}
 }

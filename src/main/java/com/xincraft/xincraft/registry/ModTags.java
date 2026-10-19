@@ -20,6 +20,10 @@ public final class ModTags {
     public static final TagKey<Item> REPAIRS_TIN_ARMOR =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "repairs_tin_armor"));
 
+    // xincraft:repairs_bronze_armor - repair ingredient tag for bronze armor
+    public static final TagKey<Item> REPAIRS_BRONZE_ARMOR =
+        TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "repairs_bronze_armor"));
+
     // xincraft:padded_rails - every colour of padded rail and padded powered rail; minecart
     // sounds are muffled on these (see client.PaddedRailSounds)
     public static final TagKey<Block> PADDED_RAILS =

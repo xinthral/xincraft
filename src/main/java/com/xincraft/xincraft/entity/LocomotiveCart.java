@@ -12,7 +12,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ContainerUser;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.player.Inventory;
@@ -36,18 +38,21 @@ import net.minecraft.world.phys.Vec3;
 // minecart you can sit in. It has a fuel slot (anything that burns in a furnace, lasting
 // Config.locomotiveFuelMultiplier times as long) and one storage slot, both reachable by
 // shift-right-clicking the cart, pressing the inventory key while riding, or a hopper above it.
-public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen {
+// Takes upgrades (see CartUpgrades).
+public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
     public static final int SLOT_COUNT = 2;
 
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
     // Engine force added each tick while burning. Strong enough to hold the cart at the speed
     // cap, including the raised cap on tin rails.
     private static final double PUSH = 0.25;
     // Below this horizontal speed (squared) the cart counts as stopped
     private static final double STOPPED_SPEED_SQR = 1.0E-4;
 
+    private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
     private int litTime;
     private int litDuration;
     // Horizontal unit vector the engine drives along; zero while parked, so no fuel is used
@@ -78,6 +83,12 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_LIT, false);
+        builder.define(DATA_UPGRADES, 0);
+    }
+
+    @Override
+    public CartUpgrades upgrades() {
+        return upgrades;
     }
 
     public boolean isLit() {
@@ -156,9 +167,13 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return super.applyNaturalSlowdown(deltaMovement);
     }
 
-    // Right-click to ride; shift-right-click to open the fuel and storage slots
+    // Upgrades first; then right-click to ride, shift-right-click to open the fuel and storage slots
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        InteractionResult upgraded = upgrades.interact(this, player, hand);
+        if (upgraded != InteractionResult.PASS) {
+            return upgraded;
+        }
         if (player.isSecondaryUseActive()) {
             InteractionResult result = interactWithContainerVehicle(player);
             if (result.consumesAction() && player.level() instanceof ServerLevel) {
@@ -182,6 +197,19 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         if (player.level() instanceof ServerLevel) {
             gameEvent(GameEvent.CONTAINER_OPEN, player);
         }
+    }
+
+    @Override
+    public void push(Entity entity) {
+        if (!upgrades.pushAside(entity)) {
+            super.push(entity);
+        }
+    }
+
+    @Override
+    public void destroy(ServerLevel level, DamageSource source) {
+        super.destroy(level, source);
+        upgrades.dropAll(level);
     }
 
     @Override
@@ -233,6 +261,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         output.putInt("LitDuration", litDuration);
         output.putDouble("HeadingX", heading.x);
         output.putDouble("HeadingZ", heading.z);
+        upgrades.save(output);
     }
 
     @Override
@@ -241,5 +270,6 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         litTime = input.getIntOr("LitTime", 0);
         litDuration = input.getIntOr("LitDuration", 0);
         heading = new Vec3(input.getDoubleOr("HeadingX", 0.0), 0.0, input.getDoubleOr("HeadingZ", 0.0));
+        upgrades.load(input);
     }
 }

@@ -24,5 +24,23 @@ public final class ModArmorMaterials {
         ModEquipmentAssets.TIN
     );
 
+    // Iron's protection with more durability (iron is 15) and better enchantability (iron is 9)
+    public static final ArmorMaterial BRONZE = new ArmorMaterial(
+        17,
+        Map.of(
+            ArmorType.BOOTS, 2,
+            ArmorType.LEGGINGS, 5,
+            ArmorType.CHESTPLATE, 6,
+            ArmorType.HELMET, 2,
+            ArmorType.BODY, 6
+        ),
+        12,
+        SoundEvents.ARMOR_EQUIP_COPPER,
+        0.0F,
+        0.0F,
+        ModTags.REPAIRS_BRONZE_ARMOR,
+        ModEquipmentAssets.BRONZE
+    );
+
     private ModArmorMaterials() {}
 }

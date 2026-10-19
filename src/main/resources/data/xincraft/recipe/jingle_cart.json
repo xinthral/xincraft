@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:minecart_frame",
+    "minecraft:jukebox",
+    "#c:ingots/tin",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "xincraft:jingle_cart",
+    "count": 1
+  }
+}

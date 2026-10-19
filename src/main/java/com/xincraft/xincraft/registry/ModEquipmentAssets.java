@@ -9,6 +9,8 @@ import net.minecraft.world.item.equipment.EquipmentAssets;
 public final class ModEquipmentAssets {
     public static final ResourceKey<EquipmentAsset> TIN =
         ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "tin"));
+    public static final ResourceKey<EquipmentAsset> BRONZE =
+        ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "bronze"));
 
     private ModEquipmentAssets() {}
 }

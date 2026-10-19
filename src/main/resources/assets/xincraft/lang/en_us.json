@@ -6,6 +6,10 @@
   "item.xincraft.raw_bronze": "Raw Bronze",
   "item.xincraft.bronze_ingot": "Bronze Ingot",
   "block.xincraft.bronze_block": "Block of Bronze",
+  "item.xincraft.bronze_helmet": "Bronze Helmet",
+  "item.xincraft.bronze_chestplate": "Bronze Chestplate",
+  "item.xincraft.bronze_leggings": "Bronze Leggings",
+  "item.xincraft.bronze_boots": "Bronze Boots",
   "item.xincraft.tin_helmet": "Tin Helmet",
   "item.xincraft.tin_chestplate": "Tin Chestplate",
   "item.xincraft.tin_leggings": "Tin Leggings",
@@ -64,5 +68,13 @@
   "block.xincraft.tin_ore": "Tin Ore",
   "block.xincraft.deepslate_tin_ore": "Deepslate Tin Ore",
   "item.xincraft.raw_tin": "Raw Tin",
-  "block.xincraft.inspector_rail": "Inspector Rail"
+  "block.xincraft.inspector_rail": "Inspector Rail",
+  "item.xincraft.jingle_cart": "Jingle Cart",
+  "entity.xincraft.jingle_cart": "Jingle Cart",
+  "item.xincraft.shrieker_upgrade": "Shrieker Upgrade",
+  "item.xincraft.shrieker_upgrade.desc": "Minecart upgrade: clears mobs and players off the track ahead",
+  "item.xincraft.sculk_sensor_upgrade": "Sculk Sensor Upgrade",
+  "item.xincraft.sculk_sensor_upgrade.desc": "Jingle Cart upgrade: only plays while a player is nearby",
+  "message.xincraft.upgrade_not_accepted": "This upgrade doesn't fit this cart",
+  "message.xincraft.upgrade_already_fitted": "This cart already has that upgrade"
 }

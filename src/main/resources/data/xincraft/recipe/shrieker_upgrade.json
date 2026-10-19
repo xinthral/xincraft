@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "S": "minecraft:sculk_shrieker"
+  },
+  "pattern": [
+    " T ",
+    "TST",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:shrieker_upgrade",
+    "count": 1
+  }
+}

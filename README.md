@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, and teleporting ender rails.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, and teleporting ender rails. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -20,6 +20,8 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
+- [Jingle Cart](#jingle-cart)
+- [Cart Upgrades](#cart-upgrades)
 - [Tin Spyglass](#tin-spyglass)
 - [Configuration](#configuration)
 - [Building from source](#building-from-source)
@@ -80,8 +82,13 @@ An alloy of copper and tin.
 | Raw Bronze | 3 Raw Copper + 1 Raw Tin, shapeless | 4 |
 | Bronze Ingot | Smelt or blast Raw Bronze | 1 |
 | Block of Bronze | 9 Bronze Ingots (and back into 9 ingots) | 1 |
+| Bronze Helmet, Chestplate, Leggings, Boots | Same shapes as iron armor, with Bronze Ingots (5 / 8 / 7 / 4 ingots) | 1 |
 
 Bronze is a muted golden orange, and the Block of Bronze has copper's polished shine. It needs a stone pickaxe or better to mine. Bronze uses the common `c:` tags (`c:raw_materials/bronze`, `c:ingots/bronze`, `c:storage_blocks/bronze`), and the raw bronze recipe accepts any mod's raw copper and raw tin.
+
+Bronze armor gives the same protection as iron, 2 / 6 / 5 / 2 armor points (helmet / chestplate / leggings / boots), but lasts longer, with a durability multiplier of 17 (iron is 15), and has an enchantability of 12. Repair it with bronze ingots in an anvil. It takes armor trims like vanilla armor.
+
+**Full set bonus:** wearing all four pieces of bronze armor lets you **walk straight up one-block steps** without jumping, the way horses do (step height 1 block instead of 0.6). Take any piece off and it's back to normal at once.
 
 ## Tin Rails
 
@@ -272,6 +279,35 @@ Ways to open it:
 
 > Like the other powered features, the engine only works with the default minecart physics.
 
+## Jingle Cart
+
+A minecart carrying a jukebox that plays music discs as it rolls along, the music following the cart down the track.
+
+**Recipe** (shapeless):
+
+> 1 Minecart Frame + 1 Jukebox + 1 Tin Ingot + 1 Amethyst Shard → 1 Jingle Cart
+
+- **Right-click with a music disc** to put it in; **right-click again** to take it out. Any music disc works, including other mods'.
+- **It plays while it's moving.** The song starts when the cart sets off and stops shortly after it comes to a halt. A song can't be resumed partway, so it starts from the top each time the cart sets off again. As long as it keeps rolling, the song loops.
+- It's as loud as a jukebox and uses the **Jukebox/Note Blocks** volume slider.
+- If you come within earshot partway through a song, you'll hear the cart from the next time it starts the song.
+- Breaking the cart drops the disc.
+
+## Cart Upgrades
+
+Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and jingle cart) and show as small blocks on the cart's rim.
+
+- **Fit an upgrade** by right-clicking the cart with it. Each upgrade can be fitted once per cart.
+- **Remove upgrades** with **shears**: each right-click snips off the last one fitted and drops it.
+- Breaking the cart drops its upgrades.
+
+| Upgrade | Recipe | Fits | Effect |
+| --- | --- | --- | --- |
+| Shrieker Upgrade | Sculk Shrieker surrounded by 4 Tin Ingots (one on each side) | Any Xincraft cart | Clears the track ahead: mobs and players in the cart's path are shoved off to the side with a shriek before the cart reaches them. The cart never picks them up and is never slowed by them (it still bumps into other minecarts). |
+| Sculk Sensor Upgrade | Sculk Sensor surrounded by 4 Tin Ingots (one on each side) | Jingle Cart | The cart only plays while a player is within 16 blocks. |
+
+> The shrieker, like the other powered features, only works with the default minecart physics.
+
 ## Tin Spyglass
 
 A spyglass with a night-vision lens. Looking through it lets you see in the dark as if you had Night Vision, and tints the view green. The effect stops as soon as you lower it, and it never shows an effect icon. If you already have Night Vision from a potion, the spyglass leaves it alone.
@@ -357,10 +393,10 @@ On Windows, use `gradlew.bat` in place of `./gradlew`.
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
-| `.../item/` | Ender rail item (attuning and glint), tin armor set bonus, tin spyglass night vision |
-| `.../entity/` | Ender minecart, locomotive cart, and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
+| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items |
+| `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart menu (slots and burn progress) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers, locomotive cart screen, tin spyglass tint |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "S": "minecraft:sculk_sensor"
+  },
+  "pattern": [
+    " T ",
+    "TST",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:sculk_sensor_upgrade",
+    "count": 1
+  }
+}
