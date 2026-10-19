@@ -7,6 +7,7 @@ import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.HoneyRailBlock;
 import com.xincraft.xincraft.block.BouncyRailBlock;
+import com.xincraft.xincraft.block.ChargingRailBlock;
 import com.xincraft.xincraft.block.InspectorRailBlock;
 import com.xincraft.xincraft.block.EnderRailBlock;
 import com.xincraft.xincraft.block.ModPoweredRailBlock;
@@ -114,6 +115,18 @@ public final class ModBlocks {
             .noCollision()
             .strength(0.7F)
             .sound(SoundType.METAL),
+        true
+    );
+
+    // A bronze powered rail holding Forge Energy for locomotive carts with the energy upgrade to
+    // charge from (block.ChargingRailBlock)
+    public static final RegistryObject<Block> CHARGING_RAIL = registerBlock(
+        "charging_rail",
+        ChargingRailBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .strength(0.7F)
+            .sound(SoundType.COPPER),
         true
     );
 

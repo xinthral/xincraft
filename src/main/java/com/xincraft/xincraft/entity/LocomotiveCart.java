@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.entity;
 
 import com.xincraft.xincraft.Config;
+import com.xincraft.xincraft.block.ChargingRailBlockEntity;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
 import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -47,8 +48,8 @@ import org.jspecify.annotations.Nullable;
 // Config.locomotiveFuelMultiplier times as long) and one storage slot, both reachable by
 // shift-right-clicking the cart, pressing the inventory key while riding, or a hopper above it.
 // Takes upgrades (see CartUpgrades). With the energy upgrade it also stores Forge Energy, charged
-// from energy blocks under the track (or by anything that hands energy to entities), and runs on
-// that before burning any fuel.
+// from charging rails, energy blocks under the track (or anything that hands energy to entities),
+// or by burning its fuel, and the engine runs only on that stored energy.
 public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
@@ -134,14 +135,14 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
             }
             electric = false;
             if (upgrades.has(CartUpgrade.ENERGY)) {
+                // Fuel and the track charge the battery, and the engine runs only on the battery
                 chargeFromTrack(serverLevel);
-                // Runs on energy whenever it has some, saving fuel for when it runs out
-                if (litTime <= 0 && heading.lengthSqr() > 0 && energy >= Config.locomotiveEnergyPerTick) {
+                chargeFromFuel(serverLevel);
+                if (heading.lengthSqr() > 0 && energy >= Config.locomotiveEnergyPerTick) {
                     energy -= Config.locomotiveEnergyPerTick;
                     electric = true;
                 }
-            }
-            if (litTime <= 0 && !electric && heading.lengthSqr() > 0) {
+            } else if (litTime <= 0 && heading.lengthSqr() > 0) {
                 burnFuel(serverLevel);
             }
             entityData.set(DATA_LIT, litTime > 0);
@@ -155,14 +156,33 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         }
     }
 
+    // With the energy upgrade, burning fuel charges the battery rather than driving the cart, moving
+    // or parked. Each tick of burn stores as much energy as a tick of driving uses, so fuel goes as
+    // far as it would without the upgrade. Lights new fuel only while the battery isn't full.
+    private void chargeFromFuel(ServerLevel level) {
+        if (energy >= energyCapacity()) {
+            return;
+        }
+        if (litTime <= 0) {
+            burnFuel(level);
+        }
+        if (litTime > 0) {
+            energy = Math.min(energyCapacity(), energy + Config.locomotiveEnergyPerTick);
+        }
+    }
+
     // Draws energy from whatever's under the cart that gives it out: the rail itself (for other
-    // mods' charging rails), then the block beneath the rail (e.g. a battery)
+    // mods' charging rails), then the block beneath the rail (e.g. a battery). The mod's own
+    // charging rail pushes energy into the cart instead (block.ChargingRailBlockEntity), so it's
+    // skipped here rather than charging the cart twice over.
     private void chargeFromTrack(ServerLevel level) {
         if (energy >= energyCapacity()) {
             return;
         }
         BlockPos rail = getCurrentBlockPosOrRailBelow();
-        drawFrom(level, rail, null);
+        if (!(level.getBlockEntity(rail) instanceof ChargingRailBlockEntity)) {
+            drawFrom(level, rail, null);
+        }
         drawFrom(level, rail.below(), Direction.UP);
     }
 
@@ -226,7 +246,9 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     // Same engine force as the furnace minecart, applied along the heading
     @Override
     protected Vec3 applyNaturalSlowdown(Vec3 deltaMovement) {
-        if ((litTime > 0 || electric) && heading.lengthSqr() > 0) {
+        // With the energy upgrade, burning fuel only charges the battery; the battery drives
+        boolean powered = upgrades.has(CartUpgrade.ENERGY) ? electric : litTime > 0;
+        if (powered && heading.lengthSqr() > 0) {
             deltaMovement = deltaMovement.multiply(0.8, 0.0, 0.8).add(heading.scale(PUSH));
             if (isInWater()) {
                 deltaMovement = deltaMovement.scale(0.1);

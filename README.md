@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, and teleporting ender rails. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -17,6 +17,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Bouncy Rail](#bouncy-rail)
 - [Inspector Rail](#inspector-rail)
 - [Ender Rails](#ender-rails)
+- [Charging Rail](#charging-rail)
 - [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
@@ -225,6 +226,19 @@ To keep servers stable, there's also a server-wide limit on how many teleports c
 
 > Teleporting only works with the default minecart physics, not Minecraft's experimental minecart physics.
 
+## Charging Rail
+
+A bronze powered rail that stores Forge Energy (FE) for locomotive carts with the [Energy Upgrade](#energy-upgrade). For modpacks with FE mods: it doesn't make energy itself.
+
+| Recipe | Makes |
+| --- | --- |
+| Powered Rail recipe with Bronze Ingots in place of Gold Ingots (6 Bronze Ingots + 1 Stick + 1 Redstone) | 6 |
+
+- **Filling it:** place another mod's generator, battery or energy cell **right next to it** (beside, above or below), and the rail draws energy from it by itself. Cables connected to it work too. It holds up to **50,000 FE** and takes in up to 1,000 FE per tick.
+- **Charging a cart:** the rail passes up to 1,000 FE per tick into a locomotive cart with the energy upgrade sitting on it or rolling over it. It also charges other mods' carts that take Forge Energy.
+- **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail with a generator beside it makes a **charging station**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
+- Other mods' machines can draw energy back out of it too.
+
 ## Minecart Frame
 
 A bare tin minecart frame, the base for the mod's special minecarts.
@@ -276,7 +290,7 @@ Ways to open it:
 - **Getting going:** while stopped, press a movement key to set off in that direction. A cart without a rider sets off when pushed.
 - **Staying going:** once moving, it keeps driving whichever way it's going, around curves and up slopes, for as long as there's fuel (or stored energy, with the [Energy Upgrade](#energy-upgrade)).
 - **Stopping:** an **unpowered powered rail** brings it to a stop, the same way it stops any minecart. Power the rail to set off again. It also stops if it runs into something or reaches the end of the track.
-- **Fuel use:** a new fuel item is only lit when the cart is trying to move, so a parked locomotive doesn't eat its fuel. An item that's already burning keeps burning down while parked, like in a furnace.
+- **Fuel use:** a new fuel item is only lit when the cart is trying to move, so a parked locomotive doesn't eat its fuel. An item that's already burning keeps burning down while parked, like in a furnace. (The [Energy Upgrade](#energy-upgrade) changes this: fuel charges the battery, and the battery drives the cart.)
 - **Speed:** it drives at the normal minecart speed cap, at the higher speed on straight [Tin Rails](#tin-rails), and at the slower speed on [Honey Rails](#honey-rail).
 
 > Like the other powered features, the engine only works with the default minecart physics.
@@ -320,8 +334,9 @@ Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and j
 
 For modpacks with Forge Energy (FE) mods. A locomotive cart with the energy upgrade holds up to **100,000 FE** and uses **20 FE per tick** while driving, about 4 minutes of driving on a full charge.
 
-- **Charging:** the cart draws up to 1,000 FE per tick from an energy block (a battery, energy cell, generator and so on) **under the rail** it's on, the way a hopper under the rail empties a chest minecart. It also takes energy from another mod's charging rail, or from anything else that hands energy to entities. Energy can't be drawn back out.
-- **Running:** while it has enough energy, the engine runs on that, throwing off sparks instead of smoke. It only burns fuel from its fuel slot once the energy runs out, and a fuel item that's already lit burns out before it switches back.
+- **Charging:** the cart draws up to 1,000 FE per tick from a [Charging Rail](#charging-rail) it's on, which makes a charging station. It also draws from an energy block (a battery, energy cell, generator and so on) **under the rail** it's on, the way a hopper under the rail empties a chest minecart, from other mods' charging rails, and from anything else that hands energy to entities. Energy can't be drawn back out of the cart.
+- **Fuel charges the battery:** whenever the battery isn't full, the cart burns fuel from its fuel slot, moving or parked, and every tick of burning goes into the battery (20 FE by default, the same as a tick of driving uses). So fuel lasts just as long as it would without the upgrade. Once the battery is full it stops lighting new fuel, so a parked locomotive with fuel loaded tops itself up and then waits.
+- **The battery drives the cart:** with the upgrade, the engine runs only on stored energy, throwing off sparks (and smoke while fuel is burning). While moving with fuel loaded, the fuel refills the battery as fast as driving drains it; once the fuel runs out, the battery keeps it going until it's empty.
 - **Energy bar:** the cart's inventory screen shows the charge as a red bar left of the fuel slot. Hover over it for the exact amount.
 - The stored energy stays with the cart if the upgrade is removed, but the cart can't use it or charge until the upgrade is fitted again. Breaking the cart loses it.
 - The capacity and energy per tick can be changed in the config (`energyCapacity` and `energyPerTick` under `locomotiveCart`).
@@ -416,7 +431,7 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, and ender rails |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails |
 | `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items |
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |

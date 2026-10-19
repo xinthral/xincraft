@@ -80,5 +80,6 @@
   "item.xincraft.energy_upgrade": "Energy Upgrade",
   "item.xincraft.energy_upgrade.desc": "Locomotive Cart upgrade: stores Forge Energy (FE) and runs on it before burning fuel",
   "container.xincraft.locomotive_cart.energy": "%s / %s FE",
-  "message.xincraft.upgrade_removed": "Removed %s"
+  "message.xincraft.upgrade_removed": "Removed %s",
+  "block.xincraft.charging_rail": "Charging Rail"
 }
