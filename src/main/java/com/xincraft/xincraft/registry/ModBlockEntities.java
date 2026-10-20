@@ -5,6 +5,8 @@ import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.ChargingRailBlockEntity;
 import com.xincraft.xincraft.block.EnderRailBlockEntity;
 import com.xincraft.xincraft.block.HeatTurbineBlockEntity;
+import com.xincraft.xincraft.block.MendingLilacBlockEntity;
+import com.xincraft.xincraft.block.MixingTrayBlockEntity;
 import com.xincraft.xincraft.block.SteamTurbineBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -26,6 +28,12 @@ public final class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<SteamTurbineBlockEntity>> STEAM_TURBINE = BLOCK_ENTITIES.register("steam_turbine",
         () -> new BlockEntityType<>(SteamTurbineBlockEntity::new, Set.of(ModBlocks.STEAM_TURBINE.get())));
+
+    public static final RegistryObject<BlockEntityType<MixingTrayBlockEntity>> MIXING_TRAY = BLOCK_ENTITIES.register("mixing_tray",
+        () -> new BlockEntityType<>(MixingTrayBlockEntity::new, Set.of(ModBlocks.MIXING_TRAY.get())));
+
+    public static final RegistryObject<BlockEntityType<MendingLilacBlockEntity>> MENDING_LILAC = BLOCK_ENTITIES.register("mending_lilac",
+        () -> new BlockEntityType<>(MendingLilacBlockEntity::new, Set.of(ModBlocks.MENDING_LILAC.get())));
 
     private ModBlockEntities() {}
 }

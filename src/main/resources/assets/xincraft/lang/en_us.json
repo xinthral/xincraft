@@ -85,5 +85,9 @@
   "block.xincraft.heat_turbine": "Heat Turbine",
   "block.xincraft.steam_turbine": "Steam Turbine",
   "container.xincraft.turbine.energy": "%s / %s FE",
-  "container.xincraft.turbine.water": "%s / %s mB Water"
+  "container.xincraft.turbine.water": "%s / %s mB Water",
+  "block.xincraft.mixing_tray": "Mixing Tray",
+  "block.xincraft.mending_lilac": "Mending Lilac",
+  "block.xincraft.firefly_petunia": "Firefly Petunia",
+  "item.xincraft.exotic_pollen": "Exotic Pollen"
 }

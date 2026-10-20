@@ -6,6 +6,7 @@ import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
 import com.xincraft.xincraft.item.CartUpgradeItem;
 import com.xincraft.xincraft.item.EnderRailItem;
+import com.xincraft.xincraft.item.ExoticPollenItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MinecartItem;
@@ -101,6 +102,10 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.SCULK_SENSOR, properties), Item.Properties::new);
     public static final RegistryObject<Item> ENERGY_UPGRADE = registerItem("energy_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.ENERGY, properties), Item.Properties::new);
+
+    // Mixed from three different flowers on the mixing tray; turns certain flowers into exotic ones
+    public static final RegistryObject<Item> EXOTIC_POLLEN = registerItem("exotic_pollen", ExoticPollenItem::new,
+        () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
     private ModItems() {}
 }

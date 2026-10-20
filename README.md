@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades, and exotic flowers that give off area effects.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -25,6 +25,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Jingle Cart](#jingle-cart)
 - [Cart Upgrades](#cart-upgrades)
 - [Tin Spyglass](#tin-spyglass)
+- [Exotic Flowers](#exotic-flowers)
 - [Configuration](#configuration)
 - [Building from source](#building-from-source)
 
@@ -384,6 +385,39 @@ It zooms, sounds, and counts for advancements exactly like a normal spyglass, be
 
 ---
 
+## Exotic Flowers
+
+Flowers that work like a small beacon, each giving off its own effect around it. You grow them from vanilla flowers using **Exotic Pollen**, which you mix on a **Mixing Tray**.
+
+### Mixing Tray
+
+**Recipe:** 5 wooden slabs (any kind) in a U shape (`S S` over `SSS`) → 1 Mixing Tray.
+
+- **Right-click it with a flower** to set it on the tray. Any small flower works (dandelions, poppies, tulips, lilies of the valley, and so on), but each flower on the tray must be a **different** kind.
+- When the **third different flower** goes on, the three mix into **1 Exotic Pollen**.
+- **Right-click with an empty hand** to take the pollen off. If there's no pollen yet, an empty hand takes back the last flower you put on.
+- Breaking the tray drops whatever is on it.
+
+### Growing exotic flowers
+
+Right-click one of these flowers with Exotic Pollen to turn it into an exotic flower. Each one uses up one pollen.
+
+| Use pollen on | To grow | Effect |
+| --- | --- | --- |
+| Lily of the Valley | **Mending Lilac** | **Regeneration I** for players, pets and peaceful mobs within 8 blocks (a 16×16×16 area), but not hostile mobs |
+| Dandelion | **Firefly Petunia** | Glows a soft yellow (light level 10) with fireflies drifting around it |
+
+- **Mending Lilac:** like a beacon, it refreshes the effect every 2 seconds, so it stays on while you're in range and wears off a few seconds after you leave. Several lilacs don't make it stronger. The range can be changed in the config (`flowers.mendingLilacRange`).
+- **Firefly Petunia:** bright enough to stop mobs spawning around it, while still giving a garden a soft glow.
+- Both are planted and broken like any flower (they break instantly and drop themselves), bees pollinate them, and they work in suspicious stew. They also craft into dye: a Mending Lilac makes Magenta Dye and a Firefly Petunia makes Yellow Dye.
+- They can't go in flower pots yet.
+
+### Glowing leaves
+
+Right-click any **leaves** with Exotic Pollen to make them glow faintly, about as bright as glow lichen (light level 7). It uses one pollen per block, and works on every kind of vanilla leaves: oak, spruce, birch, jungle, acacia, cherry, dark oak, pale oak, mangrove, azalea and flowering azalea.
+
+Glowing leaves look exactly like the leaves they came from and behave the same way. They decay when their tree is cut down, and drop the same saplings, sticks and apples. Broken with shears or Silk Touch, they drop ordinary leaves, so the glow stays where it was applied and doesn't come with you.
+
 ## Configuration
 
 Xincraft's settings live in `config/xincraft-common.toml`. The file is created the first time the game starts, with a comment and the allowed range for each value. Changes made while the game is running take effect immediately, except `tin.generateOre` (see below).
@@ -409,6 +443,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 	energyCapacity = 100000
 	energyPerTick = 20
 
+[flowers]
+	mendingLilacRange = 8
+
 [turbines]
 	heatTurbineEnergyPerTick = 40
 	steamTurbineEnergyPerTick = 160
@@ -431,6 +468,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
 | `locomotiveCart.energyCapacity` | `100000` | 1,000 – 100,000,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade can store |
 | `locomotiveCart.energyPerTick` | `20` | 1 – 100,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade uses each tick while driving |
+| `flowers.mendingLilacRange` | `8` | 1 – 32 | How far, in blocks, a mending lilac's regeneration reaches in each direction (8 = a 16-block-wide area) |
 | `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
 | `turbines.steamTurbineEnergyPerTick` | `160` | 1 – 100,000 | Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed) |
 | `turbines.steamTurbineWaterPerTick` | `5` | 0 – 1,000 | Water, in millibuckets (1,000 = one bucket), a steam turbine uses each tick while running |
@@ -464,11 +502,11 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, and the heat and steam turbines |
-| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, and the exotic flowers |
+| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen |
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, mixing tray contents, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

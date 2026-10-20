@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_firefly_petunia": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:firefly_petunia"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:yellow_dye_from_firefly_petunia"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_firefly_petunia"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:yellow_dye_from_firefly_petunia"
+    ]
+  }
+}

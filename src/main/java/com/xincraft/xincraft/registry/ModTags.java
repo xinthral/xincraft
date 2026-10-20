@@ -11,6 +11,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public final class ModTags {
+    // minecraft:small_flowers - the flowers that can be mixed on a mixing tray
+    public static final TagKey<Item> SMALL_FLOWERS =
+        TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("small_flowers"));
+
     // c:ingots/tin - common cross-mod tag identifying tin ingots
     public static final TagKey<Item> TIN_INGOTS =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "ingots/tin"));

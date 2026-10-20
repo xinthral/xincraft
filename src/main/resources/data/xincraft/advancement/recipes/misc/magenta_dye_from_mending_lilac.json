@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mending_lilac": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:mending_lilac"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:magenta_dye_from_mending_lilac"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mending_lilac"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:magenta_dye_from_mending_lilac"
+    ]
+  }
+}
