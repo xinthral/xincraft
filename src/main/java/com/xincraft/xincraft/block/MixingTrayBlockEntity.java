@@ -1,127 +1,98 @@
 package com.xincraft.xincraft.block;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.xincraft.xincraft.registry.ModBlockEntities;
 import com.xincraft.xincraft.registry.ModItems;
 import com.xincraft.xincraft.registry.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 
-// What's on a mixing tray: up to three different small flowers, which mix into one exotic pollen as
-// soon as the third goes on. Synced to clients so the tray can show them (client.MixingTrayRenderer).
+// Remembers which flowers have gone into a mixing tray's mash, so each one has to be different. How
+// full the tray is lives in its block state (MixingTrayBlock.LEVEL), which is what shows the mash.
+// Also notices honeycomb thrown onto a full tray, which turns the mash into pollen.
 public class MixingTrayBlockEntity extends BlockEntity {
-    public static final int SLOTS = 3;
+    // How often a full tray looks for thrown honeycomb
+    private static final int HONEYCOMB_CHECK_TICKS = 4;
 
-    // The flowers in the order they went on, or the pollen alone in the first slot
-    private NonNullList<ItemStack> items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
+    private final List<Item> flowers = new ArrayList<>();
 
     public MixingTrayBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MIXING_TRAY.get(), pos, state);
-    }
-
-    public NonNullList<ItemStack> getItems() {
-        return items;
-    }
-
-    private boolean hasPollen() {
-        return items.get(0).is(ModItems.EXOTIC_POLLEN.get());
-    }
-
-    private int count() {
-        int count = 0;
-        while (count < SLOTS && !items.get(count).isEmpty()) {
-            count++;
-        }
-        return count;
     }
 
     public static boolean isMixable(ItemStack stack) {
         return stack.is(ModTags.SMALL_FLOWERS);
     }
 
-    // Puts one of the stack's flower on the tray, if there's room and it isn't already there;
-    // returns whether it went on. The third different flower mixes them all into pollen.
-    boolean addFlower(ServerLevel level, ItemStack stack) {
-        if (hasPollen() || count() >= SLOTS || !isMixable(stack)) {
-            return false;
-        }
-        for (ItemStack item : items) {
-            if (item.is(stack.getItem())) {
-                return false;
-            }
-        }
-        items.set(count(), stack.copyWithCount(1));
-        level.playSound(null, worldPosition, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.2F);
-        if (count() == SLOTS) {
-            items.clear();
-            items.set(0, new ItemStack(ModItems.EXOTIC_POLLEN.get()));
-            level.playSound(null, worldPosition, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 0.8F);
-            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, worldPosition.getX() + 0.5, worldPosition.getY() + 0.25,
-                worldPosition.getZ() + 0.5, 10, 0.25, 0.1, 0.25, 0.0);
-        }
-        changed(level);
-        return true;
+    // Whether this flower can go in: it's a small flower that isn't in the mash already
+    boolean accepts(ItemStack stack) {
+        return isMixable(stack) && !flowers.contains(stack.getItem());
     }
 
-    // Takes the pollen, or else the last flower put on; empty if the tray is empty
-    ItemStack takeTop(ServerLevel level) {
-        int count = count();
-        if (count == 0) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack taken = items.get(count - 1);
-        items.set(count - 1, ItemStack.EMPTY);
-        changed(level);
-        return taken;
-    }
-
-    private void changed(ServerLevel level) {
+    void addFlower(ItemStack stack) {
+        flowers.add(stack.getItem());
         setChanged();
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
     }
 
+    void clearFlowers() {
+        flowers.clear();
+        setChanged();
+    }
+
+    // A full tray turns honeycomb thrown onto it into pollen, one honeycomb per batch
+    void serverTick(ServerLevel level, BlockState state) {
+        if (state.getValue(MixingTrayBlock.LEVEL) != MixingTrayBlock.FULL
+                || Math.floorMod(level.getGameTime() + worldPosition.asLong(), HONEYCOMB_CHECK_TICKS) != 0) {
+            return;
+        }
+        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition),
+                item -> item.isAlive() && item.getItem().is(Items.HONEYCOMB))) {
+            item.getItem().shrink(1);
+            if (item.getItem().isEmpty()) {
+                item.discard();
+            }
+            MixingTrayBlock.finish(level, worldPosition, state);
+            return;
+        }
+    }
+
+    // Breaking a tray of finished pollen drops the pollen; a half-made mash is lost, like compost
     @Override
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);
-        if (level != null) {
-            Containers.dropContents(level, pos, items);
+        if (level != null && state.getValue(MixingTrayBlock.LEVEL) == MixingTrayBlock.READY) {
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.EXOTIC_POLLEN.get()));
         }
     }
 
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        // A fresh list, so slots emptied since the last sync don't linger on clients
-        items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(input, items);
+        flowers.clear();
+        for (String id : input.getStringOr("Flowers", "").split(",")) {
+            Identifier key = Identifier.tryParse(id);
+            if (!id.isEmpty() && key != null) {
+                BuiltInRegistries.ITEM.getOptional(key).ifPresent(flowers::add);
+            }
+        }
     }
 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        ContainerHelper.saveAllItems(output, items);
-    }
-
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
+        output.putString("Flowers", String.join(",", flowers.stream().map(item -> BuiltInRegistries.ITEM.getKey(item).toString()).toList()));
     }
 }

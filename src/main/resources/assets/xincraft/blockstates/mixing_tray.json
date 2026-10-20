@@ -1,7 +1,22 @@
 {
   "variants": {
-    "": {
+    "level=0": {
       "model": "xincraft:block/mixing_tray"
+    },
+    "level=1": {
+      "model": "xincraft:block/mixing_tray_level1"
+    },
+    "level=2": {
+      "model": "xincraft:block/mixing_tray_level2"
+    },
+    "level=3": {
+      "model": "xincraft:block/mixing_tray_level3"
+    },
+    "level=4": {
+      "model": "xincraft:block/mixing_tray_level4"
+    },
+    "level=5": {
+      "model": "xincraft:block/mixing_tray_level5"
     }
   }
 }

@@ -393,10 +393,15 @@ Flowers that work like a small beacon, each giving off its own effect around it.
 
 **Recipe:** 5 wooden slabs (any kind) in a U shape (`S S` over `SSS`) → 1 Mixing Tray.
 
-- **Right-click it with a flower** to set it on the tray. Any small flower works (dandelions, poppies, tulips, lilies of the valley, and so on), but each flower on the tray must be a **different** kind.
-- When the **third different flower** goes on, the three mix into **1 Exotic Pollen**.
-- **Right-click with an empty hand** to take the pollen off. If there's no pollen yet, an empty hand takes back the last flower you put on.
-- Breaking the tray drops whatever is on it.
+It fills up like a composter:
+
+1. **Right-click it with a flower** to mash it in. Each flower raises the layer of green, petal-flecked flower mash a step. Any small flower works (dandelions, poppies, tulips, lilies of the valley, and so on), but each one must be a **different** kind.
+2. **Four different flowers** fill the tray.
+3. **Add a honeycomb** to the full tray, either by right-clicking with it or by **throwing it on**. The mash turns into shimmering **Exotic Pollen**.
+4. **Right-click with an empty hand** to take the pollen (1 per batch). The tray is then empty and ready for the next batch.
+
+- Flowers can't be taken back out once they're mashed in.
+- Breaking the tray drops the pollen if it's finished. A half-made mash is lost, like compost.
 
 ### Growing exotic flowers
 
@@ -406,10 +411,12 @@ Right-click one of these flowers with Exotic Pollen to turn it into an exotic fl
 | --- | --- | --- |
 | Lily of the Valley | **Mending Lilac** | **Regeneration I** for players, pets and peaceful mobs within 8 blocks (a 16×16×16 area), but not hostile mobs |
 | Dandelion | **Firefly Petunia** | Glows a soft yellow (light level 10) with fireflies drifting around it |
+| Golden Dandelion | **Moonlit Dandelion** | **Night Vision** for players within 8 blocks (a 16×16×16 area) |
 
 - **Mending Lilac:** like a beacon, it refreshes the effect every 2 seconds, so it stays on while you're in range and wears off a few seconds after you leave. Several lilacs don't make it stronger. The range can be changed in the config (`flowers.mendingLilacRange`).
+- **Moonlit Dandelion:** a pale silver bloom that sheds the odd glimmer of light. Like the lilac, it refreshes Night Vision every 2 seconds. Each dose lasts 15 seconds, so the screen doesn't flicker as it runs low, and it wears off about 15 seconds after you leave. The range can be changed in the config (`flowers.moonlitDandelionRange`).
 - **Firefly Petunia:** bright enough to stop mobs spawning around it, while still giving a garden a soft glow.
-- Both are planted and broken like any flower (they break instantly and drop themselves), bees pollinate them, and they work in suspicious stew. They also craft into dye: a Mending Lilac makes Magenta Dye and a Firefly Petunia makes Yellow Dye.
+- Both are planted and broken like any flower (they break instantly and drop themselves), bees pollinate them, and they work in suspicious stew. They also craft into dye: a Mending Lilac makes Magenta Dye, a Firefly Petunia Yellow Dye and a Moonlit Dandelion Light Gray Dye.
 - They can't go in flower pots yet.
 
 ### Glowing leaves
@@ -445,6 +452,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 
 [flowers]
 	mendingLilacRange = 8
+	moonlitDandelionRange = 8
 
 [turbines]
 	heatTurbineEnergyPerTick = 40
@@ -469,6 +477,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `locomotiveCart.energyCapacity` | `100000` | 1,000 – 100,000,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade can store |
 | `locomotiveCart.energyPerTick` | `20` | 1 – 100,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade uses each tick while driving |
 | `flowers.mendingLilacRange` | `8` | 1 – 32 | How far, in blocks, a mending lilac's regeneration reaches in each direction (8 = a 16-block-wide area) |
+| `flowers.moonlitDandelionRange` | `8` | 1 – 32 | How far, in blocks, a moonlit dandelion's night vision reaches in each direction (8 = a 16-block-wide area) |
 | `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
 | `turbines.steamTurbineEnergyPerTick` | `160` | 1 – 100,000 | Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed) |
 | `turbines.steamTurbineWaterPerTick` | `5` | 0 – 1,000 | Water, in millibuckets (1,000 = one bucket), a steam turbine uses each tick while running |
@@ -507,6 +516,6 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, mixing tray contents, jingle cart music, tin spyglass tint |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

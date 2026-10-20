@@ -15,7 +15,7 @@ import com.xincraft.xincraft.block.ModPoweredRailBlock;
 import com.xincraft.xincraft.block.TurbineBlock;
 import com.xincraft.xincraft.block.GlowingLeavesBlock;
 import com.xincraft.xincraft.block.MixingTrayBlock;
-import com.xincraft.xincraft.block.MendingLilacBlock;
+import com.xincraft.xincraft.block.AuraFlowerBlock;
 import com.xincraft.xincraft.block.FireflyPetuniaBlock;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
@@ -226,7 +226,14 @@ public final class ModBlocks {
 
     public static final RegistryObject<Block> MENDING_LILAC = registerBlock(
         "mending_lilac",
-        MendingLilacBlock::new,
+        AuraFlowerBlock::mendingLilac,
+        flowerProperties(),
+        true
+    );
+
+    public static final RegistryObject<Block> MOONLIT_DANDELION = registerBlock(
+        "moonlit_dandelion",
+        AuraFlowerBlock::moonlitDandelion,
         flowerProperties(),
         true
     );

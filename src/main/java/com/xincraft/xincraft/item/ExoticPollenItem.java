@@ -23,7 +23,8 @@ public class ExoticPollenItem extends Item {
     // Which flower turns into which. Add new exotic flowers here.
     private static final Map<Block, Supplier<Block>> CONVERSIONS = Map.of(
         Blocks.LILY_OF_THE_VALLEY, ModBlocks.MENDING_LILAC,
-        Blocks.DANDELION, ModBlocks.FIREFLY_PETUNIA);
+        Blocks.DANDELION, ModBlocks.FIREFLY_PETUNIA,
+        Blocks.GOLDEN_DANDELION, ModBlocks.MOONLIT_DANDELION);
 
     public ExoticPollenItem(Item.Properties properties) {
         super(properties);
