@@ -11,6 +11,7 @@ import com.xincraft.xincraft.block.ChargingRailBlock;
 import com.xincraft.xincraft.block.InspectorRailBlock;
 import com.xincraft.xincraft.block.EnderRailBlock;
 import com.xincraft.xincraft.block.ModPoweredRailBlock;
+import com.xincraft.xincraft.block.TurbineBlock;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
@@ -175,6 +176,32 @@ public final class ModBlocks {
             .sound(SoundType.METAL)
             .lightLevel(state -> state.getValue(EnderRailBlock.GLOWING) ? 12 : state.getValue(EnderRailBlock.LINKED) ? 3 : 0),
         false
+    );
+
+    // Generators that burn fuel into Forge Energy for charging rails (block.TurbineBlockEntity): the
+    // tin heat turbine, and the bronze steam turbine, which also uses water
+    public static final RegistryObject<Block> HEAT_TURBINE = registerBlock(
+        "heat_turbine",
+        TurbineBlock::heat,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.METAL)
+            .strength(3.5F)
+            .sound(SoundType.METAL)
+            .requiresCorrectToolForDrops()
+            .lightLevel(state -> state.getValue(TurbineBlock.LIT) ? 13 : 0),
+        true
+    );
+
+    public static final RegistryObject<Block> STEAM_TURBINE = registerBlock(
+        "steam_turbine",
+        TurbineBlock::steam,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_ORANGE)
+            .strength(3.5F)
+            .sound(SoundType.COPPER)
+            .requiresCorrectToolForDrops()
+            .lightLevel(state -> state.getValue(TurbineBlock.LIT) ? 13 : 0),
+        true
     );
 
     private static Map<DyeColor, RegistryObject<Block>> registerColored(

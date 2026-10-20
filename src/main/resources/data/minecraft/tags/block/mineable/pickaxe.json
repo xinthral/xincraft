@@ -3,6 +3,8 @@
     "xincraft:tin_ore",
     "xincraft:deepslate_tin_ore",
     "xincraft:tin_block",
-    "xincraft:bronze_block"
+    "xincraft:bronze_block",
+    "xincraft:heat_turbine",
+    "xincraft:steam_turbine"
   ]
 }

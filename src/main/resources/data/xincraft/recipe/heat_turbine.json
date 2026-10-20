@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "T": "#c:ingots/tin",
+    "F": "minecraft:furnace",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "TTT",
+    "TFT",
+    "TRT"
+  ],
+  "result": {
+    "id": "xincraft:heat_turbine",
+    "count": 1
+  }
+}

@@ -2,6 +2,7 @@ package com.xincraft.xincraft.registry;
 
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
+import com.xincraft.xincraft.inventory.TurbineMenu;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -14,6 +15,10 @@ public final class ModMenuTypes {
 
     public static final RegistryObject<MenuType<LocomotiveCartMenu>> LOCOMOTIVE_CART = MENU_TYPES.register("locomotive_cart",
         () -> new MenuType<>(LocomotiveCartMenu::new, FeatureFlags.VANILLA_SET));
+
+    // Shared by the heat and steam turbines
+    public static final RegistryObject<MenuType<TurbineMenu>> TURBINE = MENU_TYPES.register("turbine",
+        () -> new MenuType<>(TurbineMenu::new, FeatureFlags.VANILLA_SET));
 
     private ModMenuTypes() {}
 }

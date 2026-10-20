@@ -20,6 +20,9 @@ public class Config {
     private static final ForgeConfigSpec.DoubleValue LOCOMOTIVE_FUEL_MULTIPLIER;
     private static final ForgeConfigSpec.IntValue LOCOMOTIVE_ENERGY_CAPACITY;
     private static final ForgeConfigSpec.IntValue LOCOMOTIVE_ENERGY_PER_TICK;
+    private static final ForgeConfigSpec.IntValue HEAT_TURBINE_ENERGY_PER_TICK;
+    private static final ForgeConfigSpec.IntValue STEAM_TURBINE_ENERGY_PER_TICK;
+    private static final ForgeConfigSpec.IntValue STEAM_TURBINE_WATER_PER_TICK;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_PER_SECOND;
@@ -69,6 +72,18 @@ public class Config {
                 .defineInRange("energyPerTick", 20, 1, 100_000);
         BUILDER.pop();
 
+        BUILDER.comment("Heat and steam turbines").push("turbines");
+        HEAT_TURBINE_ENERGY_PER_TICK = BUILDER
+                .comment("Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed)")
+                .defineInRange("heatTurbineEnergyPerTick", 40, 1, 100_000);
+        STEAM_TURBINE_ENERGY_PER_TICK = BUILDER
+                .comment("Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed)")
+                .defineInRange("steamTurbineEnergyPerTick", 160, 1, 100_000);
+        STEAM_TURBINE_WATER_PER_TICK = BUILDER
+                .comment("Water, in millibuckets (1000 = one bucket), a steam turbine uses each tick while running")
+                .defineInRange("steamTurbineWaterPerTick", 5, 0, 1_000);
+        BUILDER.pop();
+
         BUILDER.comment("Ender rails").push("enderRails");
         ENDER_RAIL_MAX_DISTANCE = BUILDER
                 .comment("Maximum distance in blocks between two linked ender rails")
@@ -97,6 +112,9 @@ public class Config {
     public static double locomotiveFuelMultiplier = 8.0;
     public static int locomotiveEnergyCapacity = 100_000;
     public static int locomotiveEnergyPerTick = 20;
+    public static int heatTurbineEnergyPerTick = 40;
+    public static int steamTurbineEnergyPerTick = 160;
+    public static int steamTurbineWaterPerTick = 5;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
@@ -122,6 +140,9 @@ public class Config {
         locomotiveFuelMultiplier = LOCOMOTIVE_FUEL_MULTIPLIER.get();
         locomotiveEnergyCapacity = LOCOMOTIVE_ENERGY_CAPACITY.get();
         locomotiveEnergyPerTick = LOCOMOTIVE_ENERGY_PER_TICK.get();
+        heatTurbineEnergyPerTick = HEAT_TURBINE_ENERGY_PER_TICK.get();
+        steamTurbineEnergyPerTick = STEAM_TURBINE_ENERGY_PER_TICK.get();
+        steamTurbineWaterPerTick = STEAM_TURBINE_WATER_PER_TICK.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
         enderRailMaxTeleportsPerSecond = ENDER_RAIL_MAX_PER_SECOND.get();

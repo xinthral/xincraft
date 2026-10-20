@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -18,6 +18,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Inspector Rail](#inspector-rail)
 - [Ender Rails](#ender-rails)
 - [Charging Rail](#charging-rail)
+- [Turbines](#turbines)
 - [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
@@ -228,16 +229,40 @@ To keep servers stable, there's also a server-wide limit on how many teleports c
 
 ## Charging Rail
 
-A bronze powered rail that stores Forge Energy (FE) for locomotive carts with the [Energy Upgrade](#energy-upgrade). For modpacks with FE mods: it doesn't make energy itself.
+A bronze powered rail that stores Forge Energy (FE) for locomotive carts with the [Energy Upgrade](#energy-upgrade). It doesn't make energy itself: power it with a [Turbine](#turbines), or with another mod's generators.
 
 | Recipe | Makes |
 | --- | --- |
 | Powered Rail recipe with Bronze Ingots in place of Gold Ingots (6 Bronze Ingots + 1 Stick + 1 Redstone) | 6 |
 
-- **Filling it:** place another mod's generator, battery or energy cell **right next to it** (beside, above or below), and the rail draws energy from it by itself. Cables connected to it work too. It holds up to **50,000 FE** and takes in up to 1,000 FE per tick.
+- **Filling it:** place a [Heat or Steam Turbine](#turbines), or another mod's generator, battery or energy cell, **right next to it** (beside, above or below), and the rail draws energy from it by itself. Cables connected to it work too. It holds up to **50,000 FE** and takes in up to 1,000 FE per tick.
 - **Charging a cart:** the rail passes up to 1,000 FE per tick into a locomotive cart with the energy upgrade sitting on it or rolling over it. It also charges other mods' carts that take Forge Energy.
 - **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail with a generator beside it makes a **charging station**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
 - Other mods' machines can draw energy back out of it too.
+
+## Turbines
+
+Generators that burn furnace fuel into Forge Energy (FE), to power [Charging Rails](#charging-rail) without needing another mod (they work with other mods' cables and machines too).
+
+| Turbine | Recipe |
+| --- | --- |
+| Heat Turbine | Furnace in the middle, Redstone Dust below it, and 7 Tin Ingots around the rest |
+| Steam Turbine | Heat Turbine in the middle, Cauldron below it, and 7 Bronze Ingots around the rest |
+
+| | Heat Turbine | Steam Turbine |
+| --- | --- | --- |
+| Fuel burns | At furnace speed | Twice as fast |
+| Energy made | 40 FE per tick | 160 FE per tick |
+| Energy per coal | 64,000 FE | 128,000 FE (twice as much) |
+| Energy buffer | 50,000 FE | 100,000 FE |
+| Water | None | 5 mB per tick (a bucket lasts 10 seconds); 8,000 mB tank |
+
+- **Fuel:** right-click to open it and put any furnace fuel in the fuel slot. **Hoppers** fill it too, from above or the sides. A lava bucket leaves its empty bucket behind, which a hopper underneath can pull out.
+- **Output:** it pushes up to 1,000 FE per tick into each neighbouring block that takes energy, so a turbine **next to a charging rail** keeps the rail charged. Other mods' cables can draw from it as well, and a turbine placed **under the track** charges a locomotive passing over it directly.
+- **Full buffer:** once the buffer is full, the turbine stops lighting new fuel, so it doesn't eat through the fuel slot while nothing's drawing power. A fuel item that's already burning finishes burning, like in a furnace, and any energy it makes that won't fit is lost.
+- **Water (steam turbine):** right-click it with a **water bucket** to fill the tank, or pipe water in from another mod from any side. Without water it stops, and doesn't use fuel.
+- **Screen:** the flame shows how much of the current fuel is left, the red bar on the right the stored energy, and (steam turbine) the blue bar on the left the water. Hover over a bar for the exact amount.
+- The energy per tick and water use can be changed in the config (under `turbines`).
 
 ## Minecart Frame
 
@@ -384,6 +409,11 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 	energyCapacity = 100000
 	energyPerTick = 20
 
+[turbines]
+	heatTurbineEnergyPerTick = 40
+	steamTurbineEnergyPerTick = 160
+	steamTurbineWaterPerTick = 5
+
 [enderRails]
 	maxDistance = 64
 	cooldownSeconds = 3.0
@@ -401,6 +431,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
 | `locomotiveCart.energyCapacity` | `100000` | 1,000 – 100,000,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade can store |
 | `locomotiveCart.energyPerTick` | `20` | 1 – 100,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade uses each tick while driving |
+| `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
+| `turbines.steamTurbineEnergyPerTick` | `160` | 1 – 100,000 | Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed) |
+| `turbines.steamTurbineWaterPerTick` | `5` | 0 – 1,000 | Water, in millibuckets (1,000 = one bucket), a steam turbine uses each tick while running |
 | `enderRails.maxDistance` | `64` | 1 – 30,000,000 | Furthest apart, in blocks, two ender rails can be and still link. Lowering it stops existing links that are now too long from teleporting, without unlinking them |
 | `enderRails.cooldownSeconds` | `3.0` | 0.0 – 3600.0 | Seconds a cart must wait after teleporting before it can teleport again |
 | `enderRails.maxTeleportsPerSecond` | `20` | 0 – 1000 | Most ender rail teleports allowed across the whole server in any one second (0 = no limit) |
@@ -431,11 +464,11 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, and the heat and steam turbines |
 | `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items |
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
-| `.../inventory/` | Locomotive cart menu (slots, burn progress, and stored energy) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), jingle cart music, tin spyglass tint |
+| `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
