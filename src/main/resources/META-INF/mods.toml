@@ -4,8 +4,8 @@
 
 modLoader="javafml"
 loaderVersion="[65,)"
-license="All Rights Reserved"
-#issueTrackerURL="https://github.com/MyOrganization/MyMod/" #optional
+license="MIT"
+issueTrackerURL="https://github.com/xinthral/xincraft/issues"
 #clientSideOnly=true #optional, default=false
 
 [[mods]]
@@ -13,13 +13,13 @@ modId="xincraft"
 version="${mod_version}"
 displayName="Xincraft"
 #updateJSONURL="https://example.com/updates.json" #optional
-#displayURL="https://example.com/" #optional
-#logoFile="xincraft.png" #optional
+displayURL="https://github.com/xinthral/xincraft"
+logoFile="xincraft.png"
 #credits="" #optional
 authors="Xinthral" #optional
 #displayTest="MATCH_VERSION" #optional, default=MATCH_VERSION when not clientSideOnly, else IGNORE_ALL_VERSION
 
-description='''Minecarts are fun, but loud. Time to under-engineer it.'''
+description='''Tin, bronze and a whole lot of rails: fast tin rails, quiet padded rails, bouncy, honey, inspector, ender and charging rails. Self-driving locomotives, jingle carts and motorboats with upgrades, turbines to power them, and exotic flowers that work like little beacons.'''
 
 [[dependencies.xincraft]] #recommended
     modId="forge"
@@ -31,6 +31,6 @@ description='''Minecarts are fun, but loud. Time to under-engineer it.'''
 [[dependencies.xincraft]] #recommended
     modId="minecraft"
     mandatory=true
-    versionRange="[26.2,26.3,)"
+    versionRange="[26.2,26.3)"
     ordering="NONE"
     side="BOTH"

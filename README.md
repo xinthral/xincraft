@@ -566,3 +566,7 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart and motorboat renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
+
+## License
+
+Xincraft is released under the [MIT License](LICENSE.txt): you can use, modify and redistribute it, including in modpacks, as long as the copyright notice comes along.
