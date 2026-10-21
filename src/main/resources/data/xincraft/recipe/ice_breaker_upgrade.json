@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "S": "minecraft:iron_pickaxe"
+  },
+  "pattern": [
+    " T ",
+    "TST",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:ice_breaker_upgrade",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "S": "minecraft:blaze_rod"
+  },
+  "pattern": [
+    " T ",
+    "TST",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:speed_upgrade",
+    "count": 1
+  }
+}

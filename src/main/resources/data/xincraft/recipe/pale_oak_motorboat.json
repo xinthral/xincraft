@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "motorboat",
+  "ingredients": [
+    "minecraft:pale_oak_boat",
+    "xincraft:propeller"
+  ],
+  "result": {
+    "id": "xincraft:pale_oak_motorboat",
+    "count": 1
+  }
+}

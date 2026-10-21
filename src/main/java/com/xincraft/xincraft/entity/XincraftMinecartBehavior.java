@@ -177,7 +177,7 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
                 || !(level() instanceof ServerLevel level)) {
             return super.pushAndPickupEntities();
         }
-        cart.upgrades().clearTrackAhead(level);
+        cart.upgrades().clearTrackAhead(level, minecart.getDeltaMovement());
         for (Entity entity : level.getEntities(minecart, minecart.getBoundingBox().inflate(0.2, 0.0, 0.2))) {
             if (entity instanceof AbstractMinecart && entity.isPushable() && !minecart.hasPassenger(entity)) {
                 entity.push(minecart);

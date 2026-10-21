@@ -1,13 +1,18 @@
 package com.xincraft.xincraft.registry;
 
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
+import com.xincraft.xincraft.entity.MotorboatType;
 import com.xincraft.xincraft.item.CartUpgradeItem;
 import com.xincraft.xincraft.item.EnderRailItem;
 import com.xincraft.xincraft.item.ExoticPollenItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BoatItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.Rarity;
@@ -102,6 +107,27 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.SCULK_SENSOR, properties), Item.Properties::new);
     public static final RegistryObject<Item> ENERGY_UPGRADE = registerItem("energy_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.ENERGY, properties), Item.Properties::new);
+    public static final RegistryObject<Item> ICE_BREAKER_UPGRADE = registerItem("ice_breaker_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.ICE_BREAKER, properties), Item.Properties::new);
+    public static final RegistryObject<Item> SPEED_UPGRADE = registerItem("speed_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.SPEED, properties), Item.Properties::new);
+
+    // Crafted with any boat to make a motorboat
+    public static final RegistryObject<Item> PROPELLER =
+        registerItem("propeller", Item::new, Item.Properties::new);
+
+    // A motorboat item for each kind of boat (entity.MotorboatType), placed like a boat
+    public static final Map<MotorboatType, RegistryObject<Item>> MOTORBOATS = registerMotorboats();
+
+    private static Map<MotorboatType, RegistryObject<Item>> registerMotorboats() {
+        Map<MotorboatType, RegistryObject<Item>> items = new EnumMap<>(MotorboatType.class);
+        for (MotorboatType kind : MotorboatType.values()) {
+            items.put(kind, registerItem(kind.id(),
+                properties -> new BoatItem(ModEntityTypes.MOTORBOATS.get(kind).get(), properties),
+                () -> new Item.Properties().stacksTo(1)));
+        }
+        return Collections.unmodifiableMap(items);
+    }
 
     // Mixed from three different flowers on the mixing tray; turns certain flowers into exotic ones
     public static final RegistryObject<Item> EXOTIC_POLLEN = registerItem("exotic_pollen", ExoticPollenItem::new,

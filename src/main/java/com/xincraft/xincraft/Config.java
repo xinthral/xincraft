@@ -23,6 +23,9 @@ public class Config {
     private static final ForgeConfigSpec.IntValue HEAT_TURBINE_ENERGY_PER_TICK;
     private static final ForgeConfigSpec.IntValue STEAM_TURBINE_ENERGY_PER_TICK;
     private static final ForgeConfigSpec.IntValue STEAM_TURBINE_WATER_PER_TICK;
+    private static final ForgeConfigSpec.DoubleValue MOTORBOAT_FUEL_MULTIPLIER;
+    private static final ForgeConfigSpec.IntValue MOTORBOAT_ENERGY_CAPACITY;
+    private static final ForgeConfigSpec.IntValue MOTORBOAT_ENERGY_PER_TICK;
     private static final ForgeConfigSpec.IntValue MENDING_LILAC_RANGE;
     private static final ForgeConfigSpec.IntValue MOONLIT_DANDELION_RANGE;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
@@ -86,6 +89,18 @@ public class Config {
                 .defineInRange("steamTurbineWaterPerTick", 5, 0, 1_000);
         BUILDER.pop();
 
+        BUILDER.comment("Motorboats").push("motorboat");
+        MOTORBOAT_FUEL_MULTIPLIER = BUILDER
+                .comment("How many times longer fuel burns in a motorboat than in a furnace")
+                .defineInRange("fuelMultiplier", 8.0, 1.0, 64.0);
+        MOTORBOAT_ENERGY_CAPACITY = BUILDER
+                .comment("How much Forge Energy (FE) a motorboat with the energy upgrade can store")
+                .defineInRange("energyCapacity", 100_000, 1_000, 100_000_000);
+        MOTORBOAT_ENERGY_PER_TICK = BUILDER
+                .comment("How much Forge Energy (FE) a motorboat with the energy upgrade uses each tick while cruising (twice this with the speed upgrade)")
+                .defineInRange("energyPerTick", 20, 1, 100_000);
+        BUILDER.pop();
+
         BUILDER.comment("Exotic flowers").push("flowers");
         MENDING_LILAC_RANGE = BUILDER
                 .comment("How far, in blocks, a mending lilac's regeneration reaches in each direction (8 = a 16-block-wide area)")
@@ -126,6 +141,9 @@ public class Config {
     public static int heatTurbineEnergyPerTick = 40;
     public static int steamTurbineEnergyPerTick = 160;
     public static int steamTurbineWaterPerTick = 5;
+    public static double motorboatFuelMultiplier = 8.0;
+    public static int motorboatEnergyCapacity = 100_000;
+    public static int motorboatEnergyPerTick = 20;
     public static int mendingLilacRange = 8;
     public static int moonlitDandelionRange = 8;
     public static int enderRailMaxDistance = 64;
@@ -156,6 +174,9 @@ public class Config {
         heatTurbineEnergyPerTick = HEAT_TURBINE_ENERGY_PER_TICK.get();
         steamTurbineEnergyPerTick = STEAM_TURBINE_ENERGY_PER_TICK.get();
         steamTurbineWaterPerTick = STEAM_TURBINE_WATER_PER_TICK.get();
+        motorboatFuelMultiplier = MOTORBOAT_FUEL_MULTIPLIER.get();
+        motorboatEnergyCapacity = MOTORBOAT_ENERGY_CAPACITY.get();
+        motorboatEnergyPerTick = MOTORBOAT_ENERGY_PER_TICK.get();
         mendingLilacRange = MENDING_LILAC_RANGE.get();
         moonlitDandelionRange = MOONLIT_DANDELION_RANGE.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();

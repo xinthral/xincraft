@@ -15,7 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
@@ -38,13 +38,13 @@ public final class CartUpgrades {
     // Below this horizontal speed the cart has no direction to clear in
     private static final double MOVING_SPEED = 0.05;
 
-    private final AbstractMinecart cart;
+    private final VehicleEntity cart;
     private final EntityDataAccessor<Integer> data;
     // Server side: the fitted upgrades in the order they went on, so shears take off the newest
     private final List<CartUpgrade> fitOrder = new ArrayList<>();
     private int shriekCooldown;
 
-    public CartUpgrades(AbstractMinecart cart, EntityDataAccessor<Integer> data) {
+    public CartUpgrades(VehicleEntity cart, EntityDataAccessor<Integer> data) {
         this.cart = cart;
         this.data = data;
     }
@@ -144,10 +144,10 @@ public final class CartUpgrades {
         set(bits);
     }
 
-    // With a shrieker, only other minecarts can push the cart: anything else bumping into it is
-    // shoved aside instead, so it never slows the cart down. Returns whether it handled the push.
+    // With a shrieker, only other vehicles (minecarts, boats) can push this one: anything else bumping
+    // into it is shoved aside instead, so it never slows it down. Returns whether it handled the push.
     public boolean pushAside(Entity entity) {
-        if (!has(CartUpgrade.SHRIEKER) || entity instanceof AbstractMinecart || cart.hasPassenger(entity)) {
+        if (!has(CartUpgrade.SHRIEKER) || entity instanceof VehicleEntity || cart.hasPassenger(entity)) {
             return false;
         }
         Vec3 away = entity.position().subtract(cart.position()).horizontal();
@@ -158,15 +158,16 @@ public final class CartUpgrades {
         return true;
     }
 
-    // The shrieker's job, run each tick in place of vanilla's pick-up-and-push (see
-    // XincraftMinecartBehavior#pushAndPickupEntities): anything living on the track ahead is shoved
-    // off to whichever side it's already nearer, with a hop, before the cart reaches it. Only
-    // shoves something not already moving clear, so each is shoved once.
-    public void clearTrackAhead(ServerLevel level) {
+    // The shrieker's job, run each tick (for carts, in place of vanilla's pick-up-and-push; see
+    // XincraftMinecartBehavior#pushAndPickupEntities): anything living in the vehicle's path is shoved
+    // off to whichever side it's already nearer, with a hop, before the vehicle reaches it. Only
+    // shoves something not already moving clear, so each is shoved once. Takes the vehicle's
+    // motion, since a boat steered by a player only moves on that player's client.
+    public void clearTrackAhead(ServerLevel level, Vec3 vehicleMotion) {
         if (shriekCooldown > 0) {
             shriekCooldown--;
         }
-        Vec3 motion = cart.getDeltaMovement().horizontal();
+        Vec3 motion = vehicleMotion.horizontal();
         double speed = motion.length();
         if (speed < MOVING_SPEED) {
             return;

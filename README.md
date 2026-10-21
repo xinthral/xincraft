@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, with upgrades, and exotic flowers that give off area effects.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, and exotic flowers that give off area effects.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -23,6 +23,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
 - [Jingle Cart](#jingle-cart)
+- [Motorboats](#motorboats)
 - [Cart Upgrades](#cart-upgrades)
 - [Tin Spyglass](#tin-spyglass)
 - [Exotic Flowers](#exotic-flowers)
@@ -337,9 +338,38 @@ A minecart carrying a jukebox that plays music discs as it rolls along, the musi
 - On a **detector rail**, a comparator reads a full signal when it has a disc in, and none when it's empty.
 - Breaking the cart drops the disc.
 
+## Motorboats
+
+Boats with a propeller and an engine that cruise along under their own power.
+
+| Item | Recipe |
+| --- | --- |
+| Propeller | Bronze Ingot surrounded by 4 Tin Ingots (one on each side) |
+| Motorboat | Any boat + 1 Propeller (shapeless) |
+
+Every kind of boat works, and the motorboat keeps its wood: an oak boat makes an **Oak Motorboat**, a cherry boat a **Cherry Motorboat**, and so on, and a bamboo raft makes a **Bamboo Motor Raft**. Chest boats can't be made into motorboats.
+
+### Driving
+
+- **Right-click** to get in, as with any boat. It seats two.
+- **Press forward** to start cruising. The motorboat keeps going under power at about **twice paddling speed** while you steer left and right, so you don't have to hold forward. Holding forward as well adds your paddling to the engine.
+- **Press back** to stop the engine. It also cuts out when it runs out of fuel, when it runs into something and is stuck for a second, or when you get out.
+- **The engine only pushes in water.** On land or ice it's an ordinary boat.
+- While cruising, the propeller spins and churns up spray behind the boat, and the engine smokes while fuel is burning.
+
+### Fuel
+
+Fuel goes in the motorboat's **fuel slot**, and there's a **storage slot** for carrying anything. Open them with **Shift + right-click**, or press your **inventory key** while riding. It's the same screen as the locomotive cart's.
+
+- It takes anything that burns in a furnace, and each item burns **8 times as long** as it would in a furnace (configurable). A lava bucket leaves its empty bucket behind.
+- A new fuel item is only lit while the boat is cruising. An item that's already burning keeps burning down while you drift, like in a furnace.
+- Breaking the motorboat drops it as an item, along with its fuel, storage and upgrades.
+
+> **Upgrades** fit motorboats too: the shrieker, energy, ice breaker and speed upgrades. See [Cart Upgrades](#cart-upgrades).
+
 ## Cart Upgrades
 
-Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and jingle cart) and show as small blocks on the cart's rim.
+Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and jingle cart) and motorboats, and show as small blocks on the vehicle.
 
 > [!IMPORTANT]
 > **Removing upgrades: use shears.**
@@ -350,9 +380,11 @@ Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and j
 
 | Upgrade | Recipe | Fits | Effect |
 | --- | --- | --- | --- |
-| Shrieker Upgrade | Sculk Shrieker surrounded by 4 Tin Ingots (one on each side) | Any Xincraft cart | Clears the track ahead: mobs and players in the cart's path are shoved off to the side with a shriek before the cart reaches them. The cart never picks them up and is never slowed by them (it still bumps into other minecarts). |
+| Shrieker Upgrade | Sculk Shrieker surrounded by 4 Tin Ingots (one on each side) | Any Xincraft cart, motorboats | Clears the way ahead: mobs and players in the vehicle's path are shoved off to the side with a shriek before it reaches them. It never picks them up and is never slowed by them (it still bumps into other minecarts and boats). |
 | Sculk Sensor Upgrade | Sculk Sensor surrounded by 4 Tin Ingots (one on each side) | Jingle Cart | The cart only plays while a player is within 32 blocks. |
-| Energy Upgrade | Block of Redstone surrounded by 4 Tin Ingots (one on each side) | Locomotive Cart | The cart stores Forge Energy (FE) and runs on it, only burning fuel once the energy runs out. See below. |
+| Energy Upgrade | Block of Redstone surrounded by 4 Tin Ingots (one on each side) | Locomotive Cart, motorboats | The vehicle stores Forge Energy (FE) in a battery that its fuel charges, and runs on that. See below. |
+| Ice Breaker Upgrade | Iron Pickaxe surrounded by 4 Tin Ingots (one on each side) | Motorboats | Breaks the ice in front of the boat, turning it back into water, so it can cut through frozen rivers and lakes. Only works while the boat is in water, so it leaves ice roads alone. |
+| Speed Upgrade | Blaze Rod surrounded by 4 Tin Ingots (one on each side) | Motorboats | Cruises 50% faster, burning fuel (or energy) twice as fast. |
 
 > The shrieker, like the other powered features, only works with the default minecart physics.
 
@@ -366,6 +398,8 @@ For modpacks with Forge Energy (FE) mods. A locomotive cart with the energy upgr
 - **Energy bar:** the cart's inventory screen shows the charge as a red bar left of the fuel slot. Hover over it for the exact amount.
 - The stored energy stays with the cart if the upgrade is removed, but the cart can't use it or charge until the upgrade is fitted again. Breaking the cart loses it.
 - The capacity and energy per tick can be changed in the config (`energyCapacity` and `energyPerTick` under `locomotiveCart`).
+
+**On a motorboat** the energy upgrade works the same way. Fuel charges the battery whenever it isn't full, and the engine runs only on the battery: 100,000 FE, using 20 FE per tick while cruising (40 FE with the speed upgrade). Instead of a charging rail, it charges from energy blocks **right next to it**, such as a turbine on a dock. The battery's settings are under `motorboat` in the config.
 
 ## Tin Spyglass
 
@@ -450,6 +484,11 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 	energyCapacity = 100000
 	energyPerTick = 20
 
+[motorboat]
+	fuelMultiplier = 8.0
+	energyCapacity = 100000
+	energyPerTick = 20
+
 [flowers]
 	mendingLilacRange = 8
 	moonlitDandelionRange = 8
@@ -476,6 +515,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `locomotiveCart.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a locomotive cart than in a furnace |
 | `locomotiveCart.energyCapacity` | `100000` | 1,000 – 100,000,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade can store |
 | `locomotiveCart.energyPerTick` | `20` | 1 – 100,000 | How much Forge Energy (FE) a locomotive cart with the energy upgrade uses each tick while driving |
+| `motorboat.fuelMultiplier` | `8.0` | 1.0 – 64.0 | How many times longer fuel burns in a motorboat than in a furnace |
+| `motorboat.energyCapacity` | `100000` | 1,000 – 100,000,000 | How much Forge Energy (FE) a motorboat with the energy upgrade can store |
+| `motorboat.energyPerTick` | `20` | 1 – 100,000 | How much Forge Energy (FE) a motorboat with the energy upgrade uses each tick while cruising (twice this with the speed upgrade) |
 | `flowers.mendingLilacRange` | `8` | 1 – 32 | How far, in blocks, a mending lilac's regeneration reaches in each direction (8 = a 16-block-wide area) |
 | `flowers.moonlitDandelionRange` | `8` | 1 – 32 | How far, in blocks, a moonlit dandelion's night vision reaches in each direction (8 = a 16-block-wide area) |
 | `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
@@ -513,9 +555,9 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, and the exotic flowers |
 | `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen |
-| `.../entity/` | Ender minecart, locomotive cart, jingle cart, cart upgrades (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
+| `.../entity/` | Ender minecart, locomotive cart, jingle cart, motorboats, upgrades for carts and boats (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart and motorboat renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

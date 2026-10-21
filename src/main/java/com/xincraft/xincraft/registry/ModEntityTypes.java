@@ -1,9 +1,14 @@
 package com.xincraft.xincraft.registry;
 
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.EnderMinecart;
 import com.xincraft.xincraft.entity.JingleCart;
 import com.xincraft.xincraft.entity.LocomotiveCart;
+import com.xincraft.xincraft.entity.Motorboat;
+import com.xincraft.xincraft.entity.MotorboatType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -38,6 +43,24 @@ public final class ModEntityTypes {
             .passengerAttachments(0.1875F)
             .clientTrackingRange(8)
             .build(ENTITY_TYPES.key("jingle_cart")));
+
+    // A motorboat for each kind of boat (entity.MotorboatType), sized and tracked like vanilla boats
+    public static final Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> MOTORBOATS = registerMotorboats();
+
+    private static Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> registerMotorboats() {
+        Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> types = new EnumMap<>(MotorboatType.class);
+        for (MotorboatType kind : MotorboatType.values()) {
+            types.put(kind, ENTITY_TYPES.register(kind.id(),
+                () -> EntityType.Builder.<Motorboat>of(
+                        (type, level) -> new Motorboat(type, level, () -> ModItems.MOTORBOATS.get(kind).get(), kind.raft()), MobCategory.MISC)
+                    .noLootTable()
+                    .sized(1.375F, 0.5625F)
+                    .eyeHeight(0.5625F)
+                    .clientTrackingRange(10)
+                    .build(ENTITY_TYPES.key(kind.id()))));
+        }
+        return Collections.unmodifiableMap(types);
+    }
 
     private ModEntityTypes() {}
 }

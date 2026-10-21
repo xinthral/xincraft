@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "motorboat",
+  "ingredients": [
+    "minecraft:bamboo_raft",
+    "xincraft:propeller"
+  ],
+  "result": {
+    "id": "xincraft:bamboo_motor_raft",
+    "count": 1
+  }
+}

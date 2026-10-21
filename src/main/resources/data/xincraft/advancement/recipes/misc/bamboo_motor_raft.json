@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bamboo_raft": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:bamboo_raft"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_propeller": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:propeller"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:bamboo_motor_raft"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bamboo_raft",
+      "has_propeller"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:bamboo_motor_raft"
+    ]
+  }
+}

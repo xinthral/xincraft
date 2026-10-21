@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "motorboat",
+  "ingredients": [
+    "minecraft:acacia_boat",
+    "xincraft:propeller"
+  ],
+  "result": {
+    "id": "xincraft:acacia_motorboat",
+    "count": 1
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_jungle_boat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:jungle_boat"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_propeller": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:propeller"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:jungle_motorboat"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_jungle_boat",
+      "has_propeller"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:jungle_motorboat"
+    ]
+  }
+}

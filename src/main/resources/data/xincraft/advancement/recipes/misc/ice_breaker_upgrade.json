@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ingots_tin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/tin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_iron_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_pickaxe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:ice_breaker_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ingots_tin",
+      "has_iron_pickaxe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:ice_breaker_upgrade"
+    ]
+  }
+}
