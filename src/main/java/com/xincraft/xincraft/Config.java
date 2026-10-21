@@ -28,6 +28,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue MOTORBOAT_ENERGY_PER_TICK;
     private static final ForgeConfigSpec.IntValue MENDING_LILAC_RANGE;
     private static final ForgeConfigSpec.IntValue MOONLIT_DANDELION_RANGE;
+    private static final ForgeConfigSpec.IntValue SHIMMER_LILY_RANGE;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_PER_SECOND;
@@ -108,6 +109,9 @@ public class Config {
         MOONLIT_DANDELION_RANGE = BUILDER
                 .comment("How far, in blocks, a moonlit dandelion's night vision reaches in each direction (8 = a 16-block-wide area)")
                 .defineInRange("moonlitDandelionRange", 8, 1, 32);
+        SHIMMER_LILY_RANGE = BUILDER
+                .comment("How far, in blocks, a shimmer lily's invisibility reaches in each direction (8 = a 16-block-wide area)")
+                .defineInRange("shimmerLilyRange", 8, 1, 32);
         BUILDER.pop();
 
         BUILDER.comment("Ender rails").push("enderRails");
@@ -146,6 +150,7 @@ public class Config {
     public static int motorboatEnergyPerTick = 20;
     public static int mendingLilacRange = 8;
     public static int moonlitDandelionRange = 8;
+    public static int shimmerLilyRange = 8;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
@@ -179,6 +184,7 @@ public class Config {
         motorboatEnergyPerTick = MOTORBOAT_ENERGY_PER_TICK.get();
         mendingLilacRange = MENDING_LILAC_RANGE.get();
         moonlitDandelionRange = MOONLIT_DANDELION_RANGE.get();
+        shimmerLilyRange = SHIMMER_LILY_RANGE.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
         enderRailMaxTeleportsPerSecond = ENDER_RAIL_MAX_PER_SECOND.get();

@@ -19,7 +19,10 @@ public enum CartUpgrade {
     // A motorboat breaks the ice in front of it
     ICE_BREAKER("ice_breaker", ModItems.ICE_BREAKER_UPGRADE, Blocks.STONECUTTER, List.of(Motorboat.class)),
     // A motorboat goes faster, burning its fuel faster
-    SPEED("speed", ModItems.SPEED_UPGRADE, Blocks.BLAST_FURNACE, List.of(Motorboat.class));
+    SPEED("speed", ModItems.SPEED_UPGRADE, Blocks.BLAST_FURNACE, List.of(Motorboat.class)),
+    // Riders are invisible, but for the odd pink glint (the rideable vehicles only)
+    SHIMMER("shimmer", ModItems.SHIMMER_UPGRADE, Blocks.TINTED_GLASS,
+        List.of(EnderMinecart.class, LocomotiveCart.class, Motorboat.class));
 
     private final String id;
     private final Supplier<Item> item;

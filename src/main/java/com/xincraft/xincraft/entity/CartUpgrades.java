@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.xincraft.xincraft.item.CartUpgradeItem;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
@@ -12,6 +13,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +38,12 @@ public final class CartUpgrades {
     private static final double SHOVE = 0.5;
     private static final double HOP = 0.3;
     private static final int SHRIEK_COOLDOWN_TICKS = 40;
+    // The shimmer upgrade refreshes its riders' invisibility this often, each dose outlasting the
+    // gap; and now and then gives them away with a pink glint (on average every few seconds)
+    private static final int SHIMMER_INTERVAL_TICKS = 20;
+    private static final int SHIMMER_EFFECT_TICKS = 60;
+    private static final int GLINT_CHANCE = 80;
+    private static final DustParticleOptions GLINT = new DustParticleOptions(0xFF7FC8, 1.0F);
     // Below this horizontal speed the cart has no direction to clear in
     private static final double MOVING_SPEED = 0.05;
 
@@ -114,6 +123,26 @@ public final class CartUpgrades {
             }
         }
         return fitOrder.get(fitOrder.size() - 1);
+    }
+
+    // The shimmer upgrade's job, run each tick: keeps whoever's riding invisible, the effect
+    // wearing off a few seconds after they get out
+    public void tickShimmer(ServerLevel level) {
+        if (!has(CartUpgrade.SHIMMER) || !cart.isVehicle()) {
+            return;
+        }
+        for (Entity passenger : cart.getPassengers()) {
+            if (!(passenger instanceof LivingEntity rider)) {
+                continue;
+            }
+            if (cart.tickCount % SHIMMER_INTERVAL_TICKS == 0) {
+                // No swirling effect particles, which would give the rider away
+                rider.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, SHIMMER_EFFECT_TICKS, 0, true, false, true));
+            }
+            if (cart.getRandom().nextInt(GLINT_CHANCE) == 0) {
+                level.sendParticles(GLINT, rider.getX(), rider.getY() + rider.getBbHeight() * 0.6, rider.getZ(), 1, 0.25, 0.3, 0.25, 0.0);
+            }
+        }
     }
 
     // Called when the cart is broken

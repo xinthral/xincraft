@@ -24,7 +24,8 @@ public class ExoticPollenItem extends Item {
     private static final Map<Block, Supplier<Block>> CONVERSIONS = Map.of(
         Blocks.LILY_OF_THE_VALLEY, ModBlocks.MENDING_LILAC,
         Blocks.DANDELION, ModBlocks.FIREFLY_PETUNIA,
-        Blocks.GOLDEN_DANDELION, ModBlocks.MOONLIT_DANDELION);
+        Blocks.GOLDEN_DANDELION, ModBlocks.MOONLIT_DANDELION,
+        Blocks.WITHER_ROSE, ModBlocks.SHIMMER_LILY);
 
     public ExoticPollenItem(Item.Properties properties) {
         super(properties);

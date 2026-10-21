@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_shimmer_lily": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:shimmer_lily"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:pink_dye_from_shimmer_lily"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_shimmer_lily"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:pink_dye_from_shimmer_lily"
+    ]
+  }
+}

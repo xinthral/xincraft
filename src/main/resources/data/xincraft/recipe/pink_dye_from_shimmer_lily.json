@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "pink_dye",
+  "ingredients": [
+    "xincraft:shimmer_lily"
+  ],
+  "result": {
+    "id": "minecraft:pink_dye",
+    "count": 1
+  }
+}

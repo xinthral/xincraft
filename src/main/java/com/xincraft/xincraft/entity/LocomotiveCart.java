@@ -129,6 +129,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     @Override
     public void tick() {
         if (level() instanceof ServerLevel serverLevel) {
+            upgrades.tickShimmer(serverLevel);
             updateHeading();
             if (litTime > 0) {
                 litTime--;

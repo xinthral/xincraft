@@ -8,7 +8,10 @@ import com.xincraft.xincraft.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -27,9 +30,13 @@ import org.jspecify.annotations.Nullable;
 // (AuraFlowerBlockEntity). Grown with exotic pollen (item.ExoticPollenItem):
 // - the mending lilac (from lily of the valley): Regeneration for players and peaceful mobs
 // - the moonlit dandelion (from golden dandelion): Night Vision for players
+// - the shimmer lily (from wither rose): Invisibility for players
 public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
     public static final MapCodec<AuraFlowerBlock> MENDING_LILAC_CODEC = simpleCodec(AuraFlowerBlock::mendingLilac);
     public static final MapCodec<AuraFlowerBlock> MOONLIT_DANDELION_CODEC = simpleCodec(AuraFlowerBlock::moonlitDandelion);
+    public static final MapCodec<AuraFlowerBlock> SHIMMER_LILY_CODEC = simpleCodec(AuraFlowerBlock::shimmerLily);
+    // The shimmer upgrade's pink glint (entity.CartUpgrades)
+    private static final DustParticleOptions SHIMMER = new DustParticleOptions(0xFF7FC8, 1.0F);
 
     private final Holder<MobEffect> aura;
     // How long each refresh of the effect lasts
@@ -37,32 +44,46 @@ public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
     // Whether mobs that aren't hostile get the effect too, or only players
     private final boolean includesMobs;
     private final IntSupplier range;
-    private final SimpleParticleType particle;
+    // Whether the effect shows its swirling particles on whoever has it (not for invisibility)
+    private final boolean effectParticles;
+    private final ParticleOptions particle;
+    // Whether it also grows where a wither rose can (soul sand, soul soil, netherrack)
+    private final boolean witherRoseSoil;
     private final Supplier<? extends BlockEntityType<AuraFlowerBlockEntity>> type;
     private final MapCodec<AuraFlowerBlock> codec;
 
     private AuraFlowerBlock(BlockBehaviour.Properties properties, Holder<MobEffect> stewEffect, float stewSeconds,
-            Holder<MobEffect> aura, int effectTicks, boolean includesMobs, IntSupplier range, SimpleParticleType particle,
-            Supplier<? extends BlockEntityType<AuraFlowerBlockEntity>> type, MapCodec<AuraFlowerBlock> codec) {
+            Holder<MobEffect> aura, int effectTicks, boolean includesMobs, boolean effectParticles, IntSupplier range,
+            ParticleOptions particle, boolean witherRoseSoil, Supplier<? extends BlockEntityType<AuraFlowerBlockEntity>> type,
+            MapCodec<AuraFlowerBlock> codec) {
         super(stewEffect, stewSeconds, properties);
         this.aura = aura;
         this.effectTicks = effectTicks;
         this.includesMobs = includesMobs;
         this.range = range;
+        this.effectParticles = effectParticles;
         this.particle = particle;
+        this.witherRoseSoil = witherRoseSoil;
         this.type = type;
         this.codec = codec;
     }
 
     public static AuraFlowerBlock mendingLilac(BlockBehaviour.Properties properties) {
-        return new AuraFlowerBlock(properties, MobEffects.REGENERATION, 8.0F, MobEffects.REGENERATION, 100, true,
-            () -> Config.mendingLilacRange, ParticleTypes.HAPPY_VILLAGER, ModBlockEntities.MENDING_LILAC, MENDING_LILAC_CODEC);
+        return new AuraFlowerBlock(properties, MobEffects.REGENERATION, 8.0F, MobEffects.REGENERATION, 100, true, true,
+            () -> Config.mendingLilacRange, ParticleTypes.HAPPY_VILLAGER, false, ModBlockEntities.MENDING_LILAC, MENDING_LILAC_CODEC);
     }
 
     // Night Vision makes the screen flicker in its last 10 seconds, so each refresh lasts longer than that
     public static AuraFlowerBlock moonlitDandelion(BlockBehaviour.Properties properties) {
-        return new AuraFlowerBlock(properties, MobEffects.NIGHT_VISION, 5.0F, MobEffects.NIGHT_VISION, 300, false,
-            () -> Config.moonlitDandelionRange, ParticleTypes.END_ROD, ModBlockEntities.MOONLIT_DANDELION, MOONLIT_DANDELION_CODEC);
+        return new AuraFlowerBlock(properties, MobEffects.NIGHT_VISION, 5.0F, MobEffects.NIGHT_VISION, 300, false, true,
+            () -> Config.moonlitDandelionRange, ParticleTypes.END_ROD, false, ModBlockEntities.MOONLIT_DANDELION, MOONLIT_DANDELION_CODEC);
+    }
+
+    // Like the shimmer upgrade: no effect swirl to give players away, just the odd pink glint at the
+    // flower. Grows wherever the wither rose it came from could.
+    public static AuraFlowerBlock shimmerLily(BlockBehaviour.Properties properties) {
+        return new AuraFlowerBlock(properties, MobEffects.INVISIBILITY, 8.0F, MobEffects.INVISIBILITY, 100, false, false,
+            () -> Config.shimmerLilyRange, SHIMMER, true, ModBlockEntities.SHIMMER_LILY, SHIMMER_LILY_CODEC);
     }
 
     public Holder<MobEffect> getAura() {
@@ -77,12 +98,21 @@ public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
         return includesMobs;
     }
 
+    public boolean showsEffectParticles() {
+        return effectParticles;
+    }
+
     public int getRange() {
         return range.getAsInt();
     }
 
     BlockEntityType<AuraFlowerBlockEntity> getBlockEntityType() {
         return type.get();
+    }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return super.mayPlaceOn(state, level, pos) || witherRoseSoil && state.is(BlockTags.SUPPORTS_WITHER_ROSE);
     }
 
     @Override

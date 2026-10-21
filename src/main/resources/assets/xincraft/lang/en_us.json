@@ -115,5 +115,8 @@
   "item.xincraft.ice_breaker_upgrade": "Ice Breaker Upgrade",
   "item.xincraft.ice_breaker_upgrade.desc": "Motorboat upgrade: breaks the ice in front of the boat",
   "item.xincraft.speed_upgrade": "Speed Upgrade",
-  "item.xincraft.speed_upgrade.desc": "Motorboat upgrade: faster cruising, burning fuel twice as fast"
+  "item.xincraft.speed_upgrade.desc": "Motorboat upgrade: faster cruising, burning fuel twice as fast",
+  "item.xincraft.shimmer_upgrade": "Shimmer Upgrade",
+  "item.xincraft.shimmer_upgrade.desc": "Minecart and motorboat upgrade: makes riders invisible, but for the odd pink glint",
+  "block.xincraft.shimmer_lily": "Shimmer Lily"
 }

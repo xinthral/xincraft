@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "S": "minecraft:tinted_glass"
+  },
+  "pattern": [
+    " T ",
+    "TST",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:shimmer_upgrade",
+    "count": 1
+  }
+}

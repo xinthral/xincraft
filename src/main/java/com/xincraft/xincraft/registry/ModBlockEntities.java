@@ -39,5 +39,8 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<AuraFlowerBlockEntity>> MOONLIT_DANDELION = BLOCK_ENTITIES.register("moonlit_dandelion",
         () -> new BlockEntityType<>(AuraFlowerBlockEntity::new, Set.of(ModBlocks.MOONLIT_DANDELION.get())));
 
+    public static final RegistryObject<BlockEntityType<AuraFlowerBlockEntity>> SHIMMER_LILY = BLOCK_ENTITIES.register("shimmer_lily",
+        () -> new BlockEntityType<>(AuraFlowerBlockEntity::new, Set.of(ModBlocks.SHIMMER_LILY.get())));
+
     private ModBlockEntities() {}
 }

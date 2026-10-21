@@ -238,6 +238,13 @@ public final class ModBlocks {
         true
     );
 
+    public static final RegistryObject<Block> SHIMMER_LILY = registerBlock(
+        "shimmer_lily",
+        AuraFlowerBlock::shimmerLily,
+        flowerProperties(),
+        true
+    );
+
     public static final RegistryObject<Block> FIREFLY_PETUNIA = registerBlock(
         "firefly_petunia",
         FireflyPetuniaBlock::new,

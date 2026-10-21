@@ -194,6 +194,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         if (upgrades.has(CartUpgrade.SHRIEKER)) {
             upgrades.clearTrackAhead(level, motion);
         }
+        upgrades.tickShimmer(level);
         // Only in water, so it leaves ice roads for boats alone
         if (upgrades.has(CartUpgrade.ICE_BREAKER) && isInWater() && (isCruising() || motion.horizontalDistanceSqr() > 1.0E-3)) {
             breakIceAhead(level, motion);

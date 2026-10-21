@@ -111,6 +111,8 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.ICE_BREAKER, properties), Item.Properties::new);
     public static final RegistryObject<Item> SPEED_UPGRADE = registerItem("speed_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.SPEED, properties), Item.Properties::new);
+    public static final RegistryObject<Item> SHIMMER_UPGRADE = registerItem("shimmer_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.SHIMMER, properties), Item.Properties::new);
 
     // Crafted with any boat to make a motorboat
     public static final RegistryObject<Item> PROPELLER =

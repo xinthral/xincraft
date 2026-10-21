@@ -30,7 +30,7 @@ public class AuraFlowerBlockEntity extends BlockEntity {
         AABB area = new AABB(worldPosition).inflate(flower.getRange());
         for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, area, entity -> entity.isAlive() && !entity.isSpectator()
                 && (entity instanceof Player || flower.includesMobs() && !(entity instanceof Enemy)))) {
-            entity.addEffect(new MobEffectInstance(flower.getAura(), flower.getEffectTicks(), 0, true, true));
+            entity.addEffect(new MobEffectInstance(flower.getAura(), flower.getEffectTicks(), 0, true, flower.showsEffectParticles()));
         }
     }
 }

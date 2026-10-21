@@ -48,6 +48,14 @@ public class EnderMinecart extends Minecart implements UpgradableCart {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (level() instanceof ServerLevel serverLevel) {
+            upgrades.tickShimmer(serverLevel);
+        }
+    }
+
+    @Override
     public void push(Entity entity) {
         if (!upgrades.pushAside(entity)) {
             super.push(entity);
