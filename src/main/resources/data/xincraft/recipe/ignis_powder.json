@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:mortar_and_pestle",
+    "minecraft:vine",
+    "minecraft:poppy",
+    "minecraft:torchflower"
+  ],
+  "result": {
+    "id": "xincraft:ignis_powder",
+    "count": 2
+  }
+}

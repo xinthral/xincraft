@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "fill=0": {
+      "model": "xincraft:block/flora_lucis"
+    },
+    "fill=1": {
+      "model": "xincraft:block/flora_lucis"
+    },
+    "fill=2": {
+      "model": "xincraft:block/flora_lucis"
+    },
+    "fill=3": {
+      "model": "xincraft:block/flora_lucis"
+    },
+    "fill=4": {
+      "model": "xincraft:block/flora_lucis"
+    }
+  }
+}

@@ -118,5 +118,22 @@
   "item.xincraft.speed_upgrade.desc": "Motorboat upgrade: faster cruising, burning fuel twice as fast",
   "item.xincraft.shimmer_upgrade": "Shimmer Upgrade",
   "item.xincraft.shimmer_upgrade.desc": "Minecart and motorboat upgrade: makes riders invisible, but for the odd pink glint",
-  "block.xincraft.shimmer_lily": "Shimmer Lily"
+  "block.xincraft.shimmer_lily": "Shimmer Lily",
+  "item.xincraft.mortar_and_pestle": "Mortar and Pestle",
+  "item.xincraft.terra_powder": "Terra Powder",
+  "item.xincraft.aqua_powder": "Aqua Powder",
+  "item.xincraft.ignis_powder": "Ignis Powder",
+  "item.xincraft.aer_powder": "Aer Powder",
+  "item.xincraft.vita_powder": "Vita Powder",
+  "item.xincraft.lux_powder": "Lux Powder",
+  "item.xincraft.umbra_powder": "Umbra Powder",
+  "item.xincraft.element_powder.desc": "Use on a flower to make it a %s, or on one to top it up",
+  "block.xincraft.flora_terrae": "Flora Terrae",
+  "block.xincraft.flora_aquae": "Flora Aquae",
+  "block.xincraft.flora_ignis": "Flora Ignis",
+  "block.xincraft.flora_aeris": "Flora Aeris",
+  "block.xincraft.flora_vitae": "Flora Vitae",
+  "block.xincraft.flora_lucis": "Flora Lucis",
+  "block.xincraft.flora_umbrae": "Flora Umbrae",
+  "message.xincraft.flora_essence": "%s: %s/%s essence"
 }

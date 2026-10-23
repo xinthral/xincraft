@@ -17,6 +17,8 @@ import com.xincraft.xincraft.block.GlowingLeavesBlock;
 import com.xincraft.xincraft.block.MixingTrayBlock;
 import com.xincraft.xincraft.block.AuraFlowerBlock;
 import com.xincraft.xincraft.block.FireflyPetuniaBlock;
+import com.xincraft.xincraft.block.FloraBlock;
+import com.xincraft.xincraft.magic.Element;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -251,6 +253,19 @@ public final class ModBlocks {
         flowerProperties().lightLevel(state -> 10),
         true
     );
+
+    // Elemental flora, one per element (block.FloraBlock), made by using an element's powder on a
+    // small flower. No items, and they drop nothing when broken.
+    public static final Map<Element, RegistryObject<Block>> FLORA = registerFlora();
+
+    private static Map<Element, RegistryObject<Block>> registerFlora() {
+        Map<Element, RegistryObject<Block>> blocks = new EnumMap<>(Element.class);
+        for (Element element : Element.values()) {
+            blocks.put(element, registerBlock(element.floraId(), properties -> new FloraBlock(element, properties),
+                flowerProperties().noLootTable().lightLevel(FloraBlock::lightLevel), false));
+        }
+        return Collections.unmodifiableMap(blocks);
+    }
 
     // Glowing copies of each kind of vanilla leaves, made by using exotic pollen on them
     // (block.GlowingLeavesBlock), keyed by the leaves they came from. No items: they drop and

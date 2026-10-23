@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:mortar_and_pestle",
+    "minecraft:vine",
+    "minecraft:azure_bluet",
+    "minecraft:white_tulip"
+  ],
+  "result": {
+    "id": "xincraft:aer_powder",
+    "count": 2
+  }
+}

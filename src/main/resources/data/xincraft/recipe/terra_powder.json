@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:mortar_and_pestle",
+    "minecraft:vine",
+    "minecraft:dandelion",
+    "minecraft:oxeye_daisy"
+  ],
+  "result": {
+    "id": "xincraft:terra_powder",
+    "count": 2
+  }
+}

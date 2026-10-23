@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:mortar_and_pestle",
+    "minecraft:vine",
+    [
+      "minecraft:wither_rose",
+      "minecraft:closed_eyeblossom"
+    ],
+    "minecraft:allium"
+  ],
+  "result": {
+    "id": "xincraft:umbra_powder",
+    "count": 2
+  }
+}

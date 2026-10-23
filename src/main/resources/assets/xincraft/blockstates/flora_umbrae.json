@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "fill=0": {
+      "model": "xincraft:block/flora_umbrae"
+    },
+    "fill=1": {
+      "model": "xincraft:block/flora_umbrae"
+    },
+    "fill=2": {
+      "model": "xincraft:block/flora_umbrae"
+    },
+    "fill=3": {
+      "model": "xincraft:block/flora_umbrae"
+    },
+    "fill=4": {
+      "model": "xincraft:block/flora_umbrae"
+    }
+  }
+}

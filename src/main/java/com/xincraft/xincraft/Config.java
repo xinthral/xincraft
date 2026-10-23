@@ -29,6 +29,9 @@ public class Config {
     private static final ForgeConfigSpec.IntValue MENDING_LILAC_RANGE;
     private static final ForgeConfigSpec.IntValue MOONLIT_DANDELION_RANGE;
     private static final ForgeConfigSpec.IntValue SHIMMER_LILY_RANGE;
+    private static final ForgeConfigSpec.IntValue FLORA_CAPACITY;
+    private static final ForgeConfigSpec.IntValue FLORA_INITIAL_ESSENCE;
+    private static final ForgeConfigSpec.IntValue FLORA_ESSENCE_PER_POWDER;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_PER_SECOND;
@@ -114,6 +117,18 @@ public class Config {
                 .defineInRange("shimmerLilyRange", 8, 1, 32);
         BUILDER.pop();
 
+        BUILDER.comment("Elemental flora").push("flora");
+        FLORA_CAPACITY = BUILDER
+                .comment("How much essence an elemental flora can hold")
+                .defineInRange("capacity", 64, 1, 100_000);
+        FLORA_INITIAL_ESSENCE = BUILDER
+                .comment("Essence a flower holds when an element's powder first turns it into a flora")
+                .defineInRange("initialEssence", 16, 0, 100_000);
+        FLORA_ESSENCE_PER_POWDER = BUILDER
+                .comment("Essence each further powder of the same element adds to a flora")
+                .defineInRange("essencePerPowder", 16, 1, 100_000);
+        BUILDER.pop();
+
         BUILDER.comment("Ender rails").push("enderRails");
         ENDER_RAIL_MAX_DISTANCE = BUILDER
                 .comment("Maximum distance in blocks between two linked ender rails")
@@ -151,6 +166,9 @@ public class Config {
     public static int mendingLilacRange = 8;
     public static int moonlitDandelionRange = 8;
     public static int shimmerLilyRange = 8;
+    public static int floraCapacity = 64;
+    public static int floraInitialEssence = 16;
+    public static int floraEssencePerPowder = 16;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
@@ -185,6 +203,9 @@ public class Config {
         mendingLilacRange = MENDING_LILAC_RANGE.get();
         moonlitDandelionRange = MOONLIT_DANDELION_RANGE.get();
         shimmerLilyRange = SHIMMER_LILY_RANGE.get();
+        floraCapacity = FLORA_CAPACITY.get();
+        floraInitialEssence = FLORA_INITIAL_ESSENCE.get();
+        floraEssencePerPowder = FLORA_ESSENCE_PER_POWDER.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
         enderRailMaxTeleportsPerSecond = ENDER_RAIL_MAX_PER_SECOND.get();

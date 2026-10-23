@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:mortar_and_pestle",
+    "minecraft:vine",
+    "minecraft:blue_orchid",
+    "minecraft:cornflower"
+  ],
+  "result": {
+    "id": "xincraft:aqua_powder",
+    "count": 2
+  }
+}

@@ -9,6 +9,9 @@ import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
 import com.xincraft.xincraft.entity.MotorboatType;
 import com.xincraft.xincraft.item.CartUpgradeItem;
+import com.xincraft.xincraft.item.ElementPowderItem;
+import com.xincraft.xincraft.item.MortarAndPestleItem;
+import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.item.EnderRailItem;
 import com.xincraft.xincraft.item.ExoticPollenItem;
 import net.minecraft.world.item.BlockItem;
@@ -134,6 +137,23 @@ public final class ModItems {
     // Mixed from three different flowers on the mixing tray; turns certain flowers into exotic ones
     public static final RegistryObject<Item> EXOTIC_POLLEN = registerItem("exotic_pollen", ExoticPollenItem::new,
         () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    // Grinds flowers and vines into elemental powders in the crafting grid, wearing down instead of
+    // being used up
+    public static final RegistryObject<Item> MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", MortarAndPestleItem::new,
+        () -> new Item.Properties().durability(64));
+
+    // One powder per element (e.g. ignis_powder); turns small flowers into elemental flora
+    public static final Map<Element, RegistryObject<Item>> ELEMENT_POWDERS = registerElementPowders();
+
+    private static Map<Element, RegistryObject<Item>> registerElementPowders() {
+        Map<Element, RegistryObject<Item>> items = new EnumMap<>(Element.class);
+        for (Element element : Element.values()) {
+            items.put(element, registerItem(element.powderId(),
+                properties -> new ElementPowderItem(element, properties), Item.Properties::new));
+        }
+        return Collections.unmodifiableMap(items);
+    }
 
     private ModItems() {}
 }

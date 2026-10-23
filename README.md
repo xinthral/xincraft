@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, and exotic flowers that give off area effects.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, exotic flowers that give off area effects, and the start of a nature magic system built on elemental flowers.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -27,6 +27,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Cart Upgrades](#cart-upgrades)
 - [Tin Spyglass](#tin-spyglass)
 - [Exotic Flowers](#exotic-flowers)
+- [Nature Magic](#nature-magic)
 - [Configuration](#configuration)
 - [Building from source](#building-from-source)
 
@@ -462,6 +463,39 @@ Right-click any **leaves** with Exotic Pollen to make them glow faintly, about a
 
 Glowing leaves look exactly like the leaves they came from and behave the same way. They decay when their tree is cut down, and drop the same saplings, sticks and apples. Broken with shears or Silk Touch, they drop ordinary leaves, so the glow stays where it was applied and doesn't come with you.
 
+## Nature Magic
+
+Flowers hold the primal elements: **Terra, Aqua, Ignis, Aer, Vita, Lux and Umbra**. You grind them into powders, then use a powder to turn a living flower into an **elemental flora** that stores that element's essence. The flora are the reservoirs for rituals coming in a later update.
+
+### Mortar and Pestle
+
+**Recipe:** a flint in the top-right corner over 3 stone (cobblestone, blackstone or cobbled deepslate) in a bowl shape (`  F` / `S S` / ` S `) → 1 Mortar and Pestle.
+
+It isn't used up when you grind with it. It stays in the crafting grid and wears down by one each time, lasting 64 grinds.
+
+### Elemental powders
+
+Each powder is a shapeless recipe: the **mortar and pestle**, a **vine** and two flowers, making **2 powders**.
+
+| Powder | Flowers |
+| --- | --- |
+| Ignis | Poppy + Torchflower |
+| Aqua | Blue Orchid + Cornflower |
+| Aer | Azure Bluet + White Tulip |
+| Terra | Dandelion + Oxeye Daisy |
+| Vita | Lily of the Valley + Pink Tulip |
+| Lux | Sunflower + Orange Tulip |
+| Umbra | Wither Rose or Closed Eyeblossom + Allium |
+
+### Elemental flora
+
+**Right-click any small flower with a powder** to turn it into that element's flora (Ignis powder makes a **Flora Ignis**, Aqua powder a **Flora Aquae**, and so on). It starts with 16 essence and uses up the powder. The mod's exotic flowers can't be changed this way.
+
+- **Topping up:** right-click a flora with more of its own element's powder to add 16 essence, up to 64. Other powders do nothing.
+- **Checking:** right-click a flora with an empty hand to see how much essence it holds.
+- The fuller it is, the more it glows (up to light level 8) and sparkles in its element's colour.
+- **Breaking a flora destroys it.** It drops nothing, and its essence is lost. Pistons and flowing water break it too.
+
 ## Configuration
 
 Xincraft's settings live in `config/xincraft-common.toml`. The file is created the first time the game starts, with a comment and the allowed range for each value. Changes made while the game is running take effect immediately, except `tin.generateOre` (see below).
@@ -497,6 +531,11 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 	moonlitDandelionRange = 8
 	shimmerLilyRange = 8
 
+[flora]
+	capacity = 64
+	initialEssence = 16
+	essencePerPowder = 16
+
 [turbines]
 	heatTurbineEnergyPerTick = 40
 	steamTurbineEnergyPerTick = 160
@@ -525,6 +564,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `flowers.mendingLilacRange` | `8` | 1 – 32 | How far, in blocks, a mending lilac's regeneration reaches in each direction (8 = a 16-block-wide area) |
 | `flowers.moonlitDandelionRange` | `8` | 1 – 32 | How far, in blocks, a moonlit dandelion's night vision reaches in each direction (8 = a 16-block-wide area) |
 | `flowers.shimmerLilyRange` | `8` | 1 – 32 | How far, in blocks, a shimmer lily's invisibility reaches in each direction (8 = a 16-block-wide area) |
+| `flora.capacity` | `64` | 1 – 100,000 | How much essence an elemental flora can hold |
+| `flora.initialEssence` | `16` | 0 – 100,000 | Essence a flower holds when a powder first turns it into a flora |
+| `flora.essencePerPowder` | `16` | 1 – 100,000 | Essence each further powder of the same element adds to a flora |
 | `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
 | `turbines.steamTurbineEnergyPerTick` | `160` | 1 – 100,000 | Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed) |
 | `turbines.steamTurbineWaterPerTick` | `5` | 0 – 1,000 | Water, in millibuckets (1,000 = one bucket), a steam turbine uses each tick while running |

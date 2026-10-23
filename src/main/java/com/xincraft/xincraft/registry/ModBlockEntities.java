@@ -1,9 +1,11 @@
 package com.xincraft.xincraft.registry;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.ChargingRailBlockEntity;
 import com.xincraft.xincraft.block.EnderRailBlockEntity;
+import com.xincraft.xincraft.block.FloraBlockEntity;
 import com.xincraft.xincraft.block.HeatTurbineBlockEntity;
 import com.xincraft.xincraft.block.AuraFlowerBlockEntity;
 import com.xincraft.xincraft.block.MixingTrayBlockEntity;
@@ -41,6 +43,11 @@ public final class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<AuraFlowerBlockEntity>> SHIMMER_LILY = BLOCK_ENTITIES.register("shimmer_lily",
         () -> new BlockEntityType<>(AuraFlowerBlockEntity::new, Set.of(ModBlocks.SHIMMER_LILY.get())));
+
+    // All the elemental flora share one type (block.FloraBlock)
+    public static final RegistryObject<BlockEntityType<FloraBlockEntity>> FLORA = BLOCK_ENTITIES.register("flora",
+        () -> new BlockEntityType<>(FloraBlockEntity::new,
+            ModBlocks.FLORA.values().stream().map(RegistryObject::get).collect(Collectors.toUnmodifiableSet())));
 
     private ModBlockEntities() {}
 }

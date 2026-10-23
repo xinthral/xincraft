@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:mortar_and_pestle",
+    "minecraft:vine",
+    "minecraft:sunflower",
+    "minecraft:orange_tulip"
+  ],
+  "result": {
+    "id": "xincraft:lux_powder",
+    "count": 2
+  }
+}

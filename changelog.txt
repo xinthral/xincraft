@@ -1,6 +1,12 @@
 Xincraft Changelog
 ==================
 
+1.16.0
+ - Nature magic: a mortar and pestle grinds vines and flowers into seven elemental powders
+   (Terra, Aqua, Ignis, Aer, Vita, Lux, Umbra)
+ - Elemental flora: an element's powder on any small flower turns it into a glowing store of
+   that element's essence, for rituals to come; broken, it's lost
+
 1.15.0
  - Shimmer Upgrade (formerly Refractive): riders of an ender minecart, locomotive cart or
    motorboat are invisible, but for the odd pink glint
