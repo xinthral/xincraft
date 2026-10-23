@@ -135,5 +135,9 @@
   "block.xincraft.flora_vitae": "Flora Vitae",
   "block.xincraft.flora_lucis": "Flora Lucis",
   "block.xincraft.flora_umbrae": "Flora Umbrae",
-  "message.xincraft.flora_essence": "%s: %s/%s essence"
+  "message.xincraft.flora_essence": "%s: %s/%s essence",
+  "block.xincraft.apothecary_altar": "Apothecary Altar",
+  "container.xincraft.apothecary_altar.room": "%s: in range, has room",
+  "container.xincraft.apothecary_altar.full": "%s: in range, full",
+  "container.xincraft.apothecary_altar.none": "%s: none in range"
 }

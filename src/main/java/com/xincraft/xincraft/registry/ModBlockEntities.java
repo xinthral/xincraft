@@ -3,6 +3,7 @@ package com.xincraft.xincraft.registry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
 import com.xincraft.xincraft.block.ChargingRailBlockEntity;
 import com.xincraft.xincraft.block.EnderRailBlockEntity;
 import com.xincraft.xincraft.block.FloraBlockEntity;
@@ -48,6 +49,9 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<FloraBlockEntity>> FLORA = BLOCK_ENTITIES.register("flora",
         () -> new BlockEntityType<>(FloraBlockEntity::new,
             ModBlocks.FLORA.values().stream().map(RegistryObject::get).collect(Collectors.toUnmodifiableSet())));
+
+    public static final RegistryObject<BlockEntityType<ApothecaryAltarBlockEntity>> APOTHECARY_ALTAR = BLOCK_ENTITIES.register("apothecary_altar",
+        () -> new BlockEntityType<>(ApothecaryAltarBlockEntity::new, Set.of(ModBlocks.APOTHECARY_ALTAR.get())));
 
     private ModBlockEntities() {}
 }

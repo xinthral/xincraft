@@ -493,8 +493,33 @@ Each powder is a shapeless recipe: the **mortar and pestle**, a **vine** and two
 
 - **Topping up:** right-click a flora with more of its own element's powder to add 16 essence, up to 64. Other powders do nothing.
 - **Checking:** right-click a flora with an empty hand to see how much essence it holds.
-- The fuller it is, the more it glows (up to light level 8) and sparkles in its element's colour.
+- The fuller it is, the deeper its colour, from pale and washed-out when empty to the element's full colour, and the more it glows (up to light level 8) and sparkles.
 - **Breaking a flora destroys it.** It drops nothing, and its essence is lost. Pistons and flowing water break it too.
+
+### Apothecary Altar
+
+**Recipe:** two elemental powders (any kind) in the top corners, stone bricks either side of a campfire, and 3 stone bricks along the bottom (`P P` / `SCS` / `SSS`) → 1 Apothecary Altar. Mine it with a pickaxe.
+
+The altar burns plants into elemental essence, which flows into the flora around it. It works like a furnace: put a **plant** in the top slot and **fuel** (anything that burns in a furnace) in the bottom slot.
+
+- Each plant takes 5 seconds to burn and gives **4 essence of each of its elements**. A stream of the element's colour flows from the altar to each flora that takes some, emptiest first.
+- It reaches flora **up to 4 blocks away** in every direction.
+- It only burns while a flora of one of the plant's elements is in range and has room, so plants and fuel aren't wasted. Fuel that's already lit burns out, as in a furnace.
+- Only plants go in the plant slot. Which plant gives which element is set by the item tags `xincraft:essence/<element>`, so a data pack can change them:
+
+| Element | Plants |
+| --- | --- |
+| Terra | Saplings, Dandelion, Oxeye Daisy, Dead Bush, Short Grass, Fern, Wheat Seeds |
+| Aqua | Kelp, Seagrass, Lily Pad, Sea Pickle, Sugar Cane, Blue Orchid, Cornflower |
+| Ignis | Poppy, Torchflower, Nether Wart, Crimson Fungus, Crimson Roots, Cactus |
+| Aer | Vines, Leaves, Azure Bluet, White Tulip, Spore Blossom |
+| Vita | Lily of the Valley, Pink Tulip, Sweet Berries, Moss Block, Pink Petals |
+| Lux | Sunflower, Orange Tulip, Glow Berries, Glow Lichen |
+| Umbra | Wither Rose, Closed Eyeblossom, Allium, Red and Brown Mushrooms, Warped Fungus, Warped Roots |
+
+- **The screen** shows a row of seven pips, one per element. A pip is dark when no flora of its element is in range, dim when they're all full, and bright when one has room. It's outlined in white when the plant in the slot gives that element. Hover a pip to see which.
+- **Hoppers** put plants in from above and fuel in from the sides, and take empty buckets out from below.
+- Breaking the altar drops what's in it.
 
 ## Configuration
 
@@ -536,6 +561,11 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 	initialEssence = 16
 	essencePerPowder = 16
 
+[altar]
+	range = 4
+	burnTicks = 100
+	essencePerElement = 4
+
 [turbines]
 	heatTurbineEnergyPerTick = 40
 	steamTurbineEnergyPerTick = 160
@@ -567,6 +597,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `flora.capacity` | `64` | 1 – 100,000 | How much essence an elemental flora can hold |
 | `flora.initialEssence` | `16` | 0 – 100,000 | Essence a flower holds when a powder first turns it into a flora |
 | `flora.essencePerPowder` | `16` | 1 – 100,000 | Essence each further powder of the same element adds to a flora |
+| `altar.range` | `4` | 1 – 8 | How far, in blocks, the apothecary altar reaches in each direction for flora to fill (4 = a 9-block-wide cube) |
+| `altar.burnTicks` | `100` | 1 – 6,000 | Ticks the altar takes to burn one plant (20 = one second) |
+| `altar.essencePerElement` | `4` | 1 – 100,000 | Essence each burnt plant gives for each of its elements |
 | `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
 | `turbines.steamTurbineEnergyPerTick` | `160` | 1 – 100,000 | Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed) |
 | `turbines.steamTurbineWaterPerTick` | `5` | 0 – 1,000 | Water, in millibuckets (1,000 = one bucket), a steam turbine uses each tick while running |

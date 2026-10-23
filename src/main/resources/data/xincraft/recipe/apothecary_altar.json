@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": "#xincraft:element_powders",
+    "C": "minecraft:campfire",
+    "S": "minecraft:stone_bricks"
+  },
+  "pattern": [
+    "P P",
+    "SCS",
+    "SSS"
+  ],
+  "result": {
+    "id": "xincraft:apothecary_altar",
+    "count": 1
+  }
+}

@@ -7,6 +7,17 @@ import net.minecraft.world.level.Level;
 
 // Finding and drawing from essence reservoirs around a point, for the ritual multiblock to come
 public final class EssenceHelper {
+    // Every loaded reservoir, of any element, within radius blocks of center (a cube)
+    public static List<EssenceReservoir> findReservoirs(Level level, BlockPos center, int radius) {
+        List<EssenceReservoir> found = new ArrayList<>();
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
+            if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof EssenceReservoir reservoir) {
+                found.add(reservoir);
+            }
+        }
+        return found;
+    }
+
     // Every loaded reservoir of the given element within radius blocks of center (a cube)
     public static List<EssenceReservoir> findReservoirs(Level level, BlockPos center, int radius, Element element) {
         List<EssenceReservoir> found = new ArrayList<>();
@@ -40,6 +51,26 @@ public final class EssenceHelper {
             remaining -= reservoir.extract(remaining, false);
         }
         return true;
+    }
+
+    // Puts amount essence into the reservoirs, emptiest first, and returns the ones that took some.
+    // Whatever doesn't fit is left over.
+    public static List<EssenceReservoir> fill(List<EssenceReservoir> reservoirs, int amount) {
+        List<EssenceReservoir> emptiestFirst = new ArrayList<>(reservoirs);
+        emptiestFirst.sort((a, b) -> Integer.compare(a.getEssence(), b.getEssence()));
+        List<EssenceReservoir> filled = new ArrayList<>();
+        int remaining = amount;
+        for (EssenceReservoir reservoir : emptiestFirst) {
+            if (remaining <= 0) {
+                break;
+            }
+            int added = reservoir.insert(remaining, false);
+            if (added > 0) {
+                remaining -= added;
+                filled.add(reservoir);
+            }
+        }
+        return filled;
     }
 
     private EssenceHelper() {}

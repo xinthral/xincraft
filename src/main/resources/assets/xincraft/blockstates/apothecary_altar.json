@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "xincraft:block/apothecary_altar"
+    },
+    "lit=true": {
+      "model": "xincraft:block/apothecary_altar_on"
+    }
+  }
+}

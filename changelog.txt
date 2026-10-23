@@ -1,6 +1,11 @@
 Xincraft Changelog
 ==================
 
+1.17.0
+ - Apothecary Altar: burns plants and furnace fuel into elemental essence for the flora within
+   4 blocks; which plant gives which element is set by item tags
+ - Elemental flora now deepen in colour as they fill, from washed-out to their full colour
+
 1.16.0
  - Nature magic: a mortar and pestle grinds vines and flowers into seven elemental powders
    (Terra, Aqua, Ignis, Aer, Vita, Lux, Umbra)

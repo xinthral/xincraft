@@ -1,19 +1,19 @@
 {
   "variants": {
     "fill=0": {
-      "model": "xincraft:block/flora_vitae"
+      "model": "xincraft:block/flora_vitae_0"
     },
     "fill=1": {
-      "model": "xincraft:block/flora_vitae"
+      "model": "xincraft:block/flora_vitae_1"
     },
     "fill=2": {
-      "model": "xincraft:block/flora_vitae"
+      "model": "xincraft:block/flora_vitae_2"
     },
     "fill=3": {
-      "model": "xincraft:block/flora_vitae"
+      "model": "xincraft:block/flora_vitae_3"
     },
     "fill=4": {
-      "model": "xincraft:block/flora_vitae"
+      "model": "xincraft:block/flora_vitae_4"
     }
   }
 }

@@ -32,6 +32,9 @@ public class Config {
     private static final ForgeConfigSpec.IntValue FLORA_CAPACITY;
     private static final ForgeConfigSpec.IntValue FLORA_INITIAL_ESSENCE;
     private static final ForgeConfigSpec.IntValue FLORA_ESSENCE_PER_POWDER;
+    private static final ForgeConfigSpec.IntValue ALTAR_RANGE;
+    private static final ForgeConfigSpec.IntValue ALTAR_BURN_TICKS;
+    private static final ForgeConfigSpec.IntValue ALTAR_ESSENCE_PER_ELEMENT;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_PER_SECOND;
@@ -129,6 +132,18 @@ public class Config {
                 .defineInRange("essencePerPowder", 16, 1, 100_000);
         BUILDER.pop();
 
+        BUILDER.comment("Apothecary altar").push("altar");
+        ALTAR_RANGE = BUILDER
+                .comment("How far, in blocks, the altar reaches in each direction for flora to fill (4 = a 9-block-wide cube)")
+                .defineInRange("range", 4, 1, 8);
+        ALTAR_BURN_TICKS = BUILDER
+                .comment("Ticks the altar takes to burn one plant (20 = one second)")
+                .defineInRange("burnTicks", 100, 1, 6_000);
+        ALTAR_ESSENCE_PER_ELEMENT = BUILDER
+                .comment("Essence each burnt plant gives for each of its elements")
+                .defineInRange("essencePerElement", 4, 1, 100_000);
+        BUILDER.pop();
+
         BUILDER.comment("Ender rails").push("enderRails");
         ENDER_RAIL_MAX_DISTANCE = BUILDER
                 .comment("Maximum distance in blocks between two linked ender rails")
@@ -169,6 +184,9 @@ public class Config {
     public static int floraCapacity = 64;
     public static int floraInitialEssence = 16;
     public static int floraEssencePerPowder = 16;
+    public static int altarRange = 4;
+    public static int altarBurnTicks = 100;
+    public static int altarEssencePerElement = 4;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
@@ -206,6 +224,9 @@ public class Config {
         floraCapacity = FLORA_CAPACITY.get();
         floraInitialEssence = FLORA_INITIAL_ESSENCE.get();
         floraEssencePerPowder = FLORA_ESSENCE_PER_POWDER.get();
+        altarRange = ALTAR_RANGE.get();
+        altarBurnTicks = ALTAR_BURN_TICKS.get();
+        altarEssencePerElement = ALTAR_ESSENCE_PER_ELEMENT.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
         enderRailMaxTeleportsPerSecond = ENDER_RAIL_MAX_PER_SECOND.get();

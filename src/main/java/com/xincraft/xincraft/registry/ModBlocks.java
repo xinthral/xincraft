@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.block.ApothecaryAltarBlock;
 import com.xincraft.xincraft.block.HoneyRailBlock;
 import com.xincraft.xincraft.block.BouncyRailBlock;
 import com.xincraft.xincraft.block.ChargingRailBlock;
@@ -266,6 +267,19 @@ public final class ModBlocks {
         }
         return Collections.unmodifiableMap(blocks);
     }
+
+    // Burns plants into elemental essence for the flora around it (block.ApothecaryAltarBlockEntity)
+    public static final RegistryObject<Block> APOTHECARY_ALTAR = registerBlock(
+        "apothecary_altar",
+        ApothecaryAltarBlock::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .strength(2.0F, 6.0F)
+            .requiresCorrectToolForDrops()
+            .lightLevel(state -> state.getValue(ApothecaryAltarBlock.LIT) ? 10 : 0),
+        true
+    );
 
     // Glowing copies of each kind of vanilla leaves, made by using exotic pollen on them
     // (block.GlowingLeavesBlock), keyed by the leaves they came from. No items: they drop and

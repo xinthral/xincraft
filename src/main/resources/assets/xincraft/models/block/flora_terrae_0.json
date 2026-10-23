@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "xincraft:block/flora_aquae"
+    "cross": "xincraft:block/flora_terrae_0"
   }
 }
