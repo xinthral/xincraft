@@ -8,12 +8,16 @@ import java.util.function.Supplier;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
 import com.xincraft.xincraft.entity.MotorboatType;
+import com.xincraft.xincraft.item.BuoyItem;
 import com.xincraft.xincraft.item.CartUpgradeItem;
+import com.xincraft.xincraft.item.LinkingBarItem;
 import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.item.MortarAndPestleItem;
+import com.xincraft.xincraft.item.RoseTintedGlassesItem;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.item.EnderRailItem;
 import com.xincraft.xincraft.item.ExoticPollenItem;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BoatItem;
 import net.minecraft.world.item.Item;
@@ -103,6 +107,14 @@ public final class ModItems {
         properties -> new MinecartItem(ModEntityTypes.JINGLE_CART.get(), properties),
         () -> new Item.Properties().stacksTo(1));
 
+    public static final RegistryObject<Item> CARRIAGE = registerItem("carriage",
+        properties -> new MinecartItem(ModEntityTypes.CARRIAGE.get(), properties),
+        () -> new Item.Properties().stacksTo(1));
+
+    // Hitches a cart behind a locomotive (see entity.CartCoupling)
+    public static final RegistryObject<Item> LINKING_BAR = registerItem("linking_bar",
+        LinkingBarItem::new, Item.Properties::new);
+
     // Minecart upgrades (see entity.CartUpgrades)
     public static final RegistryObject<Item> SHRIEKER_UPGRADE = registerItem("shrieker_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.SHRIEKER, properties), Item.Properties::new);
@@ -116,6 +128,8 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.SPEED, properties), Item.Properties::new);
     public static final RegistryObject<Item> SHIMMER_UPGRADE = registerItem("shimmer_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.SHIMMER, properties), Item.Properties::new);
+    public static final RegistryObject<Item> RC_UPGRADE = registerItem("rc_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.RC, properties), Item.Properties::new);
 
     // Crafted with any boat to make a motorboat
     public static final RegistryObject<Item> PROPELLER =
@@ -133,6 +147,23 @@ public final class ModItems {
         }
         return Collections.unmodifiableMap(items);
     }
+
+    // Bronze ingots shaped to line a boat; with any motorboat and a jukebox, makes a party boat
+    public static final RegistryObject<Item> BRONZE_HULL_LINING =
+        registerItem("bronze_hull_lining", Item::new, Item.Properties::new);
+
+    public static final RegistryObject<Item> PARTY_BOAT = registerItem("party_boat",
+        properties -> new BoatItem(ModEntityTypes.PARTY_BOAT.get(), properties),
+        () -> new Item.Properties().stacksTo(1));
+
+    // Placed in still water; linked into paths for motorboats with the RC upgrade (block.BuoyBlock)
+    public static final RegistryObject<Item> BUOY = registerItem("buoy",
+        properties -> new BuoyItem(ModBlocks.BUOY.get(), properties),
+        () -> new Item.Properties().useBlockDescriptionPrefix());
+
+    // Worn (or held), shows buoy paths; used on an RC motorboat on a path, starts and stops it
+    public static final RegistryObject<Item> ROSE_TINTED_GLASSES = registerItem("rose_tinted_glasses", RoseTintedGlassesItem::new,
+        () -> new Item.Properties().stacksTo(1).equippable(EquipmentSlot.HEAD));
 
     // Mixed from three different flowers on the mixing tray; turns certain flowers into exotic ones
     public static final RegistryObject<Item> EXOTIC_POLLEN = registerItem("exotic_pollen", ExoticPollenItem::new,

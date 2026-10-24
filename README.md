@@ -23,7 +23,9 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
 - [Jingle Cart](#jingle-cart)
+- [Carriage and Linking Bar](#carriage-and-linking-bar)
 - [Motorboats](#motorboats)
+- [Buoys](#buoys)
 - [Cart Upgrades](#cart-upgrades)
 - [Tin Spyglass](#tin-spyglass)
 - [Exotic Flowers](#exotic-flowers)
@@ -180,14 +182,15 @@ A detector rail that tells minecarts apart. Instead of always giving a full-stre
 
 | Minecart | Signal |
 | --- | --- |
-| Minecart | 1 |
+| Minecart, empty Carriage | 1 |
+| Carriage with a passenger | 2 |
 | Minecart with Hopper | 3 |
 | Minecart with Chest, Minecart with Furnace | 6 |
 | Locomotive Cart | 9 |
 | Ender Minecart | 12 |
 | Minecart with TNT | 15 |
 
-Any other minecart (for example from another mod) gives 0, the same as an empty rail, until it's added to one of the signal tags below. If several carts are on the rail at once, it outputs the strongest signal. Like the detector rail, it strongly powers the block beneath it, powers adjacent powered rails, keeps its signal for up to a second after a cart leaves, and lets a comparator read how full a container cart on it is.
+A carriage gives one more than its tag's signal while someone (a player or a mob) is riding it, so a station can tell a full carriage from an empty one; the signal rises as soon as they get in and drops within a second of them getting out. Any other minecart (for example from another mod) gives 0, the same as an empty rail, until it's added to one of the signal tags below. If several carts are on the rail at once, it outputs the strongest signal. Like the detector rail, it strongly powers the block beneath it, powers adjacent powered rails, keeps its signal for up to a second after a cart leaves, and lets a comparator read how full a container cart on it is.
 
 **Adding cart types:** the signal for each cart type comes from the entity type tags `xincraft:inspector_rail_signal/1` through `/15`, in `data/xincraft/tags/entity_type/inspector_rail_signal/`. To give a new cart a signal, add its ID to the tag file for that strength (creating the file if it doesn't exist yet). A datapack can do the same to add carts from other mods.
 
@@ -318,6 +321,7 @@ Ways to open it:
 - **Getting going:** while stopped, press a movement key to set off in that direction. A cart without a rider sets off when pushed.
 - **Staying going:** once moving, it keeps driving whichever way it's going, around curves and up slopes, for as long as there's fuel (or stored energy, with the [Energy Upgrade](#energy-upgrade)).
 - **Stopping:** an **unpowered powered rail** brings it to a stop, the same way it stops any minecart. Power the rail to set off again. It also stops if it runs into something or reaches the end of the track.
+- **Handbrake:** hold **jump** (space) while riding to cut the engine and brake, sparks flying from the wheels, to a stop in under a second from full speed. It stays stopped for as long as you hold it, without burning new fuel. Let go and it carries on the way it was going, or, if it had stopped, press a movement key to set off again. A cart it's towing is braked along with it.
 - **Fuel use:** a new fuel item is only lit when the cart is trying to move, so a parked locomotive doesn't eat its fuel. An item that's already burning keeps burning down while parked, like in a furnace. (The [Energy Upgrade](#energy-upgrade) changes this: fuel charges the battery, and the battery drives the cart.)
 - **Speed:** it drives at the normal minecart speed cap, at the higher speed on straight [Tin Rails](#tin-rails), and at the slower speed on [Honey Rails](#honey-rail).
 
@@ -338,6 +342,39 @@ A minecart carrying a jukebox that plays music discs as it rolls along, the musi
 - **Hoppers load and unload it**, like a chest minecart: a hopper feeding into the rail puts a disc in, and a hopper under the rail takes it out. It only takes discs, one at a time.
 - On a **detector rail**, a comparator reads a full signal when it has a disc in, and none when it's empty.
 - Breaking the cart drops the disc.
+
+## Carriage and Linking Bar
+
+A **Carriage** is a passenger car for your locomotive: a rideable minecart in maroon lacquer with bronze trim and windows, a carpeted floor and wood-panelled walls. On its own it rides like an ordinary minecart. A **Linking Bar** hitches it, or any other Xincraft cart, behind a [Locomotive Cart](#locomotive-cart), so the locomotive pulls it along.
+
+**Recipes:**
+
+> Carriage (shapeless): 1 Minecart Frame + 2 Bronze Ingots + 1 Wool (any colour) → 1 Carriage
+
+| | | |
+| --- | --- | --- |
+| | | Bronze Ingot |
+| | Iron Chain | |
+| Bronze Ingot | | |
+
+> Linking Bar (shaped): 2 Bronze Ingots and 1 Iron Chain on a diagonal → 1 Linking Bar
+
+### Linking
+
+- **Right-click one cart with the linking bar, then the other.** The bar glints between the two clicks. Click the same cart twice to cancel.
+- **One of the two must be a locomotive**, and it leads. Behind it can go a **carriage, a jingle cart, or another locomotive**; if both are locomotives, the one you clicked first leads. The ender minecart and vanilla minecarts can't be linked.
+- **One link per cart:** a locomotive tows a single cart, and that cart can't tow anything further back.
+- The carts must be within about 3 blocks of each other. The link draws them to just under 2 blocks apart, centre to centre.
+- The same bar also links [buoys](#buoys).
+- **Unhitching:** **shift + right-click** either cart with a linking bar to unhitch them and get the bar back. Breaking either cart unhitches them and drops the bar, and so does the link snapping if the carts are pulled more than 5 blocks apart (for example by an ender rail teleporting one of them).
+
+### Towing
+
+- The locomotive drives as usual and pulls the towed cart along behind it, around curves, up and down slopes, and to a stop at an unpowered powered rail. If the locomotive runs backward, it pushes the towed cart ahead of it instead.
+- The two carts are joined by a **bronze drawbar** about two-thirds of a block long, with a **pivot pin** at each end. It swings with the carts through corners, and the linked carts never collide with or bump each other, so they don't jam on tight turns or slopes.
+- Links are saved with the world.
+
+> Like the other powered features, towing only works with the default minecart physics.
 
 ## Motorboats
 
@@ -368,9 +405,46 @@ Fuel goes in the motorboat's **fuel slot**, and there's a **storage slot** for c
 
 > **Upgrades** fit motorboats too: the shrieker, energy, ice breaker, speed and shimmer upgrades. See [Cart Upgrades](#cart-upgrades).
 
+### Party Boat
+
+A bronze-lined motorboat with a jukebox in its back seat.
+
+| Item | Recipe |
+| --- | --- |
+| Bronze Hull Lining | 5 Bronze Ingots in a U shape (`B B` over `BBB`) |
+| Party Boat | Any motorboat or motor raft + 1 Bronze Hull Lining + 1 Jukebox (shapeless) |
+
+- It drives, fuels and takes upgrades like any motorboat, and always looks like an oak boat. The jukebox takes the second seat, so it carries one rider.
+- **Right-click with a music disc** to put it in, swapping out any disc already there. **Shift + right-click with an empty hand** takes the disc out (with no disc in, that opens the fuel and storage slots as usual).
+- Like the [Jingle Cart](#jingle-cart), it plays the disc **while it's moving**, the music following the boat, and starts the song over each time it sets off again. With the **Sculk Sensor Upgrade** it only plays while a player is within 32 blocks.
+- Breaking it drops the disc along with the boat, its fuel, storage and upgrades.
+
+## Buoys
+
+Marker buoys linked into courses that motorboats with the **RC Upgrade** follow by themselves, for canals, harbour runs or a lazy-river ride.
+
+| Item | Recipe |
+| --- | --- |
+| Buoy | 1 Iron Ingot + 1 Red Dye + 1 White Dye + 1 Torch (shapeless) → 2 |
+| Linking Bar | see [Carriage and Linking Bar](#carriage-and-linking-bar) |
+| RC Upgrade | see [Cart Upgrades](#cart-upgrades) |
+| Rose-Tinted Glasses | 2 Tin Ingots over 2 Pink Stained Glass Panes with a Rose Bush between them (`T T` / `PRP`) |
+
+- **Placing:** right-click **still water** with a buoy, the way you place a lily pad. It's two blocks tall: a red-and-white float in the water and a pole with a small lamp above it, which glows. Boats, players and mobs pass straight through it. Breaking either half breaks the whole buoy.
+- **Linking:** right-click one buoy with a **Linking Bar**, then the next. The bar glints in between, and one bar is used up per link. Linked buoys can be up to **32 blocks** apart, and each buoy takes **two links**, so a course is a line or a loop. **Shift + right-click** a buoy with a linking bar to unlink it and get its bars back; breaking a buoy drops its bars.
+- **Following:** a **cruising motorboat with the RC Upgrade** (party boats included) that comes within 2 blocks of a link starts following the course, steering from buoy to buoy. It takes gentle bends at full speed and **slows down before sharp turns**, braking about 2 blocks out (further when it's going faster). It keeps cruising **with nobody aboard** until the course ends, the fuel runs out, or it **runs aground**, when it just stops. A rider can still press back to stop. Boats without the upgrade ignore buoys.
+- **Switching a buoy off:** right-click a buoy (with anything but a linking bar) to switch its lamp off, and again to switch it back on. A boat following the course toward a buoy that's off **cuts its engine within 6 blocks, eases to a stop about 2 blocks short of it, and waits there**, propeller still and burning no fuel. Switch the buoy back on and it sets off again, carrying on along the course, so an unlit buoy works like a stop signal at a pier.
+- Links between buoys go in a straight line, so keep them over open water.
+
+### Rose-Tinted Glasses
+
+- **Wear them** (they go in the helmet slot) **or hold them** to see the links between buoys within 48 blocks, traced over the water. Worn, they also give your view a faint rose tint. A course is traced in **yellow**, like glowstone, when it makes a **complete loop** (every buoy linked to two others), and in **red**, like powered redstone, when it doesn't: it has an end.
+- **Look at an elemental flora** through them to read the essence it holds out of its capacity, or **at an Apothecary Altar** to see the flora within its reach, element by element: how many there are, and how much essence they hold out of how much they can.
+- **Right-click a motorboat with the RC Upgrade** with the glasses in hand when it's on a course with nobody steering to **start** it cruising, and again to **stop** it. A motorboat left on a loop will lap it until its fuel runs out.
+
 ## Cart Upgrades
 
-Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and jingle cart) and motorboats, and show as small blocks on the vehicle.
+Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, jingle cart, and carriage) and motorboats, and show as small blocks on the vehicle.
 
 > [!IMPORTANT]
 > **Removing upgrades: use shears.**
@@ -382,11 +456,12 @@ Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, and j
 | Upgrade | Recipe | Fits | Effect |
 | --- | --- | --- | --- |
 | Shrieker Upgrade | Sculk Shrieker surrounded by 4 Tin Ingots (one on each side) | Any Xincraft cart, motorboats | Clears the way ahead: mobs and players in the vehicle's path are shoved off to the side with a shriek before it reaches them. It never picks them up and is never slowed by them (it still bumps into other minecarts and boats). |
-| Sculk Sensor Upgrade | Sculk Sensor surrounded by 4 Tin Ingots (one on each side) | Jingle Cart | The cart only plays while a player is within 32 blocks. |
+| Sculk Sensor Upgrade | Sculk Sensor surrounded by 4 Tin Ingots (one on each side) | Jingle Cart, Party Boat | The vehicle only plays while a player is within 32 blocks. |
 | Energy Upgrade | Block of Redstone surrounded by 4 Tin Ingots (one on each side) | Locomotive Cart, motorboats | The vehicle stores Forge Energy (FE) in a battery that its fuel charges, and runs on that. See below. |
 | Ice Breaker Upgrade | Iron Pickaxe surrounded by 4 Tin Ingots (one on each side) | Motorboats | Breaks the ice in front of the boat, turning it back into water, so it can cut through frozen rivers and lakes. Only works while the boat is in water, so it leaves ice roads alone. |
 | Speed Upgrade | Blaze Rod surrounded by 4 Tin Ingots (one on each side) | Motorboats | Cruises 50% faster, burning fuel (or energy) twice as fast. |
-| Shimmer Upgrade | Tinted Glass surrounded by 4 Tin Ingots (one on each side) | Ender minecart, locomotive cart, motorboats | Makes whoever's riding **invisible** (players and mobs alike), wearing off a few seconds after they get out. Every few seconds, at random, a faint pink glint flickers where the rider is, the only thing that gives them away. The vehicle itself stays visible. |
+| RC Upgrade | Lightning Rod surrounded by 4 Tin Ingots (one on each side) | Motorboats | Follows [buoy](#buoys) courses on its own, even with nobody aboard, slowing for sharp turns. |
+| Shimmer Upgrade | Tinted Glass surrounded by 4 Tin Ingots (one on each side) | Ender minecart, locomotive cart, carriage, motorboats | Makes whoever's riding **invisible** (players and mobs alike), wearing off a few seconds after they get out. Every few seconds, at random, a faint pink glint flickers where the rider is, the only thing that gives them away. The vehicle itself stays visible. |
 
 > The shrieker, like the other powered features, only works with the default minecart physics.
 
@@ -504,6 +579,7 @@ The altar burns plants into elemental essence, which flows into the flora around
 
 - Each plant takes 5 seconds to burn and gives **4 essence of each of its elements**. A stream of the element's colour flows from the altar to each flora that takes some, emptiest first.
 - It reaches flora **up to 4 blocks away** in every direction.
+- Look at the altar through **Rose-Tinted Glasses** to see how full the flora in its reach are.
 - It only burns while a flora of one of the plant's elements is in range and has room, so plants and fuel aren't wasted. Fuel that's already lit burns out, as in a furnace.
 - Only plants go in the plant slot. Which plant gives which element is set by the item tags `xincraft:essence/<element>`, so a data pack can change them:
 
@@ -633,12 +709,12 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, and the exotic flowers |
-| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen |
-| `.../entity/` | Ender minecart, locomotive cart, jingle cart, motorboats, upgrades for carts and boats (`CartUpgrades`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, and buoys |
+| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, and the buoy item |
+| `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, motorboats, upgrades for carts and boats (`CartUpgrades`), linking carts together (`CartCoupling`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, minecart and motorboat renderers (with upgrades), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
 

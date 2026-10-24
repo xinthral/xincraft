@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:minecart_frame",
+    "#c:ingots/bronze",
+    "#c:ingots/bronze",
+    "#minecraft:wool"
+  ],
+  "result": {
+    "id": "xincraft:carriage",
+    "count": 1
+  }
+}

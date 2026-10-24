@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.Blocks;
 public enum CartUpgrade {
     // Clears mobs and players out of the vehicle's path, so it never picks them up or slows for them
     SHRIEKER("shrieker", ModItems.SHRIEKER_UPGRADE, Blocks.SCULK_SHRIEKER, List.of()),
-    // A jingle cart only plays while a player is within earshot
-    SCULK_SENSOR("sculk_sensor", ModItems.SCULK_SENSOR_UPGRADE, Blocks.SCULK_SENSOR, List.of(JingleCart.class)),
+    // A jingle cart or party boat only plays while a player is within earshot
+    SCULK_SENSOR("sculk_sensor", ModItems.SCULK_SENSOR_UPGRADE, Blocks.SCULK_SENSOR, List.of(JingleCart.class, PartyBoat.class)),
     // The engine runs on a Forge Energy battery, which its fuel charges
     ENERGY("energy", ModItems.ENERGY_UPGRADE, Blocks.REDSTONE_BLOCK, List.of(LocomotiveCart.class, Motorboat.class)),
     // A motorboat breaks the ice in front of it
@@ -22,7 +22,9 @@ public enum CartUpgrade {
     SPEED("speed", ModItems.SPEED_UPGRADE, Blocks.BLAST_FURNACE, List.of(Motorboat.class)),
     // Riders are invisible, but for the odd pink glint (the rideable vehicles only)
     SHIMMER("shimmer", ModItems.SHIMMER_UPGRADE, Blocks.TINTED_GLASS,
-        List.of(EnderMinecart.class, LocomotiveCart.class, Motorboat.class));
+        List.of(EnderMinecart.class, LocomotiveCart.class, Carriage.class, Motorboat.class)),
+    // A motorboat that comes across a buoy path follows it on its own (see block.BuoyBlock)
+    RC("rc", ModItems.RC_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class));
 
     private final String id;
     private final Supplier<Item> item;

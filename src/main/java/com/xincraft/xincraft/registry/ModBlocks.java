@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.ApothecaryAltarBlock;
+import com.xincraft.xincraft.block.BuoyBlock;
 import com.xincraft.xincraft.block.HoneyRailBlock;
 import com.xincraft.xincraft.block.BouncyRailBlock;
 import com.xincraft.xincraft.block.ChargingRailBlock;
@@ -27,6 +28,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -213,6 +215,21 @@ public final class ModBlocks {
             .requiresCorrectToolForDrops()
             .lightLevel(state -> state.getValue(TurbineBlock.LIT) ? 13 : 0),
         true
+    );
+
+    // Two-block marker buoy in still water, linked into paths for motorboats (block.BuoyBlock; item
+    // in ModItems). The lamp on top glows while it's switched on.
+    public static final RegistryObject<Block> BUOY = registerBlock(
+        "buoy",
+        BuoyBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .noOcclusion()
+            .strength(0.5F)
+            .sound(SoundType.LANTERN)
+            .lightLevel(state -> state.getValue(BuoyBlock.HALF) == DoubleBlockHalf.UPPER && state.getValue(BuoyBlock.LIT) ? 7 : 0)
+            .pushReaction(PushReaction.DESTROY),
+        false
     );
 
     // Exotic flowers, grown from vanilla flowers with exotic pollen (item.ExoticPollenItem), made on

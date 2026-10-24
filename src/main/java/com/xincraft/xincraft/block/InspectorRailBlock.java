@@ -2,6 +2,7 @@ package com.xincraft.xincraft.block;
 
 import java.util.List;
 import com.mojang.serialization.MapCodec;
+import com.xincraft.xincraft.entity.Carriage;
 import com.xincraft.xincraft.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,6 +34,7 @@ import net.minecraft.world.phys.AABB;
 // A detector rail whose redstone signal depends on which kind of minecart is on it, rather than
 // always 15. The strength for each cart type comes from the entity type tags
 // xincraft:inspector_rail_signal/<1-15> (see ModTags.inspectorRailSignal); untagged carts give 0.
+// A carriage with someone aboard gives one more than its tag's signal.
 // Otherwise it behaves like vanilla's DetectorRailBlock, which this is adapted from.
 public class InspectorRailBlock extends BaseRailBlock {
     public static final MapCodec<InspectorRailBlock> CODEC = simpleCodec(InspectorRailBlock::new);
@@ -54,11 +56,12 @@ public class InspectorRailBlock extends BaseRailBlock {
         return CODEC;
     }
 
-    // The signal strength a cart produces, from the highest inspector_rail_signal tag its type is in
+    // The signal strength a cart produces, from the highest inspector_rail_signal tag its type is in;
+    // one more for an occupied carriage, so a station can tell a full carriage from an empty one
     public static int signalFor(AbstractMinecart cart) {
         for (int signal = 15; signal > 0; signal--) {
             if (cart.is(ModTags.inspectorRailSignal(signal))) {
-                return signal;
+                return cart instanceof Carriage && cart.isVehicle() ? Math.min(signal + 1, 15) : signal;
             }
         }
         return 0;

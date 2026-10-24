@@ -9,6 +9,7 @@ import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
 import com.xincraft.xincraft.entity.Motorboat;
 import com.xincraft.xincraft.entity.MotorboatType;
+import com.xincraft.xincraft.entity.PartyBoat;
 import com.xincraft.xincraft.registry.ModEntityTypes;
 import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -29,6 +30,8 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.JukeboxBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -36,9 +39,9 @@ import net.minecraftforge.fml.common.Mod;
 
 // Draws a motorboat as the vanilla boat (or raft) it was made from, using vanilla's own renderer,
 // plus a propeller at the stern, spinning while it cruises, and its upgrades as small blocks along
-// the gunwales.
+// the gunwales. The party boat is drawn as an oak motorboat with a jukebox in its back seat.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
-public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRenderer.State> {
+public class MotorboatRenderer<T extends Motorboat> extends EntityRenderer<T, MotorboatRenderer.State> {
     // Vanilla's model for each kind of boat
     private static final Map<MotorboatType, ModelLayerLocation> MODELS = Map.of(
         MotorboatType.OAK, ModelLayers.OAK_BOAT,
@@ -55,6 +58,7 @@ public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRender
     private static final float PROPELLER_SPEED = 45.0F;
     private static final float PROPELLER_SCALE = 0.5F;
     private static final float UPGRADE_SCALE = 0.25F;
+    private static final float JUKEBOX_SCALE = 0.5F;
 
     private final AbstractBoatRenderer boat;
     private final ItemModelResolver itemModelResolver;
@@ -71,8 +75,9 @@ public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRender
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         for (MotorboatType kind : MotorboatType.values()) {
-            event.registerEntityRenderer(ModEntityTypes.MOTORBOATS.get(kind).get(), context -> new MotorboatRenderer(context, kind));
+            event.registerEntityRenderer(ModEntityTypes.MOTORBOATS.get(kind).get(), context -> new MotorboatRenderer<>(context, kind));
         }
+        event.registerEntityRenderer(ModEntityTypes.PARTY_BOAT.get(), context -> new MotorboatRenderer<PartyBoat>(context, MotorboatType.OAK));
     }
 
     // Vanilla's boat state plus the propeller and upgrades
@@ -81,6 +86,9 @@ public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRender
         public float propellerAngle;
         public final List<BlockModelRenderState> upgradeModels = new ArrayList<>();
         public int upgradeCount;
+        // The party boat's jukebox
+        public final BlockModelRenderState jukebox = new BlockModelRenderState();
+        public boolean hasJukebox;
     }
 
     @Override
@@ -89,11 +97,11 @@ public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRender
     }
 
     @Override
-    public void extractRenderState(Motorboat entity, State state, float partialTicks) {
+    public void extractRenderState(T entity, State state, float partialTicks) {
         boat.extractRenderState(entity, state, partialTicks);
         itemModelResolver.updateForTopItem(state.propeller, new ItemStack(ModItems.PROPELLER.get()), ItemDisplayContext.FIXED,
             entity.level(), null, entity.getId());
-        state.propellerAngle = entity.isCruising() ? (entity.tickCount + partialTicks) * PROPELLER_SPEED : 0.0F;
+        state.propellerAngle = entity.isCruising() && !entity.isWaiting() ? (entity.tickCount + partialTicks) * PROPELLER_SPEED : 0.0F;
         List<CartUpgrade> installed = entity.upgrades().installed();
         state.upgradeCount = installed.size();
         for (int i = 0; i < installed.size(); i++) {
@@ -101,6 +109,12 @@ public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRender
                 state.upgradeModels.add(new BlockModelRenderState());
             }
             blockModelResolver.update(state.upgradeModels.get(i), installed.get(i).block().defaultBlockState(),
+                AbstractMinecartRenderer.BLOCK_DISPLAY_CONTEXT);
+        }
+        state.hasJukebox = entity instanceof PartyBoat;
+        if (entity instanceof PartyBoat party) {
+            blockModelResolver.update(state.jukebox,
+                Blocks.JUKEBOX.defaultBlockState().setValue(JukeboxBlock.HAS_RECORD, !party.jukebox().getDisc().isEmpty()),
                 AbstractMinecartRenderer.BLOCK_DISPLAY_CONTEXT);
         }
     }
@@ -119,6 +133,14 @@ public class MotorboatRenderer extends EntityRenderer<Motorboat, MotorboatRender
         poseStack.scale(PROPELLER_SCALE, PROPELLER_SCALE, PROPELLER_SCALE);
         state.propeller.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
+
+        if (state.hasJukebox) {
+            poseStack.pushPose();
+            poseStack.translate(-JUKEBOX_SCALE / 2.0F, -0.3F, 0.35F);
+            poseStack.scale(JUKEBOX_SCALE, JUKEBOX_SCALE, JUKEBOX_SCALE);
+            state.jukebox.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+            poseStack.popPose();
+        }
 
         // Upgrades sit on the gunwales, alternating sides, working back from the bow
         for (int i = 0; i < state.upgradeCount; i++) {

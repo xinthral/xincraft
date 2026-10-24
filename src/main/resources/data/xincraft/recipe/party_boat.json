@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    [
+      "xincraft:oak_motorboat",
+      "xincraft:spruce_motorboat",
+      "xincraft:birch_motorboat",
+      "xincraft:jungle_motorboat",
+      "xincraft:acacia_motorboat",
+      "xincraft:cherry_motorboat",
+      "xincraft:dark_oak_motorboat",
+      "xincraft:pale_oak_motorboat",
+      "xincraft:mangrove_motorboat",
+      "xincraft:bamboo_motor_raft"
+    ],
+    "xincraft:bronze_hull_lining",
+    "minecraft:jukebox"
+  ],
+  "result": {
+    "id": "xincraft:party_boat",
+    "count": 1
+  }
+}

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.entity.CartCoupling;
 import com.xincraft.xincraft.entity.CartUpgrade;
+import com.xincraft.xincraft.entity.LinkableCart;
 import com.xincraft.xincraft.entity.UpgradableCart;
 import com.xincraft.xincraft.registry.ModEntityTypes;
 import net.minecraft.client.gui.Font;
@@ -32,8 +34,10 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +50,8 @@ import org.jspecify.annotations.Nullable;
 // Draws the mod's minecarts as vanilla minecarts with their own textures. Vanilla's minecart
 // renderer hardcodes its texture, so we hand it a collector that swaps the texture on the way
 // through and passes everything else along untouched. It also draws a cart's upgrades (see
-// entity.CartUpgrades) as small models of their blocks, one on top of each end of the cart.
+// entity.CartUpgrades) as small models of their blocks, one on top of each end of the cart, and
+// the linking bar from a locomotive to the cart it tows (LinkingBar).
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class RetexturedMinecartRenderer extends MinecartRenderer {
     // Upgrade blocks are drawn this size, sitting on the cart's end walls: the walls' top is 5/16
@@ -64,10 +69,13 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         this.blockModelResolver = context.getBlockModelResolver();
     }
 
-    // Vanilla's render state plus the upgrade block models
+    // Vanilla's render state plus the upgrade block models, and the ends of the linking bar to a
+    // towed cart (relative to this cart's position), if it tows one
     public static class UpgradedMinecartRenderState extends MinecartRenderState {
         public final List<BlockModelRenderState> upgradeModels = new ArrayList<>();
         public int upgradeCount;
+        public @Nullable Vec3 linkFrom;
+        public @Nullable Vec3 linkTo;
     }
 
     @Override
@@ -89,6 +97,29 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             }
             blockModelResolver.update(upgraded.upgradeModels.get(i), installed.get(i).block().defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
         }
+        upgraded.linkFrom = null;
+        upgraded.linkTo = null;
+        if (towed(cart) instanceof AbstractMinecart towed) {
+            Vec3 origin = new Vec3(state.x, state.y, state.z);
+            upgraded.linkFrom = LinkingBar.bodyCentre(cart, origin).subtract(origin);
+            upgraded.linkTo = LinkingBar.bodyCentre(towed, towed.getPosition(partialTicks)).subtract(origin);
+        }
+    }
+
+    // The cart this one tows with a linking bar, as the client knows it
+    private static @Nullable Entity towed(AbstractMinecart cart) {
+        if (!(cart instanceof LinkableCart linkable)) {
+            return null;
+        }
+        int id = linkable.coupling().towedId();
+        return id == CartCoupling.NONE ? null : cart.level().getEntity(id);
+    }
+
+    // Keeps a locomotive drawn, and with it the bar, while the cart it tows is in view
+    @Override
+    protected AABB getBoundingBoxForCulling(AbstractMinecart cart) {
+        AABB box = super.getBoundingBoxForCulling(cart);
+        return towed(cart) instanceof Entity towed ? box.minmax(towed.getBoundingBox()) : box;
     }
 
     @SubscribeEvent
@@ -99,10 +130,15 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             context -> new RetexturedMinecartRenderer(context, "locomotive_cart"));
         event.registerEntityRenderer(ModEntityTypes.JINGLE_CART.get(),
             context -> new RetexturedMinecartRenderer(context, "jingle_cart"));
+        event.registerEntityRenderer(ModEntityTypes.CARRIAGE.get(),
+            context -> new RetexturedMinecartRenderer(context, "carriage"));
     }
 
     @Override
     public void submit(MinecartRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        if (state instanceof UpgradedMinecartRenderState upgraded && upgraded.linkFrom != null && upgraded.linkTo != null) {
+            LinkingBar.submit(upgraded.linkFrom, upgraded.linkTo, state.lightCoords, poseStack, collector);
+        }
         super.submit(state, poseStack, new Retextured(collector, model, model.renderType(texture), state), camera);
     }
 

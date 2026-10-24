@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "L": "#minecraft:lightning_rods"
+  },
+  "pattern": [
+    " T ",
+    "TLT",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:rc_upgrade",
+    "count": 1
+  }
+}

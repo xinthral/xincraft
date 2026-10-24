@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:iron_ingot",
+    "minecraft:red_dye",
+    "minecraft:white_dye",
+    "minecraft:torch"
+  ],
+  "result": {
+    "id": "xincraft:buoy",
+    "count": 2
+  }
+}

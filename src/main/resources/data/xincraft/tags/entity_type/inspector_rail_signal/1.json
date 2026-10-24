@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:minecart"
+    "minecraft:minecart",
+    "xincraft:carriage"
   ]
 }

@@ -2,11 +2,15 @@ package com.xincraft.xincraft.entity;
 
 import java.util.function.Supplier;
 import com.xincraft.xincraft.Config;
+import com.xincraft.xincraft.block.BuoyBlock;
+import com.xincraft.xincraft.block.BuoyBlockEntity;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
+import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -60,6 +64,12 @@ import org.jspecify.annotations.Nullable;
 // energy (a Forge Energy battery that fuel charges, and energy blocks on the shore top up), ice
 // breaker and speed.
 //
+// With the RC upgrade, a cruising motorboat that comes across a buoy path (block.BuoyBlock, see
+// BuoyPath) steers itself from buoy to buoy along it, slowing for sharp turns, and keeps cruising
+// with nobody aboard until the path ends or it runs aground. Heading for a buoy that's switched off,
+// it cuts its engine, stops short of the buoy and waits there, burning no fuel, until the buoy is
+// switched back on. Rose-tinted glasses start and stop one on a path with nobody steering.
+//
 // A player steering a boat moves it on their own client, so the server decides whether it's
 // cruising (from the rider's keys and its fuel) and syncs that, and the steering client pushes it.
 public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustomInventoryScreen, ContainerEntity {
@@ -69,6 +79,8 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_CRUISING = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
+    // Waiting at a switched-off buoy, engine idle: the propeller stops and the exhaust clears
+    private static final EntityDataAccessor<Boolean> DATA_WAITING = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
 
     // The engine's push each tick: twice a paddler's 0.04, so about twice paddling speed, and half
     // as much again with the speed upgrade
@@ -79,6 +91,28 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     private static final int STUCK_TICKS = 20;
     // Most Forge Energy taken in per tick, from the shore or anything else
     private static final int MAX_ENERGY_RECEIVE = 1_000;
+    // Following a buoy path: most degrees it turns each tick, and how much of its sideways drift is kept
+    private static final float PATH_TURN = 20.0F;
+    private static final double PATH_DRIFT = 0.5;
+    // How close to a buoy it gets before heading for the next one, which also rounds off the corner
+    private static final double ARRIVE_DISTANCE = 2.5;
+    // Turns sharper than this are taken slower: from FAST_CORNER_SPEED for a slight turn down to
+    // SLOW_CORNER_SPEED for a hairpin (or the end of the path), in blocks a tick
+    private static final double SLOW_TURN_DEGREES = 30.0;
+    private static final double FAST_CORNER_SPEED = 0.5;
+    private static final double SLOW_CORNER_SPEED = 0.15;
+    // Share of its speed kept each tick while braking for a turn, and how many blocks (per block a
+    // tick of speed) before the turn it starts braking, never less than MIN_BRAKE_DISTANCE
+    private static final double CORNER_BRAKE = 0.6;
+    private static final double BRAKE_DISTANCE_PER_SPEED = 3.0;
+    private static final double MIN_BRAKE_DISTANCE = 2.0;
+    private static final int JOIN_INTERVAL_TICKS = 10;
+    // Heading for a buoy that's switched off: within HOLD_DISTANCE the engine cuts out and it slows
+    // to stop STOP_DISTANCE short of the buoy, allowed HOLD_SLOWING blocks a tick of speed for each
+    // block it still has to go
+    private static final double HOLD_DISTANCE = 6.0;
+    private static final double STOP_DISTANCE = 2.0;
+    private static final double HOLD_SLOWING = 0.25;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
     private final boolean raft;
@@ -88,6 +122,12 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     private int energy;
     private int slowTicks;
     private @Nullable Vec3 lastPos;
+    // Set by rose-tinted glasses, for the next server tick
+    private boolean startRequested;
+    private boolean stopRequested;
+    // The buoy path it's following: the buoy it's heading for, and the one it came from
+    private @Nullable BlockPos pathTarget;
+    private @Nullable BlockPos pathPrevious;
     private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> new Battery());
 
     // The locomotive screen's data (LocomotiveCartMenu): burn left, stored energy and capacity
@@ -125,6 +165,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         builder.define(DATA_UPGRADES, 0);
         builder.define(DATA_CRUISING, false);
         builder.define(DATA_LIT, false);
+        builder.define(DATA_WAITING, false);
     }
 
     @Override
@@ -136,6 +177,10 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     @Override
     public CartUpgrades upgrades() {
         return upgrades;
+    }
+
+    public boolean isWaiting() {
+        return entityData.get(DATA_WAITING);
     }
 
     public boolean isCruising() {
@@ -154,9 +199,11 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         super.tick();
         // The steering client (or the server, with nobody steering) pushes it while cruising
         if (isCruising() && isLocalInstanceAuthoritative() && isInWater()) {
-            float thrust = THRUST * (upgrades.has(CartUpgrade.SPEED) ? SPEED_UPGRADE_THRUST : 1.0F);
-            float yaw = getYRot() * Mth.DEG_TO_RAD;
-            setDeltaMovement(getDeltaMovement().add(-Mth.sin(yaw) * thrust, 0.0, Mth.cos(yaw) * thrust));
+            if (!followPath()) {
+                float thrust = THRUST * (upgrades.has(CartUpgrade.SPEED) ? SPEED_UPGRADE_THRUST : 1.0F);
+                float yaw = getYRot() * Mth.DEG_TO_RAD;
+                setDeltaMovement(getDeltaMovement().add(-Mth.sin(yaw) * thrust, 0.0, Mth.cos(yaw) * thrust));
+            }
         }
         if (level().isClientSide()) {
             spawnEngineParticles();
@@ -167,9 +214,24 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         // Its motion, worked out from where it's been: the server doesn't move a boat a player steers
         Vec3 motion = lastPos != null ? position().subtract(lastPos) : Vec3.ZERO;
         lastPos = position();
-        boolean cruising = updateCruising(motion);
+        if (!upgrades.has(CartUpgrade.RC)) {
+            clearPath();
+        } else if (getControllingPassenger() != null) {
+            // The rider's client steers it along the path; the server keeps track of where it is
+            // too, to know when it's waiting at a buoy
+            if (isCruising()) {
+                updatePath();
+            }
+        } else if (pathTarget == null && isCruising()) {
+            // e.g. its rider just got out: carry on along the path it was on, if any
+            tryJoinPath();
+        }
+        boolean held = isHeld();
+        boolean cruising = updateCruising(motion, held);
+        // Waiting at a switched-off buoy, the engine is off and no fuel burns at all
+        boolean waiting = cruising && held;
         boolean speedy = upgrades.has(CartUpgrade.SPEED);
-        if (litTime > 0) {
+        if (litTime > 0 && !waiting) {
             // The speed upgrade burns through fuel twice as fast while cruising
             litTime = Math.max(0, litTime - (cruising && speedy ? 2 : 1));
         }
@@ -177,19 +239,23 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         if (upgrades.has(CartUpgrade.ENERGY)) {
             // Fuel and the shore charge the battery, and the engine runs only on the battery
             chargeFromShore(level);
-            chargeFromFuel(level);
+            if (!waiting) {
+                chargeFromFuel(level);
+            }
             int cost = Config.motorboatEnergyPerTick * (speedy ? 2 : 1);
-            if (cruising && energy >= cost) {
+            if (cruising && !waiting && energy >= cost) {
                 energy -= cost;
                 powered = true;
             }
-        } else if (cruising) {
+        } else if (cruising && !waiting) {
             if (litTime <= 0) {
                 burnFuel(level);
             }
             powered = litTime > 0;
         }
-        entityData.set(DATA_CRUISING, cruising && powered);
+        // Still cruising while it waits, so it sets off again once the buoy is switched back on
+        entityData.set(DATA_CRUISING, cruising && (powered || waiting));
+        entityData.set(DATA_WAITING, waiting);
         entityData.set(DATA_LIT, litTime > 0);
         if (upgrades.has(CartUpgrade.SHRIEKER)) {
             upgrades.clearTrackAhead(level, motion);
@@ -199,24 +265,156 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         if (upgrades.has(CartUpgrade.ICE_BREAKER) && isInWater() && (isCruising() || motion.horizontalDistanceSqr() > 1.0E-3)) {
             breakIceAhead(level, motion);
         }
+        onServerTick(level, motion);
     }
 
-    // Forward sets it cruising and back stops it; it also stops with nobody steering, or once it's
-    // been stuck against something for a second
-    private boolean updateCruising(Vec3 motion) {
-        boolean cruising = isCruising();
-        if (!(getControllingPassenger() instanceof ServerPlayer rider)) {
+    // For subclasses: run at the end of each server tick, with how far the boat moved this tick
+    protected void onServerTick(ServerLevel level, Vec3 motion) {}
+
+    private Vec3 heading() {
+        float yaw = getYRot() * Mth.DEG_TO_RAD;
+        return new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
+    }
+
+    // Joins the buoy path it's on, if any; returns whether it did
+    private boolean tryJoinPath() {
+        BuoyPath.Join join = BuoyPath.join(level(), position(), heading());
+        if (join == null) {
             return false;
         }
-        if (rider.getLastClientInput().forward()) {
-            cruising = true;
+        pathTarget = join.target();
+        pathPrevious = join.previous();
+        return true;
+    }
+
+    private void clearPath() {
+        pathTarget = null;
+        pathPrevious = null;
+    }
+
+    // With the RC upgrade, steers along the buoy path: toward the buoy ahead, moving on to the next
+    // as it comes up, and slowing for a sharp turn there. Without a path, it looks for one now and
+    // then. Returns whether it's braking for a turn, when the engine shouldn't push.
+    private boolean followPath() {
+        if (!updatePath()) {
+            return false;
+        }
+        if (horizontalCollision) {
+            // Run aground (or into something): it just stops
+            clearPath();
+            if (!level().isClientSide()) {
+                stopRequested = true;
+            }
+            return false;
+        }
+        Level level = level();
+        Vec3 here = position();
+        Vec3 target = BuoyPath.point(pathTarget);
+        float targetYaw = (float) (Mth.atan2(-(target.x - getX()), target.z - getZ()) * Mth.RAD_TO_DEG);
+        setYRot(getYRot() + Mth.clamp(Mth.wrapDegrees(targetYaw - getYRot()), -PATH_TURN, PATH_TURN));
+        Vec3 forward = heading();
+        Vec3 motion = getDeltaMovement();
+        double along = motion.x * forward.x + motion.z * forward.z;
+        Vec3 drift = new Vec3(motion.x - forward.x * along, 0.0, motion.z - forward.z * along);
+        double toTarget = target.subtract(here).horizontalDistance();
+        boolean braking;
+        if (isHeld()) {
+            // Engine off, easing to a stop short of the switched-off buoy
+            along = Math.min(along, Math.max(0.0, (toTarget - STOP_DISTANCE) * HOLD_SLOWING));
+            braking = true;
+        } else {
+            double cornerSpeed = cornerSpeed(level, here, target);
+            braking = along > cornerSpeed
+                && toTarget < ARRIVE_DISTANCE + Math.max(MIN_BRAKE_DISTANCE, along * BRAKE_DISTANCE_PER_SPEED);
+            if (braking) {
+                along = Math.max(cornerSpeed, along * CORNER_BRAKE);
+            }
+        }
+        setDeltaMovement(forward.x * along + drift.x * PATH_DRIFT, motion.y, forward.z * along + drift.z * PATH_DRIFT);
+        return braking;
+    }
+
+    // Keeps track of where it is on a buoy path (with the RC upgrade): looks for one to join now and
+    // then if it isn't on one, and moves on to the next buoy as it comes up, but not past a buoy
+    // that's switched off. Returns whether it's on a path.
+    private boolean updatePath() {
+        if (!upgrades.has(CartUpgrade.RC)) {
+            clearPath();
+            return false;
+        }
+        if (pathTarget == null && (tickCount % JOIN_INTERVAL_TICKS != 0 || !tryJoinPath())) {
+            return false;
+        }
+        Level level = level();
+        if (level.isLoaded(pathTarget) && BuoyBlockEntity.at(level, pathTarget) == null) {
+            // The buoy it was heading for is gone
+            clearPath();
+            return false;
+        }
+        if (!BuoyBlock.isUnlit(level, pathTarget)
+                && BuoyPath.point(pathTarget).subtract(position()).horizontalDistance() < ARRIVE_DISTANCE) {
+            BlockPos next = BuoyPath.next(level, pathTarget, pathPrevious);
+            if (next == null) {
+                // The end of the path
+                clearPath();
+                return false;
+            }
+            pathPrevious = pathTarget;
+            pathTarget = next;
+        }
+        return true;
+    }
+
+    // Whether it's waiting at (or pulling up to) a buoy that's switched off
+    private boolean isHeld() {
+        return pathTarget != null && BuoyBlock.isUnlit(level(), pathTarget)
+            && BuoyPath.point(pathTarget).subtract(position()).horizontalDistance() < HOLD_DISTANCE;
+    }
+
+    // How fast it can take the turn at the buoy ahead: full speed for a slight one, slower the
+    // sharper it is, and slowest at the end of the path
+    private double cornerSpeed(Level level, Vec3 here, Vec3 target) {
+        BlockPos after = BuoyPath.next(level, pathTarget, pathPrevious);
+        if (after == null) {
+            return level.isLoaded(pathTarget) ? SLOW_CORNER_SPEED : Double.MAX_VALUE;
+        }
+        Vec3 into = target.subtract(here).horizontal();
+        Vec3 out = BuoyPath.point(after).subtract(target).horizontal();
+        if (into.lengthSqr() < 1.0E-6 || out.lengthSqr() < 1.0E-6) {
+            return Double.MAX_VALUE;
+        }
+        double turn = Math.toDegrees(Math.acos(Math.clamp(into.normalize().dot(out.normalize()), -1.0, 1.0)));
+        if (turn <= SLOW_TURN_DEGREES) {
+            return Double.MAX_VALUE;
+        }
+        double sharpness = Math.min(1.0, (turn - SLOW_TURN_DEGREES) / (180.0 - SLOW_TURN_DEGREES));
+        return Mth.lerp(sharpness, FAST_CORNER_SPEED, SLOW_CORNER_SPEED);
+    }
+
+    // Forward sets it cruising and back stops it, as do rose-tinted glasses with nobody aboard. With
+    // nobody steering it only keeps going along a buoy path, and it stops once it's been stuck
+    // against something for a second (but not while it's waiting at a switched-off buoy).
+    private boolean updateCruising(Vec3 motion, boolean held) {
+        boolean cruising = (isCruising() || startRequested) && !stopRequested;
+        if (startRequested) {
             slowTicks = 0;
         }
-        if (rider.getLastClientInput().backward()) {
-            cruising = false;
+        startRequested = false;
+        stopRequested = false;
+        if (getControllingPassenger() instanceof ServerPlayer rider) {
+            if (rider.getLastClientInput().forward()) {
+                cruising = true;
+                slowTicks = 0;
+            }
+            if (rider.getLastClientInput().backward()) {
+                cruising = false;
+            }
+        } else if (pathTarget == null) {
+            return false;
         }
         if (cruising) {
-            slowTicks = motion.horizontalDistance() < STUCK_SPEED ? slowTicks + 1 : 0;
+            // Stopped at a switched-off buoy isn't stuck
+            slowTicks = motion.horizontalDistance() < STUCK_SPEED && !held ? slowTicks + 1 : 0;
             if (slowTicks > STUCK_TICKS) {
                 cruising = false;
             }
@@ -302,7 +500,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     }
 
     private void spawnEngineParticles() {
-        if (!isCruising() && !entityData.get(DATA_LIT)) {
+        if (!isCruising() && !entityData.get(DATA_LIT) || isWaiting()) {
             return;
         }
         float yaw = getYRot() * Mth.DEG_TO_RAD;
@@ -320,9 +518,26 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         }
     }
 
-    // Upgrades first; then shift-right-click opens the fuel and storage slots, and right-click rides
+    // Rose-tinted glasses start or stop a boat with the RC upgrade and nobody steering it that's on a
+    // buoy path. Then upgrades; then shift-right-click opens the fuel and storage slots, and
+    // right-click rides.
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        if (player.getItemInHand(hand).is(ModItems.ROSE_TINTED_GLASSES.get()) && upgrades.has(CartUpgrade.RC)
+                && getControllingPassenger() == null) {
+            if (!level().isClientSide()) {
+                if (pathTarget == null && !tryJoinPath()) {
+                    player.sendOverlayMessage(Component.translatable("message.xincraft.motorboat.no_path"));
+                    return InteractionResult.FAIL;
+                }
+                if (isCruising()) {
+                    stopRequested = true;
+                } else {
+                    startRequested = true;
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
         InteractionResult upgraded = upgrades.interact(this, player, hand);
         if (upgraded != InteractionResult.PASS) {
             return upgraded;
@@ -523,6 +738,12 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         output.putInt("LitDuration", litDuration);
         output.putInt("Energy", energy);
         upgrades.save(output);
+        if (pathTarget != null) {
+            output.store("PathTarget", BlockPos.CODEC, pathTarget);
+        }
+        if (pathPrevious != null) {
+            output.store("PathPrevious", BlockPos.CODEC, pathPrevious);
+        }
     }
 
     @Override
@@ -533,5 +754,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         litDuration = input.getIntOr("LitDuration", 0);
         energy = input.getIntOr("Energy", 0);
         upgrades.load(input);
+        pathTarget = input.read("PathTarget", BlockPos.CODEC).orElse(null);
+        pathPrevious = input.read("PathPrevious", BlockPos.CODEC).orElse(null);
     }
 }

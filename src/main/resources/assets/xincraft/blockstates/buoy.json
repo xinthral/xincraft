@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "xincraft:block/buoy_lower"
+    },
+    "half=upper,lit=true": {
+      "model": "xincraft:block/buoy_upper"
+    },
+    "half=upper,lit=false": {
+      "model": "xincraft:block/buoy_upper_off"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "T": "xincraft:tin_ingot",
+    "P": "minecraft:pink_stained_glass_pane",
+    "R": "minecraft:rose_bush"
+  },
+  "pattern": [
+    "T T",
+    "PRP"
+  ],
+  "result": {
+    "id": "xincraft:rose_tinted_glasses",
+    "count": 1
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "textures": {
+    "buoy": "xincraft:block/buoy",
+    "particle": "xincraft:block/buoy"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            2,
+            16
+          ],
+          "texture": "#buoy"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            2,
+            16
+          ],
+          "texture": "#buoy"
+        },
+        "east": {
+          "uv": [
+            0,
+            10,
+            2,
+            16
+          ],
+          "texture": "#buoy"
+        },
+        "west": {
+          "uv": [
+            0,
+            10,
+            2,
+            16
+          ],
+          "texture": "#buoy"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#buoy"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#buoy"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        10,
+        6
+      ],
+      "to": [
+        10,
+        14,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            10,
+            8,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "south": {
+          "uv": [
+            4,
+            10,
+            8,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "east": {
+          "uv": [
+            4,
+            10,
+            8,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "west": {
+          "uv": [
+            4,
+            10,
+            8,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "up": {
+          "uv": [
+            8,
+            10,
+            12,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "down": {
+          "uv": [
+            8,
+            10,
+            12,
+            14
+          ],
+          "texture": "#buoy"
+        }
+      }
+    }
+  ]
+}

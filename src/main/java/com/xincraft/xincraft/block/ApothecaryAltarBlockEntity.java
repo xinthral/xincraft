@@ -13,7 +13,9 @@ import com.xincraft.xincraft.registry.ModBlockEntities;
 import com.xincraft.xincraft.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -62,6 +64,8 @@ public class ApothecaryAltarBlockEntity extends BaseContainerBlockEntity impleme
     // From the last scan for flora
     private int floraMask;
     private int roomMask;
+    // On the client, the server's Config.altarRange, for rose-tinted glasses (client.EssenceReadout)
+    private int syncedRange = Config.altarRange;
 
     private final ContainerData data = new ContainerData() {
         @Override
@@ -85,6 +89,11 @@ public class ApothecaryAltarBlockEntity extends BaseContainerBlockEntity impleme
 
     public ApothecaryAltarBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.APOTHECARY_ALTAR.get(), pos, state);
+    }
+
+    // How far, in blocks, the altar reaches flora (a cube)
+    public int getRange() {
+        return level != null && level.isClientSide() ? syncedRange : Config.altarRange;
     }
 
     // Whether the altar burns this item: it's in at least one xincraft:essence/<element> tag
@@ -264,6 +273,7 @@ public class ApothecaryAltarBlockEntity extends BaseContainerBlockEntity impleme
         litTime = input.getIntOr("LitTime", 0);
         litDuration = input.getIntOr("LitDuration", 0);
         burnProgress = input.getIntOr("BurnProgress", 0);
+        syncedRange = input.getIntOr("Range", Config.altarRange);
     }
 
     @Override
@@ -273,5 +283,13 @@ public class ApothecaryAltarBlockEntity extends BaseContainerBlockEntity impleme
         output.putInt("LitTime", litTime);
         output.putInt("LitDuration", litDuration);
         output.putInt("BurnProgress", burnProgress);
+    }
+
+    // Clients are only told the range, when the chunk loads; the contents go to the menu
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("Range", Config.altarRange);
+        return tag;
     }
 }

@@ -1,6 +1,25 @@
 Xincraft Changelog
 ==================
 
+1.19.0
+ - Carriage: a rideable passenger minecart in maroon lacquer, trimmed in bronze; an inspector rail
+   reads 1 for an empty one and 2 for one with a passenger
+ - Linking Bar: hitches a carriage, jingle cart or another locomotive behind a locomotive, which
+   tows it; the carts are joined by a pivoting bronze drawbar so they take corners and slopes
+   without jamming
+ - Locomotive Cart handbrake: hold jump while riding to brake to a stop
+ - Buoys: two-block marker buoys for still water, linked into courses up to 32 blocks a leg with
+   the linking bar; right-click one to switch its lamp off, and boats on the course stop and
+   wait at it, burning no fuel, until it's switched back on
+ - RC Upgrade: a motorboat with it follows buoy courses on its own, slowing for sharp turns and
+   stopping if it runs aground; rose-tinted glasses show the courses and start and stop RC boats
+
+1.18.0
+ - Party Boat: a bronze-lined motorboat with a jukebox; plays its disc while on the move, and
+   takes the sculk sensor upgrade
+ - Rose-Tinted Glasses: worn or held, read the essence in elemental flora, one at a time or all
+   of those around an Apothecary Altar
+
 1.17.0
  - Apothecary Altar: burns plants and furnace fuel into elemental essence for the flora within
    4 blocks; which plant gives which element is set by item tags
