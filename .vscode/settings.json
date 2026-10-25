@@ -1,5 +1,6 @@
 {
   "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.autobuild.enabled": false,
   "r.lsp.promptToInstall": false
 }

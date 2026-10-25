@@ -23,9 +23,10 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Ender Minecart](#ender-minecart)
 - [Locomotive Cart](#locomotive-cart)
 - [Jingle Cart](#jingle-cart)
-- [Storage Cart](#storage-cart)
+- [Freight Cart](#freight-cart)
 - [Carriage and Linking Bar](#carriage-and-linking-bar)
 - [Motorboats](#motorboats)
+- [Boat Trains: Ferry and Barge](#boat-trains-ferry-and-barge)
 - [Buoys](#buoys)
 - [Cart Upgrades](#cart-upgrades)
 - [Tin Spyglass](#tin-spyglass)
@@ -187,12 +188,12 @@ A detector rail that tells minecarts apart. Instead of always giving a full-stre
 | Carriage with a passenger | 2 |
 | Minecart with Hopper | 3 |
 | Minecart with Chest, Minecart with Furnace | 6 |
-| Storage Cart | 1 (empty) to 15 (full), see below |
+| Freight Cart | 1 (empty) to 15 (full), see below |
 | Locomotive Cart | 9 |
 | Ender Minecart | 12 |
 | Minecart with TNT | 15 |
 
-A carriage gives one more than its tag's signal while someone (a player or a mob) is riding it, so a station can tell a full carriage from an empty one; the signal rises as soon as they get in and drops within a second of them getting out. A **Storage Cart** gives a signal for **how full it is** instead: 1 when empty, 5 with a row's worth of full stacks, 10 with two rows, and 15 with three rows or anything over 85% full, stepping up evenly in between (anything in it at all gives at least 2). Half-full stacks count as half a stack, as a comparator counts them, and the signal follows changes within a second while the cart sits on the rail. Any other minecart (for example from another mod) gives 0, the same as an empty rail, until it's added to one of the signal tags below. If several carts are on the rail at once, it outputs the strongest signal. Like the detector rail, it strongly powers the block beneath it, powers adjacent powered rails, keeps its signal for up to a second after a cart leaves, and lets a comparator read how full a container cart on it is.
+A carriage gives one more than its tag's signal while someone (a player or a mob) is riding it, so a station can tell a full carriage from an empty one; the signal rises as soon as they get in and drops within a second of them getting out. A **Freight Cart** gives a signal for **how full it is** instead: 1 when empty, 5 with a row's worth of full stacks, 10 with two rows, and 15 with three rows or anything over 85% full, stepping up evenly in between (anything in it at all gives at least 2). Half-full stacks count as half a stack, as a comparator counts them, and the signal follows changes within a second while the cart sits on the rail. Any other minecart (for example from another mod) gives 0, the same as an empty rail, until it's added to one of the signal tags below. If several carts are on the rail at once, it outputs the strongest signal. Like the detector rail, it strongly powers the block beneath it, powers adjacent powered rails, keeps its signal for up to a second after a cart leaves, and lets a comparator read how full a container cart on it is.
 
 **Adding cart types:** the signal for each cart type comes from the entity type tags `xincraft:inspector_rail_signal/1` through `/15`, in `data/xincraft/tags/entity_type/inspector_rail_signal/`. To give a new cart a signal, add its ID to the tag file for that strength (creating the file if it doesn't exist yet). A datapack can do the same to add carts from other mods.
 
@@ -295,7 +296,7 @@ A rideable minecart on ender wheels, and the only cart that can teleport on ende
 
 ## Locomotive Cart
 
-A rideable minecart with its own engine. While it has fuel burning, it drives itself forward, like a furnace minecart you can sit in.
+A rideable minecart with its own engine. While it has fuel burning, it drives itself forward, like a furnace minecart you can sit in. Only **players and villagers** can ride it; it won't pick up other mobs.
 
 **Recipe** (shapeless):
 
@@ -345,17 +346,17 @@ A minecart carrying a jukebox that plays music discs as it rolls along, the musi
 - On a **detector rail**, a comparator reads a full signal when it has a disc in, and none when it's empty.
 - Breaking the cart drops the disc.
 
-## Storage Cart
+## Freight Cart
 
 A minecart carrying a **shulker box**, and working like one.
 
 **Recipe** (shapeless):
 
-> 1 Minecart Frame + 2 Shulker Shells + 1 Chest → 1 Storage Cart
+> 1 Minecart Frame + 2 Shulker Shells + 1 Chest → 1 Freight Cart
 
 - **Right-click** to open its 27 slots. It opens and closes with the shulker box sounds.
-- **Breaking it keeps everything inside.** It drops as a single Storage Cart item holding its contents, which show in the item's tooltip, and placing it back on a rail brings them back. (In creative, breaking it spills the contents like a chest minecart.)
-- Like a shulker box, it **can't hold shulker boxes or other storage carts**, and a storage cart can't go inside a shulker box or a bundle.
+- **Breaking it keeps everything inside.** It drops as a single Freight Cart item holding its contents, which show in the item's tooltip, and placing it back on a rail brings them back. (In creative, breaking it spills the contents like a chest minecart.)
+- Like a shulker box, it **can't hold shulker boxes or other freight carts**, and a freight cart can't go inside a shulker box or a bundle.
 - **Hoppers load and unload it**, like a chest minecart, and a comparator reads how full it is from a detector or inspector rail. An [inspector rail](#inspector-rail) on its own also signals how full it is, from 1 when empty to 15 when full.
 - Hitch it into a locomotive's train with a [Linking Bar](#carriage-and-linking-bar) to haul it along.
 
@@ -380,7 +381,8 @@ A **Carriage** is a passenger car for your locomotive: a rideable minecart in ma
 - **Right-click one cart with the linking bar, then the other.** The bar glints between the two clicks. Click the same cart twice to cancel.
 - **Carts link in a line**, each to one cart ahead and one behind, and **every train is led by a locomotive**. A locomotive tows **up to 3 carts**, counting every cart down the line.
 - You can build a train from either end: link a cart to the locomotive, then the next cart to the last one in the train. Two short trains can be joined the same way, as long as the result has a locomotive at the front and no more than 3 carts behind it.
-- The cart you click first goes in front when that makes a train; otherwise the other one does. Carriages, jingle carts, storage carts and other locomotives can all go in a train; a locomotive further back only counts as a cart. The ender minecart and vanilla minecarts can't be linked (the ender minecart because a train can't teleport through an ender rail together).
+- The cart you click first goes in front when that makes a train; otherwise the other one does. Carriages, jingle carts, freight carts and other locomotives can all go in a train; a locomotive further back only counts as a cart. The ender minecart and vanilla minecarts can't be linked (the ender minecart because a train can't teleport through an ender rail together).
+- **Boats link the same way**, behind a [motorboat](#boat-trains-ferry-and-barge) instead of a locomotive. A cart can't be linked to a boat.
 - The carts must be within about 3 blocks of each other. The link draws them to just under 2 blocks apart, centre to centre.
 - The same bar also links [buoys](#buoys).
 - **Unhitching:** **shift + right-click** a cart with a linking bar to unhitch it from the cart ahead of it, taking any carts behind it along, and get the bar back. On the locomotive, it unhitches the cart behind. Breaking a cart unhitches the carts either side of it and drops a bar for each link, and so does the link snapping if the carts are pulled more than 5 blocks apart (for example by an ender rail teleporting one of them).
@@ -436,6 +438,22 @@ A bronze-lined motorboat with a jukebox in its back seat.
 - Like the [Jingle Cart](#jingle-cart), it plays the disc **while it's moving**, the music following the boat, and starts the song over each time it sets off again. With the **Sculk Sensor Upgrade** it only plays while a player is within 32 blocks.
 - Breaking it drops the disc along with the boat, its fuel, storage and upgrades.
 
+## Boat Trains: Ferry and Barge
+
+A motorboat can tow a train of boats the way a locomotive tows carts, hitched with the same [Linking Bar](#carriage-and-linking-bar) and by the same rules: each boat links to one ahead and one behind, every train is led by a **motorboat** (party boats included), and a motorboat tows **up to 3 boats**.
+
+| Item | Recipe |
+| --- | --- |
+| Ferry | Any boat or raft + 2 Bronze Ingots + 1 Wool (any colour) (shapeless) |
+| Barge | Any boat or raft + 2 Shulker Shells + 1 Chest (shapeless) |
+
+- **Ferry:** the carriage's boat, a bamboo raft with maroon trim that seats two. Its passengers ride but **can't paddle or steer**, so it goes where it's towed and otherwise drifts. Like the carriage, it won't pick up hostile mobs unless it has a **Cell Upgrade**.
+- **Barge:** the freight cart's boat, an oak boat carrying a shulker box, with the same **27 slots** that **stay inside when it's broken**. Right-click to open it. Nobody rides it, and it can't hold shulker boxes, freight carts or other barges.
+- Both are listed with vanilla's boats, as are the motorboats and party boat: search **`#boats`** in the creative inventory. Likewise the Xincraft carts are listed with vanilla's minecarts in the `c:minecarts` tag: search **`#minecarts`**.
+- **Towing:** each towed boat follows the one ahead and turns to face it. A motorboat hitched behind another is towed like any other boat: nobody aboard can steer it, and its engine and RC upgrade stay off until it's unhitched.
+- A motorboat leading a train drives and follows [buoy](#buoys) courses as usual, pulling its train behind it.
+- The boats must be within about 4 blocks of each other to link, and the link holds them about 2½ blocks apart, centre to centre. It snaps, dropping the bar, if they're pulled more than about 5½ blocks apart, for example if a towed boat runs aground.
+
 ## Buoys
 
 Marker buoys linked into courses that motorboats with the **RC Upgrade** follow by themselves, for canals, harbour runs or a lazy-river ride.
@@ -463,7 +481,7 @@ Marker buoys linked into courses that motorboats with the **RC Upgrade** follow 
 
 ## Cart Upgrades
 
-Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, jingle cart, storage cart, and carriage) and motorboats, and show as small blocks on the vehicle.
+Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, jingle cart, freight cart, and carriage) and boats (motorboats, ferry, and barge), and show as small blocks on the vehicle.
 
 > [!IMPORTANT]
 > **Removing upgrades: use shears.**
@@ -481,8 +499,9 @@ Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, jingl
 | Speed Upgrade | Blaze Rod surrounded by 4 Tin Ingots (one on each side) | Motorboats | Cruises 50% faster, burning fuel (or energy) twice as fast. |
 | RC Upgrade | Lightning Rod surrounded by 4 Tin Ingots (one on each side) | Motorboats | Follows [buoy](#buoys) courses on its own, even with nobody aboard, slowing for sharp turns. |
 | Advanced Antenna Upgrade | Lightning Rod surrounded by 4 Bronze Ingots (one on each side) | Motorboats with the RC Upgrade | Extends the RC Upgrade's mast like a car aerial, so the boat can follow the long legs, up to **64 blocks**, between [advanced buoys](#buoys). It has to go on after the RC Upgrade, and shears take it off first. |
-| Shimmer Upgrade | Tinted Glass surrounded by 4 Tin Ingots (one on each side) | Ender minecart, locomotive cart, carriage, motorboats | Makes whoever's riding **invisible** (players and mobs alike), wearing off a few seconds after they get out. Every few seconds, at random, a faint pink glint flickers where the rider is, the only thing that gives them away. The vehicle itself stays visible. |
-| Cell Upgrade | Iron Bars surrounded by 4 Tin Ingots (one on each side) | Carriage | Makes the carriage a **cell for carrying mobs**, and lets it pick up hostile ones, which it otherwise won't. A mob it picks up (by rolling into it, as any minecart does) has its AI switched off with a clang, so it can't attack, shoot, explode or move while it's inside. **Right-click** the carriage to let it out; it stays harmless for **1.5 seconds** after leaving, giving you time to step back, then gets its AI back. The same goes however it gets out: an activator rail, the carriage breaking, or the upgrade being snipped off. With the cell empty, you can still ride the carriage. |
+| Shimmer Upgrade | Tinted Glass surrounded by 4 Tin Ingots (one on each side) | Ender minecart, locomotive cart, carriage, motorboats, ferry | Makes whoever's riding **invisible** (players and mobs alike), wearing off a few seconds after they get out. Every few seconds, at random, a faint pink glint flickers where the rider is, the only thing that gives them away. The vehicle itself stays visible. |
+| Cell Upgrade | Iron Bars surrounded by 4 Tin Ingots (one on each side) | Carriage, ferry | Puts a low **cage of iron bars** around the carriage (or ferry), with the mob inside shown as its **spinning spawn egg** (a mob with no spawn egg shows as itself, standing out of the cage), and lets it pick up hostile mobs, which it otherwise won't. A mob it picks up (by rolling or floating into it, as any minecart or boat does) has its AI switched off with a clang, so it can't attack, shoot, explode or move while it's inside. The bars **shade it from the sun**, so zombies and skeletons don't burn, and **hold endermen in**: they can't teleport out, however they're hurt. Nothing in the cell can hurt anyone, even mobs like slimes that damage you just by touching you. **Right-click** the vehicle to let the mob out; it stays harmless for **1.5 seconds** after leaving, giving you time to step back, then gets its AI back. The same goes however it gets out: an activator rail, the vehicle breaking, or the upgrade being snipped off. **Leads:** right-click the vehicle (or the mob) with a lead to tie it ready, and the mob comes out of the cage already on the lead, held by you. This works for any mob that can be leashed, so not hostile mobs. If you're more than 12 blocks away when it comes out, the lead drops instead. With the cell empty, you can still ride it. |
+| Reinforced Cage Upgrade | Iron Bars surrounded by 4 Obsidian (one on each side) | Carriage or ferry with the Cell Upgrade | Rebuilds the cage as an **obsidian frame with a glass window** on each side, through which you can see the spinning egg, and it holds **any mob except the Ender Dragon**: wardens, withers, iron golems, giant slimes, phantoms and the rest. It hauls in whatever mob it touches while it's empty, even mobs that normally won't ride anything, but passes over mobs on a lead and ones you've just let out. It has to go on after the Cell Upgrade, and shears take it off first. Players can still ride normally. A mob with no spawn egg shows as itself, so a big one sticks out of the top. |
 
 > The shrieker, like the other powered features, only works with the default minecart physics.
 
@@ -732,7 +751,7 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
 | `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, and buoys |
 | `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, and the buoy item |
-| `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, storage cart, motorboats, upgrades for carts and boats (`CartUpgrades`), linking carts together (`CartCoupling`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
+| `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, freight cart, motorboats, upgrades for carts and boats (`CartUpgrades`), the ferry and barge, linking carts and boats into trains (`LinkedTransport`), the freight cart's and barge's shulker box storage (`ShulkerHold`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
 | `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |

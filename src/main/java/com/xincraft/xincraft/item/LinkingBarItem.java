@@ -22,10 +22,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 
-// A bronze drawbar that hitches carts into a locomotive's train, or links two buoys into a path for
-// motorboats. The carts handle using it on them (entity.CartCoupling); buoys are handled here. Either
-// way, the bar remembers the first cart or buoy it was used on, glinting until it's used on the
-// second, and one bar is used up per link.
+// A bronze drawbar that hitches carts and boats into trains, or links two buoys into a path for
+// motorboats. The vehicles handle using it on them (entity.LinkedTransport); buoys are handled here.
+// Either way, the bar remembers the first vehicle or buoy it was used on, glinting until it's used
+// on the second, and one bar is used up per link.
 public class LinkingBarItem extends Item {
     public LinkingBarItem(Item.Properties properties) {
         super(properties);

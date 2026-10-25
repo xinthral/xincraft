@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -50,9 +51,10 @@ import org.jspecify.annotations.Nullable;
 // Takes upgrades (see CartUpgrades). With the energy upgrade it also stores Forge Energy, charged
 // from charging rails, energy blocks under the track (or anything that hands energy to entities),
 // or by burning its fuel, and the engine runs only on that stored energy. Tows a train of up to
-// MAX_TOWED carts hitched behind it with linking bars (see CartCoupling). A rider holding jump pulls
+// MAX_TOWED carts hitched behind it with linking bars (see LinkedTransport). A rider holding jump pulls
 // the handbrake: the engine cuts out and the cart brakes to a stop, and stays stopped while it's held.
-public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart, LinkableCart {
+// Only players and villagers ride it.
+public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart, LinkableTransport {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
     public static final int SLOT_COUNT = 2;
@@ -62,6 +64,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     // Engine force added each tick while burning. Strong enough to hold the cart at the speed
     // cap, including the raised cap on tin rails.
     private static final double PUSH = 0.25;
@@ -78,7 +81,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     public static final int DATA_COUNT = 6;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
-    private final CartCoupling coupling = new CartCoupling(this, DATA_TOWED);
+    private final LinkedTransport transport = new LinkedTransport(this, DATA_TOWED, DATA_HITCHED);
     private int litTime;
     private int litDuration;
     private int energy;
@@ -123,7 +126,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         super.defineSynchedData(builder);
         builder.define(DATA_LIT, false);
         builder.define(DATA_UPGRADES, 0);
-        builder.define(DATA_TOWED, CartCoupling.NONE);
+        builder.define(DATA_TOWED, LinkedTransport.NONE);
+        builder.define(DATA_HITCHED, false);
     }
 
     @Override
@@ -132,8 +136,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     }
 
     @Override
-    public CartCoupling coupling() {
-        return coupling;
+    public LinkedTransport transport() {
+        return transport;
     }
 
     @Override
@@ -152,7 +156,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     @Override
     public void tick() {
         if (level() instanceof ServerLevel serverLevel) {
-            coupling.tick(serverLevel);
+            transport.tick(serverLevel);
             upgrades.tickShimmer(serverLevel);
             braking = getFirstPassenger() instanceof ServerPlayer rider && rider.getLastClientInput().jump();
             updateHeading();
@@ -300,7 +304,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     // fuel and storage slots
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
-        InteractionResult linked = coupling.interact(player, hand);
+        InteractionResult linked = transport.interact(player, hand);
         if (linked != InteractionResult.PASS) {
             return linked;
         }
@@ -335,14 +339,14 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
 
     @Override
     public void push(Entity entity) {
-        if (!coupling.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
+        if (!transport.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
             super.push(entity);
         }
     }
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        return !coupling.isLinkedTo(entity) && super.canCollideWith(entity);
+        return !transport.isLinkedTo(entity) && super.canCollideWith(entity);
     }
 
     @Override
@@ -353,13 +357,19 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
 
     @Override
     public void remove(RemovalReason reason) {
-        coupling.onRemove(reason);
+        transport.onRemove(reason);
         super.remove(reason);
     }
 
     @Override
     public void stopOpen(ContainerUser user) {
         level().gameEvent(GameEvent.CONTAINER_CLOSE, position(), GameEvent.Context.of(user.getLivingEntity()));
+    }
+
+    // Only players and villagers ride a locomotive: it doesn't pick up other mobs
+    @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return (passenger instanceof Player || passenger instanceof Villager) && super.canAddPassenger(passenger);
     }
 
     @Override
@@ -469,7 +479,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         output.putDouble("HeadingX", heading.x);
         output.putDouble("HeadingZ", heading.z);
         upgrades.save(output);
-        coupling.save(output);
+        transport.save(output);
     }
 
     @Override
@@ -480,6 +490,6 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         energy = input.getIntOr("Energy", 0);
         heading = new Vec3(input.getDoubleOr("HeadingX", 0.0), 0.0, input.getDoubleOr("HeadingZ", 0.0));
         upgrades.load(input);
-        coupling.load(input);
+        transport.load(input);
     }
 }

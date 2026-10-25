@@ -3,7 +3,8 @@ package com.xincraft.xincraft.block;
 import java.util.List;
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.entity.Carriage;
-import com.xincraft.xincraft.entity.StorageCart;
+import com.xincraft.xincraft.entity.FreightCart;
+import com.xincraft.xincraft.entity.ShulkerHold;
 import com.xincraft.xincraft.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,7 +37,7 @@ import net.minecraft.world.phys.AABB;
 // A detector rail whose redstone signal depends on which kind of minecart is on it, rather than
 // always 15. The strength for each cart type comes from the entity type tags
 // xincraft:inspector_rail_signal/<1-15> (see ModTags.inspectorRailSignal); untagged carts give 0.
-// A carriage with someone aboard gives one more than its tag's signal, and a storage cart's signal
+// A carriage with someone aboard gives one more than its tag's signal, and a freight cart's signal
 // shows how full it is instead (storageSignal).
 // Otherwise it behaves like vanilla's DetectorRailBlock, which this is adapted from.
 public class InspectorRailBlock extends BaseRailBlock {
@@ -45,7 +46,7 @@ public class InspectorRailBlock extends BaseRailBlock {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
     // While powered, how often to check whether the cart has left (same as the detector rail)
     private static final int PRESSED_CHECK_PERIOD = 20;
-    // A storage cart at least this full gives a full signal
+    // A freight cart at least this full gives a full signal
     private static final double FULL_SHARE = 0.85;
 
     public InspectorRailBlock(BlockBehaviour.Properties properties) {
@@ -64,7 +65,7 @@ public class InspectorRailBlock extends BaseRailBlock {
     // The signal strength a cart produces, from the highest inspector_rail_signal tag its type is in;
     // one more for an occupied carriage, so a station can tell a full carriage from an empty one
     public static int signalFor(AbstractMinecart cart) {
-        if (cart instanceof StorageCart storage) {
+        if (cart instanceof FreightCart storage) {
             return storageSignal(storage);
         }
         for (int signal = 15; signal > 0; signal--) {
@@ -75,10 +76,10 @@ public class InspectorRailBlock extends BaseRailBlock {
         return 0;
     }
 
-    // A storage cart's fullness, counted in rows of full stacks (as a comparator counts it, each
+    // A freight cart's fullness, counted in rows of full stacks (as a comparator counts it, each
     // stack as its share of a full one): 1 empty, 5 at one row, 10 at two, and 15 at three, or
     // from FULL_SHARE of the cart on. Steps evenly in between, and never 1 with anything inside.
-    private static int storageSignal(StorageCart cart) {
+    private static int storageSignal(FreightCart cart) {
         double stacks = 0.0;
         for (int slot = 0; slot < cart.getContainerSize(); slot++) {
             ItemStack stack = cart.getItem(slot);
@@ -89,8 +90,8 @@ public class InspectorRailBlock extends BaseRailBlock {
         if (stacks <= 0.0) {
             return 1;
         }
-        double rows = stacks / StorageCart.ROW_SIZE;
-        double fullRows = FULL_SHARE * StorageCart.SLOT_COUNT / StorageCart.ROW_SIZE;
+        double rows = stacks / ShulkerHold.ROW_SIZE;
+        double fullRows = FULL_SHARE * ShulkerHold.SLOT_COUNT / ShulkerHold.ROW_SIZE;
         if (rows >= fullRows) {
             return 15;
         }

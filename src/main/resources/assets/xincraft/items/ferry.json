@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "xincraft:item/storage_cart"
+    "model": "xincraft:item/ferry"
   }
 }

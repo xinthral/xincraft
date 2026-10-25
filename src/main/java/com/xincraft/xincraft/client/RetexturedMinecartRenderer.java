@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.entity.CartCoupling;
 import com.xincraft.xincraft.entity.CartUpgrade;
-import com.xincraft.xincraft.entity.LinkableCart;
 import com.xincraft.xincraft.entity.UpgradableCart;
 import com.xincraft.xincraft.registry.ModEntityTypes;
 import net.minecraft.client.gui.Font;
@@ -24,6 +22,7 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.MinecartRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.gizmos.DrawableGizmoPrimitives;
+import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -50,8 +49,9 @@ import org.jspecify.annotations.Nullable;
 // Draws the mod's minecarts as vanilla minecarts with their own textures. Vanilla's minecart
 // renderer hardcodes its texture, so we hand it a collector that swaps the texture on the way
 // through and passes everything else along untouched. It also draws a cart's upgrades (see
-// entity.CartUpgrades) as small models of their blocks, one on top of each end of the cart, and
-// the linking bar from each cart in a train to the cart it tows (LinkingBar).
+// entity.CartUpgrades) as small models of their blocks, one on top of each end of the cart (the cell
+// upgrade as a cage around the cart instead, see CellCage), and the linking bar from each cart in a
+// train to the cart it tows (LinkingBar).
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class RetexturedMinecartRenderer extends MinecartRenderer {
     // Upgrade blocks are drawn this size, sitting on the cart's end walls: the walls' top is 5/16
@@ -59,23 +59,30 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
     private static final float UPGRADE_SCALE = 0.25F;
     private static final float WALL_TOP = 5.0F / 16.0F;
     private static final float END_WALL = 9.0F / 16.0F;
+    // The cell upgrade's cage stands on the walls, around the cart's half-length and half-width, tall
+    // enough to hold the spawn egg shown for the mob inside
+    private static final float CART_HALF_LENGTH = 10.0F / 16.0F;
+    private static final float CART_HALF_WIDTH = 8.0F / 16.0F;
+    private static final float CAGE_HEIGHT = 0.8F;
 
     private final Identifier texture;
     private final BlockModelResolver blockModelResolver;
+    private final ItemModelResolver itemModelResolver;
 
     public RetexturedMinecartRenderer(EntityRendererProvider.Context context, String texture) {
         super(context, ModelLayers.MINECART);
         this.texture = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/entity/" + texture + ".png");
         this.blockModelResolver = context.getBlockModelResolver();
+        this.itemModelResolver = context.getItemModelResolver();
     }
 
-    // Vanilla's render state plus the upgrade block models, and the ends of the linking bar to a
-    // towed cart (relative to this cart's position), if it tows one
+    // Vanilla's render state plus the upgrade block models, and the linking bar to a towed cart, if
+    // it tows one
     public static class UpgradedMinecartRenderState extends MinecartRenderState {
         public final List<BlockModelRenderState> upgradeModels = new ArrayList<>();
         public int upgradeCount;
-        public @Nullable Vec3 linkFrom;
-        public @Nullable Vec3 linkTo;
+        public final CellCage.Models cage = new CellCage.Models();
+        public LinkingBar.@Nullable Link link;
     }
 
     @Override
@@ -90,6 +97,10 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             return;
         }
         List<CartUpgrade> installed = cart instanceof UpgradableCart upgradable ? upgradable.upgrades().installed() : List.of();
+        // The cell (and its reinforcement) is drawn as the cage rather than blocks of their own
+        boolean caged = installed.contains(CartUpgrade.CELL);
+        CellCage.extract(blockModelResolver, upgraded.cage, caged, installed.contains(CartUpgrade.REINFORCED_CAGE));
+        installed = installed.stream().filter(upgrade -> upgrade != CartUpgrade.CELL && upgrade != CartUpgrade.REINFORCED_CAGE).toList();
         upgraded.upgradeCount = installed.size();
         for (int i = 0; i < installed.size(); i++) {
             if (upgraded.upgradeModels.size() <= i) {
@@ -97,29 +108,13 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             }
             blockModelResolver.update(upgraded.upgradeModels.get(i), installed.get(i).block().defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
         }
-        upgraded.linkFrom = null;
-        upgraded.linkTo = null;
-        if (towed(cart) instanceof AbstractMinecart towed) {
-            Vec3 origin = new Vec3(state.x, state.y, state.z);
-            upgraded.linkFrom = LinkingBar.bodyCentre(cart, origin).subtract(origin);
-            upgraded.linkTo = LinkingBar.bodyCentre(towed, towed.getPosition(partialTicks)).subtract(origin);
-        }
+        upgraded.link = LinkingBar.extract(cart, new Vec3(state.x, state.y, state.z), partialTicks);
+        CellCage.extractEggs(itemModelResolver, upgraded.cage, cart, new Vec3(state.x, state.y, state.z), partialTicks);
     }
 
-    // The cart this one tows with a linking bar, as the client knows it
-    private static @Nullable Entity towed(AbstractMinecart cart) {
-        if (!(cart instanceof LinkableCart linkable)) {
-            return null;
-        }
-        int id = linkable.coupling().towedId();
-        return id == CartCoupling.NONE ? null : cart.level().getEntity(id);
-    }
-
-    // Keeps a cart drawn, and with it the bar, while the cart it tows is in view
     @Override
     protected AABB getBoundingBoxForCulling(AbstractMinecart cart) {
-        AABB box = super.getBoundingBoxForCulling(cart);
-        return towed(cart) instanceof Entity towed ? box.minmax(towed.getBoundingBox()) : box;
+        return LinkingBar.cullingBox(cart, super.getBoundingBoxForCulling(cart));
     }
 
     @SubscribeEvent
@@ -132,14 +127,17 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             context -> new RetexturedMinecartRenderer(context, "jingle_cart"));
         event.registerEntityRenderer(ModEntityTypes.CARRIAGE.get(),
             context -> new RetexturedMinecartRenderer(context, "carriage"));
-        event.registerEntityRenderer(ModEntityTypes.STORAGE_CART.get(),
-            context -> new RetexturedMinecartRenderer(context, "storage_cart"));
+        event.registerEntityRenderer(ModEntityTypes.FREIGHT_CART.get(),
+            context -> new RetexturedMinecartRenderer(context, "freight_cart"));
     }
 
     @Override
     public void submit(MinecartRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-        if (state instanceof UpgradedMinecartRenderState upgraded && upgraded.linkFrom != null && upgraded.linkTo != null) {
-            LinkingBar.submit(upgraded.linkFrom, upgraded.linkTo, state.lightCoords, poseStack, collector);
+        if (state instanceof UpgradedMinecartRenderState upgraded) {
+            if (upgraded.link != null) {
+                LinkingBar.submit(upgraded.link, state.lightCoords, poseStack, collector);
+            }
+            CellCage.submitEggs(upgraded.cage, poseStack, collector, state.lightCoords, state.outlineColor);
         }
         super.submit(state, poseStack, new Retextured(collector, model, model.renderType(texture), state), camera);
     }
@@ -150,6 +148,11 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         if (!(state instanceof UpgradedMinecartRenderState upgraded)) {
             return;
         }
+        poseStack.pushPose();
+        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        CellCage.submit(upgraded.cage, CART_HALF_LENGTH, CART_HALF_WIDTH, WALL_TOP, CAGE_HEIGHT, poseStack, collector,
+            state.lightCoords, state.outlineColor);
+        poseStack.popPose();
         for (int i = 0; i < upgraded.upgradeCount; i++) {
             poseStack.pushPose();
             poseStack.scale(-1.0F, -1.0F, 1.0F);

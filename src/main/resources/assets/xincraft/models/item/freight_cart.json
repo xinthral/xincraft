@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "xincraft:item/storage_cart"
+    "layer0": "xincraft:item/freight_cart"
   }
 }

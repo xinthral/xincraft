@@ -7,11 +7,19 @@ Xincraft Changelog
    without the cell upgrade
  - Linking Bar: hitches carts into a train behind a locomotive, which tows up to 3 of them; the
    carts are joined by pivoting bronze drawbars so they take corners and slopes without jamming
- - Cell Upgrade: a carriage with it carries mobs, hostile ones included, caged with their AI off;
-   right-click to let one out, and it wakes 1.5 seconds later
- - Storage Cart: a minecart carrying a shulker box; 27 slots, and breaking it keeps the contents
+ - Cell Upgrade: puts a cage of iron bars around a carriage or ferry, which then carries mobs,
+   hostile ones included, with their AI off; caged undead don't burn in sunlight and endermen
+   can't teleport out. Right-click to let one out, and it wakes 1.5 seconds later; tie a lead on
+   first and it comes out leashed. A caged mob is shown as its spinning spawn egg
+ - Reinforced Cage Upgrade: fitted over the cell, rebuilds it as an obsidian-framed glass cage
+   that holds any mob but the ender dragon, wardens and withers included
+ - Freight Cart: a minecart carrying a shulker box; 27 slots, and breaking it keeps the contents
    in the dropped item; an inspector rail reads 1 to 15 for how full it is
+ - Boat trains: a motorboat tows up to 3 boats hitched with linking bars, by the same rules as
+   carts. Ferry: a passenger raft for boat trains. Barge: a boat carrying a shulker box, keeping
+   its contents when broken
  - Locomotive Cart handbrake: hold jump while riding to brake to a stop
+ - Only players and villagers can ride the Locomotive Cart
  - Buoys: two-block marker buoys for still water, linked into courses up to 32 blocks a leg with
    the linking bar; right-click one to switch its lamp off, and boats on the course stop and
    wait at it, burning no fuel, until it's switched back on

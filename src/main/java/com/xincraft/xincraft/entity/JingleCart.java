@@ -32,16 +32,17 @@ import net.minecraft.world.ticks.ContainerSingleItem;
 // track (see JukeboxPlayback); with a sculk sensor upgrade, only while a player is within earshot.
 // Like a jukebox, it holds its disc as a one-slot container, so
 // hoppers (and hopper minecarts) can load and unload it, and a detector rail's comparator signal
-// shows whether it has a disc. Can be hitched into a locomotive's train with a linking bar (see CartCoupling).
-public class JingleCart extends AbstractMinecart implements UpgradableCart, LinkableCart, JukeboxVehicle, ContainerSingleItem {
+// shows whether it has a disc. Can be hitched into a locomotive's train with a linking bar (see LinkedTransport).
+public class JingleCart extends AbstractMinecart implements UpgradableCart, LinkableTransport, JukeboxVehicle, ContainerSingleItem {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<ItemStack> DATA_DISC = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_SESSION = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
     private final JukeboxPlayback jukebox = new JukeboxPlayback(this, DATA_DISC, DATA_SESSION);
-    private final CartCoupling coupling = new CartCoupling(this, DATA_TOWED);
+    private final LinkedTransport transport = new LinkedTransport(this, DATA_TOWED, DATA_HITCHED);
 
     public JingleCart(EntityType<?> type, Level level) {
         super(type, level);
@@ -51,7 +52,8 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_UPGRADES, 0);
-        builder.define(DATA_TOWED, CartCoupling.NONE);
+        builder.define(DATA_TOWED, LinkedTransport.NONE);
+        builder.define(DATA_HITCHED, false);
         builder.define(DATA_DISC, ItemStack.EMPTY);
         builder.define(DATA_SESSION, 0);
     }
@@ -62,8 +64,8 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
     }
 
     @Override
-    public CartCoupling coupling() {
-        return coupling;
+    public LinkedTransport transport() {
+        return transport;
     }
 
     @Override
@@ -128,7 +130,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
     @Override
     public void tick() {
         if (level() instanceof ServerLevel serverLevel) {
-            coupling.tick(serverLevel);
+            transport.tick(serverLevel);
         }
         super.tick();
         if (level() instanceof ServerLevel serverLevel) {
@@ -147,7 +149,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
     // The linking bar and upgrades first; then a disc goes in, or the disc comes out
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
-        InteractionResult result = coupling.interact(player, hand);
+        InteractionResult result = transport.interact(player, hand);
         if (result == InteractionResult.PASS) {
             result = upgrades.interact(this, player, hand);
         }
@@ -177,19 +179,19 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
 
     @Override
     public void push(Entity entity) {
-        if (!coupling.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
+        if (!transport.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
             super.push(entity);
         }
     }
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        return !coupling.isLinkedTo(entity) && super.canCollideWith(entity);
+        return !transport.isLinkedTo(entity) && super.canCollideWith(entity);
     }
 
     @Override
     public void remove(RemovalReason reason) {
-        coupling.onRemove(reason);
+        transport.onRemove(reason);
         super.remove(reason);
     }
 
@@ -225,7 +227,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
             output.store("Disc", ItemStack.CODEC, getDisc());
         }
         upgrades.save(output);
-        coupling.save(output);
+        transport.save(output);
     }
 
     @Override
@@ -233,6 +235,6 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
         super.readAdditionalSaveData(input);
         setDisc(input.read("Disc", ItemStack.CODEC).orElse(ItemStack.EMPTY));
         upgrades.load(input);
-        coupling.load(input);
+        transport.load(input);
     }
 }

@@ -28,6 +28,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -70,17 +71,25 @@ import org.jspecify.annotations.Nullable;
 // it cuts its engine, stops short of the buoy and waits there, burning no fuel, until the buoy is
 // switched back on. Rose-tinted glasses start and stop one on a path with nobody steering.
 //
+// Leads a train of up to MAX_TOWED boats hitched behind it with linking bars, as a locomotive does
+// carts (see LinkedTransport). A motorboat hitched behind another is towed like any boat: nobody
+// can steer it, and its engine and RC upgrade stay idle.
+//
 // A player steering a boat moves it on their own client, so the server decides whether it's
 // cruising (from the rider's keys and its fuel) and syncs that, and the steering client pushes it.
-public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustomInventoryScreen, ContainerEntity {
+public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableTransport, HasCustomInventoryScreen, ContainerEntity {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
+    // Most boats it tows in a train behind it
+    public static final int MAX_TOWED = 3;
 
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_CRUISING = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
     // Waiting at a switched-off buoy, engine idle: the propeller stops and the exhaust clears
     private static final EntityDataAccessor<Boolean> DATA_WAITING = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
 
     // The engine's push each tick: twice a paddler's 0.04, so about twice paddling speed, and half
     // as much again with the speed upgrade
@@ -115,6 +124,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     private static final double HOLD_SLOWING = 0.25;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
+    private final LinkedTransport transport = new LinkedTransport(this, DATA_TOWED, DATA_HITCHED);
     private final boolean raft;
     private NonNullList<ItemStack> items = NonNullList.withSize(LocomotiveCart.SLOT_COUNT, ItemStack.EMPTY);
     private int litTime;
@@ -166,6 +176,8 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         builder.define(DATA_CRUISING, false);
         builder.define(DATA_LIT, false);
         builder.define(DATA_WAITING, false);
+        builder.define(DATA_TOWED, LinkedTransport.NONE);
+        builder.define(DATA_HITCHED, false);
     }
 
     @Override
@@ -177,6 +189,22 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     @Override
     public CartUpgrades upgrades() {
         return upgrades;
+    }
+
+    @Override
+    public LinkedTransport transport() {
+        return transport;
+    }
+
+    @Override
+    public int maxTowed() {
+        return MAX_TOWED;
+    }
+
+    // Hitched behind another boat, it's towed, and nobody aboard steers
+    @Override
+    public @Nullable LivingEntity getControllingPassenger() {
+        return transport.isHitched() ? null : super.getControllingPassenger();
     }
 
     public boolean isWaiting() {
@@ -211,10 +239,11 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     }
 
     private void serverTick(ServerLevel level) {
+        transport.tick(level);
         // Its motion, worked out from where it's been: the server doesn't move a boat a player steers
         Vec3 motion = lastPos != null ? position().subtract(lastPos) : Vec3.ZERO;
         lastPos = position();
-        if (!upgrades.has(CartUpgrade.RC)) {
+        if (!upgrades.has(CartUpgrade.RC) || transport.isHitched()) {
             clearPath();
         } else if (getControllingPassenger() != null) {
             // The rider's client steers it along the path; the server keeps track of where it is
@@ -343,7 +372,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     // then if it isn't on one, and moves on to the next buoy as it comes up, but not past a buoy
     // that's switched off. Returns whether it's on a path.
     private boolean updatePath() {
-        if (!upgrades.has(CartUpgrade.RC)) {
+        if (!upgrades.has(CartUpgrade.RC) || transport.isHitched()) {
             clearPath();
             return false;
         }
@@ -523,11 +552,15 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         }
     }
 
-    // Rose-tinted glasses start or stop a boat with the RC upgrade and nobody steering it that's on a
-    // buoy path. Then upgrades; then shift-right-click opens the fuel and storage slots, and
-    // right-click rides.
+    // The linking bar first. Rose-tinted glasses start or stop a boat with the RC upgrade and nobody
+    // steering it that's on a buoy path. Then upgrades; then shift-right-click opens the fuel and
+    // storage slots, and right-click rides.
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        InteractionResult linked = transport.interact(player, hand);
+        if (linked != InteractionResult.PASS) {
+            return linked;
+        }
         if (player.getItemInHand(hand).is(ModItems.ROSE_TINTED_GLASSES.get()) && upgrades.has(CartUpgrade.RC)
                 && getControllingPassenger() == null) {
             if (!level().isClientSide()) {
@@ -568,9 +601,20 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
 
     @Override
     public void push(Entity entity) {
-        if (!upgrades.pushAside(entity)) {
+        if (!transport.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
             super.push(entity);
         }
+    }
+
+    @Override
+    public boolean canCollideWith(Entity entity) {
+        return !transport.isLinkedTo(entity) && super.canCollideWith(entity);
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        transport.onRemove(reason);
+        super.remove(reason);
     }
 
     @Override
@@ -743,6 +787,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         output.putInt("LitDuration", litDuration);
         output.putInt("Energy", energy);
         upgrades.save(output);
+        transport.save(output);
         if (pathTarget != null) {
             output.store("PathTarget", BlockPos.CODEC, pathTarget);
         }
@@ -759,6 +804,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         litDuration = input.getIntOr("LitDuration", 0);
         energy = input.getIntOr("Energy", 0);
         upgrades.load(input);
+        transport.load(input);
         pathTarget = input.read("PathTarget", BlockPos.CODEC).orElse(null);
         pathPrevious = input.read("PathPrevious", BlockPos.CODEC).orElse(null);
     }

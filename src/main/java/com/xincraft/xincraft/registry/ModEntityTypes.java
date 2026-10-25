@@ -4,14 +4,16 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.entity.Barge;
 import com.xincraft.xincraft.entity.Carriage;
 import com.xincraft.xincraft.entity.EnderMinecart;
+import com.xincraft.xincraft.entity.Ferry;
 import com.xincraft.xincraft.entity.JingleCart;
 import com.xincraft.xincraft.entity.LocomotiveCart;
 import com.xincraft.xincraft.entity.Motorboat;
 import com.xincraft.xincraft.entity.MotorboatType;
 import com.xincraft.xincraft.entity.PartyBoat;
-import com.xincraft.xincraft.entity.StorageCart;
+import com.xincraft.xincraft.entity.FreightCart;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -55,13 +57,13 @@ public final class ModEntityTypes {
             .clientTrackingRange(8)
             .build(ENTITY_TYPES.key("carriage")));
 
-    public static final RegistryObject<EntityType<StorageCart>> STORAGE_CART = ENTITY_TYPES.register("storage_cart",
-        () -> EntityType.Builder.<StorageCart>of(StorageCart::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<FreightCart>> FREIGHT_CART = ENTITY_TYPES.register("freight_cart",
+        () -> EntityType.Builder.<FreightCart>of(FreightCart::new, MobCategory.MISC)
             .noLootTable()
             .sized(0.98F, 0.7F)
             .passengerAttachments(0.1875F)
             .clientTrackingRange(8)
-            .build(ENTITY_TYPES.key("storage_cart")));
+            .build(ENTITY_TYPES.key("freight_cart")));
 
     // A motorboat for each kind of boat (entity.MotorboatType), sized and tracked like vanilla boats
     public static final Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> MOTORBOATS = registerMotorboats();
@@ -90,6 +92,25 @@ public final class ModEntityTypes {
             .eyeHeight(0.5625F)
             .clientTrackingRange(10)
             .build(ENTITY_TYPES.key("party_boat")));
+
+    // The carriage's and freight cart's boats, both built on the oak boat (entity.Ferry, entity.Barge)
+    public static final RegistryObject<EntityType<Ferry>> FERRY = ENTITY_TYPES.register("ferry",
+        () -> EntityType.Builder.<Ferry>of(
+                (type, level) -> new Ferry(type, level, () -> ModItems.FERRY.get()), MobCategory.MISC)
+            .noLootTable()
+            .sized(1.375F, 0.5625F)
+            .eyeHeight(0.5625F)
+            .clientTrackingRange(10)
+            .build(ENTITY_TYPES.key("ferry")));
+
+    public static final RegistryObject<EntityType<Barge>> BARGE = ENTITY_TYPES.register("barge",
+        () -> EntityType.Builder.<Barge>of(
+                (type, level) -> new Barge(type, level, () -> ModItems.BARGE.get()), MobCategory.MISC)
+            .noLootTable()
+            .sized(1.375F, 0.5625F)
+            .eyeHeight(0.5625F)
+            .clientTrackingRange(10)
+            .build(ENTITY_TYPES.key("barge")));
 
     private ModEntityTypes() {}
 }

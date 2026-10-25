@@ -3,27 +3,33 @@ package com.xincraft.xincraft.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.entity.CartCoupling;
+import com.xincraft.xincraft.entity.LinkableTransport;
+import com.xincraft.xincraft.entity.LinkedTransport;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.OldMinecartBehavior;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
-// Draws the linking bar between a locomotive and the cart it tows (entity.CartCoupling): a flat
-// bronze drawbar spanning the gap between the carts, with an upright pin through each end where it
-// pivots. It always runs straight from one cart's centre toward the other's, so it swings with the
-// carts around corners.
+// Draws the linking bar from a vehicle to the one it tows (entity.LinkedTransport), for both the
+// minecart and boat renderers: a flat bronze drawbar spanning the gap between them, with an upright
+// pin through each end where it pivots. It always runs straight from one vehicle's centre toward the
+// other's, so it swings with them around corners.
 final class LinkingBar {
     private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(
         Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/entity/linking_bar.png"));
-    // Height of the bar above the cart's position on the rail: just above the cart's floor
-    private static final double HEIGHT = 0.25;
-    // How far from each cart's centre the bar starts: just inside the cart's end wall
-    private static final double BAR_START = 0.6;
+    // Height of the bar above a vehicle's position: just above a cart's floor, or a boat's waterline
+    private static final double CART_HEIGHT = 0.25;
+    private static final double BOAT_HEIGHT = 0.3;
+    // How far inside each vehicle's end the bar starts
+    private static final double BAR_INSET = 0.025;
     // Half the bar's width and thickness, and half a pin's width and height
     private static final float BAR_HALF_WIDTH = 3.0F / 32.0F;
     private static final float BAR_HALF_THICKNESS = 1.0F / 16.0F;
@@ -31,10 +37,40 @@ final class LinkingBar {
     private static final float PIN_HALF_HEIGHT = 5.0F / 32.0F;
     private static final Vec3 UP = new Vec3(0.0, 1.0, 0.0);
 
-    // Where a cart's body is drawn: vanilla draws a cart on old-style track along the rail rather
+    // A vehicle's bar to the one it tows, as a renderer keeps it: both ends relative to the vehicle's
+    // position, and how far each end is from its vehicle's centre to the end of its body
+    record Link(Vec3 from, Vec3 to, double fromHalf, double toHalf) {}
+
+    // The vehicle this one tows with a linking bar, as the client knows it
+    static @Nullable Entity towed(Entity vehicle) {
+        if (!(vehicle instanceof LinkableTransport linkable)) {
+            return null;
+        }
+        int id = linkable.transport().towedId();
+        return id == LinkedTransport.NONE ? null : vehicle.level().getEntity(id);
+    }
+
+    // The bar from vehicle, drawn at origin, to the one it tows, or null if it tows none
+    static @Nullable Link extract(Entity vehicle, Vec3 origin, float partialTicks) {
+        Entity towed = towed(vehicle);
+        if (towed == null) {
+            return null;
+        }
+        double height = vehicle instanceof AbstractBoat ? BOAT_HEIGHT : CART_HEIGHT;
+        Vec3 from = bodyCentre(vehicle, origin).subtract(origin).add(0.0, height, 0.0);
+        Vec3 to = bodyCentre(towed, towed.getPosition(partialTicks)).subtract(origin).add(0.0, height, 0.0);
+        return new Link(from, to, LinkedTransport.halfLength(vehicle), LinkedTransport.halfLength(towed));
+    }
+
+    // Keeps a vehicle drawn, and with it the bar, while the one it tows is in view
+    static AABB cullingBox(Entity vehicle, AABB box) {
+        return towed(vehicle) instanceof Entity towed ? box.minmax(towed.getBoundingBox()) : box;
+    }
+
+    // Where a vehicle's body is drawn: vanilla draws a cart on old-style track along the rail rather
     // than at its exact position (AbstractMinecartRenderer#oldRender)
-    static Vec3 bodyCentre(AbstractMinecart cart, Vec3 position) {
-        if (cart.getBehavior() instanceof OldMinecartBehavior behavior) {
+    private static Vec3 bodyCentre(Entity vehicle, Vec3 position) {
+        if (vehicle instanceof AbstractMinecart cart && cart.getBehavior() instanceof OldMinecartBehavior behavior) {
             Vec3 onRail = behavior.getPos(position.x, position.y, position.z);
             if (onRail != null) {
                 Vec3 front = behavior.getPosOffs(position.x, position.y, position.z, 0.3F);
@@ -47,13 +83,14 @@ final class LinkingBar {
         return position;
     }
 
-    // from and to are the two carts' body centres, relative to the pose
-    static void submit(Vec3 from, Vec3 to, int light, PoseStack poseStack, SubmitNodeCollector collector) {
-        Vec3 start = from.add(0.0, HEIGHT, 0.0);
-        Vec3 end = to.add(0.0, HEIGHT, 0.0);
+    static void submit(Link link, int light, PoseStack poseStack, SubmitNodeCollector collector) {
+        Vec3 start = link.from();
+        Vec3 end = link.to();
         Vec3 span = end.subtract(start);
         double length = span.length();
-        if (length <= 2.0 * CartCoupling.PIVOT) {
+        double frontPivot = link.fromHalf() + LinkedTransport.PIVOT_OVERHANG;
+        double backPivot = link.toHalf() + LinkedTransport.PIVOT_OVERHANG;
+        if (length <= frontPivot + backPivot) {
             return;
         }
         // The bar's own axes: along it, up through it, and across it
@@ -61,11 +98,11 @@ final class LinkingBar {
         Vec3 sideways = along.cross(UP);
         Vec3 across = sideways.lengthSqr() < 1.0E-6 ? new Vec3(1.0, 0.0, 0.0) : sideways.normalize();
         Vec3 up = across.cross(along);
-        Vec3 barStart = start.add(along.scale(BAR_START));
-        Vec3 barEnd = end.subtract(along.scale(BAR_START));
+        Vec3 barStart = start.add(along.scale(link.fromHalf() - BAR_INSET));
+        Vec3 barEnd = end.subtract(along.scale(link.toHalf() - BAR_INSET));
         float halfLength = (float) (barEnd.subtract(barStart).length() / 2.0);
-        Vec3 frontPin = start.add(along.scale(CartCoupling.PIVOT));
-        Vec3 backPin = end.subtract(along.scale(CartCoupling.PIVOT));
+        Vec3 frontPin = start.add(along.scale(frontPivot));
+        Vec3 backPin = end.subtract(along.scale(backPivot));
         collector.submitCustomGeometry(poseStack, RENDER_TYPE, (pose, consumer) -> {
             Cuboid bar = new Cuboid(pose, consumer, light, along, up, across);
             bar.draw(barStart.add(barEnd).scale(0.5), halfLength, BAR_HALF_THICKNESS, BAR_HALF_WIDTH, 0.0F, 0.5F);

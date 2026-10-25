@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cell_upgrade": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:cell_upgrade"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:reinforced_cage_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cell_upgrade"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:reinforced_cage_upgrade"
+    ]
+  }
+}

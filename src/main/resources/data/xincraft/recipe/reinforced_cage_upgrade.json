@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": "minecraft:obsidian",
+    "I": "minecraft:iron_bars"
+  },
+  "pattern": [
+    " O ",
+    "OIO",
+    " O "
+  ],
+  "result": {
+    "id": "xincraft:reinforced_cage_upgrade",
+    "count": 1
+  }
+}

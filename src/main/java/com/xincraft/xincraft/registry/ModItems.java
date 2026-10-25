@@ -8,13 +8,14 @@ import java.util.function.Supplier;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
 import com.xincraft.xincraft.entity.MotorboatType;
+import com.xincraft.xincraft.item.BargeItem;
 import com.xincraft.xincraft.item.BuoyItem;
 import com.xincraft.xincraft.item.CartUpgradeItem;
 import com.xincraft.xincraft.item.LinkingBarItem;
 import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.item.MortarAndPestleItem;
 import com.xincraft.xincraft.item.RoseTintedGlassesItem;
-import com.xincraft.xincraft.item.StorageCartItem;
+import com.xincraft.xincraft.item.FreightCartItem;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.item.EnderRailItem;
 import com.xincraft.xincraft.item.ExoticPollenItem;
@@ -112,10 +113,10 @@ public final class ModItems {
         properties -> new MinecartItem(ModEntityTypes.CARRIAGE.get(), properties),
         () -> new Item.Properties().stacksTo(1));
 
-    public static final RegistryObject<Item> STORAGE_CART = registerItem("storage_cart",
-        StorageCartItem::new, () -> new Item.Properties().stacksTo(1));
+    public static final RegistryObject<Item> FREIGHT_CART = registerItem("freight_cart",
+        FreightCartItem::new, () -> new Item.Properties().stacksTo(1));
 
-    // Hitches carts into a locomotive's train (see entity.CartCoupling)
+    // Hitches carts and boats into trains (see entity.LinkedTransport)
     public static final RegistryObject<Item> LINKING_BAR = registerItem("linking_bar",
         LinkingBarItem::new, Item.Properties::new);
 
@@ -138,6 +139,8 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.CELL, properties), Item.Properties::new);
     public static final RegistryObject<Item> ADVANCED_ANTENNA_UPGRADE = registerItem("advanced_antenna_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.ANTENNA, properties), Item.Properties::new);
+    public static final RegistryObject<Item> REINFORCED_CAGE_UPGRADE = registerItem("reinforced_cage_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.REINFORCED_CAGE, properties), Item.Properties::new);
 
     // Crafted with any boat to make a motorboat
     public static final RegistryObject<Item> PROPELLER =
@@ -163,6 +166,13 @@ public final class ModItems {
     public static final RegistryObject<Item> PARTY_BOAT = registerItem("party_boat",
         properties -> new BoatItem(ModEntityTypes.PARTY_BOAT.get(), properties),
         () -> new Item.Properties().stacksTo(1));
+
+    public static final RegistryObject<Item> FERRY = registerItem("ferry",
+        properties -> new BoatItem(ModEntityTypes.FERRY.get(), properties),
+        () -> new Item.Properties().stacksTo(1));
+
+    public static final RegistryObject<Item> BARGE = registerItem("barge",
+        BargeItem::new, () -> new Item.Properties().stacksTo(1));
 
     // Placed in still water; linked into paths for motorboats with the RC upgrade (block.BuoyBlock)
     public static final RegistryObject<Item> BUOY = registerItem("buoy",

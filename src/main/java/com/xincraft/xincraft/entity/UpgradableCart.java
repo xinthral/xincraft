@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.entity;
 
-// A minecart or motorboat that upgrades can be fitted to. Each one holds a CartUpgrades and hands it
+// A minecart or boat that upgrades can be fitted to. Each one holds a CartUpgrades and hands it
 // its interactions, pushes, saving and drops.
 public interface UpgradableCart {
     CartUpgrades upgrades();

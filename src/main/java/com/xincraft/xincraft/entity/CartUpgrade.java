@@ -23,14 +23,18 @@ public enum CartUpgrade {
     SPEED("speed", ModItems.SPEED_UPGRADE, Blocks.BLAST_FURNACE, List.of(Motorboat.class)),
     // Riders are invisible, but for the odd pink glint (the rideable vehicles only)
     SHIMMER("shimmer", ModItems.SHIMMER_UPGRADE, Blocks.TINTED_GLASS,
-        List.of(EnderMinecart.class, LocomotiveCart.class, Carriage.class, Motorboat.class)),
+        List.of(EnderMinecart.class, LocomotiveCart.class, Carriage.class, Motorboat.class, Ferry.class)),
     // A motorboat that comes across a buoy path follows it on its own (see block.BuoyBlock)
     RC("rc", ModItems.RC_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class)),
-    // A mob riding a carriage is caged, its AI off, until it's let out (see MobCell)
-    CELL("cell", ModItems.CELL_UPGRADE, Blocks.IRON_BARS, List.of(Carriage.class)),
+    // A mob riding a carriage or ferry is caged, its AI off, until it's let out (see MobCell)
+    CELL("cell", ModItems.CELL_UPGRADE, Blocks.IRON_BARS, List.of(Carriage.class, Ferry.class)),
     // Extends the RC upgrade's mast so the boat can follow the long legs between advanced buoys
     // (block.AdvancedBuoyBlock). Fits over the RC upgrade, and is drawn as its mast extended.
-    ANTENNA("antenna", ModItems.ADVANCED_ANTENNA_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class));
+    ANTENNA("antenna", ModItems.ADVANCED_ANTENNA_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class)),
+    // Backs the cell's bars with obsidian, so it holds any mob at all but the ender dragon, hauling
+    // aboard even those that won't ride (see MobCell). Fits over the cell, and is drawn as part of
+    // its cage.
+    REINFORCED_CAGE("reinforced_cage", ModItems.REINFORCED_CAGE_UPGRADE, Blocks.OBSIDIAN, List.of(Carriage.class, Ferry.class));
 
     private final String id;
     private final Supplier<Item> item;
@@ -59,7 +63,11 @@ public enum CartUpgrade {
 
     // The upgrade that has to be fitted before this one, if any
     public @Nullable CartUpgrade requires() {
-        return this == ANTENNA ? RC : null;
+        return switch (this) {
+            case ANTENNA -> RC;
+            case REINFORCED_CAGE -> CELL;
+            default -> null;
+        };
     }
 
     // The kinds of vehicle this upgrade fits; empty if it fits them all

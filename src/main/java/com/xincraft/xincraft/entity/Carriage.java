@@ -10,8 +10,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.Minecart;
 import net.minecraft.world.item.Item;
@@ -22,15 +20,16 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 // A rideable passenger minecart, lacquered and trimmed in bronze, for hitching into a locomotive's train
-// with a linking bar (see CartCoupling). Otherwise an ordinary minecart. Takes upgrades (see
+// with a linking bar (see LinkedTransport). Otherwise an ordinary minecart. Takes upgrades (see
 // CartUpgrades). It won't take hostile mobs aboard unless it has the cell upgrade, which carries
 // them caged (see MobCell).
-public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
+public class Carriage extends Minecart implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.BOOLEAN);
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
-    private final CartCoupling coupling = new CartCoupling(this, DATA_TOWED);
+    private final LinkedTransport transport = new LinkedTransport(this, DATA_TOWED, DATA_HITCHED);
 
     public Carriage(EntityType<?> type, Level level) {
         super(type, level);
@@ -40,7 +39,8 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_UPGRADES, 0);
-        builder.define(DATA_TOWED, CartCoupling.NONE);
+        builder.define(DATA_TOWED, LinkedTransport.NONE);
+        builder.define(DATA_HITCHED, false);
     }
 
     @Override
@@ -49,23 +49,21 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     }
 
     @Override
-    public CartCoupling coupling() {
-        return coupling;
+    public LinkedTransport transport() {
+        return transport;
     }
 
-    // The linking bar and upgrades first; then, with a mob in the cell, right-click lets it out;
-    // otherwise right-click to ride, as any minecart
+    // The linking bar and upgrades first; then, with a mob in the cell, right-click lets it out
+    // (or with a lead, ties one ready for it; see MobCell); otherwise right-click to ride, as
+    // any minecart
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
-        InteractionResult result = coupling.interact(player, hand);
+        InteractionResult result = transport.interact(player, hand);
         if (result == InteractionResult.PASS) {
             result = upgrades.interact(this, player, hand);
         }
-        if (result == InteractionResult.PASS && upgrades.has(CartUpgrade.CELL) && getFirstPassenger() instanceof Mob) {
-            if (!level().isClientSide()) {
-                MobCell.release(this);
-            }
-            return InteractionResult.SUCCESS;
+        if (result == InteractionResult.PASS && upgrades.has(CartUpgrade.CELL)) {
+            result = MobCell.interact(this, player, hand);
         }
         return result != InteractionResult.PASS ? result : super.interact(player, hand, location);
     }
@@ -73,7 +71,7 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     @Override
     public void tick() {
         if (level() instanceof ServerLevel serverLevel) {
-            coupling.tick(serverLevel);
+            transport.tick(serverLevel);
             upgrades.tickShimmer(serverLevel);
             if (upgrades.has(CartUpgrade.CELL)) {
                 MobCell.tick(this);
@@ -85,19 +83,19 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     // Hostile mobs only ride in a cell; this also keeps a cart without one from picking them up
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return (!(passenger instanceof Enemy) || upgrades.has(CartUpgrade.CELL)) && super.canAddPassenger(passenger);
+        return MobCell.canCarry(this, passenger) && super.canAddPassenger(passenger);
     }
 
     @Override
     public void push(Entity entity) {
-        if (!coupling.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
+        if (!transport.isLinkedTo(entity) && !upgrades.pushAside(entity)) {
             super.push(entity);
         }
     }
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        return !coupling.isLinkedTo(entity) && super.canCollideWith(entity);
+        return !transport.isLinkedTo(entity) && super.canCollideWith(entity);
     }
 
     @Override
@@ -108,7 +106,7 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
 
     @Override
     public void remove(RemovalReason reason) {
-        coupling.onRemove(reason);
+        transport.onRemove(reason);
         super.remove(reason);
     }
 
@@ -126,13 +124,13 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         upgrades.save(output);
-        coupling.save(output);
+        transport.save(output);
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         upgrades.load(input);
-        coupling.load(input);
+        transport.load(input);
     }
 }
