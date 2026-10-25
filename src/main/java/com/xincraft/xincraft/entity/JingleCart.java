@@ -32,15 +32,16 @@ import net.minecraft.world.ticks.ContainerSingleItem;
 // track (see JukeboxPlayback); with a sculk sensor upgrade, only while a player is within earshot.
 // Like a jukebox, it holds its disc as a one-slot container, so
 // hoppers (and hopper minecarts) can load and unload it, and a detector rail's comparator signal
-// shows whether it has a disc. Can be hitched behind a locomotive with a linking bar (see CartCoupling).
+// shows whether it has a disc. Can be hitched into a locomotive's train with a linking bar (see CartCoupling).
 public class JingleCart extends AbstractMinecart implements UpgradableCart, LinkableCart, JukeboxVehicle, ContainerSingleItem {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> DATA_DISC = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_SESSION = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
     private final JukeboxPlayback jukebox = new JukeboxPlayback(this, DATA_DISC, DATA_SESSION);
-    private final CartCoupling coupling = new CartCoupling(this, null);
+    private final CartCoupling coupling = new CartCoupling(this, DATA_TOWED);
 
     public JingleCart(EntityType<?> type, Level level) {
         super(type, level);
@@ -50,6 +51,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_UPGRADES, 0);
+        builder.define(DATA_TOWED, CartCoupling.NONE);
         builder.define(DATA_DISC, ItemStack.EMPTY);
         builder.define(DATA_SESSION, 0);
     }

@@ -11,6 +11,7 @@ import com.xincraft.xincraft.entity.LocomotiveCart;
 import com.xincraft.xincraft.entity.Motorboat;
 import com.xincraft.xincraft.entity.MotorboatType;
 import com.xincraft.xincraft.entity.PartyBoat;
+import com.xincraft.xincraft.entity.StorageCart;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -53,6 +54,14 @@ public final class ModEntityTypes {
             .passengerAttachments(0.1875F)
             .clientTrackingRange(8)
             .build(ENTITY_TYPES.key("carriage")));
+
+    public static final RegistryObject<EntityType<StorageCart>> STORAGE_CART = ENTITY_TYPES.register("storage_cart",
+        () -> EntityType.Builder.<StorageCart>of(StorageCart::new, MobCategory.MISC)
+            .noLootTable()
+            .sized(0.98F, 0.7F)
+            .passengerAttachments(0.1875F)
+            .clientTrackingRange(8)
+            .build(ENTITY_TYPES.key("storage_cart")));
 
     // A motorboat for each kind of boat (entity.MotorboatType), sized and tracked like vanilla boats
     public static final Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> MOTORBOATS = registerMotorboats();

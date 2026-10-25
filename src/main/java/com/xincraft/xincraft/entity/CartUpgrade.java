@@ -6,6 +6,7 @@ import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import org.jspecify.annotations.Nullable;
 
 // The upgrades that can be fitted to the mod's minecarts and motorboats (see CartUpgrades). Each is
 // an item used on the vehicle, and is shown on it as a small model of its block.
@@ -24,7 +25,12 @@ public enum CartUpgrade {
     SHIMMER("shimmer", ModItems.SHIMMER_UPGRADE, Blocks.TINTED_GLASS,
         List.of(EnderMinecart.class, LocomotiveCart.class, Carriage.class, Motorboat.class)),
     // A motorboat that comes across a buoy path follows it on its own (see block.BuoyBlock)
-    RC("rc", ModItems.RC_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class));
+    RC("rc", ModItems.RC_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class)),
+    // A mob riding a carriage is caged, its AI off, until it's let out (see MobCell)
+    CELL("cell", ModItems.CELL_UPGRADE, Blocks.IRON_BARS, List.of(Carriage.class)),
+    // Extends the RC upgrade's mast so the boat can follow the long legs between advanced buoys
+    // (block.AdvancedBuoyBlock). Fits over the RC upgrade, and is drawn as its mast extended.
+    ANTENNA("antenna", ModItems.ADVANCED_ANTENNA_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class));
 
     private final String id;
     private final Supplier<Item> item;
@@ -49,6 +55,11 @@ public enum CartUpgrade {
 
     public Block block() {
         return block;
+    }
+
+    // The upgrade that has to be fitted before this one, if any
+    public @Nullable CartUpgrade requires() {
+        return this == ANTENNA ? RC : null;
     }
 
     // The kinds of vehicle this upgrade fits; empty if it fits them all

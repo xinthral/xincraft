@@ -278,13 +278,18 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
 
     // Joins the buoy path it's on, if any; returns whether it did
     private boolean tryJoinPath() {
-        BuoyPath.Join join = BuoyPath.join(level(), position(), heading());
+        BuoyPath.Join join = BuoyPath.join(level(), position(), heading(), legReach());
         if (join == null) {
             return false;
         }
         pathTarget = join.target();
         pathPrevious = join.previous();
         return true;
+    }
+
+    // The longest leg between buoys it can follow: further with the advanced antenna
+    private double legReach() {
+        return upgrades.has(CartUpgrade.ANTENNA) ? BuoyBlockEntity.ADVANCED_LINK_RANGE : BuoyBlockEntity.LINK_RANGE;
     }
 
     private void clearPath() {
@@ -353,7 +358,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
         }
         if (!BuoyBlock.isUnlit(level, pathTarget)
                 && BuoyPath.point(pathTarget).subtract(position()).horizontalDistance() < ARRIVE_DISTANCE) {
-            BlockPos next = BuoyPath.next(level, pathTarget, pathPrevious);
+            BlockPos next = BuoyPath.next(level, pathTarget, pathPrevious, legReach());
             if (next == null) {
                 // The end of the path
                 clearPath();
@@ -374,7 +379,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, HasCustom
     // How fast it can take the turn at the buoy ahead: full speed for a slight one, slower the
     // sharper it is, and slowest at the end of the path
     private double cornerSpeed(Level level, Vec3 here, Vec3 target) {
-        BlockPos after = BuoyPath.next(level, pathTarget, pathPrevious);
+        BlockPos after = BuoyPath.next(level, pathTarget, pathPrevious, legReach());
         if (after == null) {
             return level.isLoaded(pathTarget) ? SLOW_CORNER_SPEED : Double.MAX_VALUE;
         }

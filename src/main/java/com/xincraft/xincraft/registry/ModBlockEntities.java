@@ -55,7 +55,7 @@ public final class ModBlockEntities {
         () -> new BlockEntityType<>(ApothecaryAltarBlockEntity::new, Set.of(ModBlocks.APOTHECARY_ALTAR.get())));
 
     public static final RegistryObject<BlockEntityType<BuoyBlockEntity>> BUOY = BLOCK_ENTITIES.register("buoy",
-        () -> new BlockEntityType<>(BuoyBlockEntity::new, Set.of(ModBlocks.BUOY.get())));
+        () -> new BlockEntityType<>(BuoyBlockEntity::new, Set.of(ModBlocks.BUOY.get(), ModBlocks.ADVANCED_BUOY.get())));
 
     private ModBlockEntities() {}
 }

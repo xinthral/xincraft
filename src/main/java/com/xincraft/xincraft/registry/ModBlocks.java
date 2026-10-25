@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.block.AdvancedBuoyBlock;
 import com.xincraft.xincraft.block.ApothecaryAltarBlock;
 import com.xincraft.xincraft.block.BuoyBlock;
 import com.xincraft.xincraft.block.HoneyRailBlock;
@@ -228,6 +229,20 @@ public final class ModBlocks {
             .strength(0.5F)
             .sound(SoundType.LANTERN)
             .lightLevel(state -> state.getValue(BuoyBlock.HALF) == DoubleBlockHalf.UPPER && state.getValue(BuoyBlock.LIT) ? 7 : 0)
+            .pushReaction(PushReaction.DESTROY),
+        false
+    );
+
+    // A buoy with a longer reach and a brighter lamp, linked into long legs (block.AdvancedBuoyBlock)
+    public static final RegistryObject<Block> ADVANCED_BUOY = registerBlock(
+        "advanced_buoy",
+        AdvancedBuoyBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .noOcclusion()
+            .strength(0.5F)
+            .sound(SoundType.LANTERN)
+            .lightLevel(state -> state.getValue(BuoyBlock.HALF) == DoubleBlockHalf.UPPER && state.getValue(BuoyBlock.LIT) ? 10 : 0)
             .pushReaction(PushReaction.DESTROY),
         false
     );

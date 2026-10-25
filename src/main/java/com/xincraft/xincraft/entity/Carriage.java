@@ -10,6 +10,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.Minecart;
 import net.minecraft.world.item.Item;
@@ -19,14 +21,16 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-// A rideable passenger minecart, lacquered and trimmed in bronze, for hitching behind a locomotive
+// A rideable passenger minecart, lacquered and trimmed in bronze, for hitching into a locomotive's train
 // with a linking bar (see CartCoupling). Otherwise an ordinary minecart. Takes upgrades (see
-// CartUpgrades).
+// CartUpgrades). It won't take hostile mobs aboard unless it has the cell upgrade, which carries
+// them caged (see MobCell).
 public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
-    private final CartCoupling coupling = new CartCoupling(this, null);
+    private final CartCoupling coupling = new CartCoupling(this, DATA_TOWED);
 
     public Carriage(EntityType<?> type, Level level) {
         super(type, level);
@@ -36,6 +40,7 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_UPGRADES, 0);
+        builder.define(DATA_TOWED, CartCoupling.NONE);
     }
 
     @Override
@@ -48,12 +53,19 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
         return coupling;
     }
 
-    // The linking bar and upgrades first; then right-click to ride, as any minecart
+    // The linking bar and upgrades first; then, with a mob in the cell, right-click lets it out;
+    // otherwise right-click to ride, as any minecart
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult result = coupling.interact(player, hand);
         if (result == InteractionResult.PASS) {
             result = upgrades.interact(this, player, hand);
+        }
+        if (result == InteractionResult.PASS && upgrades.has(CartUpgrade.CELL) && getFirstPassenger() instanceof Mob) {
+            if (!level().isClientSide()) {
+                MobCell.release(this);
+            }
+            return InteractionResult.SUCCESS;
         }
         return result != InteractionResult.PASS ? result : super.interact(player, hand, location);
     }
@@ -63,8 +75,17 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableCart {
         if (level() instanceof ServerLevel serverLevel) {
             coupling.tick(serverLevel);
             upgrades.tickShimmer(serverLevel);
+            if (upgrades.has(CartUpgrade.CELL)) {
+                MobCell.tick(this);
+            }
         }
         super.tick();
+    }
+
+    // Hostile mobs only ride in a cell; this also keeps a cart without one from picking them up
+    @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return (!(passenger instanceof Enemy) || upgrades.has(CartUpgrade.CELL)) && super.canAddPassenger(passenger);
     }
 
     @Override

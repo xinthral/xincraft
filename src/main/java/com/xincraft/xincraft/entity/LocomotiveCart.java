@@ -49,13 +49,15 @@ import org.jspecify.annotations.Nullable;
 // shift-right-clicking the cart, pressing the inventory key while riding, or a hopper above it.
 // Takes upgrades (see CartUpgrades). With the energy upgrade it also stores Forge Energy, charged
 // from charging rails, energy blocks under the track (or anything that hands energy to entities),
-// or by burning its fuel, and the engine runs only on that stored energy. Tows one cart hitched
-// behind it with a linking bar (see CartCoupling). A rider holding jump pulls the handbrake: the
-// engine cuts out and the cart brakes to a stop, and stays stopped while it's held.
+// or by burning its fuel, and the engine runs only on that stored energy. Tows a train of up to
+// MAX_TOWED carts hitched behind it with linking bars (see CartCoupling). A rider holding jump pulls
+// the handbrake: the engine cuts out and the cart brakes to a stop, and stays stopped while it's held.
 public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart, LinkableCart {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
     public static final int SLOT_COUNT = 2;
+    // Most carts it tows in a train behind it. An advanced locomotive is planned that tows more.
+    public static final int MAX_TOWED = 3;
 
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
@@ -135,8 +137,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     }
 
     @Override
-    public boolean canTow() {
-        return true;
+    public int maxTowed() {
+        return MAX_TOWED;
     }
 
     public boolean isLit() {

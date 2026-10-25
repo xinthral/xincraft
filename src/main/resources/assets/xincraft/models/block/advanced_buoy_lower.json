@@ -1,0 +1,212 @@
+{
+  "textures": {
+    "buoy": "xincraft:block/advanced_buoy",
+    "particle": "xincraft:block/advanced_buoy"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            10
+          ],
+          "texture": "#buoy"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            10
+          ],
+          "texture": "#buoy"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            10
+          ],
+          "texture": "#buoy"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            8,
+            10
+          ],
+          "texture": "#buoy"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#buoy"
+        },
+        "down": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#buoy"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        11,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ],
+          "texture": "#buoy"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ],
+          "texture": "#buoy"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ],
+          "texture": "#buoy"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ],
+          "texture": "#buoy"
+        },
+        "up": {
+          "uv": [
+            9,
+            1,
+            15,
+            7
+          ],
+          "texture": "#buoy"
+        },
+        "down": {
+          "uv": [
+            9,
+            1,
+            15,
+            7
+          ],
+          "texture": "#buoy"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        12,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            2,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            2,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "east": {
+          "uv": [
+            0,
+            10,
+            2,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "west": {
+          "uv": [
+            0,
+            10,
+            2,
+            14
+          ],
+          "texture": "#buoy"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#buoy"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#buoy"
+        }
+      }
+    }
+  ]
+}

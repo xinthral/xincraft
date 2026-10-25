@@ -51,7 +51,7 @@ import org.jspecify.annotations.Nullable;
 // renderer hardcodes its texture, so we hand it a collector that swaps the texture on the way
 // through and passes everything else along untouched. It also draws a cart's upgrades (see
 // entity.CartUpgrades) as small models of their blocks, one on top of each end of the cart, and
-// the linking bar from a locomotive to the cart it tows (LinkingBar).
+// the linking bar from each cart in a train to the cart it tows (LinkingBar).
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class RetexturedMinecartRenderer extends MinecartRenderer {
     // Upgrade blocks are drawn this size, sitting on the cart's end walls: the walls' top is 5/16
@@ -115,7 +115,7 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         return id == CartCoupling.NONE ? null : cart.level().getEntity(id);
     }
 
-    // Keeps a locomotive drawn, and with it the bar, while the cart it tows is in view
+    // Keeps a cart drawn, and with it the bar, while the cart it tows is in view
     @Override
     protected AABB getBoundingBoxForCulling(AbstractMinecart cart) {
         AABB box = super.getBoundingBoxForCulling(cart);
@@ -132,6 +132,8 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             context -> new RetexturedMinecartRenderer(context, "jingle_cart"));
         event.registerEntityRenderer(ModEntityTypes.CARRIAGE.get(),
             context -> new RetexturedMinecartRenderer(context, "carriage"));
+        event.registerEntityRenderer(ModEntityTypes.STORAGE_CART.get(),
+            context -> new RetexturedMinecartRenderer(context, "storage_cart"));
     }
 
     @Override

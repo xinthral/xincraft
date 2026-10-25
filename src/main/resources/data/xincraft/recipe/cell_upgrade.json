@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "#c:ingots/tin",
+    "I": "minecraft:iron_bars"
+  },
+  "pattern": [
+    " T ",
+    "TIT",
+    " T "
+  ],
+  "result": {
+    "id": "xincraft:cell_upgrade",
+    "count": 1
+  }
+}

@@ -3,16 +3,22 @@ Xincraft Changelog
 
 1.19.0
  - Carriage: a rideable passenger minecart in maroon lacquer, trimmed in bronze; an inspector rail
-   reads 1 for an empty one and 2 for one with a passenger
- - Linking Bar: hitches a carriage, jingle cart or another locomotive behind a locomotive, which
-   tows it; the carts are joined by a pivoting bronze drawbar so they take corners and slopes
-   without jamming
+   reads 1 for an empty one and 2 for one with a passenger. It won't pick up hostile mobs
+   without the cell upgrade
+ - Linking Bar: hitches carts into a train behind a locomotive, which tows up to 3 of them; the
+   carts are joined by pivoting bronze drawbars so they take corners and slopes without jamming
+ - Cell Upgrade: a carriage with it carries mobs, hostile ones included, caged with their AI off;
+   right-click to let one out, and it wakes 1.5 seconds later
+ - Storage Cart: a minecart carrying a shulker box; 27 slots, and breaking it keeps the contents
+   in the dropped item; an inspector rail reads 1 to 15 for how full it is
  - Locomotive Cart handbrake: hold jump while riding to brake to a stop
  - Buoys: two-block marker buoys for still water, linked into courses up to 32 blocks a leg with
    the linking bar; right-click one to switch its lamp off, and boats on the course stop and
    wait at it, burning no fuel, until it's switched back on
  - RC Upgrade: a motorboat with it follows buoy courses on its own, slowing for sharp turns and
    stopping if it runs aground; rose-tinted glasses show the courses and start and stop RC boats
+ - Advanced Buoys link up to 64 blocks apart, and the Advanced Antenna Upgrade extends the RC
+   upgrade's mast so a motorboat can follow those long legs
 
 1.18.0
  - Party Boat: a bronze-lined motorboat with a jukebox; plays its disc while on the move, and

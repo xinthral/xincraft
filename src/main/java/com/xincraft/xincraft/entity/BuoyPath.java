@@ -12,7 +12,8 @@ import org.jspecify.annotations.Nullable;
 
 // Finding and following buoy paths (block.BuoyBlock): the straight legs between linked buoys, which
 // motorboats with the RC upgrade follow (entity.Motorboat) and rose-tinted glasses show
-// (client.BuoyHighlight). Positions are compared on the level, ignoring height.
+// (client.BuoyHighlight). Positions are compared on the level, ignoring height. A boat only follows
+// legs up to its reach long (see Motorboat.legReach): a longer one is the end of the path for it.
 public final class BuoyPath {
     // How close to a leg a boat has to come to join the path
     public static final double JOIN_DISTANCE = 2.0;
@@ -54,14 +55,17 @@ public final class BuoyPath {
         return found;
     }
 
-    // The nearest leg within JOIN_DISTANCE of a boat at pos, heading toward whichever end the boat
-    // is pointed at more; null if there's none
-    public static @Nullable Join join(Level level, Vec3 pos, Vec3 heading) {
+    // The nearest leg no longer than reach within JOIN_DISTANCE of a boat at pos, heading toward
+    // whichever end the boat is pointed at more; null if there's none
+    public static @Nullable Join join(Level level, Vec3 pos, Vec3 heading, double reach) {
         Join best = null;
         double bestDistance = JOIN_DISTANCE;
-        for (BuoyBlockEntity buoy : nearby(level, pos, BuoyBlockEntity.LINK_RANGE + JOIN_DISTANCE)) {
+        for (BuoyBlockEntity buoy : nearby(level, pos, reach + JOIN_DISTANCE)) {
             BlockPos a = buoy.getBlockPos();
             for (BlockPos b : buoy.links()) {
+                if (BuoyBlockEntity.legLength(a, b) > reach) {
+                    continue;
+                }
                 double distance = distanceToLeg(pos, point(a), point(b));
                 if (distance < bestDistance) {
                     bestDistance = distance;
@@ -74,15 +78,15 @@ public final class BuoyPath {
     }
 
     // The buoy after target on its path, coming from previous: its other link. Null at the end of the
-    // line, or if target isn't loaded.
-    public static @Nullable BlockPos next(Level level, BlockPos target, @Nullable BlockPos previous) {
+    // line, if the leg there is longer than reach, or if target isn't loaded.
+    public static @Nullable BlockPos next(Level level, BlockPos target, @Nullable BlockPos previous, double reach) {
         BuoyBlockEntity buoy = BuoyBlockEntity.at(level, target);
         if (buoy == null) {
             return null;
         }
         for (BlockPos link : buoy.links()) {
             if (!link.equals(previous)) {
-                return link;
+                return BuoyBlockEntity.legLength(target, link) <= reach ? link : null;
             }
         }
         return null;

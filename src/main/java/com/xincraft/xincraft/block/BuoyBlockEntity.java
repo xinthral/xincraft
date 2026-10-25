@@ -20,13 +20,16 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 // The links from one buoy (BuoyBlock, lower half) to the buoys next to it on its path: up to
-// MAX_LINKS, each no more than LINK_RANGE blocks away, made with a linking bar (item.LinkingBarItem).
+// MAX_LINKS, each no further than both buoys reach (see BuoyBlock.linkRange), made with a linking bar (item.LinkingBarItem).
 // Both buoys hold the link. Synced to clients, which steer ridden boats along the path and draw it
 // for rose-tinted glasses. Removed, a buoy unlinks its loaded partners and drops a bar per link; a
 // link to a buoy that's gone, or doesn't link back, is ignored and dropped (see links).
 public class BuoyBlockEntity extends BlockEntity {
     public static final int MAX_LINKS = 2;
+    // How far an ordinary buoy links, and an advanced one to another advanced one. Motorboats follow
+    // legs up to LINK_RANGE long, or with the advanced antenna upgrade, up to ADVANCED_LINK_RANGE.
     public static final double LINK_RANGE = 32.0;
+    public static final double ADVANCED_LINK_RANGE = 64.0;
 
     private final List<BlockPos> links = new ArrayList<>(MAX_LINKS);
 
@@ -50,6 +53,16 @@ public class BuoyBlockEntity extends BlockEntity {
             }
         }
         return List.copyOf(links);
+    }
+
+    // How far this buoy's links reach
+    public double linkRange() {
+        return getBlockState().getBlock() instanceof BuoyBlock buoy ? buoy.linkRange() : LINK_RANGE;
+    }
+
+    // How long a leg between two buoys is
+    public static double legLength(BlockPos a, BlockPos b) {
+        return Math.sqrt(a.distSqr(b));
     }
 
     public boolean isLinkedTo(BlockPos pos) {

@@ -22,7 +22,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 
-// A bronze drawbar that hitches a cart behind a locomotive, or links two buoys into a path for
+// A bronze drawbar that hitches carts into a locomotive's train, or links two buoys into a path for
 // motorboats. The carts handle using it on them (entity.CartCoupling); buoys are handled here. Either
 // way, the bar remembers the first cart or buoy it was used on, glinting until it's used on the
 // second, and one bar is used up per link.
@@ -112,10 +112,12 @@ public class LinkingBarItem extends Item {
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_missing"));
             return InteractionResult.FAIL;
         }
-        double distance = Math.sqrt(pos.distSqr(first.pos()));
-        if (distance > BuoyBlockEntity.LINK_RANGE) {
+        // As far as the shorter-reaching of the two buoys
+        double distance = BuoyBlockEntity.legLength(pos, first.pos());
+        double range = Math.min(buoy.linkRange(), other.linkRange());
+        if (distance > range) {
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_too_far",
-                (int) Math.ceil(distance), (int) BuoyBlockEntity.LINK_RANGE));
+                (int) Math.ceil(distance), (int) range));
             return InteractionResult.FAIL;
         }
         if (buoy.isLinkedTo(first.pos())) {

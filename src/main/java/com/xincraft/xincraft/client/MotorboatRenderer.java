@@ -39,7 +39,9 @@ import net.minecraftforge.fml.common.Mod;
 
 // Draws a motorboat as the vanilla boat (or raft) it was made from, using vanilla's own renderer,
 // plus a propeller at the stern, spinning while it cruises, and its upgrades as small blocks along
-// the gunwales. The party boat is drawn as an oak motorboat with a jukebox in its back seat.
+// the gunwales. The advanced antenna isn't a block of its own: it's drawn as the RC upgrade's mast
+// extended, in narrower sections like a car aerial. The party boat is drawn as an oak motorboat with
+// a jukebox in its back seat.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class MotorboatRenderer<T extends Motorboat> extends EntityRenderer<T, MotorboatRenderer.State> {
     // Vanilla's model for each kind of boat
@@ -58,6 +60,9 @@ public class MotorboatRenderer<T extends Motorboat> extends EntityRenderer<T, Mo
     private static final float PROPELLER_SPEED = 45.0F;
     private static final float PROPELLER_SCALE = 0.5F;
     private static final float UPGRADE_SCALE = 0.25F;
+    // The advanced antenna's sections above the RC mast, each this much narrower than the one below
+    private static final int ANTENNA_SECTIONS = 2;
+    private static final float ANTENNA_TAPER = 0.05F;
     private static final float JUKEBOX_SCALE = 0.5F;
 
     private final AbstractBoatRenderer boat;
@@ -86,6 +91,8 @@ public class MotorboatRenderer<T extends Motorboat> extends EntityRenderer<T, Mo
         public float propellerAngle;
         public final List<BlockModelRenderState> upgradeModels = new ArrayList<>();
         public int upgradeCount;
+        // Which of the upgrades is the RC mast the advanced antenna extends, or -1
+        public int antennaMast = -1;
         // The party boat's jukebox
         public final BlockModelRenderState jukebox = new BlockModelRenderState();
         public boolean hasJukebox;
@@ -102,8 +109,9 @@ public class MotorboatRenderer<T extends Motorboat> extends EntityRenderer<T, Mo
         itemModelResolver.updateForTopItem(state.propeller, new ItemStack(ModItems.PROPELLER.get()), ItemDisplayContext.FIXED,
             entity.level(), null, entity.getId());
         state.propellerAngle = entity.isCruising() && !entity.isWaiting() ? (entity.tickCount + partialTicks) * PROPELLER_SPEED : 0.0F;
-        List<CartUpgrade> installed = entity.upgrades().installed();
+        List<CartUpgrade> installed = entity.upgrades().installed().stream().filter(upgrade -> upgrade != CartUpgrade.ANTENNA).toList();
         state.upgradeCount = installed.size();
+        state.antennaMast = entity.upgrades().has(CartUpgrade.ANTENNA) ? installed.indexOf(CartUpgrade.RC) : -1;
         for (int i = 0; i < installed.size(); i++) {
             if (state.upgradeModels.size() <= i) {
                 state.upgradeModels.add(new BlockModelRenderState());
@@ -149,6 +157,18 @@ public class MotorboatRenderer<T extends Motorboat> extends EntityRenderer<T, Mo
             poseStack.translate(side - UPGRADE_SCALE / 2.0F, 0.0F, -0.45F + (i / 2) * 0.35F - UPGRADE_SCALE / 2.0F);
             poseStack.scale(UPGRADE_SCALE, UPGRADE_SCALE, UPGRADE_SCALE);
             state.upgradeModels.get(i).submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+            if (i == state.antennaMast) {
+                // The same mast again for each section, stacked and narrowing (in the mast's own frame,
+                // a block tall and wide)
+                for (int section = 1; section <= ANTENNA_SECTIONS; section++) {
+                    float width = 1.0F - section * ANTENNA_TAPER / UPGRADE_SCALE;
+                    poseStack.pushPose();
+                    poseStack.translate((1.0F - width) / 2.0F, section, (1.0F - width) / 2.0F);
+                    poseStack.scale(width, 1.0F, width);
+                    state.upgradeModels.get(i).submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+                    poseStack.popPose();
+                }
+            }
             poseStack.popPose();
         }
         poseStack.popPose();

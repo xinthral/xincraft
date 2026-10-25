@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "#c:ingots/bronze",
+    "L": "minecraft:lightning_rod"
+  },
+  "pattern": [
+    " B ",
+    "BLB",
+    " B "
+  ],
+  "result": {
+    "id": "xincraft:advanced_antenna_upgrade",
+    "count": 1
+  }
+}

@@ -88,6 +88,14 @@ public final class CartUpgrades {
                 }
                 return InteractionResult.FAIL;
             }
+            CartUpgrade required = upgrade.requires();
+            if (required != null && !has(required)) {
+                if (server) {
+                    player.sendOverlayMessage(Component.translatable("message.xincraft.upgrade_needs",
+                        new ItemStack(required.item()).getHoverName()));
+                }
+                return InteractionResult.FAIL;
+            }
             if (server) {
                 set(bits() | upgrade.bit());
                 fitOrder.add(upgrade);

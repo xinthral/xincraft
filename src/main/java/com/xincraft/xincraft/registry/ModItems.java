@@ -14,6 +14,7 @@ import com.xincraft.xincraft.item.LinkingBarItem;
 import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.item.MortarAndPestleItem;
 import com.xincraft.xincraft.item.RoseTintedGlassesItem;
+import com.xincraft.xincraft.item.StorageCartItem;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.item.EnderRailItem;
 import com.xincraft.xincraft.item.ExoticPollenItem;
@@ -111,7 +112,10 @@ public final class ModItems {
         properties -> new MinecartItem(ModEntityTypes.CARRIAGE.get(), properties),
         () -> new Item.Properties().stacksTo(1));
 
-    // Hitches a cart behind a locomotive (see entity.CartCoupling)
+    public static final RegistryObject<Item> STORAGE_CART = registerItem("storage_cart",
+        StorageCartItem::new, () -> new Item.Properties().stacksTo(1));
+
+    // Hitches carts into a locomotive's train (see entity.CartCoupling)
     public static final RegistryObject<Item> LINKING_BAR = registerItem("linking_bar",
         LinkingBarItem::new, Item.Properties::new);
 
@@ -130,6 +134,10 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.SHIMMER, properties), Item.Properties::new);
     public static final RegistryObject<Item> RC_UPGRADE = registerItem("rc_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.RC, properties), Item.Properties::new);
+    public static final RegistryObject<Item> CELL_UPGRADE = registerItem("cell_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.CELL, properties), Item.Properties::new);
+    public static final RegistryObject<Item> ADVANCED_ANTENNA_UPGRADE = registerItem("advanced_antenna_upgrade",
+        properties -> new CartUpgradeItem(CartUpgrade.ANTENNA, properties), Item.Properties::new);
 
     // Crafted with any boat to make a motorboat
     public static final RegistryObject<Item> PROPELLER =
@@ -159,6 +167,10 @@ public final class ModItems {
     // Placed in still water; linked into paths for motorboats with the RC upgrade (block.BuoyBlock)
     public static final RegistryObject<Item> BUOY = registerItem("buoy",
         properties -> new BuoyItem(ModBlocks.BUOY.get(), properties),
+        () -> new Item.Properties().useBlockDescriptionPrefix());
+    // A buoy whose links to other advanced buoys reach twice as far (block.AdvancedBuoyBlock)
+    public static final RegistryObject<Item> ADVANCED_BUOY = registerItem("advanced_buoy",
+        properties -> new BuoyItem(ModBlocks.ADVANCED_BUOY.get(), properties),
         () -> new Item.Properties().useBlockDescriptionPrefix());
 
     // Worn (or held), shows buoy paths; used on an RC motorboat on a path, starts and stops it

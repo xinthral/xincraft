@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:minecart_frame",
+    "minecraft:shulker_shell",
+    "minecraft:shulker_shell",
+    "minecraft:chest"
+  ],
+  "result": {
+    "id": "xincraft:storage_cart",
+    "count": 1
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "xincraft:block/advanced_buoy_lower"
+    },
+    "half=upper,lit=true": {
+      "model": "xincraft:block/advanced_buoy_upper"
+    },
+    "half=upper,lit=false": {
+      "model": "xincraft:block/advanced_buoy_upper_off"
+    }
+  }
+}

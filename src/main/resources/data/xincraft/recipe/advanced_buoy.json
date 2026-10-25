@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "xincraft:buoy",
+    "#c:ingots/bronze",
+    "minecraft:glowstone_dust",
+    "minecraft:blue_dye"
+  ],
+  "result": {
+    "id": "xincraft:advanced_buoy",
+    "count": 1
+  }
+}

@@ -43,7 +43,8 @@ import org.jspecify.annotations.Nullable;
 // BuoyBlockEntity, on the lower half) into paths that motorboats with the RC upgrade follow
 // (entity.Motorboat). It has no collision, so boats and swimmers pass straight through it.
 // Right-clicking either half switches its lamp off, and again back on: a boat coming to an unlit
-// buoy stops short of it and waits, engine off, until it's lit again. Both halves carry LIT.
+// buoy stops short of it and waits, engine off, until it's lit again. Both halves carry LIT. Links
+// reach linkRange() blocks; the advanced buoy (AdvancedBuoyBlock) reaches further.
 public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
     public static final MapCodec<BuoyBlock> CODEC = simpleCodec(BuoyBlock::new);
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
@@ -61,8 +62,13 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
     }
 
     @Override
-    protected MapCodec<BuoyBlock> codec() {
+    protected MapCodec<? extends BuoyBlock> codec() {
         return CODEC;
+    }
+
+    // Furthest this buoy links to another; a link reaches only as far as the shorter of its two buoys
+    public double linkRange() {
+        return BuoyBlockEntity.LINK_RANGE;
     }
 
     @Override
