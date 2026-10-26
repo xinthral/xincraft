@@ -178,7 +178,7 @@ public class ModBoatRenderer<T extends AbstractBoat & UpgradableCart> extends En
         if (state.link != null) {
             LinkingBar.submit(state.link, state.lightCoords, poseStack, collector);
         }
-        CellCage.submitEggs(state.cage, poseStack, collector, state.lightCoords, state.outlineColor);
+        CellCage.submitEggs(state.cage, poseStack, collector, state.lightCoords, state.outlineColor, camera);
         boat.submit(state, poseStack, collector, camera);
         // In the boat's own frame (as vanilla turns it), where +Z is the stern and -Z the bow
         poseStack.pushPose();

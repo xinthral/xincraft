@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "terra"
+  ],
+  "catalyst": "minecraft:copper_block",
+  "mob": "minecraft:copper_golem"
+}

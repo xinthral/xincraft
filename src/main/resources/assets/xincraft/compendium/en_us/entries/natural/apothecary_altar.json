@@ -1,0 +1,28 @@
+{
+  "title": "Apothecary Altar",
+  "icon": "xincraft:apothecary_altar",
+  "category": "natural",
+  "sort": 3,
+  "items": [
+    "xincraft:apothecary_altar"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:apothecary_altar",
+      "text": "Burns plants into essence for the flora around it. Works like a furnace: a **plant** in the top slot and **fuel** below."
+    },
+    {
+      "type": "text",
+      "text": "Each plant burns for 5 seconds and gives **4 essence of each of its elements** to the emptiest flora of those elements within **4 blocks** in every direction, streaming its colour to each.\n\nIt only burns while some flora of the plant's elements has room, so nothing is wasted.\n\n**Screen pips:** dark = no flora in range, dim = all full, bright = room. Outlined = the plant gives that element."
+    },
+    {
+      "type": "text",
+      "text": "**Plants by element** (item tags xincraft:essence/<element>):\n\n**Terra:** saplings, dandelion, oxeye daisy, dead bush, short grass, fern, wheat seeds\n**Aqua:** kelp, seagrass, lily pad, sea pickle, sugar cane, blue orchid, cornflower\n**Ignis:** poppy, torchflower, nether wart, crimson fungus and roots, cactus"
+    },
+    {
+      "type": "text",
+      "text": "**Aer:** vines, leaves, azure bluet, white tulip, spore blossom\n**Vita:** lily of the valley, pink tulip, sweet berries, moss block, pink petals\n**Lux:** sunflower, orange tulip, glow berries, glow lichen\n**Umbra:** wither rose, closed eyeblossom, allium, mushrooms, warped fungus and roots\n\nHoppers feed plants from above and fuel from the sides, and pull empty buckets from below."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "lux"
+  ],
+  "catalyst": "minecraft:milk_bucket",
+  "mob": "minecraft:wandering_trader"
+}

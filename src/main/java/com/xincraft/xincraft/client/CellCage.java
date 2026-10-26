@@ -7,6 +7,11 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.xincraft.xincraft.item.RoseTintedGlassesItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.Holder;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
@@ -33,7 +38,8 @@ import net.minecraft.world.phys.Vec3;
 // carriage or ferry. Each side is tiled with panels of vanilla's iron bars, stretched to fit evenly.
 // The reinforced cage is an obsidian frame instead, with a glass window filling each side. A mob in
 // the cell is shown by its spawn egg, spinning where it sits, rather than as itself (see CagedMobs);
-// one without a spawn egg is drawn as usual, and stands out of the cage.
+// one without a spawn egg is drawn as usual, and stands out of the cage. Through rose-tinted glasses,
+// worn or held, each egg is labelled with the mob's name, as a name tag would show it.
 final class CellCage {
     // Iron bars and glass panes joined left and right, making a flat panel through the middle of the
     // block, one running along x and one along z
@@ -53,6 +59,10 @@ final class CellCage {
     private static final float EGG_HEIGHT = 0.5F;
     private static final float EGG_SCALE = 2.0F;
     private static final float EGG_SPIN = 3.0F;
+    // How far above a caged mob's feet its label hangs (vanilla raises it half a block more), and how
+    // far off it can be read, as far as vanilla shows name tags
+    private static final float LABEL_HEIGHT = EGG_HEIGHT + 0.3F;
+    private static final double LABEL_RANGE = 64.0;
     // Each mob type's spawn egg, looked up once. Vanilla finds it by searching the items for one that
     // spawns the type, so mobs added later, and other mods' mobs, find theirs too. The registry is
     // fixed once the game's loaded.
@@ -70,6 +80,9 @@ final class CellCage {
         // The spawn eggs of the mobs inside, and where each is drawn, relative to the vehicle
         final List<ItemStackRenderState> eggs = new ArrayList<>();
         final List<Vec3> eggSpots = new ArrayList<>();
+        // The mobs' names, when they're labelled
+        final List<Component> labels = new ArrayList<>();
+        boolean labelled;
         int eggCount;
         float spin;
     }
@@ -102,6 +115,9 @@ final class CellCage {
         if (!models.shown) {
             return;
         }
+        LocalPlayer player = Minecraft.getInstance().player;
+        models.labelled = player != null && RoseTintedGlassesItem.isUsing(player)
+            && vehicle.distanceToSqr(player) < LABEL_RANGE * LABEL_RANGE;
         for (Entity passenger : vehicle.getPassengers()) {
             Optional<Holder<Item>> egg = passenger instanceof Mob ? EGGS.computeIfAbsent(passenger.getType(), SpawnEggItem::byId) : Optional.empty();
             if (egg.isEmpty()) {
@@ -112,18 +128,25 @@ final class CellCage {
             if (models.eggs.size() <= i) {
                 models.eggs.add(new ItemStackRenderState());
                 models.eggSpots.add(Vec3.ZERO);
+                models.labels.add(Component.empty());
             }
             resolver.updateForTopItem(models.eggs.get(i), new ItemStack(egg.get()), ItemDisplayContext.GROUND, vehicle.level(), null,
                 passenger.getId());
             Vec3 at = new Vec3(Mth.lerp(partialTicks, passenger.xOld, passenger.getX()),
                 Mth.lerp(partialTicks, passenger.yOld, passenger.getY()), Mth.lerp(partialTicks, passenger.zOld, passenger.getZ()));
-            models.eggSpots.set(i, at.subtract(origin));
+            // From the seat rather than the mob's feet, as mobs that ride low (zombies, skeletons) sit
+            // down inside the vehicle, where their egg would be hidden
+            models.eggSpots.set(i, at.add(passenger.getVehicleAttachmentPoint(vehicle)).subtract(origin));
+            if (models.labelled) {
+                models.labels.set(i, passenger.getDisplayName());
+            }
         }
         models.spin = (vehicle.tickCount + partialTicks) * EGG_SPIN;
     }
 
-    // Draws the spawn eggs, from where the vehicle is drawn
-    static void submitEggs(Models models, PoseStack poseStack, SubmitNodeCollector collector, int light, int outlineColor) {
+    // Draws the spawn eggs, and their labels, from where the vehicle is drawn
+    static void submitEggs(Models models, PoseStack poseStack, SubmitNodeCollector collector, int light, int outlineColor,
+            CameraRenderState camera) {
         for (int i = 0; i < models.eggCount; i++) {
             Vec3 at = models.eggSpots.get(i);
             poseStack.pushPose();
@@ -132,6 +155,9 @@ final class CellCage {
             poseStack.scale(EGG_SCALE, EGG_SCALE, EGG_SCALE);
             models.eggs.get(i).submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, outlineColor);
             poseStack.popPose();
+            if (models.labelled) {
+                collector.submitNameTag(poseStack, at.add(0.0, LABEL_HEIGHT, 0.0), 0, models.labels.get(i), true, light, camera);
+            }
         }
     }
 

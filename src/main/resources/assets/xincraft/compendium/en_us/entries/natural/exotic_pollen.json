@@ -1,0 +1,18 @@
+{
+  "title": "Exotic Pollen",
+  "icon": "xincraft:exotic_pollen",
+  "category": "natural",
+  "sort": 21,
+  "items": [
+    "xincraft:exotic_pollen"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:exotic_pollen"
+      ],
+      "text": "Made on the [[mixing_tray]]. Use it on these flowers to grow exotic ones (one pollen each):\n\nLily of the Valley → [[mending_lilac]]\nDandelion → [[firefly_petunia]]\nGolden Dandelion → [[moonlit_dandelion]]\nWither Rose → [[shimmer_lily]]\n\nOr on leaves to make [[glowing_leaves]]."
+    }
+  ]
+}

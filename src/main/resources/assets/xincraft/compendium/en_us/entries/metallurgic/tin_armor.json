@@ -1,0 +1,29 @@
+{
+  "title": "Tin Armor",
+  "icon": "xincraft:tin_chestplate",
+  "category": "metallurgic",
+  "sort": 2,
+  "items": [
+    "xincraft:tin_helmet",
+    "xincraft:tin_chestplate",
+    "xincraft:tin_leggings",
+    "xincraft:tin_boots"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:tin_helmet",
+        "xincraft:tin_chestplate",
+        "xincraft:tin_leggings",
+        "xincraft:tin_boots"
+      ],
+      "text": "Between copper and iron: 2 / 5 / 4 / 1 armor points, durability multiplier 13, enchantability 10. Same shapes as iron armor; repair with tin ingots.\n\n**Full set:** Fire Resistance, renewed every 5 seconds while all four pieces are worn."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:tin_chestplate",
+      "text": ""
+    }
+  ]
+}

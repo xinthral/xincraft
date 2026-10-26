@@ -1,0 +1,20 @@
+{
+  "title": "Jingle Cart",
+  "icon": "xincraft:jingle_cart",
+  "category": "rails",
+  "sort": 13,
+  "items": [
+    "xincraft:jingle_cart"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:jingle_cart",
+      "text": "A cart with a jukebox that plays a music disc while it rolls, the music following it."
+    },
+    {
+      "type": "text",
+      "text": "Right-click with a disc to put it in, again to take it out. The song starts when the cart sets off and stops soon after it halts, looping while it keeps rolling. It uses the Jukebox volume slider.\n\nHoppers load and unload discs. The [[sculk_sensor_upgrade]] makes it play only with a player within 32 blocks."
+    }
+  ]
+}

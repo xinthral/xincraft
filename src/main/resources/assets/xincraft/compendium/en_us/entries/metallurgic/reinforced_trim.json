@@ -1,0 +1,23 @@
+{
+  "title": "Reinforced Armor Trim",
+  "icon": "xincraft:reinforced_armor_trim_smithing_template",
+  "category": "metallurgic",
+  "sort": 4,
+  "items": [
+    "xincraft:reinforced_armor_trim_smithing_template"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:reinforced_armor_trim_smithing_template"
+      ],
+      "text": "A dark edging along every edge of the armor, like metal banding, in a deep shade of the trim material. It pairs well with tin.\n\nFound in **abandoned mineshaft** chests (1 in 10). Duplicate it like any template."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:reinforced_armor_trim_smithing_template",
+      "text": ""
+    }
+  ]
+}

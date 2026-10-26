@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "lux"
+  ],
+  "catalyst": "minecraft:dried_ghast",
+  "mob": "minecraft:happy_ghast",
+  "baby": true
+}

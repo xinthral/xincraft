@@ -1,0 +1,24 @@
+{
+  "title": "Using the Compendium",
+  "icon": "xincraft:compendium",
+  "category": "",
+  "sort": 0,
+  "items": [
+    "xincraft:compendium"
+  ],
+  "pages": [
+    {
+      "type": "text",
+      "text": "This book covers everything Xincraft adds, sorted into **Magic** (Natural and Metallurgic) and **Transport** (Rails and Boats). Each category opens with an overview of how its parts fit together, then an entry for each block, item and vehicle.\n\n**Turning pages:** the arrows at the bottom, the arrow keys, or the mouse wheel. **Back** retraces your steps and the **house** goes home. The book reopens where you left it."
+    },
+    {
+      "type": "text",
+      "text": "**Search:** type in the box on the home page to find entries by name, or by the items they cover.\n\n**Bookmarks:** the ribbon in the top corner of an entry bookmarks it; up to 8 hang as tabs off the book's edge.\n\n**Items:** hover one for its tooltip, click it to open its entry.\n\n**Look-up key** (G by default): with a compendium anywhere in your inventory, press it over an item in any inventory, or while looking at a block or vehicle, to open its entry."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:compendium_from_powder",
+      "text": "Or a book and a [[minecart_frame|Minecart Frame]]."
+    }
+  ]
+}

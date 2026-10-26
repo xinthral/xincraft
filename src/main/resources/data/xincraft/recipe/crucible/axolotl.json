@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "lux"
+  ],
+  "catalyst": "minecraft:axolotl_bucket",
+  "mob": "minecraft:axolotl",
+  "baby": true
+}

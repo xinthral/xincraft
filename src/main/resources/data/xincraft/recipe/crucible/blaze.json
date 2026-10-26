@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "ignis"
+  ],
+  "catalyst": "minecraft:blaze_rod",
+  "mob": "minecraft:blaze"
+}

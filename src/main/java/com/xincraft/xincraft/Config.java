@@ -35,6 +35,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue ALTAR_RANGE;
     private static final ForgeConfigSpec.IntValue ALTAR_BURN_TICKS;
     private static final ForgeConfigSpec.IntValue ALTAR_ESSENCE_PER_ELEMENT;
+    private static final ForgeConfigSpec.IntValue CRUCIBLE_BALANCE_ESSENCE;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue ENDER_RAIL_COOLDOWN;
     private static final ForgeConfigSpec.IntValue ENDER_RAIL_MAX_PER_SECOND;
@@ -144,6 +145,12 @@ public class Config {
                 .defineInRange("essencePerElement", 4, 1, 100_000);
         BUILDER.pop();
 
+        BUILDER.comment("Apothecary crucible").push("crucible");
+        CRUCIBLE_BALANCE_ESSENCE = BUILDER
+                .comment("Essence an inscription draws from the flora around the altar, of every element not among its powders, for each powder burnt")
+                .defineInRange("balanceEssence", 1, 0, 100_000);
+        BUILDER.pop();
+
         BUILDER.comment("Ender rails").push("enderRails");
         ENDER_RAIL_MAX_DISTANCE = BUILDER
                 .comment("Maximum distance in blocks between two linked ender rails")
@@ -187,6 +194,7 @@ public class Config {
     public static int altarRange = 4;
     public static int altarBurnTicks = 100;
     public static int altarEssencePerElement = 4;
+    public static int crucibleBalanceEssence = 1;
     public static int enderRailMaxDistance = 64;
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
@@ -227,6 +235,7 @@ public class Config {
         altarRange = ALTAR_RANGE.get();
         altarBurnTicks = ALTAR_BURN_TICKS.get();
         altarEssencePerElement = ALTAR_ESSENCE_PER_ELEMENT.get();
+        crucibleBalanceEssence = CRUCIBLE_BALANCE_ESSENCE.get();
         enderRailMaxDistance = ENDER_RAIL_MAX_DISTANCE.get();
         enderRailCooldownTicks = (int) Math.round(ENDER_RAIL_COOLDOWN.get() * 20);
         enderRailMaxTeleportsPerSecond = ENDER_RAIL_MAX_PER_SECOND.get();

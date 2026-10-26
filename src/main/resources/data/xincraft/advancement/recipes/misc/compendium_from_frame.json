@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_minecart_frame": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xincraft:minecart_frame"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:compendium_from_frame"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_minecart_frame"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:compendium_from_frame"
+    ]
+  }
+}

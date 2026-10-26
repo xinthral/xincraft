@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:cobweb",
+  "mob": "minecraft:cave_spider"
+}

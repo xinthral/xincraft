@@ -1,0 +1,26 @@
+{
+  "title": "Party Boat",
+  "icon": "xincraft:party_boat",
+  "category": "boats",
+  "sort": 1,
+  "items": [
+    "xincraft:party_boat",
+    "xincraft:bronze_hull_lining"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:bronze_hull_lining",
+      "text": ""
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:party_boat",
+      "text": "Any motorboat, a bronze hull lining and a jukebox. The jukebox takes the second seat."
+    },
+    {
+      "type": "text",
+      "text": "Right-click with a disc to put it in; shift + right-click with an empty hand to take it out. Like the [[jingle_cart]], it plays while moving.\n\nIt drives, fuels and takes upgrades like any motorboat, including the [[sculk_sensor_upgrade]]."
+    }
+  ]
+}

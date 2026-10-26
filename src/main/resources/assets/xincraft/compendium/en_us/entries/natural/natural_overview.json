@@ -1,0 +1,20 @@
+{
+  "title": "Natural Magic",
+  "icon": "xincraft:terra_powder",
+  "category": "natural",
+  "sort": -1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "**The cycle of essence:**\n\n1. Grind flowers into [[elemental_powders|powders]] with the [[mortar_and_pestle]].\n2. Use a powder on a small flower to make an [[elemental_flora|elemental flora]]; it holds up to 64 essence.\n3. Burn plants at the [[apothecary_altar]] to refill the flora within 4 blocks.\n4. Draw on them in the [[apothecary_crucible]]."
+    },
+    {
+      "type": "text",
+      "text": "**Nature's balance:** the crucible burns two powders, and for each one draws **1 essence of every other element** from the flora around the altar. Keep a flora of every element near your altar.\n\n**Vita is youth:** no crucible recipe uses Vita. Swap a powder for Vita to inscribe a baby; in a recipe with **Umbra**, Vita must take the Umbra's place, life driving out death."
+    },
+    {
+      "type": "text",
+      "text": "**Exotic flowers** are a separate branch: four different flowers mashed on a [[mixing_tray]] with honeycomb make [[exotic_pollen|exotic pollen]], which grows vanilla flowers into flowers with beacon-like effects and makes leaves glow."
+    }
+  ]
+}

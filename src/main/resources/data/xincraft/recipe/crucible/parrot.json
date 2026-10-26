@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "aer"
+  ],
+  "catalyst": "minecraft:wheat_seeds",
+  "mob": "minecraft:parrot"
+}

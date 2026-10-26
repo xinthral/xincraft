@@ -1,0 +1,20 @@
+{
+  "title": "Steam Turbine",
+  "icon": "xincraft:steam_turbine",
+  "category": "metallurgic",
+  "sort": 7,
+  "items": [
+    "xincraft:steam_turbine"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:steam_turbine",
+      "text": "Burns fuel twice as fast for **160 FE per tick**, twice the energy per coal, and stores 100,000 FE."
+    },
+    {
+      "type": "text",
+      "text": "It needs **water**: 5 mB per tick from an 8,000 mB tank. Right-click it with a water bucket, or pipe water in from another mod. Without water it stops and saves its fuel.\n\nOtherwise it works like the [[heat_turbine]]. The screen shows fuel, stored energy (red) and water (blue)."
+    }
+  ]
+}

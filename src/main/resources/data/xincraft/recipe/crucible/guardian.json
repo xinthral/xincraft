@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "umbra"
+  ],
+  "catalyst": "minecraft:prismarine_shard",
+  "mob": "minecraft:guardian"
+}

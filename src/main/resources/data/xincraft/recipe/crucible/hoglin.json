@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "terra"
+  ],
+  "catalyst": "minecraft:crimson_fungus",
+  "mob": "minecraft:hoglin",
+  "baby": true
+}

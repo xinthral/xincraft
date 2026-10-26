@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "umbra"
+  ],
+  "catalyst": "minecraft:nautilus_shell",
+  "mob": "minecraft:zombie_nautilus"
+}

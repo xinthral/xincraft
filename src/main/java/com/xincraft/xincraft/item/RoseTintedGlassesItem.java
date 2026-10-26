@@ -14,7 +14,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 // Worn on the head (or just held), they show the links between buoys (block.BuoyBlock), traced in
 // yellow along a path that makes a complete loop and red along one that doesn't
 // (client.BuoyHighlight). They also read the essence in an elemental flora, or in all the flora
-// around an apothecary altar (client.EssenceReadout). Worn, they tint the view rose
+// around an apothecary altar (client.EssenceReadout), and label the mobs in cells with their names
+// (client.CellCage). Worn, they tint the view rose
 // (client.RoseTintedGlassesTint). Used on a
 // motorboat with the RC upgrade on a buoy path with nobody steering, they start or stop it (entity.Motorboat).
 public class RoseTintedGlassesItem extends Item {

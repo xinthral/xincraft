@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "terra"
+  ],
+  "catalyst": "minecraft:chest",
+  "mob": "minecraft:donkey",
+  "baby": true
+}

@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "umbra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:echo_shard",
+  "mob": "minecraft:warden"
+}

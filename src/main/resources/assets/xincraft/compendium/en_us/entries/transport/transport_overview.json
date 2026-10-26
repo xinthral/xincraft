@@ -1,0 +1,32 @@
+{
+  "title": "About Transport",
+  "icon": "xincraft:linking_bar",
+  "category": "transport",
+  "sort": -1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "**Trains:** a [[linking_bar]] hitches carts behind a [[locomotive_cart]], or boats behind a [[motorboats|motorboat]]. Each leader tows **up to 3** behind it, linked in a line.\n\n**Upgrades:** right-click a vehicle with an upgrade to fit it. **Shears** snip them off one at a time, newest first. Breaking the vehicle drops them."
+    },
+    {
+      "type": "text",
+      "text": "**Passengers:** the [[carriage]] and [[ferry]] carry players and mobs, but no hostile mobs without a [[cell_upgrade]]. A [[mob_filters|mob filter]] chooses which mobs come aboard.\n\n**Cargo:** the [[freight_cart]] and [[barge]] carry a shulker box's worth, kept when broken.\n\n**Fuel:** locomotives and motorboats burn furnace fuel 8 times as long as a furnace, or run on Forge Energy with the [[energy_upgrade]]."
+    },
+    {
+      "type": "links",
+      "title": "Upgrades",
+      "entries": [
+        "shrieker_upgrade",
+        "sculk_sensor_upgrade",
+        "energy_upgrade",
+        "shimmer_upgrade",
+        "cell_upgrade",
+        "reinforced_cage_upgrade",
+        "rc_upgrade",
+        "advanced_antenna_upgrade",
+        "ice_breaker_upgrade",
+        "speed_upgrade"
+      ]
+    }
+  ]
+}

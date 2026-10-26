@@ -1,0 +1,16 @@
+{
+  "title": "Metallurgy",
+  "icon": "xincraft:tin_ingot",
+  "category": "metallurgic",
+  "sort": -1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "**Tin** is mined from the earth; **bronze** is alloyed from tin and copper. Both use the common c: tags, so other mods' tin and bronze work in Xincraft recipes and the other way round.\n\n**Armor:** tin sits between copper and iron, bronze matches iron but lasts longer. Wearing a **full set** of either gives a bonus. Both take armor trims, and tin is itself a trim material."
+    },
+    {
+      "type": "text",
+      "text": "**Forge Energy (FE):** the [[heat_turbine]] and [[steam_turbine]] burn furnace fuel into FE. They charge the [[charging_rail]], and with the [[energy_upgrade]] power locomotives and motorboats. They work with other mods' cables and machines too.\n\nTin and bronze also go into most of Xincraft's rails, carts and upgrades."
+    }
+  ]
+}

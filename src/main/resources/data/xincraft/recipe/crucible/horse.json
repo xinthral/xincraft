@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "terra"
+  ],
+  "catalyst": "minecraft:golden_carrot",
+  "mob": "minecraft:horse",
+  "baby": true
+}

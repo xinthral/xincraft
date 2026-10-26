@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "terra"
+  ],
+  "catalyst": "minecraft:lily_pad",
+  "mob": "minecraft:frog"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "terra"
+  ],
+  "catalyst": "minecraft:goat_horn",
+  "mob": "minecraft:goat",
+  "baby": true
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Heat Turbine",
+  "icon": "xincraft:heat_turbine",
+  "category": "metallurgic",
+  "sort": 6,
+  "items": [
+    "xincraft:heat_turbine"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:heat_turbine",
+      "text": "Burns any furnace fuel at furnace speed into **40 FE per tick** (64,000 FE per coal), storing 50,000 FE."
+    },
+    {
+      "type": "text",
+      "text": "**Fuel:** right-click to open, or feed with hoppers from above and the sides.\n\n**Output:** pushes up to 1,000 FE per tick into each neighbouring block that takes energy. Next to a [[charging_rail]] it keeps the rail charged; under the track it charges passing locomotives directly.\n\nIt stops lighting new fuel when its buffer is full."
+    }
+  ]
+}

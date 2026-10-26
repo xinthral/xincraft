@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "umbra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:crimson_fungus",
+  "mob": "minecraft:zoglin",
+  "baby": true
+}

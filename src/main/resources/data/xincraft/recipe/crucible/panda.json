@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "terra"
+  ],
+  "catalyst": "minecraft:bamboo",
+  "mob": "minecraft:panda",
+  "baby": true
+}

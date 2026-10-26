@@ -1,0 +1,18 @@
+{
+  "title": "Firefly Petunia",
+  "icon": "xincraft:firefly_petunia",
+  "category": "natural",
+  "sort": 23,
+  "items": [
+    "xincraft:firefly_petunia"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:firefly_petunia"
+      ],
+      "text": "Grown from a dandelion with [[exotic_pollen]]. Glows a soft yellow (light 10), bright enough to stop mobs spawning, with fireflies drifting around it.\n\nCrafts into yellow dye."
+    }
+  ]
+}

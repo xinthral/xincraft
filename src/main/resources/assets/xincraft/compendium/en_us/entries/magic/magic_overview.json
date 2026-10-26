@@ -1,0 +1,16 @@
+{
+  "title": "About Magic",
+  "icon": "xincraft:vita_powder",
+  "category": "magic",
+  "sort": -1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Flowers hold the seven primal elements: **Terra** (earth), **Aqua** (water), **Ignis** (fire), **Aer** (air), **Vita** (life), **Lux** (light) and **Umbra** (shadow).\n\nGround with a [[mortar_and_pestle]], flowers become [[elemental_powders|elemental powders]]. A powder used on a living flower makes it an [[elemental_flora|elemental flora]], a reservoir of its element's **essence**."
+    },
+    {
+      "type": "text",
+      "text": "The [[apothecary_altar]] burns plants into essence for the flora around it, and the [[apothecary_crucible]] draws it back out to inscribe [[mob_filters|mob filters]].\n\nMetallurgic craft is the earthier side: tin and bronze, worked into armor, tools and machines. See [[metallurgic_overview]]."
+    }
+  ]
+}

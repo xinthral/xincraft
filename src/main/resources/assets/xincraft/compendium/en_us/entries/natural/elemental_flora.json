@@ -1,0 +1,25 @@
+{
+  "title": "Elemental Flora",
+  "icon": "xincraft:vita_powder",
+  "category": "natural",
+  "sort": 2,
+  "blocks": [
+    "xincraft:flora_terrae",
+    "xincraft:flora_aquae",
+    "xincraft:flora_ignis",
+    "xincraft:flora_aeris",
+    "xincraft:flora_vitae",
+    "xincraft:flora_lucis",
+    "xincraft:flora_umbrae"
+  ],
+  "pages": [
+    {
+      "type": "text",
+      "text": "**Right-click any small flower with a powder** to turn it into that element's flora: Ignis makes a Flora Ignis, Aqua a Flora Aquae, and so on. It starts with **16 essence** and uses up the powder. Xincraft's own exotic flowers can't be changed.\n\n**Topping up:** more of its own powder adds 16, up to **64**. Other powders do nothing."
+    },
+    {
+      "type": "text",
+      "text": "**Checking:** right-click with an empty hand, or look at it through [[rose_tinted_glasses]].\n\nThe fuller it is, the deeper its colour, the brighter it glows (up to light 8) and the more it sparkles.\n\n**Breaking a flora destroys it**, essence and all. Pistons and flowing water break it too."
+    }
+  ]
+}

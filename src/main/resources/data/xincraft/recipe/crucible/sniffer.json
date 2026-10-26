@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "terra"
+  ],
+  "catalyst": "minecraft:sniffer_egg",
+  "mob": "minecraft:sniffer",
+  "baby": true
+}

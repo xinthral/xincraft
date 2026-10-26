@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "terra"
+  ],
+  "catalyst": "minecraft:armadillo_scute",
+  "mob": "minecraft:armadillo",
+  "baby": true
+}

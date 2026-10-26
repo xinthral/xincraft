@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "aqua"
+  ],
+  "catalyst": "minecraft:nautilus_shell",
+  "mob": "minecraft:nautilus",
+  "baby": true
+}

@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:golden_carrot",
+  "mob": "minecraft:zombie_horse"
+}

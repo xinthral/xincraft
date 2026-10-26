@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "aqua"
+  ],
+  "catalyst": "minecraft:tropical_fish",
+  "mob": "minecraft:tropical_fish"
+}

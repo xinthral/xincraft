@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": "#xincraft:element_powders",
+    "C": "minecraft:cauldron"
+  },
+  "pattern": [
+    "PPP",
+    " C "
+  ],
+  "result": {
+    "id": "xincraft:apothecary_crucible",
+    "count": 1
+  }
+}

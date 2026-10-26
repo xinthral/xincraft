@@ -1,0 +1,20 @@
+{
+  "title": "Ferry",
+  "icon": "xincraft:ferry",
+  "category": "boats",
+  "sort": 2,
+  "items": [
+    "xincraft:ferry"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:ferry",
+      "text": "The [[carriage]]'s boat: a bamboo raft with maroon trim, seating two. Its passengers can't paddle or steer, so it goes where it's towed."
+    },
+    {
+      "type": "text",
+      "text": "Like the carriage, it won't take hostile mobs without the [[cell_upgrade]], and takes a [[mob_filters|mob filter]] and the [[shimmer_upgrade]]."
+    }
+  ]
+}

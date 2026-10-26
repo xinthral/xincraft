@@ -1,0 +1,7 @@
+{
+  "title": "Rails",
+  "icon": "xincraft:tin_rail",
+  "parent": "transport",
+  "sort": 0,
+  "description": "Faster, quieter, slower, bouncier and smarter rails, and the carts that run on them."
+}

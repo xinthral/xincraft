@@ -2,6 +2,7 @@ package com.xincraft.xincraft;
 
 import com.mojang.logging.LogUtils;
 import com.xincraft.xincraft.entity.XincraftMinecartBehavior;
+import com.xincraft.xincraft.network.ModNetwork;
 import com.xincraft.xincraft.registry.ModBiomeModifiers;
 import com.xincraft.xincraft.registry.ModBlockEntities;
 import com.xincraft.xincraft.registry.ModBlocks;
@@ -10,6 +11,7 @@ import com.xincraft.xincraft.registry.ModDataComponents;
 import com.xincraft.xincraft.registry.ModEntityTypes;
 import com.xincraft.xincraft.registry.ModMenuTypes;
 import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.registry.ModRecipes;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -43,6 +45,10 @@ public final class XincraftMod {
         ModDataComponents.COMPONENTS.register(modBusGroup);
         ModCreativeModeTabs.TABS.register(modBusGroup);
         ModBiomeModifiers.SERIALIZERS.register(modBusGroup);
+        ModRecipes.RECIPE_TYPES.register(modBusGroup);
+        ModRecipes.RECIPE_SERIALIZERS.register(modBusGroup);
+        ModRecipes.RECIPE_BOOK_CATEGORIES.register(modBusGroup);
+        ModNetwork.register();
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

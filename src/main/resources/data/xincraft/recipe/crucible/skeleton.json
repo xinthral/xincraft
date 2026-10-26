@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:arrow",
+  "mob": "minecraft:skeleton"
+}

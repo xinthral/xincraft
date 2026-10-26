@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "umbra"
+  ],
+  "catalyst": "minecraft:golden_axe",
+  "mob": "minecraft:piglin_brute"
+}

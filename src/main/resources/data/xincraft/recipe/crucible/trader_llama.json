@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "terra"
+  ],
+  "catalyst": "minecraft:lead",
+  "mob": "minecraft:trader_llama",
+  "baby": true
+}

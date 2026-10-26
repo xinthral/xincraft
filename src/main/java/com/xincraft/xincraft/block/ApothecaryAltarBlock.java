@@ -69,10 +69,10 @@ public class ApothecaryAltarBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    // Flames and smoke rising from the basin, with the odd crackle
+    // Flames and smoke rising from the basin, with the odd crackle; none with a crucible sitting in it
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (!state.getValue(LIT)) {
+        if (!state.getValue(LIT) || level.getBlockState(pos.above()).getBlock() instanceof ApothecaryCrucibleBlock) {
             return;
         }
         double x = pos.getX() + 0.5;

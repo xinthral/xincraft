@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "terra"
+  ],
+  "catalyst": "minecraft:slime_ball",
+  "mob": "minecraft:slime"
+}

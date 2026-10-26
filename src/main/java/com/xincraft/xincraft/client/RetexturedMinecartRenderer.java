@@ -137,7 +137,7 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
             if (upgraded.link != null) {
                 LinkingBar.submit(upgraded.link, state.lightCoords, poseStack, collector);
             }
-            CellCage.submitEggs(upgraded.cage, poseStack, collector, state.lightCoords, state.outlineColor);
+            CellCage.submitEggs(upgraded.cage, poseStack, collector, state.lightCoords, state.outlineColor, camera);
         }
         super.submit(state, poseStack, new Retextured(collector, model, model.renderType(texture), state), camera);
     }

@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "lux"
+  ],
+  "catalyst": "minecraft:gold_ingot",
+  "mob": "minecraft:piglin",
+  "baby": true
+}

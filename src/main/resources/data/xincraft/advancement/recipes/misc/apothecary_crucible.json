@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_element_powder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#xincraft:element_powders"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "xincraft:apothecary_crucible"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_element_powder"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "xincraft:apothecary_crucible"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "umbra"
+  ],
+  "catalyst": "minecraft:wet_sponge",
+  "mob": "minecraft:elder_guardian"
+}

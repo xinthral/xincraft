@@ -9,4 +9,9 @@ public interface UpgradableCart {
     default boolean accepts(CartUpgrade upgrade) {
         return upgrade.fits().isEmpty() || upgrade.fits().stream().anyMatch(type -> type.isInstance(this));
     }
+
+    // Whether a mob filter (item.MobFilterItem) can be fitted, to choose which mobs come aboard
+    default boolean acceptsFilter() {
+        return false;
+    }
 }

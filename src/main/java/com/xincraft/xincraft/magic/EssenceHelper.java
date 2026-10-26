@@ -3,9 +3,12 @@ package com.xincraft.xincraft.magic;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-// Finding and drawing from essence reservoirs around a point, for the ritual multiblock to come
+// Finding, drawing from and filling essence reservoirs around a point (the apothecary altar fills
+// them; the apothecary crucible draws on them)
 public final class EssenceHelper {
     // Every loaded reservoir, of any element, within radius blocks of center (a cube)
     public static List<EssenceReservoir> findReservoirs(Level level, BlockPos center, int radius) {
@@ -71,6 +74,15 @@ public final class EssenceHelper {
             }
         }
         return filled;
+    }
+
+    // A line of the element's dust between two points, showing essence flowing along it
+    public static void stream(ServerLevel level, Element element, Vec3 from, Vec3 to) {
+        int steps = Math.max(1, (int) (from.distanceTo(to) * 4));
+        for (int i = 0; i <= steps; i++) {
+            Vec3 point = from.lerp(to, i / (double) steps);
+            level.sendParticles(element.particle(), point.x, point.y, point.z, 1, 0.0, 0.0, 0.0, 0.0);
+        }
     }
 
     private EssenceHelper() {}

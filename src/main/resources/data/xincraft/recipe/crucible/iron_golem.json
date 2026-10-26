@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "terra"
+  ],
+  "catalyst": "minecraft:iron_ingot",
+  "mob": "minecraft:iron_golem"
+}

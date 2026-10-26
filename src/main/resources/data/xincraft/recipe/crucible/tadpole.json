@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "aqua"
+  ],
+  "catalyst": "minecraft:tadpole_bucket",
+  "mob": "minecraft:tadpole"
+}

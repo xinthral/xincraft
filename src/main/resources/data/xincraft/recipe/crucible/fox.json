@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:sweet_berries",
+  "mob": "minecraft:fox",
+  "baby": true
+}

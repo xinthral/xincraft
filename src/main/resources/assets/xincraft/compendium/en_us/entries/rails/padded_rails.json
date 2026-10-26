@@ -1,0 +1,52 @@
+{
+  "title": "Padded Rails",
+  "icon": "xincraft:white_padded_rail",
+  "category": "rails",
+  "sort": 1,
+  "items": [
+    "xincraft:white_padded_rail",
+    "xincraft:orange_padded_rail",
+    "xincraft:magenta_padded_rail",
+    "xincraft:light_blue_padded_rail",
+    "xincraft:yellow_padded_rail",
+    "xincraft:lime_padded_rail",
+    "xincraft:pink_padded_rail",
+    "xincraft:gray_padded_rail",
+    "xincraft:light_gray_padded_rail",
+    "xincraft:cyan_padded_rail",
+    "xincraft:purple_padded_rail",
+    "xincraft:blue_padded_rail",
+    "xincraft:brown_padded_rail",
+    "xincraft:green_padded_rail",
+    "xincraft:red_padded_rail",
+    "xincraft:black_padded_rail",
+    "xincraft:white_padded_powered_rail",
+    "xincraft:orange_padded_powered_rail",
+    "xincraft:magenta_padded_powered_rail",
+    "xincraft:light_blue_padded_powered_rail",
+    "xincraft:yellow_padded_powered_rail",
+    "xincraft:lime_padded_powered_rail",
+    "xincraft:pink_padded_powered_rail",
+    "xincraft:gray_padded_powered_rail",
+    "xincraft:light_gray_padded_powered_rail",
+    "xincraft:cyan_padded_powered_rail",
+    "xincraft:purple_padded_powered_rail",
+    "xincraft:blue_padded_powered_rail",
+    "xincraft:brown_padded_powered_rail",
+    "xincraft:green_padded_powered_rail",
+    "xincraft:red_padded_powered_rail",
+    "xincraft:black_padded_powered_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:white_padded_rail",
+      "text": "Two wool of the same colour and a rail. Carts roll over them much more quietly, the sound fading smoothly on and off a padded stretch. 16 colours, each working exactly like a normal rail."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:white_padded_powered_rail",
+      "text": "Padded powered rails: the same muffling on a powered rail, boosting and braking as usual."
+    }
+  ]
+}

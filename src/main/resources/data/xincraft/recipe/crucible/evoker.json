@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "umbra"
+  ],
+  "catalyst": "minecraft:totem_of_undying",
+  "mob": "minecraft:evoker"
+}

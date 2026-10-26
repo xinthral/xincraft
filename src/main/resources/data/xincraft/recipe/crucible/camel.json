@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "terra"
+  ],
+  "catalyst": "minecraft:cactus",
+  "mob": "minecraft:camel",
+  "baby": true
+}

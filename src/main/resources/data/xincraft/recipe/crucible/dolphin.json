@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "aqua"
+  ],
+  "catalyst": "minecraft:heart_of_the_sea",
+  "mob": "minecraft:dolphin",
+  "baby": true
+}

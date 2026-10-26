@@ -1,0 +1,6 @@
+{
+  "title": "Transport",
+  "icon": "xincraft:locomotive_cart",
+  "sort": 1,
+  "description": "Minecarts and boats that drive themselves, tow trains, carry passengers and cargo, and follow courses on their own."
+}

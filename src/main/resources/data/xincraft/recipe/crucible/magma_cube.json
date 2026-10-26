@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "ignis"
+  ],
+  "catalyst": "minecraft:magma_cream",
+  "mob": "minecraft:magma_cube"
+}

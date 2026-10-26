@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "umbra"
+  ],
+  "catalyst": "minecraft:gunpowder",
+  "mob": "minecraft:creeper"
+}

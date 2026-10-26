@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "lux"
+  ],
+  "catalyst": "minecraft:honeycomb",
+  "mob": "minecraft:bee",
+  "baby": true
+}

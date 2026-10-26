@@ -2,6 +2,7 @@ package com.xincraft.xincraft.registry;
 
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.inventory.ApothecaryAltarMenu;
+import com.xincraft.xincraft.inventory.ApothecaryCrucibleMenu;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
 import com.xincraft.xincraft.inventory.TurbineMenu;
 import net.minecraft.world.flag.FeatureFlags;
@@ -23,6 +24,9 @@ public final class ModMenuTypes {
 
     public static final RegistryObject<MenuType<ApothecaryAltarMenu>> APOTHECARY_ALTAR = MENU_TYPES.register("apothecary_altar",
         () -> new MenuType<>(ApothecaryAltarMenu::new, FeatureFlags.VANILLA_SET));
+
+    public static final RegistryObject<MenuType<ApothecaryCrucibleMenu>> APOTHECARY_CRUCIBLE = MENU_TYPES.register("apothecary_crucible",
+        () -> new MenuType<>(ApothecaryCrucibleMenu::new, FeatureFlags.VANILLA_SET));
 
     private ModMenuTypes() {}
 }

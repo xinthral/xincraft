@@ -3,6 +3,7 @@ package com.xincraft.xincraft.registry;
 import java.util.UUID;
 import com.mojang.serialization.Codec;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.item.MobFilterContents;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
@@ -35,6 +36,10 @@ public final class ModDataComponents {
     // The buoy a linking bar was used on first; using it on a second buoy links the two
     public static final RegistryObject<DataComponentType<GlobalPos>> LINKING_BAR_BUOY = COMPONENTS.register("linking_bar_buoy",
         () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
+
+    // The mobs inscribed on a mob filter (see item.MobFilterItem)
+    public static final RegistryObject<DataComponentType<MobFilterContents>> MOB_FILTER = COMPONENTS.register("mob_filter",
+        () -> DataComponentType.<MobFilterContents>builder().persistent(MobFilterContents.CODEC).networkSynchronized(MobFilterContents.STREAM_CODEC).build());
 
     private ModDataComponents() {}
 }

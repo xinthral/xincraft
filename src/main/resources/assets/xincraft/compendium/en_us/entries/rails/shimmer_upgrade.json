@@ -1,0 +1,19 @@
+{
+  "title": "Shimmer Upgrade",
+  "icon": "xincraft:shimmer_upgrade",
+  "category": "rails",
+  "also": [
+    "boats"
+  ],
+  "sort": 33,
+  "items": [
+    "xincraft:shimmer_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:shimmer_upgrade",
+      "text": "**Fits:** ender minecart, locomotive, carriage, motorboats, ferry.\n\nWhoever's riding is **invisible**, players and mobs alike, until a few seconds after they get out. Now and then a faint pink glint gives them away."
+    }
+  ]
+}

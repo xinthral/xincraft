@@ -1,0 +1,16 @@
+{
+  "title": "Speed Upgrade",
+  "icon": "xincraft:speed_upgrade",
+  "category": "boats",
+  "sort": 13,
+  "items": [
+    "xincraft:speed_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:speed_upgrade",
+      "text": "**Fits:** motorboats.\n\nCruises **50% faster**, burning fuel (or energy) twice as fast."
+    }
+  ]
+}

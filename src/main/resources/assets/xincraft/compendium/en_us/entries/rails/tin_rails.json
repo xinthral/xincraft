@@ -1,0 +1,22 @@
+{
+  "title": "Tin Rails",
+  "icon": "xincraft:tin_rail",
+  "category": "rails",
+  "sort": 0,
+  "items": [
+    "xincraft:tin_rail",
+    "xincraft:tin_powered_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:tin_rail",
+      "text": "A cart on straight tin rails, slopes included, can travel **twice as fast** (configurable). Back on ordinary rails it's limited to normal speed."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:tin_powered_rail",
+      "text": "Boosts and brakes like a powered rail. Space them along a tin line so carts build up to and hold the higher speed. Carts ease down a block before each corner and speed back up after."
+    }
+  ]
+}

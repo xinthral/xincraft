@@ -1,0 +1,25 @@
+{
+  "title": "Glowing Leaves",
+  "icon": "xincraft:exotic_pollen",
+  "category": "natural",
+  "sort": 26,
+  "blocks": [
+    "xincraft:glowing_oak_leaves",
+    "xincraft:glowing_spruce_leaves",
+    "xincraft:glowing_birch_leaves",
+    "xincraft:glowing_jungle_leaves",
+    "xincraft:glowing_acacia_leaves",
+    "xincraft:glowing_cherry_leaves",
+    "xincraft:glowing_dark_oak_leaves",
+    "xincraft:glowing_pale_oak_leaves",
+    "xincraft:glowing_mangrove_leaves",
+    "xincraft:glowing_azalea_leaves",
+    "xincraft:glowing_flowering_azalea_leaves"
+  ],
+  "pages": [
+    {
+      "type": "text",
+      "text": "Right-click any vanilla **leaves** with [[exotic_pollen]] to make them glow faintly (light 7), one pollen per block.\n\nThey look and behave exactly like the leaves they came from: they decay, and drop saplings, sticks and apples. Sheared or Silk Touched, they drop ordinary leaves, so the glow stays put."
+    }
+  ]
+}

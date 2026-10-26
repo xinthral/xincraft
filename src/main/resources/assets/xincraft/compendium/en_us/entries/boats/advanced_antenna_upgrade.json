@@ -1,0 +1,16 @@
+{
+  "title": "Advanced Antenna Upgrade",
+  "icon": "xincraft:advanced_antenna_upgrade",
+  "category": "boats",
+  "sort": 11,
+  "items": [
+    "xincraft:advanced_antenna_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:advanced_antenna_upgrade",
+      "text": "**Fits:** motorboats with the [[rc_upgrade]], over it.\n\nExtends the mast like a car aerial so the boat can follow legs of up to **64 blocks** between advanced buoys."
+    }
+  ]
+}

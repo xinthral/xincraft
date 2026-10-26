@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:iron_axe",
+  "mob": "minecraft:vindicator"
+}

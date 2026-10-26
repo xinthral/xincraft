@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "aqua"
+  ],
+  "catalyst": "minecraft:snowball",
+  "mob": "minecraft:snow_golem"
+}

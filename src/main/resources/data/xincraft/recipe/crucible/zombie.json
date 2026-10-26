@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:rotten_flesh",
+  "mob": "minecraft:zombie",
+  "baby": true
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "F": "xincraft:mob_filter"
+  },
+  "pattern": [
+    " A ",
+    "AFA",
+    " A "
+  ],
+  "result": {
+    "id": "xincraft:advanced_mob_filter",
+    "count": 1
+  }
+}

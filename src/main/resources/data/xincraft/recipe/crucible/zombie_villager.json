@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "umbra"
+  ],
+  "catalyst": "minecraft:golden_apple",
+  "mob": "minecraft:zombie_villager",
+  "baby": true
+}

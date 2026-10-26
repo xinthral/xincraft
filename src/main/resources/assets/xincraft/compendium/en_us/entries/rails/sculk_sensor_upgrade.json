@@ -1,0 +1,19 @@
+{
+  "title": "Sculk Sensor Upgrade",
+  "icon": "xincraft:sculk_sensor_upgrade",
+  "category": "rails",
+  "also": [
+    "boats"
+  ],
+  "sort": 31,
+  "items": [
+    "xincraft:sculk_sensor_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:sculk_sensor_upgrade",
+      "text": "**Fits:** [[jingle_cart]], [[party_boat]].\n\nThe music only plays while a player is within 32 blocks."
+    }
+  ]
+}

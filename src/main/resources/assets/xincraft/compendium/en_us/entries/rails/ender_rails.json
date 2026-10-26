@@ -1,0 +1,24 @@
+{
+  "title": "Ender Rails",
+  "icon": "xincraft:ender_rail",
+  "category": "rails",
+  "sort": 5,
+  "items": [
+    "xincraft:ender_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:ender_rail",
+      "text": "A linked pair teleports an [[ender_minecart]] and its rider from one to the other, keeping its speed."
+    },
+    {
+      "type": "text",
+      "text": "**Linking:** place one rail; hold another and right-click the placed one when it sparkles. The held rail is now **attuned** (its tooltip shows where). Place it to link the pair. Linked rails have **lit** eyes.\n\nSame dimension, within 64 blocks. Each rail links to one other; breaking either unlinks both."
+    },
+    {
+      "type": "text",
+      "text": "**Teleporting:** a moving ender minecart on a linked rail jumps to its partner, keeping speed, and turns **right** if the partner runs crosswise. It then waits 3 seconds before teleporting again. A stopped cart stays put.\n\nOther minecarts roll over unless the config allows them."
+    }
+  ]
+}

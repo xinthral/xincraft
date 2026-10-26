@@ -1,0 +1,24 @@
+{
+  "title": "Inspector Rail",
+  "icon": "xincraft:inspector_rail",
+  "category": "rails",
+  "sort": 4,
+  "items": [
+    "xincraft:inspector_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:inspector_rail",
+      "text": "A detector rail whose signal strength depends on the cart on it, to sort carts with comparators or dust."
+    },
+    {
+      "type": "text",
+      "text": "**Signals:**\nMinecart, empty carriage: 1\nCarriage with a rider: 2\nHopper minecart: 3\nChest or furnace minecart: 6\nLocomotive: 9\nEnder minecart: 12\nTNT minecart: 15\nFreight cart: 1 (empty) to 15 (full)\nOther carts: 0"
+    },
+    {
+      "type": "text",
+      "text": "Add carts from other mods with the entity type tags xincraft:inspector_rail_signal/1 to /15.\n\nLike a detector rail it strongly powers the block below, powers powered rails beside it, and holds its signal a second after the cart leaves."
+    }
+  ]
+}

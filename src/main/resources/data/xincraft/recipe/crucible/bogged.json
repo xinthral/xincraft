@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "umbra"
+  ],
+  "catalyst": "minecraft:brown_mushroom",
+  "mob": "minecraft:bogged"
+}

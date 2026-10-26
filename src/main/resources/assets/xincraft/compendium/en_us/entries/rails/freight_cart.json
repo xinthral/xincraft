@@ -1,0 +1,20 @@
+{
+  "title": "Freight Cart",
+  "icon": "xincraft:freight_cart",
+  "category": "rails",
+  "sort": 14,
+  "items": [
+    "xincraft:freight_cart"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:freight_cart",
+      "text": "A cart carrying a **shulker box**: 27 slots, opened with a right-click."
+    },
+    {
+      "type": "text",
+      "text": "**Breaking it keeps everything inside**, shown in the item's tooltip, and placing it brings them back. Like a shulker box it can't hold shulker boxes or other freight carts.\n\nHoppers load and unload it. An [[inspector_rail]] signals how full it is, from 1 to 15. Hitch it into a train with a [[linking_bar]]."
+    }
+  ]
+}

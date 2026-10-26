@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "umbra"
+  ],
+  "catalyst": "minecraft:gold_nugget",
+  "mob": "minecraft:zombified_piglin",
+  "baby": true
+}

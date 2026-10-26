@@ -10,7 +10,8 @@ Xincraft Changelog
  - Cell Upgrade: puts a cage of iron bars around a carriage or ferry, which then carries mobs,
    hostile ones included, with their AI off; caged undead don't burn in sunlight and endermen
    can't teleport out. Right-click to let one out, and it wakes 1.5 seconds later; tie a lead on
-   first and it comes out leashed. A caged mob is shown as its spinning spawn egg
+   first and it comes out leashed. A caged mob is shown as its spinning spawn egg, labelled with
+   its name when seen through rose-tinted glasses
  - Reinforced Cage Upgrade: fitted over the cell, rebuilds it as an obsidian-framed glass cage
    that holds any mob but the ender dragon, wardens and withers included
  - Freight Cart: a minecart carrying a shulker box; 27 slots, and breaking it keeps the contents
@@ -27,6 +28,17 @@ Xincraft Changelog
    stopping if it runs aground; rose-tinted glasses show the courses and start and stop RC boats
  - Advanced Buoys link up to 64 blocks apart, and the Advanced Antenna Upgrade extends the RC
    upgrade's mast so a motorboat can follow those long legs
+ - Apothecary Crucible: sits on an apothecary altar and inscribes mobs onto mob filters from two
+   elemental powders and a catalyst item, drawing essence of every other element from the flora
+   around the altar; swap a powder for Vita to inscribe the baby. Recipes are data-driven
+ - Mob Filters: fitted to a carriage or ferry, only the mobs inscribed on them come aboard. The
+   Mob Filter holds 2 mobs and the Advanced Mob Filter 8, telling babies and kin apart; the Fuzzy
+   Mob Filter holds 8 and lets through any age and kin. Wash in a water cauldron to wipe
+ - Xincraft Compendium: an in-game guide book with an entry for everything in the mod, grouped
+   into Magic (Natural, Metallurgic) and Transport (Rails, Boats). Shows the server's live
+   recipes, including every crucible recipe, and has search, bookmarks and a look-up key (G)
+   that opens the entry for the hovered item or the block or vehicle in view. Crafted from a
+   book and any elemental powder, or a book and a minecart frame
 
 1.18.0
  - Party Boat: a bronze-lined motorboat with a jukebox; plays its disc while on the move, and

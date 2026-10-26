@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "terra"
+  ],
+  "catalyst": "minecraft:turtle_scute",
+  "mob": "minecraft:turtle",
+  "baby": true
+}

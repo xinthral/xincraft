@@ -1,0 +1,16 @@
+{
+  "title": "Mortar and Pestle",
+  "icon": "xincraft:mortar_and_pestle",
+  "category": "natural",
+  "sort": 0,
+  "items": [
+    "xincraft:mortar_and_pestle"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:mortar_and_pestle",
+      "text": "Grinds flowers and vines into [[elemental_powders|powders]] in the crafting grid. It isn't used up: it stays in the grid and wears down by one per grind, lasting 64."
+    }
+  ]
+}

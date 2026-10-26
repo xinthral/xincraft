@@ -1,0 +1,23 @@
+{
+  "title": "Rose-Tinted Glasses",
+  "icon": "xincraft:rose_tinted_glasses",
+  "category": "natural",
+  "also": [
+    "boats"
+  ],
+  "sort": 6,
+  "items": [
+    "xincraft:rose_tinted_glasses"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:rose_tinted_glasses",
+      "text": "Worn on your head or held in hand."
+    },
+    {
+      "type": "text",
+      "text": "**Flora:** look at an elemental flora to read its essence, or at an [[apothecary_altar]] to see every flora in its reach, element by element.\n\n**Buoys:** see the links between [[buoys]] within 48 blocks: **yellow** for a complete loop, **red** for a course with an end. Worn, they tint your view rose.\n\n**Cells:** a mob in a [[cell_upgrade|cell]] is labelled with its name, as a name tag would show it.\n\n**RC boats:** right-click a motorboat with the [[rc_upgrade]] on a course to start or stop it."
+    }
+  ]
+}

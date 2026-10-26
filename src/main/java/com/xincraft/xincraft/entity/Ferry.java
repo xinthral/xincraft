@@ -24,7 +24,8 @@ import org.jspecify.annotations.Nullable;
 // The carriage's boat: a passenger raft, seating two, for hitching behind a motorboat with a linking
 // bar (see LinkedTransport). Its passengers ride but don't paddle or steer, so it goes where it's
 // towed and otherwise drifts. Like the carriage, it won't take hostile mobs aboard unless it has the
-// cell upgrade, which carries them caged (see MobCell). Takes upgrades (see CartUpgrades).
+// cell upgrade, which carries them caged (see MobCell). Takes upgrades (see CartUpgrades), and a mob
+// filter, which lets only the mobs on it aboard.
 public class Ferry extends AbstractBoat implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Ferry.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Ferry.class, EntityDataSerializers.INT);
@@ -53,6 +54,11 @@ public class Ferry extends AbstractBoat implements UpgradableCart, LinkableTrans
     @Override
     public LinkedTransport transport() {
         return transport;
+    }
+
+    @Override
+    public boolean acceptsFilter() {
+        return true;
     }
 
     // As vanilla's raft

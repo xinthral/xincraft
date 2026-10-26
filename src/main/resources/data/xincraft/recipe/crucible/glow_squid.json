@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "lux"
+  ],
+  "catalyst": "minecraft:glow_ink_sac",
+  "mob": "minecraft:glow_squid",
+  "baby": true
+}

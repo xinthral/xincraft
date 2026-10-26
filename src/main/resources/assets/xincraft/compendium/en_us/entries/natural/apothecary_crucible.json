@@ -1,0 +1,32 @@
+{
+  "title": "Apothecary Crucible",
+  "icon": "xincraft:apothecary_crucible",
+  "category": "natural",
+  "sort": 4,
+  "items": [
+    "xincraft:apothecary_crucible"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:apothecary_crucible",
+      "text": "Sits on top of an [[apothecary_altar]] (nowhere else) and inscribes mobs onto [[mob_filters|mob filters]]. Like a crafting table it keeps nothing."
+    },
+    {
+      "type": "text",
+      "text": "**Slots:** a powder in each top corner, a **catalyst** in the middle, a filter at the bottom. The output is the same filter with the mob added.\n\n**Nature's balance:** the altar needn't be lit, but its flora must hold essence: for each powder burnt, **1 essence of every other element**. Aer + Terra draws 2 each of Aqua, Ignis, Vita, Lux and Umbra."
+    },
+    {
+      "type": "text",
+      "text": "**Babies:** swap either powder for **Vita** to inscribe the baby, as long as the mob has one (✿ in the list). If the recipe has **Umbra**, Vita must replace the Umbra.\n\n**The screen:** the pips light for the elements drawn on and outline red when the flora are short. The filter slot glows red when the filter is full or already lists the mob. Hover the empty output to see what's missing."
+    },
+    {
+      "type": "crucible",
+      "mob": "minecraft:chicken",
+      "text": "Aer + Terra + a feather inscribes a Chicken; Aer + Vita + a feather a Baby Chicken."
+    },
+    {
+      "type": "crucible_index"
+    }
+  ]
+}

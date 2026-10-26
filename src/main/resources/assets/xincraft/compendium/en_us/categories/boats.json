@@ -1,0 +1,7 @@
+{
+  "title": "Boats",
+  "icon": "xincraft:oak_motorboat",
+  "parent": "transport",
+  "sort": 1,
+  "description": "Motorboats, the boats they tow, and the buoys that lay out their courses."
+}

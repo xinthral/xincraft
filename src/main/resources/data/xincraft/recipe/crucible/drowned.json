@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "umbra"
+  ],
+  "catalyst": "minecraft:copper_ingot",
+  "mob": "minecraft:drowned",
+  "baby": true
+}

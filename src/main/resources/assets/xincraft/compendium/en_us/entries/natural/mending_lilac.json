@@ -1,0 +1,18 @@
+{
+  "title": "Mending Lilac",
+  "icon": "xincraft:mending_lilac",
+  "category": "natural",
+  "sort": 22,
+  "items": [
+    "xincraft:mending_lilac"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:mending_lilac"
+      ],
+      "text": "Grown from a lily of the valley with [[exotic_pollen]]. Gives **Regeneration I** to players, pets and peaceful mobs within 8 blocks, but not hostile mobs, refreshed every 2 seconds. Several don't stack.\n\nCrafts into magenta dye."
+    }
+  ]
+}

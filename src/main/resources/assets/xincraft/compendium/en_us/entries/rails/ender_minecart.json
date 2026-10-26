@@ -1,0 +1,16 @@
+{
+  "title": "Ender Minecart",
+  "icon": "xincraft:ender_minecart",
+  "category": "rails",
+  "sort": 11,
+  "items": [
+    "xincraft:ender_minecart"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:ender_minecart",
+      "text": "A rideable cart on ender wheels, the only one that teleports on [[ender_rails]] (unless the config allows others). It can't be linked into a train: a train can't teleport together."
+    }
+  ]
+}

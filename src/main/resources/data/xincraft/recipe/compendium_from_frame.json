@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "xincraft:minecart_frame"
+  ],
+  "result": {
+    "id": "xincraft:compendium",
+    "count": 1
+  }
+}

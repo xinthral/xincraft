@@ -1,0 +1,32 @@
+{
+  "title": "Bronze",
+  "icon": "xincraft:bronze_ingot",
+  "category": "metallurgic",
+  "sort": 1,
+  "items": [
+    "xincraft:raw_bronze",
+    "xincraft:bronze_ingot",
+    "xincraft:bronze_block"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:raw_bronze",
+        "xincraft:bronze_ingot",
+        "xincraft:bronze_block"
+      ],
+      "text": "An alloy of copper and tin, a muted golden orange. **3 raw copper + 1 raw tin** make 4 raw bronze, which smelts into bronze ingots; 9 make a block, with copper's polished shine."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:raw_bronze",
+      "text": ""
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:bronze_ingot_from_smelting_raw_bronze",
+      "text": ""
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "terra",
+    "terra"
+  ],
+  "catalyst": "minecraft:porkchop",
+  "mob": "minecraft:pig",
+  "baby": true
+}

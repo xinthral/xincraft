@@ -1,0 +1,24 @@
+{
+  "title": "Locomotive Cart",
+  "icon": "xincraft:locomotive_cart",
+  "category": "rails",
+  "sort": 12,
+  "items": [
+    "xincraft:locomotive_cart"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:locomotive_cart",
+      "text": "A rideable cart with its own engine. Only **players and villagers** ride it."
+    },
+    {
+      "type": "text",
+      "text": "**Inventory:** shift + right-click, or your inventory key while riding. A **fuel slot** (any furnace fuel, burning 8 times as long) and a **storage slot**. Hoppers above the track load it.\n\n**Driving:** while stopped, press a movement key to set off. It keeps going round curves and up slopes while it has fuel."
+    },
+    {
+      "type": "text",
+      "text": "**Stopping:** an unpowered powered rail stops it; power the rail to go again.\n\n**Handbrake:** hold **jump** to brake to a stop, train and all.\n\n**Towing:** hitch up to 3 carts behind it with a [[linking_bar]].\n\nIt only lights fuel while trying to move. See also the [[energy_upgrade]]."
+    }
+  ]
+}

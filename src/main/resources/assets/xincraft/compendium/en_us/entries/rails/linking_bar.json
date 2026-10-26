@@ -1,0 +1,27 @@
+{
+  "title": "Linking Bar",
+  "icon": "xincraft:linking_bar",
+  "category": "rails",
+  "also": [
+    "boats"
+  ],
+  "sort": 16,
+  "items": [
+    "xincraft:linking_bar"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:linking_bar",
+      "text": "Right-click one vehicle, then the other, to hitch them. The bar glints between clicks; click the same one twice to cancel."
+    },
+    {
+      "type": "text",
+      "text": "**Trains** link in a line, each to one ahead and one behind, led by a [[locomotive_cart]] (carts) or a [[motorboats|motorboat]] (boats), towing **up to 3**. Carts and boats can't mix. The [[ender_minecart]] and vanilla carts can't link.\n\nCarts link within about 3 blocks and are held just under 2 apart; boats within 4, held 2½ apart."
+    },
+    {
+      "type": "text",
+      "text": "**Unhitching:** shift + right-click a vehicle with the bar to unhitch it (and those behind) from the one ahead. Breaking a vehicle, or a link pulled too far, drops the bars.\n\nCarts are joined by bronze drawbars that pivot through corners, so trains never jam.\n\nThe same bar links [[buoys]]."
+    }
+  ]
+}

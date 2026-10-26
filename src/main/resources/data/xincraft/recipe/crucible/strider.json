@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "ignis"
+  ],
+  "catalyst": "minecraft:warped_fungus",
+  "mob": "minecraft:strider",
+  "baby": true
+}

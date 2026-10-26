@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "umbra"
+  ],
+  "catalyst": "minecraft:cactus",
+  "mob": "minecraft:camel_husk"
+}

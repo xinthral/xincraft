@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "aer"
+  ],
+  "catalyst": "minecraft:breeze_rod",
+  "mob": "minecraft:breeze"
+}

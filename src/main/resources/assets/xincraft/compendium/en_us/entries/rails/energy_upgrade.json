@@ -1,0 +1,24 @@
+{
+  "title": "Energy Upgrade",
+  "icon": "xincraft:energy_upgrade",
+  "category": "rails",
+  "also": [
+    "boats",
+    "metallurgic"
+  ],
+  "sort": 32,
+  "items": [
+    "xincraft:energy_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:energy_upgrade",
+      "text": "**Fits:** [[locomotive_cart]], motorboats.\n\nA 100,000 FE battery: the engine runs only on it, using 20 FE per tick."
+    },
+    {
+      "type": "text",
+      "text": "**Fuel charges the battery** whenever it isn't full, so fuel lasts as long as before. Once full, it stops lighting fuel.\n\n**Charging:** a locomotive draws from a [[charging_rail]], or an energy block under the rail. A motorboat draws from energy blocks right next to it, like a [[heat_turbine|turbine]] on a dock.\n\nA red bar on the inventory screen shows the charge."
+    }
+  ]
+}

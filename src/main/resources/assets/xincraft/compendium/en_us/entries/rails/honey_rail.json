@@ -1,0 +1,20 @@
+{
+  "title": "Honey Rail",
+  "icon": "xincraft:honey_rail",
+  "category": "rails",
+  "sort": 2,
+  "items": [
+    "xincraft:honey_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:honey_rail",
+      "text": "Holds a cart at **half its top speed** (configurable): faster carts slow to it, slower ones are pushed up to it. No redstone needed. Use before sharp corners or through stations."
+    },
+    {
+      "type": "text",
+      "text": "Like powered rails, it slopes but doesn't curve. A cart stopped on one stays put until pushed. The bottles are given back when crafting."
+    }
+  ]
+}

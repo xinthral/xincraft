@@ -1,0 +1,49 @@
+{
+  "title": "Mob Filters",
+  "icon": "xincraft:mob_filter",
+  "category": "natural",
+  "also": [
+    "rails",
+    "boats"
+  ],
+  "sort": 5,
+  "items": [
+    "xincraft:mob_filter",
+    "xincraft:advanced_mob_filter",
+    "xincraft:fuzzy_mob_filter"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:mob_filter",
+        "xincraft:advanced_mob_filter",
+        "xincraft:fuzzy_mob_filter"
+      ],
+      "text": "Fitted to a [[carriage]] or [[ferry]], only the mobs inscribed on it come aboard. Players can always ride.\n\n**Mob Filter:** 2 mobs, exact.\n**Advanced:** 8 mobs, exact.\n**Fuzzy:** 8 mobs, any age and their kin."
+    },
+    {
+      "type": "text",
+      "text": "**Exact** means a Chicken isn't a Baby Chicken, and a Drowned isn't a Zombie. **Fuzzy** lets through babies and kin: zombies with husks, drowned and zombie villagers; skeletons with strays, bogged, parched and wither skeletons; horses with donkeys and mules; and so on.\n\n**Inscribe** in the [[apothecary_crucible]]; the tooltip lists the mobs."
+    },
+    {
+      "type": "text",
+      "text": "**Fitting:** right-click the vehicle with it; another filter swaps them. **Shears** snip the filter off before any upgrade, and breaking the vehicle drops it.\n\n**Wiping:** right-click a water cauldron with it to wash it blank.\n\nCrafting a filter into a bigger one gives a blank filter. The [[cell_upgrade|cell]] is still needed for hostile mobs."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:mob_filter",
+      "text": ""
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:advanced_mob_filter",
+      "text": ""
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:fuzzy_mob_filter",
+      "text": ""
+    }
+  ]
+}

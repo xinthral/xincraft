@@ -1,0 +1,16 @@
+{
+  "title": "Barge",
+  "icon": "xincraft:barge",
+  "category": "boats",
+  "sort": 3,
+  "items": [
+    "xincraft:barge"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:barge",
+      "text": "The [[freight_cart]]'s boat: an oak boat with a shulker box, 27 slots that **stay inside when broken**. Nobody rides it; it can't hold shulker boxes, freight carts or barges."
+    }
+  ]
+}

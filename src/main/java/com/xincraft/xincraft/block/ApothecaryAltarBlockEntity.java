@@ -205,13 +205,7 @@ public class ApothecaryAltarBlockEntity extends BaseContainerBlockEntity impleme
 
     // A line of the element's dust from the basin to the flora
     private void stream(ServerLevel level, Element element, BlockPos target) {
-        Vec3 from = Vec3.atCenterOf(worldPosition).add(0.0, 0.7, 0.0);
-        Vec3 to = Vec3.atCenterOf(target);
-        int steps = Math.max(1, (int) (from.distanceTo(to) * 4));
-        for (int i = 0; i <= steps; i++) {
-            Vec3 point = from.lerp(to, i / (double) steps);
-            level.sendParticles(element.particle(), point.x, point.y, point.z, 1, 0.0, 0.0, 0.0, 0.0);
-        }
+        EssenceHelper.stream(level, element, Vec3.atCenterOf(worldPosition).add(0.0, 0.7, 0.0), Vec3.atCenterOf(target));
     }
 
     // The container: a plant slot and a fuel slot

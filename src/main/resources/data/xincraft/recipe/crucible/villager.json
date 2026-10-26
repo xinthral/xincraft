@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "terra"
+  ],
+  "catalyst": "minecraft:emerald",
+  "mob": "minecraft:villager",
+  "baby": true
+}

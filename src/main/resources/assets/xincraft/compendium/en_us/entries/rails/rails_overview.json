@@ -1,0 +1,16 @@
+{
+  "title": "Rails and Carts",
+  "icon": "xincraft:tin_rail",
+  "category": "rails",
+  "sort": -1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "**Speeds:** carts run **twice as fast** on straight [[tin_rails]], ease down for corners, and are held at half speed on [[honey_rail|honey rails]]. [[bouncy_rail|Bouncy rails]] launch them by redstone strength.\n\n**Quiet:** [[padded_rails]] muffle carts.\n\n**Sorting:** the [[inspector_rail]] gives a signal by cart type."
+    },
+    {
+      "type": "text",
+      "text": "**Carts:** the [[minecart_frame]] is the base for the [[ender_minecart]] (rides [[ender_rails]]), [[locomotive_cart]] (drives itself and tows trains), [[jingle_cart]] (plays music), [[freight_cart]] (cargo) and [[carriage]] (passengers).\n\nPowered rail features, speeds and towing only work with the default minecart physics."
+    }
+  ]
+}

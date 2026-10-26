@@ -1,0 +1,16 @@
+{
+  "title": "Minecart Frame",
+  "icon": "xincraft:minecart_frame",
+  "category": "rails",
+  "sort": 10,
+  "items": [
+    "xincraft:minecart_frame"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:minecart_frame",
+      "text": "A bare tin frame in the minecart's shape, the base of Xincraft's carts: the [[ender_minecart]], [[locomotive_cart]], [[jingle_cart]], [[freight_cart]] and [[carriage]]."
+    }
+  ]
+}

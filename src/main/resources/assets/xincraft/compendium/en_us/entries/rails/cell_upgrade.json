@@ -1,0 +1,23 @@
+{
+  "title": "Cell Upgrade",
+  "icon": "xincraft:cell_upgrade",
+  "category": "rails",
+  "also": [
+    "boats"
+  ],
+  "sort": 34,
+  "items": [
+    "xincraft:cell_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:cell_upgrade",
+      "text": "**Fits:** [[carriage]], [[ferry]].\n\nA cage of iron bars that carries mobs, hostile ones too, with their **AI off**: they can't attack, shoot, explode or move. The mob shows as its spinning spawn egg; [[rose_tinted_glasses]] label it with the mob's name."
+    },
+    {
+      "type": "text",
+      "text": "Caged undead don't burn and endermen can't teleport out. Nothing caged can hurt anyone.\n\n**Right-click** to let the mob out; it stays harmless for 1.5 seconds.\n\n**Leads:** right-click with a lead to tie one ready, and a leashable mob comes out on it, held by you."
+    }
+  ]
+}

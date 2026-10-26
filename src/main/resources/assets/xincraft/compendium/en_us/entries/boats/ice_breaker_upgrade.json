@@ -1,0 +1,16 @@
+{
+  "title": "Ice Breaker Upgrade",
+  "icon": "xincraft:ice_breaker_upgrade",
+  "category": "boats",
+  "sort": 12,
+  "items": [
+    "xincraft:ice_breaker_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:ice_breaker_upgrade",
+      "text": "**Fits:** motorboats.\n\nBreaks the ice in front of the boat back into water, cutting through frozen rivers and lakes. Only while in water, so ice roads are safe."
+    }
+  ]
+}

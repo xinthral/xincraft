@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 // A rideable passenger minecart, lacquered and trimmed in bronze, for hitching into a locomotive's train
 // with a linking bar (see LinkedTransport). Otherwise an ordinary minecart. Takes upgrades (see
 // CartUpgrades). It won't take hostile mobs aboard unless it has the cell upgrade, which carries
-// them caged (see MobCell).
+// them caged (see MobCell), and with a mob filter fitted it only takes the mobs on it.
 public class Carriage extends Minecart implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
@@ -51,6 +51,11 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableTransp
     @Override
     public LinkedTransport transport() {
         return transport;
+    }
+
+    @Override
+    public boolean acceptsFilter() {
+        return true;
     }
 
     // The linking bar and upgrades first; then, with a mob in the cell, right-click lets it out

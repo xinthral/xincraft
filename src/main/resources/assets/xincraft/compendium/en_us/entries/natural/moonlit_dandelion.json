@@ -1,0 +1,18 @@
+{
+  "title": "Moonlit Dandelion",
+  "icon": "xincraft:moonlit_dandelion",
+  "category": "natural",
+  "sort": 24,
+  "items": [
+    "xincraft:moonlit_dandelion"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:moonlit_dandelion"
+      ],
+      "text": "Grown from a golden dandelion with [[exotic_pollen]]. Gives **Night Vision** to players within 8 blocks. Each dose lasts 15 seconds, so it doesn't flicker, and wears off about 15 seconds after you leave.\n\nCrafts into light gray dye."
+    }
+  ]
+}

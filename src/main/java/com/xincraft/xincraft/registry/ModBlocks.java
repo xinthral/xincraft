@@ -8,6 +8,7 @@ import java.util.function.Function;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.AdvancedBuoyBlock;
 import com.xincraft.xincraft.block.ApothecaryAltarBlock;
+import com.xincraft.xincraft.block.ApothecaryCrucibleBlock;
 import com.xincraft.xincraft.block.BuoyBlock;
 import com.xincraft.xincraft.block.HoneyRailBlock;
 import com.xincraft.xincraft.block.BouncyRailBlock;
@@ -310,6 +311,19 @@ public final class ModBlocks {
             .strength(2.0F, 6.0F)
             .requiresCorrectToolForDrops()
             .lightLevel(state -> state.getValue(ApothecaryAltarBlock.LIT) ? 10 : 0),
+        true
+    );
+
+    // Sits on the altar; inscribes mobs onto mob filters (block.ApothecaryCrucibleBlock)
+    public static final RegistryObject<Block> APOTHECARY_CRUCIBLE = registerBlock(
+        "apothecary_crucible",
+        ApothecaryCrucibleBlock::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.METAL)
+            .strength(2.0F)
+            .requiresCorrectToolForDrops()
+            .noOcclusion()
+            .pushReaction(PushReaction.DESTROY),
         true
     );
 

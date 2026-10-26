@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "umbra"
+  ],
+  "catalyst": "minecraft:ink_sac",
+  "mob": "minecraft:squid",
+  "baby": true
+}

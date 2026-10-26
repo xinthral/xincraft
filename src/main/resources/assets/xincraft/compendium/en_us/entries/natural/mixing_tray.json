@@ -1,0 +1,20 @@
+{
+  "title": "Mixing Tray",
+  "icon": "xincraft:mixing_tray",
+  "category": "natural",
+  "sort": 20,
+  "items": [
+    "xincraft:mixing_tray"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:mixing_tray",
+      "text": "Fills like a composter."
+    },
+    {
+      "type": "text",
+      "text": "1. **Right-click with a flower** to mash it in; each must be a **different** small flower.\n2. **Four flowers** fill the tray.\n3. **Add honeycomb**, by hand or thrown on. The mash turns to [[exotic_pollen|exotic pollen]].\n4. **Empty hand** takes the pollen.\n\nMashed flowers can't come back out. Breaking the tray drops finished pollen; a half-made mash is lost."
+    }
+  ]
+}

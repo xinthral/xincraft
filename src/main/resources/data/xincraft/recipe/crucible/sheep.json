@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "terra"
+  ],
+  "catalyst": "#minecraft:wool",
+  "mob": "minecraft:sheep",
+  "baby": true
+}

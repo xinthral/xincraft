@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "terra"
+  ],
+  "catalyst": "minecraft:packed_ice",
+  "mob": "minecraft:polar_bear",
+  "baby": true
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Shrieker Upgrade",
+  "icon": "xincraft:shrieker_upgrade",
+  "category": "rails",
+  "also": [
+    "boats"
+  ],
+  "sort": 30,
+  "items": [
+    "xincraft:shrieker_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:shrieker_upgrade",
+      "text": "**Fits:** any Xincraft cart, motorboats.\n\nClears the way: mobs and players in the vehicle's path are shoved aside with a shriek before it reaches them, so it never picks them up or slows for them."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "title": "RC Upgrade",
+  "icon": "xincraft:rc_upgrade",
+  "category": "boats",
+  "sort": 10,
+  "items": [
+    "xincraft:rc_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:rc_upgrade",
+      "text": "**Fits:** motorboats.\n\nA cruising motorboat within 2 blocks of a [[buoys|buoy]] link follows the course on its own, even with nobody aboard, taking gentle bends at full speed and **slowing before sharp turns**."
+    },
+    {
+      "type": "text",
+      "text": "It keeps going until the course ends, the fuel runs out or it runs aground. A rider can press back to stop. [[rose_tinted_glasses]] start and stop it on a course.\n\nA boat left on a loop laps it until its fuel runs out."
+    }
+  ]
+}

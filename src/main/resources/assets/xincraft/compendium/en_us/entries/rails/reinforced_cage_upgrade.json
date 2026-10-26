@@ -1,0 +1,19 @@
+{
+  "title": "Reinforced Cage Upgrade",
+  "icon": "xincraft:reinforced_cage_upgrade",
+  "category": "rails",
+  "also": [
+    "boats"
+  ],
+  "sort": 35,
+  "items": [
+    "xincraft:reinforced_cage_upgrade"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:reinforced_cage_upgrade",
+      "text": "**Fits:** a carriage or ferry with the [[cell_upgrade]], over it.\n\nAn obsidian-framed glass cage that holds **any mob but the ender dragon**, wardens and withers included. While empty it hauls in whatever mob it touches, even ones that won't ride, except mobs on a lead or just let out."
+    }
+  ]
+}

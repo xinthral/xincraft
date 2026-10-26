@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "umbra"
+  ],
+  "catalyst": "minecraft:ender_pearl",
+  "mob": "minecraft:enderman"
+}

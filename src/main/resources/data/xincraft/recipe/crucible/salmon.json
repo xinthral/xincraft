@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aqua",
+    "aqua"
+  ],
+  "catalyst": "minecraft:salmon",
+  "mob": "minecraft:salmon"
+}

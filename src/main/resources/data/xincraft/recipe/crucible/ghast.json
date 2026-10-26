@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "ignis"
+  ],
+  "catalyst": "minecraft:ghast_tear",
+  "mob": "minecraft:ghast"
+}

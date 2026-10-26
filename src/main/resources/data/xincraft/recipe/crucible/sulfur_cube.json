@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "terra"
+  ],
+  "catalyst": "minecraft:sulfur_cube_bucket",
+  "mob": "minecraft:sulfur_cube"
+}

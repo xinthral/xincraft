@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.xincraft.xincraft.item.CartUpgradeItem;
+import com.xincraft.xincraft.item.MobFilterItem;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,11 +26,16 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 // The upgrades fitted to one minecart, and what they do. Upgrades are fitted by using the upgrade
 // item on the cart and snipped off one at a time with shears, most recently fitted first; each can
 // be fitted once, and the cart drops them when broken. The installed set is synced to clients (as flags in an int the cart
 // defines) so they can show the upgrades on the cart.
+//
+// A carriage or ferry also takes a mob filter (item.MobFilterItem), kept apart from the upgrades
+// since it carries the mobs inscribed on it. Using another filter swaps them; shears snip the filter
+// off before any upgrade. Only the server needs it, to choose what comes aboard (see MobCell).
 public final class CartUpgrades {
     // How far ahead of the cart a shrieker clears the track, plus a little more the faster it goes
     private static final double SHRIEKER_REACH = 3.0;
@@ -52,6 +58,7 @@ public final class CartUpgrades {
     // Server side: the fitted upgrades in the order they went on, so shears take off the newest
     private final List<CartUpgrade> fitOrder = new ArrayList<>();
     private int shriekCooldown;
+    private ItemStack filter = ItemStack.EMPTY;
 
     public CartUpgrades(VehicleEntity cart, EntityDataAccessor<Integer> data) {
         this.cart = cart;
@@ -64,6 +71,11 @@ public final class CartUpgrades {
 
     public List<CartUpgrade> installed() {
         return Arrays.stream(CartUpgrade.values()).filter(this::has).toList();
+    }
+
+    // The fitted mob filter, if any
+    public @Nullable ItemStack filter() {
+        return filter.isEmpty() ? null : filter;
     }
 
     private int bits() {
@@ -104,22 +116,49 @@ public final class CartUpgrades {
             }
             return InteractionResult.SUCCESS;
         }
+        if (stack.getItem() instanceof MobFilterItem && owner.acceptsFilter()) {
+            if (server) {
+                ItemStack old = filter;
+                filter = stack.split(1);
+                if (!old.isEmpty()) {
+                    giveBack(player, old);
+                }
+                cart.playSound(SoundEvents.SMITHING_TABLE_USE, 1.0F, 1.2F);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        if (stack.is(Items.SHEARS) && !filter.isEmpty()) {
+            if (server) {
+                ItemStack removed = filter;
+                filter = ItemStack.EMPTY;
+                player.sendOverlayMessage(Component.translatable("message.xincraft.upgrade_removed", removed.getHoverName()));
+                giveBack(player, removed);
+                stack.hurtAndBreak(1, player, hand);
+                cart.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (stack.is(Items.SHEARS) && bits() != 0) {
-            if (server && cart.level() instanceof ServerLevel level) {
+            if (server) {
                 CartUpgrade last = newest();
                 set(bits() & ~last.bit());
                 fitOrder.remove(last);
                 ItemStack removed = new ItemStack(last.item());
                 player.sendOverlayMessage(Component.translatable("message.xincraft.upgrade_removed", removed.getHoverName()));
-                if (!player.getInventory().add(removed)) {
-                    cart.spawnAtLocation(level, removed);
-                }
+                giveBack(player, removed);
                 stack.hurtAndBreak(1, player, hand);
                 cart.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
             }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    // Into the player's inventory, or dropped at the cart if there's no room
+    private void giveBack(Player player, ItemStack stack) {
+        if (!player.getInventory().add(stack) && cart.level() instanceof ServerLevel level) {
+            cart.spawnAtLocation(level, stack);
+        }
     }
 
     // The most recently fitted upgrade still on the cart
@@ -158,12 +197,19 @@ public final class CartUpgrades {
         for (CartUpgrade upgrade : installed()) {
             cart.spawnAtLocation(level, new ItemStack(upgrade.item()));
         }
+        if (!filter.isEmpty()) {
+            cart.spawnAtLocation(level, filter);
+            filter = ItemStack.EMPTY;
+        }
     }
 
     public void save(ValueOutput output) {
         // In the order they were fitted
         newest();
         output.putString("Upgrades", fitOrder.stream().map(CartUpgrade::id).collect(Collectors.joining(",")));
+        if (!filter.isEmpty()) {
+            output.store("Filter", ItemStack.CODEC, filter);
+        }
     }
 
     public void load(ValueInput input) {
@@ -179,6 +225,7 @@ public final class CartUpgrades {
             }
         }
         set(bits);
+        filter = input.read("Filter", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     // With a shrieker, only other vehicles (minecarts, boats) can push this one: anything else bumping

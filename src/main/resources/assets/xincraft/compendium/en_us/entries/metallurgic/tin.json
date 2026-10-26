@@ -1,0 +1,35 @@
+{
+  "title": "Tin",
+  "icon": "xincraft:tin_ingot",
+  "category": "metallurgic",
+  "sort": 0,
+  "items": [
+    "xincraft:tin_ore",
+    "xincraft:deepslate_tin_ore",
+    "xincraft:raw_tin",
+    "xincraft:tin_ingot",
+    "xincraft:tin_block"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:tin_ore",
+        "xincraft:deepslate_tin_ore",
+        "xincraft:raw_tin",
+        "xincraft:tin_ingot",
+        "xincraft:tin_block"
+      ],
+      "text": "Tin ore generates in every Overworld biome, a little rarer than copper: up to 12 veins of up to 9 blocks per chunk, between Y -32 and 96, most common around Y 32. It needs a stone pickaxe and drops **raw tin** (more with Fortune)."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:tin_ingot_from_smelting_raw_tin",
+      "text": "Ore smelts straight to ingots too, and 9 ingots make a block."
+    },
+    {
+      "type": "text",
+      "text": "Tin ingots are an **armor trim material**, giving a dark, almost black gray trim.\n\nIf another mod already generates tin, turn Xincraft's ore off with tin.generateOre in the config."
+    }
+  ]
+}

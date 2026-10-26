@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "umbra"
+  ],
+  "catalyst": "minecraft:glowstone_dust",
+  "mob": "minecraft:witch"
+}

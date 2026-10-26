@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "lux"
+  ],
+  "catalyst": "minecraft:amethyst_shard",
+  "mob": "minecraft:allay"
+}

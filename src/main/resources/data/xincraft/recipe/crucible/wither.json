@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "umbra",
+    "umbra"
+  ],
+  "catalyst": "minecraft:nether_star",
+  "mob": "minecraft:wither"
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Metallurgic",
+  "icon": "xincraft:bronze_ingot",
+  "parent": "magic",
+  "sort": 1,
+  "description": "Tin from the earth, bronze from tin and copper: armor with set bonuses, a night-sighted spyglass, and turbines that burn fuel into Forge Energy."
+}

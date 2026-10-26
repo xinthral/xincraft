@@ -32,6 +32,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Tin Spyglass](#tin-spyglass)
 - [Exotic Flowers](#exotic-flowers)
 - [Nature Magic](#nature-magic)
+- [Xincraft Compendium](#xincraft-compendium)
 - [Configuration](#configuration)
 - [Building from source](#building-from-source)
 
@@ -362,7 +363,7 @@ A minecart carrying a **shulker box**, and working like one.
 
 ## Carriage and Linking Bar
 
-A **Carriage** is a passenger car for your locomotive: a rideable minecart in maroon lacquer with bronze trim and windows, a carpeted floor and wood-panelled walls. On its own it rides like an ordinary minecart, except that it **won't pick up hostile mobs** (it still picks up animals and other mobs); fit a [Cell Upgrade](#cart-upgrades) to carry those. A **Linking Bar** hitches it, or any other Xincraft cart, into a train behind a [Locomotive Cart](#locomotive-cart), so the locomotive pulls it along.
+A **Carriage** is a passenger car for your locomotive: a rideable minecart in maroon lacquer with bronze trim and windows, a carpeted floor and wood-panelled walls. On its own it rides like an ordinary minecart, except that it **won't pick up hostile mobs** (it still picks up animals and other mobs); fit a [Cell Upgrade](#cart-upgrades) to carry those. A [Mob Filter](#mob-filters) limits which mobs it takes. A **Linking Bar** hitches it, or any other Xincraft cart, into a train behind a [Locomotive Cart](#locomotive-cart), so the locomotive pulls it along.
 
 **Recipes:**
 
@@ -477,6 +478,7 @@ Marker buoys linked into courses that motorboats with the **RC Upgrade** follow 
 
 - **Wear them** (they go in the helmet slot) **or hold them** to see the links between buoys within 48 blocks, traced over the water. Worn, they also give your view a faint rose tint. A course is traced in **yellow**, like glowstone, when it makes a **complete loop** (every buoy linked to two others), and in **red**, like powered redstone, when it doesn't: it has an end.
 - **Look at an elemental flora** through them to read the essence it holds out of its capacity, or **at an Apothecary Altar** to see the flora within its reach, element by element: how many there are, and how much essence they hold out of how much they can.
+- **See who's in a cell:** a mob carried in a [Cell Upgrade](#cart-upgrades) shows as its spawn egg, and through the glasses the egg is labelled with the mob's name, as a name tag would show it (its custom name, if it has one), from up to 64 blocks away.
 - **Right-click a motorboat with the RC Upgrade** with the glasses in hand when it's on a course with nobody steering to **start** it cruising, and again to **stop** it. A motorboat left on a loop will lap it until its fuel runs out.
 
 ## Cart Upgrades
@@ -500,7 +502,7 @@ Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, jingl
 | RC Upgrade | Lightning Rod surrounded by 4 Tin Ingots (one on each side) | Motorboats | Follows [buoy](#buoys) courses on its own, even with nobody aboard, slowing for sharp turns. |
 | Advanced Antenna Upgrade | Lightning Rod surrounded by 4 Bronze Ingots (one on each side) | Motorboats with the RC Upgrade | Extends the RC Upgrade's mast like a car aerial, so the boat can follow the long legs, up to **64 blocks**, between [advanced buoys](#buoys). It has to go on after the RC Upgrade, and shears take it off first. |
 | Shimmer Upgrade | Tinted Glass surrounded by 4 Tin Ingots (one on each side) | Ender minecart, locomotive cart, carriage, motorboats, ferry | Makes whoever's riding **invisible** (players and mobs alike), wearing off a few seconds after they get out. Every few seconds, at random, a faint pink glint flickers where the rider is, the only thing that gives them away. The vehicle itself stays visible. |
-| Cell Upgrade | Iron Bars surrounded by 4 Tin Ingots (one on each side) | Carriage, ferry | Puts a low **cage of iron bars** around the carriage (or ferry), with the mob inside shown as its **spinning spawn egg** (a mob with no spawn egg shows as itself, standing out of the cage), and lets it pick up hostile mobs, which it otherwise won't. A mob it picks up (by rolling or floating into it, as any minecart or boat does) has its AI switched off with a clang, so it can't attack, shoot, explode or move while it's inside. The bars **shade it from the sun**, so zombies and skeletons don't burn, and **hold endermen in**: they can't teleport out, however they're hurt. Nothing in the cell can hurt anyone, even mobs like slimes that damage you just by touching you. **Right-click** the vehicle to let the mob out; it stays harmless for **1.5 seconds** after leaving, giving you time to step back, then gets its AI back. The same goes however it gets out: an activator rail, the vehicle breaking, or the upgrade being snipped off. **Leads:** right-click the vehicle (or the mob) with a lead to tie it ready, and the mob comes out of the cage already on the lead, held by you. This works for any mob that can be leashed, so not hostile mobs. If you're more than 12 blocks away when it comes out, the lead drops instead. With the cell empty, you can still ride it. |
+| Cell Upgrade | Iron Bars surrounded by 4 Tin Ingots (one on each side) | Carriage, ferry | Puts a low **cage of iron bars** around the carriage (or ferry), with the mob inside shown as its **spinning spawn egg** (a mob with no spawn egg shows as itself, standing out of the cage; [rose-tinted glasses](#rose-tinted-glasses) label the egg with the mob's name), and lets it pick up hostile mobs, which it otherwise won't. A mob it picks up (by rolling or floating into it, as any minecart or boat does) has its AI switched off with a clang, so it can't attack, shoot, explode or move while it's inside. The bars **shade it from the sun**, so zombies and skeletons don't burn, and **hold endermen in**: they can't teleport out, however they're hurt. Nothing in the cell can hurt anyone, even mobs like slimes that damage you just by touching you. **Right-click** the vehicle to let the mob out; it stays harmless for **1.5 seconds** after leaving, giving you time to step back, then gets its AI back. The same goes however it gets out: an activator rail, the vehicle breaking, or the upgrade being snipped off. **Leads:** right-click the vehicle (or the mob) with a lead to tie it ready, and the mob comes out of the cage already on the lead, held by you. This works for any mob that can be leashed, so not hostile mobs. If you're more than 12 blocks away when it comes out, the lead drops instead. With the cell empty, you can still ride it. |
 | Reinforced Cage Upgrade | Iron Bars surrounded by 4 Obsidian (one on each side) | Carriage or ferry with the Cell Upgrade | Rebuilds the cage as an **obsidian frame with a glass window** on each side, through which you can see the spinning egg, and it holds **any mob except the Ender Dragon**: wardens, withers, iron golems, giant slimes, phantoms and the rest. It hauls in whatever mob it touches while it's empty, even mobs that normally won't ride anything, but passes over mobs on a lead and ones you've just let out. It has to go on after the Cell Upgrade, and shears take it off first. Players can still ride normally. A mob with no spawn egg shows as itself, so a big one sticks out of the top. |
 
 > The shrieker, like the other powered features, only works with the default minecart physics.
@@ -637,6 +639,134 @@ The altar burns plants into elemental essence, which flows into the flora around
 - **Hoppers** put plants in from above and fuel in from the sides, and take empty buckets out from below.
 - Breaking the altar drops what's in it.
 
+### Apothecary Crucible
+
+**Recipe:** 3 elemental powders (any kind) along the top, a cauldron below the middle one (`PPP` / ` C `) → 1 Apothecary Crucible. Mine it with a pickaxe.
+
+The crucible **sits on top of an Apothecary Altar** (it can't be placed anywhere else, and breaks off if the altar goes) and inscribes mobs onto [Mob Filters](#mob-filters). Right-click it to open it. Like a crafting table it holds nothing: whatever you leave in it comes back to you when you close it.
+
+- **Slots:** an elemental powder in each top corner, a **catalyst** item in the middle, and a mob filter at the bottom. The output, on the right, is the same filter with the mob added; taking it uses up the powders, the catalyst and the original filter.
+- **Which mob:** the two powders and the catalyst together name the mob (see the table below). The powders can go in either corner.
+- **Babies:** Vita stands for youth, so no recipe uses it. For a mob that has babies, swap **either** of its powders for **Vita powder** and the same catalyst inscribes the **baby** instead: Aer + Terra + Feather is a Chicken, Aer + Vita + Feather a Baby Chicken. In a recipe with **Umbra**, though, Vita has to take the **Umbra's** place (life driving out death): Terra + Umbra + Rotten Flesh is a Zombie, and only Terra + Vita + Rotten Flesh a Baby Zombie.
+- **Nature's balance:** the altar doesn't have to be lit, but the flora around it (within the altar's reach) have to hold essence. For **each powder** burnt, the crucible draws **1 essence of every element that isn't one of the powders**. Aer + Terra draws 2 Aqua, 2 Ignis, 2 Vita, 2 Lux and 2 Umbra; Terra + Terra draws 2 of each of the other six. A stream of each element's colour flows from the flora drawn on to the crucible.
+- **The screen** shows a row of seven element pips: lit for the elements the powders will draw on, dim for the rest, and outlined in **red** when the flora around the altar are short of one. The **filter slot glows red** when the filter is full or already lists that mob, and then there's no output. Hover the empty output to see what's missing.
+
+The recipes are data-driven (`data/xincraft/recipe/crucible/<mob>.json`, type `xincraft:crucible`), so a data pack can change or add them. Undead kin with no item of their own share their living (or plainer) counterpart's catalyst, with Umbra among the powders:
+
+| Mob | Powders | Catalyst | Baby |
+| --- | --- | --- | --- |
+| Chicken | Aer + Terra | Feather | ✓ |
+| Cow | Terra + Terra | Raw Beef | ✓ |
+| Mooshroom | Terra + Umbra | Red Mushroom | ✓ |
+| Pig | Terra + Terra | Raw Porkchop | ✓ |
+| Sheep | Aer + Terra | Any Wool | ✓ |
+| Rabbit | Terra + Terra | Rabbit's Foot | ✓ |
+| Goat | Aer + Terra | Goat Horn | ✓ |
+| Horse | Aer + Terra | Golden Carrot | ✓ |
+| Donkey | Terra + Terra | Chest | ✓ |
+| Zombie Horse | Terra + Umbra | Golden Carrot | |
+| Skeleton Horse | Aer + Umbra | Golden Carrot | |
+| Mule | Terra + Umbra | Hay Bale | ✓ |
+| Llama | Aer + Terra | Any Carpet | ✓ |
+| Trader Llama | Lux + Terra | Lead | ✓ |
+| Camel | Ignis + Terra | Cactus | ✓ |
+| Camel Husk | Ignis + Umbra | Cactus | |
+| Panda | Lux + Terra | Bamboo | ✓ |
+| Polar Bear | Aqua + Terra | Packed Ice | ✓ |
+| Fox | Terra + Umbra | Sweet Berries | ✓ |
+| Wolf | Terra + Umbra | Bone | ✓ |
+| Cat | Terra + Umbra | String | ✓ |
+| Ocelot | Ignis + Terra | Cocoa Beans | ✓ |
+| Armadillo | Ignis + Terra | Armadillo Scute | ✓ |
+| Sniffer | Terra + Terra | Sniffer Egg | ✓ |
+| Turtle | Aqua + Terra | Turtle Scute | ✓ |
+| Frog | Aqua + Terra | Lily Pad |  |
+| Tadpole | Aqua + Aqua | Bucket of Tadpole |  |
+| Axolotl | Aqua + Lux | Bucket of Axolotl | ✓ |
+| Bee | Aer + Lux | Honeycomb | ✓ |
+| Parrot | Aer + Aer | Wheat Seeds |  |
+| Bat | Aer + Umbra | Apple | |
+| Allay | Aer + Lux | Amethyst Shard |  |
+| Happy Ghast | Aer + Lux | Dried Ghast | ✓ |
+| Strider | Ignis + Ignis | Warped Fungus | ✓ |
+| Hoglin | Ignis + Terra | Crimson Fungus | ✓ |
+| Zoglin | Umbra + Umbra | Crimson Fungus | ✓ |
+| Piglin | Ignis + Lux | Gold Ingot | ✓ |
+| Piglin Brute | Ignis + Umbra | Golden Axe |  |
+| Zombified Piglin | Ignis + Umbra | Gold Nugget | ✓ |
+| Villager | Lux + Terra | Emerald | ✓ |
+| Wandering Trader | Aer + Lux | Milk Bucket |  |
+| Iron Golem | Lux + Terra | Iron Ingot |  |
+| Snow Golem | Aer + Aqua | Snowball |  |
+| Copper Golem | Lux + Terra | Block of Copper |  |
+| Cod / Salmon / Pufferfish / Tropical Fish | Aqua + Aqua | Raw Cod / Raw Salmon / Pufferfish / Tropical Fish |  |
+| Squid | Aqua + Umbra | Ink Sac | ✓ |
+| Glow Squid | Aqua + Lux | Glow Ink Sac | ✓ |
+| Dolphin | Aer + Aqua | Heart of the Sea | ✓ |
+| Guardian | Aqua + Umbra | Prismarine Shard |  |
+| Elder Guardian | Aqua + Umbra | Wet Sponge |  |
+| Nautilus | Aqua + Aqua | Nautilus Shell | ✓ |
+| Zombie Nautilus | Aqua + Umbra | Nautilus Shell | |
+| Sulfur Cube | Ignis + Terra | Bucket of Sulfur Cube |  |
+| Zombie | Terra + Umbra | Rotten Flesh | ✓ |
+| Husk | Ignis + Umbra | Rotten Flesh | ✓ |
+| Drowned | Aqua + Umbra | Copper Ingot | ✓ |
+| Zombie Villager | Lux + Umbra | Golden Apple | ✓ |
+| Skeleton | Terra + Umbra | Arrow |  |
+| Stray | Aer + Umbra | Arrow | |
+| Parched | Ignis + Umbra | Arrow | |
+| Bogged | Aqua + Umbra | Brown Mushroom |  |
+| Wither Skeleton | Ignis + Umbra | Coal |  |
+| Wither | Umbra + Umbra | Nether Star |  |
+| Creeper | Ignis + Umbra | Gunpowder |  |
+| Spider | Terra + Umbra | Spider Eye |  |
+| Cave Spider | Terra + Umbra | Cobweb |  |
+| Witch | Lux + Umbra | Glowstone Dust |  |
+| Enderman | Aer + Umbra | Ender Pearl |  |
+| Endermite | Terra + Umbra | Chorus Fruit | |
+| Shulker | Lux + Umbra | Shulker Shell |  |
+| Silverfish | Terra + Umbra | Stone Bricks | |
+| Slime | Aqua + Terra | Slimeball |  |
+| Magma Cube | Ignis + Ignis | Magma Cream |  |
+| Blaze | Aer + Ignis | Blaze Rod |  |
+| Breeze | Aer + Aer | Breeze Rod |  |
+| Ghast | Aer + Ignis | Ghast Tear |  |
+| Phantom | Aer + Umbra | Phantom Membrane |  |
+| Creaking | Terra + Umbra | Resin Clump |  |
+| Pillager | Terra + Umbra | Crossbow |  |
+| Vindicator | Terra + Umbra | Iron Axe |  |
+| Vex | Aer + Umbra | Iron Axe | |
+| Evoker | Lux + Umbra | Totem of Undying |  |
+| Ravager | Terra + Umbra | Saddle |  |
+| Warden | Umbra + Umbra | Echo Shard |  |
+
+### Mob Filters
+
+A mob filter, fitted to a [Carriage](#carriage-and-linking-bar) or [Ferry](#boat-trains-ferry-and-barge), lets **only the mobs inscribed on it** aboard; anything else it bumps into is left behind. Players can always ride. It works with or without the Cell Upgrade (hostile mobs still need the cell), and the reinforced cage only hauls in mobs on the filter.
+
+| Filter | Recipe | Holds | Matches |
+| --- | --- | --- | --- |
+| Mob Filter | Iron Bars surrounded by 4 Paper (one on each side) | 2 mobs | Exactly: a Chicken isn't a Baby Chicken, and a Drowned isn't a Zombie |
+| Advanced Mob Filter | A Mob Filter surrounded by 4 Amethyst Shards (one on each side) | 8 mobs | Exactly, as the Mob Filter |
+| Fuzzy Mob Filter | An Advanced Mob Filter surrounded by 8 Wool | 8 mobs | The mob **at any age**, and **its kin** |
+
+- **Inscribing:** in an [Apothecary Crucible](#apothecary-crucible). The tooltip lists the mobs on a filter and how many more it takes. Crafting a filter into a bigger one gives a blank filter.
+- **Fitting:** right-click the carriage or ferry with the filter. Using another filter swaps them, handing the old one back. **Shears** snip the filter off before any upgrade, and breaking the vehicle drops it.
+- **Wiping:** right-click a water cauldron with an inscribed filter to wash it blank, using a level of water.
+- **Kin** (for the fuzzy filter), set by the entity type tags `xincraft:mob_family/<name>`: zombies (Zombie, Husk, Drowned, Zombie Villager); skeletons (Skeleton, Stray, Bogged, Parched, Wither Skeleton); horses (Horse, Donkey, Mule, Skeleton Horse, Zombie Horse); llamas (Llama, Trader Llama); camels (Camel, Camel Husk); cows (Cow, Mooshroom); piglins (Piglin, Piglin Brute, Zombified Piglin); hoglins (Hoglin, Zoglin); nautiluses (Nautilus, Zombie Nautilus); spiders (Spider, Cave Spider); slimes (Slime, Magma Cube, Sulfur Cube); squids (Squid, Glow Squid); guardians (Guardian, Elder Guardian); ghasts (Ghast, Happy Ghast); fish (Cod, Salmon, Pufferfish, Tropical Fish); illagers (Pillager, Vindicator, Evoker); golems (Iron, Snow and Copper Golem); frogs (Frog, Tadpole); cats (Cat, Ocelot).
+
+## Xincraft Compendium
+
+An in-game guide book with an entry for every block, item, vehicle and mechanic in the mod. Craft a Book with any elemental powder, or a Book with a Minecart Frame (both shapeless), and right-click to read it.
+
+- **Categories:** Magic (Natural, Metallurgic) and Transport (Rails, Boats). Each category opens with an overview of how its mechanics fit together.
+- **Recipes** are drawn as crafting, smelting and smithing grids, sent by the server when you join and again after `/reload`, so recipes changed by a data pack show up as they really are. The Apothecary Crucible entry lists every crucible recipe.
+- **Navigating:** click links and items to jump to their entries; the arrow buttons, arrow keys or mouse wheel turn pages, and Backspace goes back. The contents page has a search box that matches entry titles and the names of their items.
+- **Bookmarks:** the ribbon button marks the open entry; up to 8 bookmarks hang off the book's right edge. Bookmarks and the last page read are kept in `config/xincraft-compendium.json`.
+- **Look-up key** (G by default, under Miscellaneous in Controls): with a compendium anywhere in your inventory, opens the entry for the item under the mouse in any inventory screen, or for the block or vehicle you're looking at.
+
+The book's text lives in resource packs at `assets/xincraft/compendium/<language>/` (`categories/` and `entries/`), falling back to `en_us`, so it can be translated or rewritten without touching code.
+
 ## Configuration
 
 Xincraft's settings live in `config/xincraft-common.toml`. The file is created the first time the game starts, with a comment and the allowed range for each value. Changes made while the game is running take effect immediately, except `tin.generateOre` (see below).
@@ -682,6 +812,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 	burnTicks = 100
 	essencePerElement = 4
 
+[crucible]
+	balanceEssence = 1
+
 [turbines]
 	heatTurbineEnergyPerTick = 40
 	steamTurbineEnergyPerTick = 160
@@ -716,6 +849,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | `altar.range` | `4` | 1 – 8 | How far, in blocks, the apothecary altar reaches in each direction for flora to fill (4 = a 9-block-wide cube) |
 | `altar.burnTicks` | `100` | 1 – 6,000 | Ticks the altar takes to burn one plant (20 = one second) |
 | `altar.essencePerElement` | `4` | 1 – 100,000 | Essence each burnt plant gives for each of its elements |
+| `crucible.balanceEssence` | `1` | 0 – 100,000 | Essence an apothecary crucible inscription draws from the flora around the altar, of every element not among its powders, for each powder burnt |
 | `turbines.heatTurbineEnergyPerTick` | `40` | 1 – 100,000 | Forge Energy (FE) a heat turbine makes each tick while burning fuel (fuel burns at furnace speed) |
 | `turbines.steamTurbineEnergyPerTick` | `160` | 1 – 100,000 | Forge Energy (FE) a steam turbine makes each tick while burning fuel (fuel burns at twice furnace speed) |
 | `turbines.steamTurbineWaterPerTick` | `5` | 0 – 1,000 | Water, in millibuckets (1,000 = one bucket), a steam turbine uses each tick while running |
@@ -754,7 +888,8 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, freight cart, motorboats, upgrades for carts and boats (`CartUpgrades`), the ferry and barge, linking carts and boats into trains (`LinkedTransport`), the freight cart's and barge's shulker box storage (`ShulkerHold`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint, and the compendium (`compendium/`) with its look-up key |
+| `.../network/` | The mod's network channel and the packet that sends recipes to the compendium |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
 | `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
 

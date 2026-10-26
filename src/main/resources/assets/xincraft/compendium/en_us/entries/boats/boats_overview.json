@@ -1,0 +1,16 @@
+{
+  "title": "Boats",
+  "icon": "xincraft:oak_motorboat",
+  "category": "boats",
+  "sort": -1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "**Motorboats** cruise under power at twice paddling speed, steering left and right without holding forward. The engine only pushes in water.\n\n**Trains:** a motorboat tows up to 3 boats hitched with a [[linking_bar]]: a [[ferry]] for passengers, a [[barge]] for cargo."
+    },
+    {
+      "type": "text",
+      "text": "**Courses:** [[buoys]] linked into lines or loops are followed by a motorboat with the [[rc_upgrade]], even with nobody aboard. Switching a buoy off makes boats wait at it, like a stop signal.\n\n**Upgrades** for boats: shrieker, energy, shimmer, ice breaker, speed, RC and antenna; the ferry takes the cell."
+    }
+  ]
+}

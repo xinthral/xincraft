@@ -1,0 +1,18 @@
+{
+  "title": "Shimmer Lily",
+  "icon": "xincraft:shimmer_lily",
+  "category": "natural",
+  "sort": 25,
+  "items": [
+    "xincraft:shimmer_lily"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:shimmer_lily"
+      ],
+      "text": "Grown from a wither rose with [[exotic_pollen]]. Gives **Invisibility**, with no tell-tale particles, to players within 8 blocks, wearing off about 5 seconds after you leave. Grows wherever a wither rose can, but withers nothing.\n\nCrafts into pink dye."
+    }
+  ]
+}

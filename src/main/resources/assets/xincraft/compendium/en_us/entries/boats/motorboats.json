@@ -1,0 +1,35 @@
+{
+  "title": "Motorboats",
+  "icon": "xincraft:oak_motorboat",
+  "category": "boats",
+  "sort": 0,
+  "items": [
+    "xincraft:oak_motorboat",
+    "xincraft:spruce_motorboat",
+    "xincraft:birch_motorboat",
+    "xincraft:jungle_motorboat",
+    "xincraft:acacia_motorboat",
+    "xincraft:cherry_motorboat",
+    "xincraft:dark_oak_motorboat",
+    "xincraft:pale_oak_motorboat",
+    "xincraft:mangrove_motorboat",
+    "xincraft:bamboo_motor_raft",
+    "xincraft:propeller"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:propeller",
+      "text": "A propeller and any boat make a motorboat that keeps its wood; a bamboo raft makes a motor raft. Chest boats can't."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:oak_motorboat",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "**Driving:** press forward to start cruising, back to stop. It cuts out when out of fuel, stuck, or when you get out. Seats two.\n\n**Fuel:** shift + right-click (or your inventory key while riding) for a **fuel slot** (8 times furnace time) and a **storage slot**. It only lights fuel while cruising."
+    }
+  ]
+}

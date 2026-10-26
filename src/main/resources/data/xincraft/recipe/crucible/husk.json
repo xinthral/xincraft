@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "ignis",
+    "umbra"
+  ],
+  "catalyst": "minecraft:rotten_flesh",
+  "mob": "minecraft:husk",
+  "baby": true
+}

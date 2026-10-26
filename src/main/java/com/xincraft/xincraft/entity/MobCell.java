@@ -2,6 +2,7 @@ package com.xincraft.xincraft.entity;
 
 import java.util.UUID;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.item.MobFilterItem;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -64,11 +65,18 @@ public final class MobCell {
         return holds(vehicle) && ((UpgradableCart) vehicle).upgrades().has(CartUpgrade.REINFORCED_CAGE);
     }
 
-    // Whether a carriage or ferry takes a passenger: hostile mobs only into a cell, and the ender
-    // dragon never
+    // Whether a carriage or ferry takes a passenger: hostile mobs only into a cell, the ender dragon
+    // never, and with a mob filter fitted, only the mobs on it (players and other riders aren't
+    // filtered)
     public static boolean canCarry(VehicleEntity vehicle, Entity passenger) {
         if (passenger instanceof EnderDragon) {
             return false;
+        }
+        if (passenger instanceof Mob mob && vehicle instanceof UpgradableCart cart) {
+            ItemStack filter = cart.upgrades().filter();
+            if (filter != null && !MobFilterItem.allows(filter, mob)) {
+                return false;
+            }
         }
         return !(passenger instanceof Enemy) || holds(vehicle);
     }

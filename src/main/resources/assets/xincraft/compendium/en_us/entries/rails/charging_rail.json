@@ -1,0 +1,20 @@
+{
+  "title": "Charging Rail",
+  "icon": "xincraft:charging_rail",
+  "category": "rails",
+  "sort": 6,
+  "items": [
+    "xincraft:charging_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:charging_rail",
+      "text": "A bronze powered rail storing 50,000 FE, for carts with the [[energy_upgrade]]."
+    },
+    {
+      "type": "text",
+      "text": "**Filling:** a [[heat_turbine|turbine]] or another mod's generator **right next to it** fills it by itself, up to 1,000 FE per tick.\n\n**Charging:** it passes up to 1,000 FE per tick into an energy-upgraded cart on it.\n\n**Station:** unpowered it holds carts still, so the locomotive stops and charges; power it to send the cart on."
+    }
+  ]
+}

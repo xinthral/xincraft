@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "aer",
+    "terra"
+  ],
+  "catalyst": "minecraft:feather",
+  "mob": "minecraft:chicken",
+  "baby": true
+}

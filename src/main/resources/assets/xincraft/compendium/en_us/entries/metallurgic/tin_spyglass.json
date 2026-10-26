@@ -1,0 +1,13 @@
+{
+  "title": "Tin Spyglass",
+  "icon": "minecraft:spyglass",
+  "category": "metallurgic",
+  "sort": 5,
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:tin_spyglass",
+      "text": "A spyglass with a night-vision lens: looking through it lets you see in the dark and tints the view green. The effect stops when you lower it and never shows an icon. It's still a spyglass for advancements."
+    }
+  ]
+}

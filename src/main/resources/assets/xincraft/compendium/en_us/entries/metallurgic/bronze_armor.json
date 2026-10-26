@@ -1,0 +1,29 @@
+{
+  "title": "Bronze Armor",
+  "icon": "xincraft:bronze_chestplate",
+  "category": "metallurgic",
+  "sort": 3,
+  "items": [
+    "xincraft:bronze_helmet",
+    "xincraft:bronze_chestplate",
+    "xincraft:bronze_leggings",
+    "xincraft:bronze_boots"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:bronze_helmet",
+        "xincraft:bronze_chestplate",
+        "xincraft:bronze_leggings",
+        "xincraft:bronze_boots"
+      ],
+      "text": "As protective as iron (2 / 6 / 5 / 2) but longer lasting: durability multiplier 17, enchantability 12. Repair with bronze ingots.\n\n**Full set:** walk straight up one-block steps without jumping, like a horse."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:bronze_chestplate",
+      "text": ""
+    }
+  ]
+}

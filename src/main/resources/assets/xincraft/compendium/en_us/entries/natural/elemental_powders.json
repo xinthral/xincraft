@@ -1,0 +1,41 @@
+{
+  "title": "Elemental Powders",
+  "icon": "xincraft:ignis_powder",
+  "category": "natural",
+  "sort": 1,
+  "items": [
+    "xincraft:terra_powder",
+    "xincraft:aqua_powder",
+    "xincraft:ignis_powder",
+    "xincraft:aer_powder",
+    "xincraft:vita_powder",
+    "xincraft:lux_powder",
+    "xincraft:umbra_powder"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:terra_powder",
+        "xincraft:aqua_powder",
+        "xincraft:ignis_powder",
+        "xincraft:aer_powder"
+      ],
+      "text": "Each powder is shapeless: the **mortar and pestle**, a **vine** and two flowers make **2 powders**.\n\n**Terra:** dandelion + oxeye daisy\n**Aqua:** blue orchid + cornflower\n**Ignis:** poppy + torchflower\n**Aer:** azure bluet + white tulip"
+    },
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:vita_powder",
+        "xincraft:lux_powder",
+        "xincraft:umbra_powder"
+      ],
+      "text": "**Vita:** lily of the valley + pink tulip\n**Lux:** sunflower + orange tulip\n**Umbra:** wither rose or closed eyeblossom + allium\n\nUse a powder on a small flower to make an [[elemental_flora|elemental flora]], or on a flora of its element to top it up."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:ignis_powder",
+      "text": ""
+    }
+  ]
+}

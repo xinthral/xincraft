@@ -1,0 +1,20 @@
+{
+  "title": "Bouncy Rail",
+  "icon": "xincraft:bouncy_rail",
+  "category": "rails",
+  "sort": 3,
+  "items": [
+    "xincraft:bouncy_rail"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:bouncy_rail",
+      "text": "Powered, it throws a cart into the air, keeping its forward speed, to sail over a gap or onto a higher track."
+    },
+    {
+      "type": "text",
+      "text": "**Height** follows signal strength: about **8 blocks** at 15, half a block less per level. Use a comparator or target block to tune it. The pads light up when powered.\n\nIt doesn't pass power on. On the way up a cart ignores rails; from the top of its arc it can land again."
+    }
+  ]
+}

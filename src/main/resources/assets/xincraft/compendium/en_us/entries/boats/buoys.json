@@ -1,0 +1,26 @@
+{
+  "title": "Buoys",
+  "icon": "xincraft:buoy",
+  "category": "boats",
+  "sort": 4,
+  "items": [
+    "xincraft:buoy",
+    "xincraft:advanced_buoy"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:buoy",
+      "text": "Right-click **still water** to place, like a lily pad: a float and a pole with a glowing lamp. Boats and mobs pass through it."
+    },
+    {
+      "type": "text",
+      "text": "**Linking:** right-click one buoy with a [[linking_bar]], then the next, up to **32 blocks** apart. Each buoy takes two links, so courses are lines or loops. Shift + right-click with the bar to unlink.\n\n**Switching off:** right-click a buoy to turn its lamp off. A boat heading for it stops about 2 blocks short and waits until it's switched back on."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:advanced_buoy",
+      "text": "**Advanced buoys** link up to **64 blocks** apart to each other. A boat needs the [[advanced_antenna_upgrade]] to follow a leg over 32 blocks."
+    }
+  ]
+}

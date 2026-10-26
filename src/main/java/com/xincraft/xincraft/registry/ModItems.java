@@ -11,8 +11,10 @@ import com.xincraft.xincraft.entity.MotorboatType;
 import com.xincraft.xincraft.item.BargeItem;
 import com.xincraft.xincraft.item.BuoyItem;
 import com.xincraft.xincraft.item.CartUpgradeItem;
+import com.xincraft.xincraft.item.CompendiumItem;
 import com.xincraft.xincraft.item.LinkingBarItem;
 import com.xincraft.xincraft.item.ElementPowderItem;
+import com.xincraft.xincraft.item.MobFilterItem;
 import com.xincraft.xincraft.item.MortarAndPestleItem;
 import com.xincraft.xincraft.item.RoseTintedGlassesItem;
 import com.xincraft.xincraft.item.FreightCartItem;
@@ -51,6 +53,10 @@ public final class ModItems {
         return ITEMS.register(name, () -> new BlockItem(block.get(),
             new Item.Properties().useBlockDescriptionPrefix().setId(ITEMS.key(name))));
     }
+
+    // The mod's guide book (item.CompendiumItem)
+    public static final RegistryObject<Item> COMPENDIUM = registerItem("compendium", CompendiumItem::new,
+        () -> new Item.Properties().stacksTo(1));
 
     public static final RegistryObject<Item> RAW_TIN =
         registerItem("raw_tin", Item::new, Item.Properties::new);
@@ -141,6 +147,15 @@ public final class ModItems {
         properties -> new CartUpgradeItem(CartUpgrade.ANTENNA, properties), Item.Properties::new);
     public static final RegistryObject<Item> REINFORCED_CAGE_UPGRADE = registerItem("reinforced_cage_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.REINFORCED_CAGE, properties), Item.Properties::new);
+
+    // Fitted to a carriage or ferry, let only the mobs inscribed on them aboard (see item.MobFilterItem);
+    // the fuzzy one also lets through their babies and kin
+    public static final RegistryObject<Item> MOB_FILTER = registerItem("mob_filter",
+        properties -> new MobFilterItem(2, false, properties), () -> new Item.Properties().stacksTo(1));
+    public static final RegistryObject<Item> ADVANCED_MOB_FILTER = registerItem("advanced_mob_filter",
+        properties -> new MobFilterItem(8, false, properties), () -> new Item.Properties().stacksTo(1));
+    public static final RegistryObject<Item> FUZZY_MOB_FILTER = registerItem("fuzzy_mob_filter",
+        properties -> new MobFilterItem(8, true, properties), () -> new Item.Properties().stacksTo(1));
 
     // Crafted with any boat to make a motorboat
     public static final RegistryObject<Item> PROPELLER =

@@ -1,0 +1,20 @@
+{
+  "title": "Carriage",
+  "icon": "xincraft:carriage",
+  "category": "rails",
+  "sort": 15,
+  "items": [
+    "xincraft:carriage"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:carriage",
+      "text": "A passenger car in maroon lacquer with bronze trim. It rides like a minecart but **won't pick up hostile mobs** unless it has the [[cell_upgrade]]."
+    },
+    {
+      "type": "text",
+      "text": "Hitch it behind a [[locomotive_cart]] with a [[linking_bar]].\n\nA [[mob_filters|mob filter]] chooses which mobs it takes; the [[shimmer_upgrade]] hides its riders; the [[reinforced_cage_upgrade]] lets it carry any mob but the dragon.\n\nOn an [[inspector_rail]] it reads 1 empty, 2 with a rider."
+    }
+  ]
+}

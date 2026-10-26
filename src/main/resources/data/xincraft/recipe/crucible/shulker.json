@@ -1,0 +1,9 @@
+{
+  "type": "xincraft:crucible",
+  "elements": [
+    "lux",
+    "umbra"
+  ],
+  "catalyst": "minecraft:shulker_shell",
+  "mob": "minecraft:shulker"
+}
