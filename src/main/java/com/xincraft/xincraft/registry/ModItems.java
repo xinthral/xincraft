@@ -16,6 +16,7 @@ import com.xincraft.xincraft.item.LinkingBarItem;
 import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.item.MobFilterItem;
 import com.xincraft.xincraft.item.MortarAndPestleItem;
+import com.xincraft.xincraft.item.LonsdaleiteArmorItem;
 import com.xincraft.xincraft.item.RoseTintedGlassesItem;
 import com.xincraft.xincraft.item.FreightCartItem;
 import com.xincraft.xincraft.magic.Element;
@@ -29,6 +30,12 @@ import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SmithingTemplateItem;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -44,6 +51,13 @@ public final class ModItems {
     public static <T extends Item> RegistryObject<T> registerItem(
             String name, Function<Item.Properties, T> factory, Supplier<Item.Properties> properties) {
         return ITEMS.register(name, () -> factory.apply(properties.get().setId(ITEMS.key(name))));
+    }
+
+    // Fireproof like netherite. Vanilla's purple glint is off, even when enchanted: the piece has its
+    // own red shimmer instead.
+    private static Item.Properties lonsdaleiteArmor(ArmorType type, ItemAttributeModifiers attributes) {
+        return new Item.Properties().humanoidArmor(ModArmorMaterials.LONSDALEITE, type).attributes(attributes).fireResistant()
+            .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
     }
 
     // Registers the BlockItem for a block under the same name. Called by ModBlocks.registerBlock.
@@ -79,6 +93,26 @@ public final class ModItems {
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.LEGGINGS));
     public static final RegistryObject<Item> BRONZE_BOOTS = registerItem("bronze_boots", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.BOOTS));
+
+    // Transmuted from a diamond at the apothecary altar; upgrades bronze armor there, and repairs the result
+    public static final RegistryObject<Item> LONSDALEITE_SHARD =
+        registerItem("lonsdaleite_shard", Item::new, Item.Properties::new);
+
+    // Bronze armor upgraded at the apothecary altar (item.LonsdaleiteArmorItem)
+    public static final RegistryObject<Item> LONSDALEITE_HELMET = registerItem("lonsdaleite_helmet", LonsdaleiteArmorItem::new,
+        () -> lonsdaleiteArmor(ArmorType.HELMET, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.HELMET)));
+    public static final RegistryObject<Item> LONSDALEITE_CHESTPLATE = registerItem("lonsdaleite_chestplate", LonsdaleiteArmorItem::new,
+        () -> lonsdaleiteArmor(ArmorType.CHESTPLATE, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.CHESTPLATE)));
+    // Walks straight up full-block steps, from a step height of 0.6 to 1.0
+    public static final RegistryObject<Item> LONSDALEITE_LEGGINGS = registerItem("lonsdaleite_leggings", LonsdaleiteArmorItem::new,
+        () -> lonsdaleiteArmor(ArmorType.LEGGINGS, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.LEGGINGS).withModifierAdded(
+            Attributes.STEP_HEIGHT, new AttributeModifier(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_leggings_step_height"),
+                0.4, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.LEGS)));
+    // The same 20% as Speed I
+    public static final RegistryObject<Item> LONSDALEITE_BOOTS = registerItem("lonsdaleite_boots", LonsdaleiteArmorItem::new,
+        () -> lonsdaleiteArmor(ArmorType.BOOTS, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.BOOTS).withModifierAdded(
+            Attributes.MOVEMENT_SPEED, new AttributeModifier(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_boots_speed"),
+                0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.FEET)));
 
     public static final RegistryObject<Item> TIN_HELMET = registerItem("tin_helmet", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.HELMET));

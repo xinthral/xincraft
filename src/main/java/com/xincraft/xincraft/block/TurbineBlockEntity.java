@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,13 +30,15 @@ import org.jspecify.annotations.Nullable;
 // machines). New fuel is only lit while there's room in the buffer, so a full turbine doesn't eat
 // its fuel; an item already burning burns out regardless. Hoppers fill the fuel slot. HeatTurbineBlockEntity and SteamTurbineBlockEntity set
 // how fast it burns and how much energy each tick of burning makes.
-public abstract class TurbineBlockEntity extends BaseContainerBlockEntity {
+public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
     public static final int FUEL_SLOT = 0;
     // Most energy pushed to each neighbour per tick
     public static final int OUTPUT_PER_SIDE = 1_000;
     // Menu data entries: burn left, stored energy and capacity (each split in two, as menu data
     // travels as 16-bit numbers), then water stored and the tank's size (0 with no tank)
     public static final int DATA_COUNT = 7;
+
+    private static final int[] SLOTS = {FUEL_SLOT};
 
     private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
     // Burn time left in the current fuel item, in the fuel's own (furnace) ticks
@@ -254,9 +254,19 @@ public abstract class TurbineBlockEntity extends BaseContainerBlockEntity {
         return level != null && level.fuelValues().isFuel(stack);
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return SLOTS;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+        return canPlaceItem(slot, stack);
+    }
+
     // Like a furnace, only empty buckets can be pulled back out
     @Override
-    public boolean canTakeItem(Container into, int slot, ItemStack stack) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
         return stack.is(Items.BUCKET);
     }
 

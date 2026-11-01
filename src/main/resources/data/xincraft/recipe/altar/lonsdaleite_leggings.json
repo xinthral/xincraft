@@ -1,0 +1,12 @@
+{
+  "type": "xincraft:altar_transmutation",
+  "base": "xincraft:bronze_leggings",
+  "material": "xincraft:lonsdaleite_shard",
+  "material_count": 7,
+  "essence": {
+    "terra": 40,
+    "aer": 40
+  },
+  "time": 400,
+  "result": "xincraft:lonsdaleite_leggings"
+}

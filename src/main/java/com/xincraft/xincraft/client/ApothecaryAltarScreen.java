@@ -21,7 +21,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 // The apothecary altar's screen, laid out like a furnace: the plant slot over the flame and fuel
 // slot, then the burn progress arrow pointing at a row of element pips. A pip is dark with no flora
 // of its element in range, dim when they're all full, and bright when one has room; it's outlined
-// when the plant in the slot gives that element. Hovering a pip says which.
+// when the plant in the slot gives that element. Hovering a pip says which. Below is the
+// transmutation: base and material, an arrow, and the result. A pip is outlined amber when the
+// transmutation needs that element and red when the flora are short of it.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class ApothecaryAltarScreen extends AbstractContainerScreen<ApothecaryAltarMenu> {
     private static final Identifier TEXTURE =
@@ -62,12 +64,17 @@ public class ApothecaryAltarScreen extends AbstractContainerScreen<ApothecaryAlt
         int burnProgressWidth = Mth.ceil(menu.getBurnProgress() * 24.0F);
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BURN_PROGRESS_SPRITE, 24, 16, 0, 0, xo + 79, yo + 34, burnProgressWidth, 16);
 
+        int transmuteProgressWidth = Mth.ceil(menu.getTransmuteProgress() * 24.0F);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BURN_PROGRESS_SPRITE, 24, 16, 0, 0, xo + 123, yo + 56, transmuteProgressWidth, 16);
+
         int plantMask = menu.getPlantMask();
         for (Element element : Element.values()) {
             int bit = 1 << element.ordinal();
             int x = xo + PIPS_X + element.ordinal() * PIP_SPACING;
             int y = yo + PIPS_Y;
-            graphics.fill(x - 1, y - 1, x + PIP_SIZE + 1, y + PIP_SIZE + 1, (plantMask & bit) != 0 ? 0xFFFFFFFF : 0xFF373737);
+            int outline = (menu.getShortMask() & bit) != 0 ? 0xFFE02020 : (plantMask & bit) != 0 ? 0xFFFFFFFF
+                : (menu.getCostMask() & bit) != 0 ? 0xFFE0A030 : 0xFF373737;
+            graphics.fill(x - 1, y - 1, x + PIP_SIZE + 1, y + PIP_SIZE + 1, outline);
             int color = (menu.getRoomMask() & bit) != 0 ? ARGB.opaque(element.color())
                 : (menu.getFloraMask() & bit) != 0 ? ARGB.opaque(ARGB.scaleRGB(element.color(), 0.45F))
                 : 0xFF2A2A2A;
@@ -82,6 +89,9 @@ public class ApothecaryAltarScreen extends AbstractContainerScreen<ApothecaryAlt
             if (isHovering(PIPS_X + element.ordinal() * PIP_SPACING - 1, PIPS_Y - 1, PIP_SIZE + 2, PIP_SIZE + 2, mouseX, mouseY)) {
                 int bit = 1 << element.ordinal();
                 String state = (menu.getRoomMask() & bit) != 0 ? "room" : (menu.getFloraMask() & bit) != 0 ? "full" : "none";
+                if ((menu.getShortMask() & bit) != 0) {
+                    state = "short";
+                }
                 graphics.setTooltipForNextFrame(Component.translatable("container.xincraft.apothecary_altar." + state,
                     Component.translatable("block.xincraft." + element.floraId())), mouseX, mouseY);
             }

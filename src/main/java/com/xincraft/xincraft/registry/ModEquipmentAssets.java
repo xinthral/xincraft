@@ -12,5 +12,8 @@ public final class ModEquipmentAssets {
     public static final ResourceKey<EquipmentAsset> BRONZE =
         ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "bronze"));
 
+    public static final ResourceKey<EquipmentAsset> LONSDALEITE =
+        ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite"));
+
     private ModEquipmentAssets() {}
 }

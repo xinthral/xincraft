@@ -1,0 +1,51 @@
+{
+  "title": "Lonsdaleite Armor",
+  "icon": "xincraft:lonsdaleite_chestplate",
+  "category": "metallurgic",
+  "also": [
+    "natural"
+  ],
+  "sort": 9,
+  "items": [
+    "xincraft:lonsdaleite_helmet",
+    "xincraft:lonsdaleite_chestplate",
+    "xincraft:lonsdaleite_leggings",
+    "xincraft:lonsdaleite_boots"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:lonsdaleite_helmet",
+        "xincraft:lonsdaleite_chestplate",
+        "xincraft:lonsdaleite_leggings",
+        "xincraft:lonsdaleite_boots"
+      ],
+      "text": "[[bronze_armor|Bronze armor]] remade at the [[apothecary_altar]]. As strong as netherite, and as fireproof. Repair with [[lonsdaleite_shard|shards]]. Enchantments and trims carry over.\n\nIt's banded like the [[reinforced_trim]] and shimmers red, even when enchanted. It still takes a trim."
+    },
+    {
+      "type": "text",
+      "text": "Each piece has its own power:\n\n**Helmet:** night vision.\n**Chestplate:** piglins stay neutral, as with gold.\n**Leggings:** walk up one-block steps.\n**Boots:** speed, the same as Speed I."
+    },
+    {
+      "type": "altar",
+      "recipe": "xincraft:altar/lonsdaleite_helmet",
+      "text": ""
+    },
+    {
+      "type": "altar",
+      "recipe": "xincraft:altar/lonsdaleite_chestplate",
+      "text": ""
+    },
+    {
+      "type": "altar",
+      "recipe": "xincraft:altar/lonsdaleite_leggings",
+      "text": ""
+    },
+    {
+      "type": "altar",
+      "recipe": "xincraft:altar/lonsdaleite_boots",
+      "text": ""
+    }
+  ]
+}

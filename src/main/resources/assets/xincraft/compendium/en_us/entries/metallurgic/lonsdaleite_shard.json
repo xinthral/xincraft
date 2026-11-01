@@ -1,0 +1,19 @@
+{
+  "title": "Lonsdaleite Shard",
+  "icon": "xincraft:lonsdaleite_shard",
+  "category": "metallurgic",
+  "also": [
+    "natural"
+  ],
+  "sort": 8,
+  "items": [
+    "xincraft:lonsdaleite_shard"
+  ],
+  "pages": [
+    {
+      "type": "altar",
+      "recipe": "xincraft:altar/lonsdaleite_shard",
+      "text": "Diamond, its lattice forced into hexagons. Transmuted at the [[apothecary_altar]], and used to make [[lonsdaleite_armor]]."
+    }
+  ]
+}

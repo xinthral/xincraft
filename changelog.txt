@@ -34,6 +34,15 @@ Xincraft Changelog
  - Mob Filters: fitted to a carriage or ferry, only the mobs inscribed on them come aboard. The
    Mob Filter holds 2 mobs and the Advanced Mob Filter 8, telling babies and kin apart; the Fuzzy
    Mob Filter holds 8 and lets through any age and kin. Wash in a water cauldron to wipe
+ - Lonsdaleite Armor: bronze armor remade at the apothecary altar, as strong and fireproof as
+   netherite, in dark amber with reinforced banding and a red shimmer. The helmet gives night
+   vision, the chestplate keeps piglins neutral, the leggings step up full blocks, and the boots
+   give the speed of Speed I. Enchantments and trims carry over
+ - Apothecary Altar transmutation: a new row of slots turns a base and a material into a result,
+   burning fuel and drawing essence from flora. Data-driven; makes Lonsdaleite Shards from diamonds
+   and lonsdaleite armor
+ - Fixed hoppers pulling fuel out of turbines, and plants and fuel out of the apothecary altar;
+   only empty buckets, and the altar's results, come out now
  - Xincraft Compendium: an in-game guide book with an entry for everything in the mod, grouped
    into Magic (Natural, Metallurgic) and Transport (Rails, Boats). Shows the server's live
    recipes, including every crucible recipe, and has search, bookmarks and a look-up key (G)

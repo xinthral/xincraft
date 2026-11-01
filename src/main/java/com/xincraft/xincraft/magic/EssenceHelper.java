@@ -1,14 +1,18 @@
 package com.xincraft.xincraft.magic;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 // Finding, drawing from and filling essence reservoirs around a point (the apothecary altar fills
-// them; the apothecary crucible draws on them)
+// them, and draws on them to transmute; the apothecary crucible draws on them)
 public final class EssenceHelper {
     // Every loaded reservoir, of any element, within radius blocks of center (a cube)
     public static List<EssenceReservoir> findReservoirs(Level level, BlockPos center, int radius) {
@@ -31,6 +35,40 @@ public final class EssenceHelper {
             }
         }
         return found;
+    }
+
+    // Every loaded reservoir within radius blocks of center (a cube), by element
+    public static Map<Element, List<EssenceReservoir>> byElement(Level level, BlockPos center, int radius) {
+        Map<Element, List<EssenceReservoir>> flora = new EnumMap<>(Element.class);
+        for (EssenceReservoir reservoir : findReservoirs(level, center, radius)) {
+            flora.computeIfAbsent(reservoir.getElement(), element -> new ArrayList<>()).add(reservoir);
+        }
+        return flora;
+    }
+
+    // Bitmask (by Element ordinal) of the elements whose reservoirs between them hold too little for
+    // the cost
+    public static int shortfall(Map<Element, List<EssenceReservoir>> reservoirs, Map<Element, Integer> cost) {
+        int mask = 0;
+        for (Map.Entry<Element, Integer> entry : cost.entrySet()) {
+            if (total(reservoirs.getOrDefault(entry.getKey(), List.of())) < entry.getValue()) {
+                mask |= 1 << entry.getKey().ordinal();
+            }
+        }
+        return mask;
+    }
+
+    // Takes amount essence of the element out of the reservoirs, with a stream of its dust from each
+    // one drawn on to the point
+    public static void draw(ServerLevel level, Element element, List<EssenceReservoir> reservoirs, int amount, Vec3 to) {
+        Map<EssenceReservoir, Integer> before = new HashMap<>();
+        reservoirs.forEach(reservoir -> before.put(reservoir, reservoir.getEssence()));
+        drain(reservoirs, amount);
+        for (EssenceReservoir reservoir : reservoirs) {
+            if (reservoir.getEssence() < before.get(reservoir) && reservoir instanceof BlockEntity flower) {
+                stream(level, element, Vec3.atCenterOf(flower.getBlockPos()), to);
+            }
+        }
     }
 
     // Total essence the reservoirs hold

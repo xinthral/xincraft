@@ -19,7 +19,9 @@ import net.minecraftforge.fml.common.Mod;
 // item of its own: vanilla's zoom, scope overlay, hand hiding and slowed mouse all check for
 // Items.SPYGLASS specifically (Player#isScoping), and not all of them can be hooked. Looking
 // through one gives night vision (below) and tints the view green (client.TinSpyglassTint); its
-// look comes from the component select in assets/minecraft/items/spyglass.json.
+// look comes from the component select in assets/minecraft/items/spyglass.json. The lonsdaleite
+// helmet gives the same night vision, and is handled here too, as a player can have both and taking
+// off one mustn't remove what the other gives.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public final class TinSpyglass {
     // Night vision flickers in its last 10 seconds (GameRenderer#nightVisionScale), so the effect
@@ -50,10 +52,10 @@ public final class TinSpyglass {
         }
         MobEffectInstance current = player.getEffect(MobEffects.NIGHT_VISION);
         boolean ours = current != null && isFromSpyglass(current);
-        if (isLookingThrough(player)) {
+        if (isLookingThrough(player) || LonsdaleiteArmorItem.isWearingHelmet(player)) {
             // Leaves other night vision alone, e.g. from a potion
             if (current == null || ours && current.endsWithin(RENEW_TICKS)) {
-                // No particles and no icon: it's the lens, not a status effect
+                // No particles and no icon: it's the lens or helmet, not a status effect
                 player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, DURATION_TICKS, 0, false, false, false));
             }
         } else if (ours) {

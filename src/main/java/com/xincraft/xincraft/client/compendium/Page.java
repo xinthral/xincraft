@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.registry.ModItems;
@@ -158,6 +159,7 @@ public interface Page {
                 case "recipe" -> new RecipeSpec(Identifier.parse(GsonHelper.getAsString(json, "recipe")), text);
                 case "crucible" -> new CrucibleSpec(CompendiumData.entityType(GsonHelper.getAsString(json, "mob"), where).orElse(null), text);
                 case "crucible_index" -> new CrucibleIndexSpec();
+                case "altar" -> new AltarSpec(Identifier.parse(GsonHelper.getAsString(json, "recipe")), text);
                 case "links" -> {
                     List<String> entries = new ArrayList<>();
                     for (JsonElement entry : GsonHelper.getAsJsonArray(json, "entries")) {
@@ -187,6 +189,13 @@ public interface Page {
     }
 
     record RecipeSpec(Identifier recipe, String text) implements Spec {
+        @Override
+        public List<String> links() {
+            return linksIn(text);
+        }
+    }
+
+    record AltarSpec(Identifier recipe, String text) implements Spec {
         @Override
         public List<String> links() {
             return linksIn(text);
@@ -290,6 +299,8 @@ public interface Page {
                 (context, x, y) -> drawRecipe(context, x, y + top, recipe.recipe()));
             case CrucibleSpec crucible -> addText(pages, font, title, top + 80, crucible.text(),
                 (context, x, y) -> drawCrucible(context, x, y + top, crucible.mob()));
+            case AltarSpec altar -> addText(pages, font, title, top + 66, altar.text(),
+                (context, x, y) -> drawAltar(context, x, y + top, altar.recipe()));
             case ImageSpec image -> addText(pages, font, title, top + Math.min(image.height(), HEIGHT - top) + 6, image.text(),
                 (context, x, y) -> {
                     int width = Math.min(image.width(), WIDTH);
@@ -460,6 +471,35 @@ public interface Page {
         context.item(new ItemStack(ModItems.MOB_FILTER.get()), middle, y + 48, true);
         if (recipe.baby()) {
             context.centered(Component.translatable("compendium.xincraft.crucible_baby"), x, y + 66, FAINT_COLOR);
+        }
+    }
+
+    // An altar transmutation: base and material, an arrow to the result, and the essence it draws
+    private static void drawAltar(Context context, int x, int y, Identifier id) {
+        AltarRecipe recipe = CompendiumRecipes.altar(id);
+        if (recipe == null) {
+            context.centered(Component.translatable("compendium.xincraft.no_recipe"), x, y + 30, FAINT_COLOR);
+            return;
+        }
+        ItemStack result = new ItemStack(recipe.result());
+        context.centered(result.getHoverName(), x, y, TITLE_COLOR);
+        context.item(context.cycle(recipe.base().display()), x + 6, y + 14, true);
+        recipe.material().ifPresent(material -> {
+            ItemStack stack = context.cycle(material.display());
+            context.item(stack.isEmpty() ? stack : stack.copyWithCount(recipe.materialCount()), x + 28, y + 14, true);
+        });
+        drawArrow(context, x + 62, y + 14);
+        context.item(result, x + 94, y + 14, true);
+        // Elements in order, so a recipe always reads the same way
+        int at = 0;
+        for (Element element : Element.values()) {
+            Integer amount = recipe.essence().get(element);
+            if (amount != null) {
+                int costX = x + 6 + at * 54;
+                context.item(powder(element), costX, y + 36, false);
+                context.graphics.text(context.font, Component.literal("\u00d7" + amount), costX + 18, y + 40, TEXT_COLOR, false);
+                at++;
+            }
         }
     }
 

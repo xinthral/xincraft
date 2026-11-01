@@ -1,0 +1,10 @@
+{
+  "type": "xincraft:altar_transmutation",
+  "base": "minecraft:diamond",
+  "essence": {
+    "terra": 8,
+    "ignis": 8
+  },
+  "time": 200,
+  "result": "xincraft:lonsdaleite_shard"
+}

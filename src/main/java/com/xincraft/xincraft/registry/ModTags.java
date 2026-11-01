@@ -27,6 +27,12 @@ public final class ModTags {
     public static final TagKey<Item> REPAIRS_TIN_ARMOR =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "repairs_tin_armor"));
 
+    // xincraft:repairs_lonsdaleite_armor - repair ingredient tag for lonsdaleite armor
+    public static final TagKey<Item> REPAIRS_LONSDALEITE_ARMOR =
+        TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "repairs_lonsdaleite_armor"));
+    // xincraft:lonsdaleite_armor - the pieces client.LonsdaleiteGlintLayer draws its shimmer on
+    public static final TagKey<Item> LONSDALEITE_ARMOR =
+        TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_armor"));
     // xincraft:repairs_bronze_armor - repair ingredient tag for bronze armor
     public static final TagKey<Item> REPAIRS_BRONZE_ARMOR =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "repairs_bronze_armor"));

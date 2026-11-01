@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.registry;
 
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -24,6 +25,14 @@ public final class ModRecipes {
     public static final RegistryObject<RecipeSerializer<CrucibleRecipe>> CRUCIBLE_SERIALIZER = RECIPE_SERIALIZERS.register("crucible",
         () -> new RecipeSerializer<>(CrucibleRecipe.MAP_CODEC, CrucibleRecipe.STREAM_CODEC));
     public static final RegistryObject<RecipeBookCategory> CRUCIBLE_BOOK_CATEGORY = RECIPE_BOOK_CATEGORIES.register("crucible",
+        RecipeBookCategory::new);
+
+    // The apothecary altar's transmutations (magic.AltarRecipe)
+    public static final RegistryObject<RecipeType<AltarRecipe>> ALTAR_TRANSMUTATION = RECIPE_TYPES.register("altar_transmutation",
+        () -> RecipeType.simple(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "altar_transmutation")));
+    public static final RegistryObject<RecipeSerializer<AltarRecipe>> ALTAR_TRANSMUTATION_SERIALIZER = RECIPE_SERIALIZERS.register("altar_transmutation",
+        () -> new RecipeSerializer<>(AltarRecipe.MAP_CODEC, AltarRecipe.STREAM_CODEC));
+    public static final RegistryObject<RecipeBookCategory> ALTAR_TRANSMUTATION_BOOK_CATEGORY = RECIPE_BOOK_CATEGORIES.register("altar_transmutation",
         RecipeBookCategory::new);
 
     private ModRecipes() {}

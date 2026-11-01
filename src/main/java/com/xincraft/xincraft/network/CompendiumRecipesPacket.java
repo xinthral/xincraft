@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.client.compendium.CompendiumRecipes;
+import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -19,12 +20,13 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 
 // Sends the compendium (client.compendium.CompendiumScreen) the recipes it shows, since 26.x doesn't
 // send recipes to clients: how to make each of the mod's items (as the recipe book would show it),
-// and every apothecary crucible recipe. Sent on login and /reload, so data packs that change them
+// and every apothecary crucible and altar recipe. Sent on login and /reload, so data packs that change them
 // show in the book.
-public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> crucible) {
+public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> crucible, List<ShownAltar> altar) {
     public static final StreamCodec<RegistryFriendlyByteBuf, CompendiumRecipesPacket> STREAM_CODEC = StreamCodec.composite(
         Shown.STREAM_CODEC.apply(ByteBufCodecs.list()), CompendiumRecipesPacket::recipes,
         CrucibleRecipe.STREAM_CODEC.apply(ByteBufCodecs.list()), CompendiumRecipesPacket::crucible,
+        ShownAltar.STREAM_CODEC.apply(ByteBufCodecs.list()), CompendiumRecipesPacket::altar,
         CompendiumRecipesPacket::new);
 
     // A recipe as the recipe book would show it
@@ -35,15 +37,28 @@ public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> 
             Shown::new);
     }
 
+    // An altar transmutation, with the id the book's pages name it by
+    public record ShownAltar(Identifier id, AltarRecipe recipe) {
+        public static final StreamCodec<RegistryFriendlyByteBuf, ShownAltar> STREAM_CODEC = StreamCodec.composite(
+            Identifier.STREAM_CODEC, ShownAltar::id,
+            AltarRecipe.STREAM_CODEC, ShownAltar::recipe,
+            ShownAltar::new);
+    }
+
     // The mod's own recipes, and any recipe that makes one of its items
     public static CompendiumRecipesPacket collect(ServerLevel level) {
         List<Shown> recipes = new ArrayList<>();
         List<CrucibleRecipe> crucible = new ArrayList<>();
+        List<ShownAltar> altar = new ArrayList<>();
         var context = SlotDisplayContext.fromLevel(level);
         for (RecipeHolder<?> holder : level.getServer().getRecipeManager().getRecipes()) {
             Identifier id = holder.id().identifier();
             if (holder.value() instanceof CrucibleRecipe recipe) {
                 crucible.add(recipe);
+                continue;
+            }
+            if (holder.value() instanceof AltarRecipe recipe) {
+                altar.add(new ShownAltar(id, recipe));
                 continue;
             }
             for (RecipeDisplay display : holder.value().display()) {
@@ -56,11 +71,11 @@ public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> 
                 }
             }
         }
-        return new CompendiumRecipesPacket(recipes, crucible);
+        return new CompendiumRecipesPacket(recipes, crucible, altar);
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        CompendiumRecipes.set(recipes, crucible);
+        CompendiumRecipes.set(recipes, crucible, altar);
         context.setPacketHandled(true);
     }
 }

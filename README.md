@@ -10,6 +10,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 
 - [Tin](#tin)
 - [Bronze](#bronze)
+- [Lonsdaleite Armor](#lonsdaleite-armor)
 - [Tin Rails](#tin-rails)
 - [Padded Rails](#padded-rails)
 - [Padded Powered Rails](#padded-powered-rails)
@@ -99,6 +100,23 @@ Bronze is a muted golden orange, and the Block of Bronze has copper's polished s
 Bronze armor gives the same protection as iron, 2 / 6 / 5 / 2 armor points (helmet / chestplate / leggings / boots), but lasts longer, with a durability multiplier of 17 (iron is 15), and has an enchantability of 12. Repair it with bronze ingots in an anvil. It takes armor trims like vanilla armor.
 
 **Full set bonus:** wearing all four pieces of bronze armor lets you **walk straight up one-block steps** without jumping, the way horses do (step height 1 block instead of 0.6). Take any piece off and it's back to normal at once.
+
+## Lonsdaleite Armor
+
+Bronze armor remade at the [Apothecary Altar](#apothecary-altar). It's a dark amber with a red shimmer, the same strength as netherite: 3 / 8 / 6 / 3 armor points (helmet / chestplate / leggings / boots), toughness 3, knockback resistance 0.1, a durability multiplier of 37 and an enchantability of 15. Dropped pieces survive fire and lava. Repair it with Lonsdaleite Shards in an anvil.
+
+| Piece | Made from | Essence | Power |
+| --- | --- | --- | --- |
+| Lonsdaleite Helmet | Bronze Helmet + 5 Shards | 32 Lux, 32 Umbra | **Night vision** |
+| Lonsdaleite Chestplate | Bronze Chestplate + 8 Shards | 48 Ignis, 48 Terra | **Piglins stay neutral**, as with gold armor |
+| Lonsdaleite Leggings | Bronze Leggings + 7 Shards | 40 Terra, 40 Aer | **Walk straight up one-block steps** |
+| Lonsdaleite Boots | Bronze Boots + 4 Shards | 24 Aer, 24 Vita | **Speed**, the same 20% as Speed I, with no potion icon |
+
+Each power comes from its own piece alone, so you can mix and match. Each piece takes 20 seconds at the altar. A **Lonsdaleite Shard** is transmuted from 1 Diamond and 8 Terra and 8 Ignis essence, in 10 seconds.
+
+- **Upgrading keeps** the piece's enchantments, trim, name and damage.
+- **Its look is built in.** Every piece has the [Reinforced Armor Trim](#reinforced-armor-trim)'s banding in dark tin, drawn into its texture, so it can't be removed and isn't listed in the tooltip. You can still add a real trim, which draws on top.
+- **The shimmer replaces the enchanted glint**, so a piece shimmers red whether it's enchanted or not, and never purple. The worn shimmer shows on players, mannequins and armor stands; other mobs wearing a piece show it plain.
 
 ## Tin Rails
 
@@ -638,6 +656,13 @@ The altar burns plants into elemental essence, which flows into the flora around
 - **The screen** shows a row of seven pips, one per element. A pip is dark when no flora of its element is in range, dim when they're all full, and bright when one has room. It's outlined in white when the plant in the slot gives that element. Hover a pip to see which.
 - **Hoppers** put plants in from above and fuel in from the sides, and take empty buckets out from below.
 - Breaking the altar drops what's in it.
+
+**Transmuting:** the screen's lower row changes one item into another, with a **base** on the left, a **material** beside it, and the **result** on the right. It burns the same fuel as the plant slot, alongside any plant, and when the time's up it draws the recipe's essence from the flora in range, streaming it back to the altar. It makes [Lonsdaleite Shards and armor](#lonsdaleite-armor).
+
+- It waits, keeping its progress, while the material's missing, the flora are short, or the result slot is full. Taking the base out starts it again from nothing.
+- The pips show the cost: outlined in amber for an element it needs, and red if the flora in range are short of it.
+- Hoppers put base items in from above and materials in from the sides (once the base is in), and take results out from below.
+- Recipes are data-driven, in `data/<namespace>/recipe/altar/`. For example: `{"type": "xincraft:altar_transmutation", "base": "xincraft:bronze_boots", "material": "xincraft:lonsdaleite_shard", "material_count": 4, "essence": {"aer": 24, "vita": 24}, "time": 400, "result": "xincraft:lonsdaleite_boots"}`. `material`, `material_count`, `essence` and `time` (200 ticks by default) are optional. A base item belongs to one recipe.
 
 ### Apothecary Crucible
 

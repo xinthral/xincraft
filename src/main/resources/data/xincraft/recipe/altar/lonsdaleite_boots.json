@@ -1,0 +1,12 @@
+{
+  "type": "xincraft:altar_transmutation",
+  "base": "xincraft:bronze_boots",
+  "material": "xincraft:lonsdaleite_shard",
+  "material_count": 4,
+  "essence": {
+    "aer": 24,
+    "vita": 24
+  },
+  "time": 400,
+  "result": "xincraft:lonsdaleite_boots"
+}

@@ -1,8 +1,6 @@
 package com.xincraft.xincraft.inventory;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +33,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 // The apothecary crucible: a powder in each top corner, the catalyst between them, and a mob filter
@@ -163,23 +160,14 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
 
     // The flora in reach of the altar under the crucible, by element
     private static Map<Element, List<EssenceReservoir>> flora(Level level, BlockPos cruciblePos) {
-        Map<Element, List<EssenceReservoir>> flora = new EnumMap<>(Element.class);
-        for (EssenceReservoir reservoir : EssenceHelper.findReservoirs(level, cruciblePos.below(), Config.altarRange)) {
-            flora.computeIfAbsent(reservoir.getElement(), element -> new ArrayList<>()).add(reservoir);
-        }
-        return flora;
+        return EssenceHelper.byElement(level, cruciblePos.below(), Config.altarRange);
     }
 
     // Bitmask of the elements whose flora between them hold too little essence for the balance
     private static int shortfall(Level level, BlockPos pos, CrucibleInput input) {
-        Map<Element, List<EssenceReservoir>> flora = flora(level, pos);
-        int mask = 0;
-        for (Element element : CrucibleRecipe.balancing(input)) {
-            if (EssenceHelper.total(flora.getOrDefault(element, List.of())) < balanceCost()) {
-                mask |= 1 << element.ordinal();
-            }
-        }
-        return mask;
+        Map<Element, Integer> cost = new EnumMap<>(Element.class);
+        CrucibleRecipe.balancing(input).forEach(element -> cost.put(element, balanceCost()));
+        return EssenceHelper.shortfall(flora(level, pos), cost);
     }
 
     // Burns the powders and catalyst and draws the balance from the flora, with a stream of each
@@ -194,15 +182,7 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
             Map<Element, List<EssenceReservoir>> flora = flora(serverLevel, pos);
             Vec3 crucible = Vec3.atCenterOf(pos);
             for (Element element : balancing) {
-                List<EssenceReservoir> reservoirs = flora.getOrDefault(element, List.of());
-                Map<EssenceReservoir, Integer> before = new HashMap<>();
-                reservoirs.forEach(reservoir -> before.put(reservoir, reservoir.getEssence()));
-                EssenceHelper.drain(reservoirs, balanceCost());
-                for (EssenceReservoir reservoir : reservoirs) {
-                    if (reservoir.getEssence() < before.get(reservoir) && reservoir instanceof BlockEntity flower) {
-                        EssenceHelper.stream(serverLevel, element, Vec3.atCenterOf(flower.getBlockPos()), crucible);
-                    }
-                }
+                EssenceHelper.draw(serverLevel, element, flora.getOrDefault(element, List.of()), balanceCost(), crucible);
             }
             serverLevel.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0F, 1.0F);
             serverLevel.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.8F, 1.2F);

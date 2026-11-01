@@ -42,5 +42,23 @@ public final class ModArmorMaterials {
         ModEquipmentAssets.BRONZE
     );
 
+    // Netherite's values throughout
+    public static final ArmorMaterial LONSDALEITE = new ArmorMaterial(
+        37,
+        Map.of(
+            ArmorType.BOOTS, 3,
+            ArmorType.LEGGINGS, 6,
+            ArmorType.CHESTPLATE, 8,
+            ArmorType.HELMET, 3,
+            ArmorType.BODY, 19
+        ),
+        15,
+        SoundEvents.ARMOR_EQUIP_NETHERITE,
+        3.0F,
+        0.1F,
+        ModTags.REPAIRS_LONSDALEITE_ARMOR,
+        ModEquipmentAssets.LONSDALEITE
+    );
+
     private ModArmorMaterials() {}
 }
