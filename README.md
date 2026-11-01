@@ -11,6 +11,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Tin](#tin)
 - [Bronze](#bronze)
 - [Lonsdaleite Armor](#lonsdaleite-armor)
+- [Bronze Chest and Golems](#bronze-chest-and-golems)
 - [Tin Rails](#tin-rails)
 - [Padded Rails](#padded-rails)
 - [Padded Powered Rails](#padded-powered-rails)
@@ -117,6 +118,39 @@ Each power comes from its own piece alone, so you can mix and match. Each piece 
 - **Upgrading keeps** the piece's enchantments, trim, name and damage.
 - **Its look is built in.** Every piece has the [Reinforced Armor Trim](#reinforced-armor-trim)'s banding in dark tin, drawn into its texture, so it can't be removed and isn't listed in the tooltip. You can still add a real trim, which draws on top.
 - **The shimmer replaces the enchanted glint**, so a piece shimmers red whether it's enchanted or not, and never purple. The worn shimmer shows on players, mannequins and armor stands; other mobs wearing a piece show it plain.
+
+## Bronze Chest and Golems
+
+### Bronze Chest
+
+**Recipe:** any copper chest surrounded by 4 Bronze Ingots (one on each side) → 1 Bronze Chest.
+
+A copper chest with a fourth row: **36 slots**, or **72** when two side by side join into a double chest. It doesn't weather. A double chest's screen is 8 rows tall, which can run off the edges of a small window at a high GUI scale.
+
+Copper golems take items out of it as they do from any copper chest, so a copper golem nearby will carry its contents off to ordinary chests. A bronze chest and a copper chest don't join.
+
+### Bronze Golem
+
+**Recipe:** Carved Pumpkin surrounded by 4 Bronze Ingots (one on each side) → 1 Bronze Golem Helm. Right-click a copper golem with it, at any stage of oxidation, to turn it into a bronze golem. Anything it was holding drops.
+
+A bronze golem has 40 health and 6 armor. It stays within 32 blocks across and 8 up or down of the nearest bronze chest (the range a copper golem searches), or wanders freely if there isn't one. It doesn't move items.
+
+- **Moving it:** Shift + right-click it with an empty hand to pack it into a Bronze Golem item, keeping its name. Use the item on a block to set it down.
+- **Mending it:** right-click it with a Bronze Ingot to restore a quarter of its health.
+- **Iron golems:** near one, it now and then stops and holds out a copper nugget, as an iron golem offers a villager a poppy.
+
+### Combat Golem
+
+**Recipe, at the [Apothecary Altar](#apothecary-altar):** a packed Bronze Golem in the base slot and a Diamond Sword in the material slot, with 32 Ignis and 32 Aer essence, for 20 seconds → 1 Combat Golem item, used on a block to set it down.
+
+- **The sword is its weapon.** It's kept as it is, enchantments and wear included. A plain diamond sword hits for 7, Sharpness and Fire Aspect work as usual, and Looting improves what its kills drop. Sweeping Edge doesn't apply, as only players sweep. Each hit costs the sword 1 durability, and Unbreaking helps.
+- **It hunts** hostile mobs in its area, creepers included, and any mob that attacks it, but never players, or mobs caged in a [Cell Upgrade](#cart-upgrades).
+- **It stores what they drop.** It carries one stack at a time in its off hand to the bronze chest, and only picks up what its own kills dropped. What won't fit in the chest it leaves on the ground beside it.
+- **Killing comes first.** With nothing to fight it collects drops. If a hostile mob comes into range while it's carrying something, it takes that to the chest first, then goes to fight. If it can't reach the chest within 15 seconds, it fights anyway.
+- **When the sword breaks,** it's a bronze golem again, at full health, and what it was carrying drops.
+- **A killing blow** does the same, but **destroys the sword** along with whatever durability it had left.
+
+Packing up a combat golem keeps its sword, and the item's tooltip shows the sword's durability and enchantments.
 
 ## Tin Rails
 
@@ -657,12 +691,12 @@ The altar burns plants into elemental essence, which flows into the flora around
 - **Hoppers** put plants in from above and fuel in from the sides, and take empty buckets out from below. They can't pull plants or fuel out.
 - Breaking the altar drops what's in it.
 
-**Transmuting:** the screen's lower row changes one item into another, with a **base** on the left, a **material** beside it, and the **result** on the right. It burns the same fuel as the plant slot, alongside any plant, and when the time's up it draws the recipe's essence from the flora in range, streaming it back to the altar. It makes [Lonsdaleite Shards and armor](#lonsdaleite-armor).
+**Transmuting:** the screen's lower row changes one item into another, with a **base** on the left, a **material** beside it, and the **result** on the right. It burns the same fuel as the plant slot, alongside any plant, and when the time's up it draws the recipe's essence from the flora in range, streaming it back to the altar. It makes [Lonsdaleite Shards and armor](#lonsdaleite-armor) and arms [Combat Golems](#combat-golem).
 
 - It waits, keeping its progress, while the material's missing, the flora are short, or the result slot is full. Taking the base out starts it again from nothing.
 - The pips show the cost: outlined in amber for an element it needs, and red if the flora in range are short of it.
 - Hoppers put base items in from above and materials in from the sides (once the base is in), and take results out from below. They can't pull a base or material out.
-- Recipes are data-driven, in `data/<namespace>/recipe/altar/`. For example: `{"type": "xincraft:altar_transmutation", "base": "xincraft:bronze_boots", "material": "xincraft:lonsdaleite_shard", "material_count": 4, "essence": {"aer": 24, "vita": 24}, "time": 400, "result": "xincraft:lonsdaleite_boots"}`. `material`, `material_count`, `essence` and `time` (200 ticks by default) are optional. A base item belongs to one recipe.
+- Recipes are data-driven, in `data/<namespace>/recipe/altar/`. For example: `{"type": "xincraft:altar_transmutation", "base": "xincraft:bronze_boots", "material": "xincraft:lonsdaleite_shard", "material_count": 4, "essence": {"aer": 24, "vita": 24}, "time": 400, "result": "xincraft:lonsdaleite_boots"}`. `material`, `material_count`, `essence` and `time` (200 ticks by default) are optional. `store_material` (false by default) keeps the material inside the result, as the combat golem does with its sword. A base item belongs to one recipe.
 
 ### Apothecary Crucible
 
@@ -908,13 +942,13 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
 | `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, recipe types, biome modifier types, tags, armor materials, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, buoys, the apothecary altar and crucible, and `SidedContainerBlockEntity`, the base class that makes hoppers and pipes follow a block's per-side rules (Forge's default item handler ignores them, so any new block with a container should extend it) |
-| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, the buoy item, mob filters, lonsdaleite armor, rose-tinted glasses, and the compendium item |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, buoys, the apothecary altar and crucible, the bronze chest, and `SidedContainerBlockEntity`, the base class that makes hoppers and pipes follow a block's per-side rules (Forge's default item handler ignores them, so any new block with a container should extend it) |
+| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, the buoy item, mob filters, lonsdaleite armor, rose-tinted glasses, the bronze golem helm and items, and the compendium item |
 | `.../magic/` | Elements, essence reservoirs and `EssenceHelper` (finding, filling and drawing on flora), and the crucible and altar recipe types (`CrucibleRecipe`, `AltarRecipe`) |
-| `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, freight cart, motorboats, upgrades for carts and boats (`CartUpgrades`), the ferry and barge, linking carts and boats into trains (`LinkedTransport`), the freight cart's and barge's shulker box storage (`ShulkerHold`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
+| `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, freight cart, motorboats, upgrades for carts and boats (`CartUpgrades`), the ferry and barge, the bronze golem and its goals (`BronzeGolem`), linking carts and boats into trains (`LinkedTransport`), the freight cart's and barge's shulker box storage (`ShulkerHold`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
 | `.../inventory/` | Locomotive cart, turbine, apothecary altar and crucible menus |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine, altar and crucible screens, jingle cart music, tin spyglass tint, the cell cage, lonsdaleite armor's worn shimmer (`LonsdaleiteGlintLayer`), and the compendium (`compendium/`) with its look-up key |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine, altar and crucible screens, jingle cart music, tin spyglass tint, the cell cage, lonsdaleite armor's worn shimmer (`LonsdaleiteGlintLayer`), the bronze chest's and golem's renderers, the double bronze chest's screen, and the compendium (`compendium/`) with its look-up key |
 | `.../network/` | The mod's network channel and the packet that sends recipes to the compendium |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, translations, and the compendium's text (`compendium/`) |
 | `src/main/resources/data/` | Recipes (with crucible and altar recipes in `recipe/crucible/` and `recipe/altar/`), loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |

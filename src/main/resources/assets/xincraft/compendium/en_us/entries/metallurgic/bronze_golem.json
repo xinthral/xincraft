@@ -1,0 +1,21 @@
+{
+  "title": "Bronze Golem",
+  "icon": "xincraft:bronze_golem",
+  "category": "metallurgic",
+  "sort": 11,
+  "items": [
+    "xincraft:bronze_golem",
+    "xincraft:bronze_golem_helm"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:bronze_golem_helm",
+      "text": "Use the helm on a copper golem to make it a bronze golem, whatever its oxidation."
+    },
+    {
+      "type": "text",
+      "text": "It stays within 32 blocks across and 8 up or down of the nearest [[bronze_chest]], and moves no items.\n\n**Shift + right-click** with an empty hand to pack it up; use the item on a block to set it down.\n\nA **bronze ingot** restores a quarter of its health.\n\nNear an iron golem it now and then holds out a copper nugget."
+    }
+  ]
+}

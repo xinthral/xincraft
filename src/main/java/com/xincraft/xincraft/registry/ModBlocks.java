@@ -24,7 +24,9 @@ import com.xincraft.xincraft.block.FireflyPetuniaBlock;
 import com.xincraft.xincraft.block.FloraBlock;
 import com.xincraft.xincraft.magic.Element;
 import net.minecraft.world.item.DyeColor;
+import com.xincraft.xincraft.block.BronzeChestBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.RailBlock;
@@ -79,6 +81,14 @@ public final class ModBlocks {
     // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier,
     // world.TinOreBiomeModifier) unless Config.generateTinOre is off, and drop raw tin. Properties
     // match vanilla's iron ores.
+    // A copper chest with a fourth row, and a bronze golem's home (block.BronzeChestBlock)
+    public static final RegistryObject<Block> BRONZE_CHEST = registerBlock(
+        "bronze_chest",
+        BronzeChestBlock::new,
+        BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_CHEST.weathering().unaffected()),
+        true
+    );
+
     public static final RegistryObject<Block> TIN_ORE = registerBlock(
         "tin_ore",
         Block::new,

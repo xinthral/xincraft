@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": "minecraft:carved_pumpkin",
+    "B": "#c:ingots/bronze"
+  },
+  "pattern": [
+    " B ",
+    "BPB",
+    " B "
+  ],
+  "result": {
+    "id": "xincraft:bronze_golem_helm"
+  }
+}

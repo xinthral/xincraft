@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.Barge;
+import com.xincraft.xincraft.entity.BronzeGolem;
 import com.xincraft.xincraft.entity.Carriage;
 import com.xincraft.xincraft.entity.EnderMinecart;
 import com.xincraft.xincraft.entity.Ferry;
@@ -56,6 +57,15 @@ public final class ModEntityTypes {
             .passengerAttachments(0.1875F)
             .clientTrackingRange(8)
             .build(ENTITY_TYPES.key("carriage")));
+
+    // The size of the copper golem it's made from (entity.BronzeGolem)
+    public static final RegistryObject<EntityType<BronzeGolem>> BRONZE_GOLEM = ENTITY_TYPES.register("bronze_golem",
+        () -> EntityType.Builder.<BronzeGolem>of(BronzeGolem::new, MobCategory.MISC)
+            .noLootTable()
+            .sized(0.49F, 0.98F)
+            .eyeHeight(0.8125F)
+            .clientTrackingRange(10)
+            .build(ENTITY_TYPES.key("bronze_golem")));
 
     public static final RegistryObject<EntityType<FreightCart>> FREIGHT_CART = ENTITY_TYPES.register("freight_cart",
         () -> EntityType.Builder.<FreightCart>of(FreightCart::new, MobCategory.MISC)

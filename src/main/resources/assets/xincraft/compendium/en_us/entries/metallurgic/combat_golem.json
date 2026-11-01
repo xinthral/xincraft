@@ -1,0 +1,27 @@
+{
+  "title": "Combat Golem",
+  "icon": "xincraft:combat_golem",
+  "category": "metallurgic",
+  "also": [
+    "natural"
+  ],
+  "sort": 12,
+  "items": [
+    "xincraft:combat_golem"
+  ],
+  "pages": [
+    {
+      "type": "altar",
+      "recipe": "xincraft:altar/combat_golem",
+      "text": "A packed [[bronze_golem]] and a diamond sword at the [[apothecary_altar]]. The sword keeps its enchantments and wear."
+    },
+    {
+      "type": "text",
+      "text": "It hunts hostile mobs around its [[bronze_chest]], and fights back when attacked, except by players.\n\nIt carries what its kills drop to the chest, one stack at a time.\n\n**Killing comes first**, but if a hostile mob appears while it's carrying something, it stores that before it fights."
+    },
+    {
+      "type": "text",
+      "text": "**The sword:** hits for 7 plus Sharpness, and Looting and Fire Aspect work. Each hit costs 1 durability.\n\nWhen the sword **breaks**, it's a bronze golem again.\n\nA **killing blow** does the same, and destroys the sword with whatever durability it had left."
+    }
+  ]
+}

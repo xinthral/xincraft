@@ -1,0 +1,12 @@
+{
+  "type": "xincraft:altar_transmutation",
+  "base": "xincraft:bronze_golem",
+  "material": "minecraft:diamond_sword",
+  "essence": {
+    "ignis": 32,
+    "aer": 32
+  },
+  "time": 400,
+  "result": "xincraft:combat_golem",
+  "store_material": true
+}

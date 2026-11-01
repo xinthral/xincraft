@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "#minecraft:copper_chests",
+    "B": "#c:ingots/bronze"
+  },
+  "pattern": [
+    " B ",
+    "BCB",
+    " B "
+  ],
+  "result": {
+    "id": "xincraft:bronze_chest"
+  }
+}

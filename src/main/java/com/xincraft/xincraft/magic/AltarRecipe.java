@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.xincraft.xincraft.registry.ModDataComponents;
 import com.xincraft.xincraft.registry.ModRecipes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -27,20 +28,22 @@ import net.minecraft.world.level.Level;
 // for time ticks, then draws the essence from the flora in range, uses up the material, and turns the
 // base into the result. The base's components (enchantments, trims, name, damage) carry over, as with
 // a netherite upgrade. A base belongs to one recipe, which the material then has to match; a recipe
-// with no material ignores that slot.
+// with no material ignores that slot. With store_material, the material goes into the result's
+// xincraft:golem_sword component as it is, enchantments and wear included.
 //
 //   {"type": "xincraft:altar_transmutation", "base": "xincraft:bronze_boots",
 //    "material": "xincraft:lonsdaleite_shard", "material_count": 4,
 //    "essence": {"aer": 24, "vita": 24}, "time": 400, "result": "xincraft:lonsdaleite_boots"}
 public record AltarRecipe(Ingredient base, Optional<Ingredient> material, int materialCount, Map<Element, Integer> essence,
-        int time, Item result) implements Recipe<AltarInput> {
+        int time, Item result, boolean storeMaterial) implements Recipe<AltarInput> {
     public static final MapCodec<AltarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             Ingredient.CODEC.fieldOf("base").forGetter(AltarRecipe::base),
             Ingredient.CODEC.optionalFieldOf("material").forGetter(AltarRecipe::material),
             ExtraCodecs.POSITIVE_INT.optionalFieldOf("material_count", 1).forGetter(AltarRecipe::materialCount),
             Codec.unboundedMap(Element.CODEC, ExtraCodecs.POSITIVE_INT).optionalFieldOf("essence", Map.of()).forGetter(AltarRecipe::essence),
             ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(AltarRecipe::time),
-            BuiltInRegistries.ITEM.byNameCodec().fieldOf("result").forGetter(AltarRecipe::result))
+            BuiltInRegistries.ITEM.byNameCodec().fieldOf("result").forGetter(AltarRecipe::result),
+            Codec.BOOL.optionalFieldOf("store_material", false).forGetter(AltarRecipe::storeMaterial))
         .apply(i, AltarRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AltarRecipe> STREAM_CODEC = StreamCodec.composite(
@@ -52,6 +55,7 @@ public record AltarRecipe(Ingredient base, Optional<Ingredient> material, int ma
             ByteBufCodecs.VAR_INT.cast()), AltarRecipe::essence,
         ByteBufCodecs.VAR_INT, AltarRecipe::time,
         ByteBufCodecs.registry(Registries.ITEM), AltarRecipe::result,
+        ByteBufCodecs.BOOL, AltarRecipe::storeMaterial,
         AltarRecipe::new);
 
     // Only the base: it says which recipe the altar is working on, even before the material's in
@@ -70,7 +74,11 @@ public record AltarRecipe(Ingredient base, Optional<Ingredient> material, int ma
 
     @Override
     public ItemStack assemble(AltarInput input) {
-        return input.base().transmuteCopy(result, 1);
+        ItemStack made = input.base().transmuteCopy(result, 1);
+        if (storeMaterial) {
+            made.set(ModDataComponents.GOLEM_SWORD.get(), input.material().copyWithCount(1));
+        }
+        return made;
     }
 
     @Override

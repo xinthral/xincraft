@@ -10,7 +10,7 @@
     },
     {
       "type": "text",
-      "text": "**Forge Energy (FE):** the [[heat_turbine]] and [[steam_turbine]] burn furnace fuel into FE. They charge the [[charging_rail]], and with the [[energy_upgrade]] power locomotives and motorboats. They work with other mods' cables and machines too.\n\nTin and bronze also go into most of Xincraft's rails, carts and upgrades."
+      "text": "**Forge Energy (FE):** the [[heat_turbine]] and [[steam_turbine]] burn furnace fuel into FE. They charge the [[charging_rail]], and with the [[energy_upgrade]] power locomotives and motorboats. They work with other mods' cables and machines too.\n\n**Golems:** a [[bronze_golem]] keeps near a [[bronze_chest]], and a sword at the altar makes it a [[combat_golem]].\n\nTin and bronze also go into most of Xincraft's rails, carts and upgrades."
     }
   ]
 }

@@ -16,6 +16,8 @@ import com.xincraft.xincraft.item.LinkingBarItem;
 import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.item.MobFilterItem;
 import com.xincraft.xincraft.item.MortarAndPestleItem;
+import com.xincraft.xincraft.item.BronzeGolemHelmItem;
+import com.xincraft.xincraft.item.BronzeGolemItem;
 import com.xincraft.xincraft.item.LonsdaleiteArmorItem;
 import com.xincraft.xincraft.item.RoseTintedGlassesItem;
 import com.xincraft.xincraft.item.FreightCartItem;
@@ -113,6 +115,15 @@ public final class ModItems {
         () -> lonsdaleiteArmor(ArmorType.BOOTS, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.BOOTS).withModifierAdded(
             Attributes.MOVEMENT_SPEED, new AttributeModifier(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_boots_speed"),
                 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.FEET)));
+
+    // Turns a copper golem into a bronze golem (item.BronzeGolemHelmItem)
+    public static final RegistryObject<Item> BRONZE_GOLEM_HELM =
+        registerItem("bronze_golem_helm", BronzeGolemHelmItem::new, () -> new Item.Properties().stacksTo(16));
+    // A bronze golem packed up, and one armed at the apothecary altar (item.BronzeGolemItem)
+    public static final RegistryObject<Item> BRONZE_GOLEM =
+        registerItem("bronze_golem", BronzeGolemItem::new, () -> new Item.Properties().stacksTo(1));
+    public static final RegistryObject<Item> COMBAT_GOLEM =
+        registerItem("combat_golem", BronzeGolemItem::new, () -> new Item.Properties().stacksTo(1));
 
     public static final RegistryObject<Item> TIN_HELMET = registerItem("tin_helmet", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.HELMET));

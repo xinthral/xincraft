@@ -26,7 +26,7 @@
     },
     {
       "type": "text",
-      "text": "**Transmuting:** the lower row turns a base item and a material into something new: [[lonsdaleite_shard|lonsdaleite shards]] and [[lonsdaleite_armor]]. It burns the same fuel and draws essence from the flora when it finishes, keeping any enchantments.\n\nPips outlined amber are elements it needs; red means the flora are short. Hoppers feed bases from above and materials from the sides, and take results from below, but can't take a base or material."
+      "text": "**Transmuting:** the lower row turns a base item and a material into something new: [[lonsdaleite_shard|lonsdaleite shards]], [[lonsdaleite_armor]] and the [[combat_golem]]. It burns the same fuel and draws essence from the flora when it finishes, keeping any enchantments.\n\nPips outlined amber are elements it needs; red means the flora are short. Hoppers feed bases from above and materials from the sides, and take results from below, but can't take a base or material."
     }
   ]
 }

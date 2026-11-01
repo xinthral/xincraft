@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
+import com.xincraft.xincraft.block.BronzeChestBlockEntity;
 import com.xincraft.xincraft.block.BuoyBlockEntity;
 import com.xincraft.xincraft.block.ChargingRailBlockEntity;
 import com.xincraft.xincraft.block.EnderRailBlockEntity;
@@ -20,6 +21,9 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, XincraftMod.MODID);
+
+    public static final RegistryObject<BlockEntityType<BronzeChestBlockEntity>> BRONZE_CHEST = BLOCK_ENTITIES.register("bronze_chest",
+        () -> new BlockEntityType<>(BronzeChestBlockEntity::new, Set.of(ModBlocks.BRONZE_CHEST.get())));
 
     public static final RegistryObject<BlockEntityType<EnderRailBlockEntity>> ENDER_RAIL = BLOCK_ENTITIES.register("ender_rail",
         () -> new BlockEntityType<>(EnderRailBlockEntity::new, Set.of(ModBlocks.ENDER_RAIL.get())));

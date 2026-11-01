@@ -34,6 +34,14 @@ Xincraft Changelog
  - Mob Filters: fitted to a carriage or ferry, only the mobs inscribed on them come aboard. The
    Mob Filter holds 2 mobs and the Advanced Mob Filter 8, telling babies and kin apart; the Fuzzy
    Mob Filter holds 8 and lets through any age and kin. Wash in a water cauldron to wipe
+ - Bronze Chest: a copper chest with a fourth row, 36 slots or 72 as a double chest; copper golems
+   take from it
+ - Bronze Golem: a copper golem refitted with a bronze golem helm, which keeps near a bronze chest,
+   and now and then offers a nearby iron golem a copper nugget. Shift + right-click packs it up
+ - Combat Golem: a bronze golem armed with a diamond sword at the apothecary altar. Hunts hostile
+   mobs around its chest with the sword and all its enchantments, and stores what they drop,
+   emptying its hands before it fights. It's a bronze golem again when the sword breaks, or when
+   it takes a killing blow, which destroys the sword
  - Lonsdaleite Armor: bronze armor remade at the apothecary altar, as strong and fireproof as
    netherite, in dark amber with reinforced banding and a red shimmer. The helmet gives night
    vision, the chestplate keeps piglins neutral, the leggings step up full blocks, and the boots

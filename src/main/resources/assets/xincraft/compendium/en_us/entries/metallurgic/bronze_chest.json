@@ -1,0 +1,20 @@
+{
+  "title": "Bronze Chest",
+  "icon": "xincraft:bronze_chest",
+  "category": "metallurgic",
+  "sort": 10,
+  "items": [
+    "xincraft:bronze_chest"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:bronze_chest",
+      "text": "A copper chest with a fourth row: **36 slots**, or **72** as a double chest. It never weathers."
+    },
+    {
+      "type": "text",
+      "text": "Copper golems take items from it as from any copper chest, so one nearby will carry its contents off to ordinary chests.\n\nIt's the home of a [[bronze_golem]]. It doesn't join a copper chest."
+    }
+  ]
+}

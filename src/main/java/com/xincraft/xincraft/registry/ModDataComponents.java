@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.util.Unit;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -36,6 +37,10 @@ public final class ModDataComponents {
     // The buoy a linking bar was used on first; using it on a second buoy links the two
     public static final RegistryObject<DataComponentType<GlobalPos>> LINKING_BAR_BUOY = COMPONENTS.register("linking_bar_buoy",
         () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
+
+    // The sword a combat golem item's golem holds (see item.BronzeGolemItem)
+    public static final RegistryObject<DataComponentType<ItemStack>> GOLEM_SWORD = COMPONENTS.register("golem_sword",
+        () -> DataComponentType.<ItemStack>builder().persistent(ItemStack.CODEC).networkSynchronized(ItemStack.STREAM_CODEC).build());
 
     // The mobs inscribed on a mob filter (see item.MobFilterItem)
     public static final RegistryObject<DataComponentType<MobFilterContents>> MOB_FILTER = COMPONENTS.register("mob_filter",
