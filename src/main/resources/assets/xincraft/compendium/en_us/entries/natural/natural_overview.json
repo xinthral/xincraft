@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "**The cycle of essence:**\n\n1. Grind flowers into [[elemental_powders|powders]] with the [[mortar_and_pestle]].\n2. Use a powder on a small flower to make an [[elemental_flora|elemental flora]]; it holds up to 64 essence.\n3. Burn plants at the [[apothecary_altar]] to refill the flora within 4 blocks.\n4. Draw on them in the [[apothecary_crucible]]."
+      "text": "**The cycle of essence:**\n\n1. Grind flowers into [[elemental_powders|powders]] with the [[mortar_and_pestle]].\n2. Use a powder on a small flower to make an [[elemental_flora|elemental flora]]; it holds up to 64 essence.\n3. Burn plants at the [[apothecary_altar]] to refill the flora within 4 blocks.\n4. Draw on them in the [[apothecary_crucible]] to inscribe [[mob_filters|mob filters]], or at the altar to transmute [[lonsdaleite_shard|lonsdaleite]]."
     },
     {
       "type": "text",

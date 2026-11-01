@@ -10,7 +10,7 @@
     {
       "type": "recipe",
       "recipe": "xincraft:apothecary_altar",
-      "text": "Burns plants into essence for the flora around it. Works like a furnace: a **plant** in the top slot and **fuel** below."
+      "text": "Burns plants into essence for the flora around it. Works like a furnace: a **plant** in the top slot and **fuel** below. It also transmutes items."
     },
     {
       "type": "text",
@@ -22,11 +22,11 @@
     },
     {
       "type": "text",
-      "text": "**Aer:** vines, leaves, azure bluet, white tulip, spore blossom\n**Vita:** lily of the valley, pink tulip, sweet berries, moss block, pink petals\n**Lux:** sunflower, orange tulip, glow berries, glow lichen\n**Umbra:** wither rose, closed eyeblossom, allium, mushrooms, warped fungus and roots\n\nHoppers feed plants from above and fuel from the sides, and pull empty buckets from below."
+      "text": "**Aer:** vines, leaves, azure bluet, white tulip, spore blossom\n**Vita:** lily of the valley, pink tulip, sweet berries, moss block, pink petals\n**Lux:** sunflower, orange tulip, glow berries, glow lichen\n**Umbra:** wither rose, closed eyeblossom, allium, mushrooms, warped fungus and roots\n\nHoppers feed plants from above and fuel from the sides, and pull empty buckets from below, but can't take plants or fuel."
     },
     {
       "type": "text",
-      "text": "**Transmuting:** the lower row turns a base item and a material into something new: [[lonsdaleite_shard|lonsdaleite shards]] and [[lonsdaleite_armor]]. It burns the same fuel and draws essence from the flora when it finishes, keeping any enchantments.\n\nPips outlined amber are elements it needs; red means the flora are short. Hoppers feed bases from above and materials from the sides, and take results from below."
+      "text": "**Transmuting:** the lower row turns a base item and a material into something new: [[lonsdaleite_shard|lonsdaleite shards]] and [[lonsdaleite_armor]]. It burns the same fuel and draws essence from the flora when it finishes, keeping any enchantments.\n\nPips outlined amber are elements it needs; red means the flora are short. Hoppers feed bases from above and materials from the sides, and take results from below, but can't take a base or material."
     }
   ]
 }

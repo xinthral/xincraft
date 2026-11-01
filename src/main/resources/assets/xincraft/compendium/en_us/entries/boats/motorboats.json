@@ -29,7 +29,7 @@
     },
     {
       "type": "text",
-      "text": "**Driving:** press forward to start cruising, back to stop. It cuts out when out of fuel, stuck, or when you get out. Seats two.\n\n**Fuel:** shift + right-click (or your inventory key while riding) for a **fuel slot** (8 times furnace time) and a **storage slot**. It only lights fuel while cruising."
+      "text": "**Driving:** press forward to start cruising, back to stop. It cuts out when out of fuel, stuck, or when you get out. Seats two.\n\n**Fuel:** shift + right-click (or your inventory key while riding) for a **fuel slot** (8 times furnace time) and a **storage slot**. It only lights fuel while cruising. A hopper under the boat can only take empty buckets from the fuel slot."
     }
   ]
 }

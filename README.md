@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, exotic flowers that give off area effects, and the start of a nature magic system built on elemental flowers.
+A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, exotic flowers that give off area effects, and a nature magic system built on elemental flowers, whose altar and crucible make mob filters and lonsdaleite armor. An in-game guide book, the Xincraft Compendium, covers all of it.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -80,7 +80,7 @@ Tin is tagged with the common `c:` tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_ma
 
 ### Reinforced Armor Trim
 
-A dark edging along every edge of the armor, like metal banding on reinforced gear, in a deep shade of the trim material's color. It pairs especially well with tin.
+A dark edging along every edge of the armor, like metal banding on reinforced gear, in a deep shade of the trim material's color. It pairs especially well with tin. [Lonsdaleite Armor](#lonsdaleite-armor) comes with this banding built in.
 
 The **Reinforced Armor Trim Smithing Template** is found in abandoned mineshaft chests (10% of chests). Duplicate it like a vanilla template: 7 Diamonds around the template and a Cobblestone makes 2.
 
@@ -97,7 +97,7 @@ An alloy of copper and tin.
 
 Bronze is a muted golden orange, and the Block of Bronze has copper's polished shine. It needs a stone pickaxe or better to mine. Bronze uses the common `c:` tags (`c:raw_materials/bronze`, `c:ingots/bronze`, `c:storage_blocks/bronze`), and the raw bronze recipe accepts any mod's raw copper and raw tin.
 
-Bronze armor gives the same protection as iron, 2 / 6 / 5 / 2 armor points (helmet / chestplate / leggings / boots), but lasts longer, with a durability multiplier of 17 (iron is 15), and has an enchantability of 12. Repair it with bronze ingots in an anvil. It takes armor trims like vanilla armor.
+Bronze armor gives the same protection as iron, 2 / 6 / 5 / 2 armor points (helmet / chestplate / leggings / boots), but lasts longer, with a durability multiplier of 17 (iron is 15), and has an enchantability of 12. Repair it with bronze ingots in an anvil. It takes armor trims like vanilla armor. The Apothecary Altar can upgrade it to [Lonsdaleite Armor](#lonsdaleite-armor).
 
 **Full set bonus:** wearing all four pieces of bronze armor lets you **walk straight up one-block steps** without jumping, the way horses do (step height 1 block instead of 0.6). Take any piece off and it's back to normal at once.
 
@@ -285,7 +285,7 @@ Generators that burn furnace fuel into Forge Energy (FE), to power [Charging Rai
 | Energy buffer | 50,000 FE | 100,000 FE |
 | Water | None | 5 mB per tick (a bucket lasts 10 seconds); 8,000 mB tank |
 
-- **Fuel:** right-click to open it and put any furnace fuel in the fuel slot. **Hoppers** fill it too, from above or the sides. A lava bucket leaves its empty bucket behind, which a hopper underneath can pull out.
+- **Fuel:** right-click to open it and put any furnace fuel in the fuel slot. **Hoppers** fill it too, from above or the sides. A lava bucket leaves its empty bucket behind, which a hopper underneath can pull out. Hoppers can't pull fuel back out (only empty buckets).
 - **Output:** it pushes up to 1,000 FE per tick into each neighbouring block that takes energy, so a turbine **next to a charging rail** keeps the rail charged. Other mods' cables can draw from it as well, and a turbine placed **under the track** charges a locomotive passing over it directly.
 - **Full buffer:** once the buffer is full, the turbine stops lighting new fuel, so it doesn't eat through the fuel slot while nothing's drawing power. A fuel item that's already burning finishes burning, like in a furnace, and any energy it makes that won't fit is lost.
 - **Water (steam turbine):** right-click it with a **water bucket** to fill the tank, or pipe water in from another mod from any side. Without water it stops, and doesn't use fuel.
@@ -437,7 +437,7 @@ Every kind of boat works, and the motorboat keeps its wood: an oak boat makes an
 
 Fuel goes in the motorboat's **fuel slot**, and there's a **storage slot** for carrying anything. Open them with **Shift + right-click**, or press your **inventory key** while riding. It's the same screen as the locomotive cart's.
 
-- It takes anything that burns in a furnace, and each item burns **8 times as long** as it would in a furnace (configurable). A lava bucket leaves its empty bucket behind.
+- It takes anything that burns in a furnace, and each item burns **8 times as long** as it would in a furnace (configurable). A lava bucket leaves its empty bucket behind. A hopper under the boat can only take empty buckets from the fuel slot.
 - A new fuel item is only lit while the boat is cruising. An item that's already burning keeps burning down while you drift, like in a furnace.
 - Breaking the motorboat drops it as an item, along with its fuel, storage and upgrades.
 
@@ -600,7 +600,7 @@ Glowing leaves look exactly like the leaves they came from and behave the same w
 
 ## Nature Magic
 
-Flowers hold the primal elements: **Terra, Aqua, Ignis, Aer, Vita, Lux and Umbra**. You grind them into powders, then use a powder to turn a living flower into an **elemental flora** that stores that element's essence. The flora are the reservoirs for rituals coming in a later update.
+Flowers hold the primal elements: **Terra, Aqua, Ignis, Aer, Vita, Lux and Umbra**. You grind them into powders, then use a powder to turn a living flower into an **elemental flora** that stores that element's essence. The [Apothecary Altar](#apothecary-altar) burns plants to refill the flora, and draws on them to transmute items into [Lonsdaleite Shards and armor](#lonsdaleite-armor). The [Apothecary Crucible](#apothecary-crucible) draws on them to inscribe [Mob Filters](#mob-filters).
 
 ### Mortar and Pestle
 
@@ -654,14 +654,14 @@ The altar burns plants into elemental essence, which flows into the flora around
 | Umbra | Wither Rose, Closed Eyeblossom, Allium, Red and Brown Mushrooms, Warped Fungus, Warped Roots |
 
 - **The screen** shows a row of seven pips, one per element. A pip is dark when no flora of its element is in range, dim when they're all full, and bright when one has room. It's outlined in white when the plant in the slot gives that element. Hover a pip to see which.
-- **Hoppers** put plants in from above and fuel in from the sides, and take empty buckets out from below.
+- **Hoppers** put plants in from above and fuel in from the sides, and take empty buckets out from below. They can't pull plants or fuel out.
 - Breaking the altar drops what's in it.
 
 **Transmuting:** the screen's lower row changes one item into another, with a **base** on the left, a **material** beside it, and the **result** on the right. It burns the same fuel as the plant slot, alongside any plant, and when the time's up it draws the recipe's essence from the flora in range, streaming it back to the altar. It makes [Lonsdaleite Shards and armor](#lonsdaleite-armor).
 
 - It waits, keeping its progress, while the material's missing, the flora are short, or the result slot is full. Taking the base out starts it again from nothing.
 - The pips show the cost: outlined in amber for an element it needs, and red if the flora in range are short of it.
-- Hoppers put base items in from above and materials in from the sides (once the base is in), and take results out from below.
+- Hoppers put base items in from above and materials in from the sides (once the base is in), and take results out from below. They can't pull a base or material out.
 - Recipes are data-driven, in `data/<namespace>/recipe/altar/`. For example: `{"type": "xincraft:altar_transmutation", "base": "xincraft:bronze_boots", "material": "xincraft:lonsdaleite_shard", "material_count": 4, "essence": {"aer": 24, "vita": 24}, "time": 400, "result": "xincraft:lonsdaleite_boots"}`. `material`, `material_count`, `essence` and `time` (200 ticks by default) are optional. A base item belongs to one recipe.
 
 ### Apothecary Crucible
@@ -907,16 +907,17 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | Path | Contents |
 | --- | --- |
 | `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
-| `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, biome modifier types, tags, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, and buoys |
-| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, and the buoy item |
+| `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, recipe types, biome modifier types, tags, armor materials, the tin trim material, and the creative tab |
+| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, buoys, the apothecary altar and crucible, and `SidedContainerBlockEntity`, the base class that makes hoppers and pipes follow a block's per-side rules (Forge's default item handler ignores them, so any new block with a container should extend it) |
+| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, the buoy item, mob filters, lonsdaleite armor, rose-tinted glasses, and the compendium item |
+| `.../magic/` | Elements, essence reservoirs and `EssenceHelper` (finding, filling and drawing on flora), and the crucible and altar recipe types (`CrucibleRecipe`, `AltarRecipe`) |
 | `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, freight cart, motorboats, upgrades for carts and boats (`CartUpgrades`), the ferry and barge, linking carts and boats into trains (`LinkedTransport`), the freight cart's and barge's shulker box storage (`ShulkerHold`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
 | `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
-| `.../inventory/` | Locomotive cart and turbine menus (slots, burn progress, stored energy, and water) |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine screen, jingle cart music, tin spyglass tint, and the compendium (`compendium/`) with its look-up key |
+| `.../inventory/` | Locomotive cart, turbine, apothecary altar and crucible menus |
+| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine, altar and crucible screens, jingle cart music, tin spyglass tint, the cell cage, lonsdaleite armor's worn shimmer (`LonsdaleiteGlintLayer`), and the compendium (`compendium/`) with its look-up key |
 | `.../network/` | The mod's network channel and the packet that sends recipes to the compendium |
-| `src/main/resources/assets/xincraft/` | Block states, models, textures, and translations |
-| `src/main/resources/data/` | Recipes, loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
+| `src/main/resources/assets/xincraft/` | Block states, models, textures, translations, and the compendium's text (`compendium/`) |
+| `src/main/resources/data/` | Recipes (with crucible and altar recipes in `recipe/crucible/` and `recipe/altar/`), loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
 
 ## License
 
