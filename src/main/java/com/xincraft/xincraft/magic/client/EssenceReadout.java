@@ -1,12 +1,12 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.magic.client;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
-import com.xincraft.xincraft.block.FloraBlockEntity;
+import com.xincraft.xincraft.magic.ApothecaryAltarBlockEntity;
+import com.xincraft.xincraft.magic.FloraBlockEntity;
 import com.xincraft.xincraft.common.RoseTintedGlassesItem;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.EssenceHelper;

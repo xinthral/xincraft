@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.inventory;
+package com.xincraft.xincraft.magic;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -6,17 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.common.MobFilterContents;
 import com.xincraft.xincraft.common.MobFilterItem;
-import com.xincraft.xincraft.magic.CrucibleInput;
-import com.xincraft.xincraft.magic.CrucibleRecipe;
-import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.magic.EssenceHelper;
-import com.xincraft.xincraft.magic.EssenceReservoir;
-import com.xincraft.xincraft.registry.ModRecipes;
-import com.xincraft.xincraft.magic.MagicBlocks;
-import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -40,7 +31,7 @@ import net.minecraft.world.phys.Vec3;
 // mob inscribed. Taking it burns the powders and catalyst and, for nature's balance, draws
 // Config.crucibleBalanceEssence essence per powder of every other element from the flora around the
 // altar beneath (within Config.altarRange). Nothing comes out if any of those flora are short, the
-// filter is full, or it already lists the mob; the screen (client.ApothecaryCrucibleScreen) shows
+// filter is full, or it already lists the mob; the screen (magic.client.ApothecaryCrucibleScreen) shows
 // which.
 public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
     public static final int LEFT_SLOT = 0;

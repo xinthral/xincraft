@@ -4,7 +4,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.StringRepresentable;
 
 // The primal elements of the mod's nature magic. Each has a powder ground with the mortar and pestle
-// (item.ElementPowderItem) and an elemental flora that stores its essence (block.FloraBlock), named
+// (magic.ElementPowderItem) and an elemental flora that stores its essence (magic.FloraBlock), named
 // with the element's Latin genitive (flora ignis, flora aquae, ...).
 public enum Element implements StringRepresentable {
     TERRA("terra", "terrae", 0x8B6B3D),

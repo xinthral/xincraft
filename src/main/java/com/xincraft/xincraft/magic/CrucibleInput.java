@@ -3,7 +3,7 @@ package com.xincraft.xincraft.magic;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-// What's in the apothecary crucible (inventory.ApothecaryCrucibleMenu): two powders, the catalyst
+// What's in the apothecary crucible (magic.ApothecaryCrucibleMenu): two powders, the catalyst
 // between them, and the mob filter to inscribe
 public record CrucibleInput(ItemStack left, ItemStack right, ItemStack catalyst, ItemStack filter) implements RecipeInput {
     @Override

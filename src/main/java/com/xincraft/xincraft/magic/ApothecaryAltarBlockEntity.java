@@ -1,18 +1,9 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.magic;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.inventory.ApothecaryAltarMenu;
-import com.xincraft.xincraft.magic.AltarInput;
-import com.xincraft.xincraft.magic.AltarRecipe;
-import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.magic.EssenceHelper;
-import com.xincraft.xincraft.magic.EssenceReservoir;
-import com.xincraft.xincraft.registry.ModRecipes;
-import com.xincraft.xincraft.magic.MagicBlockEntities;
-import com.xincraft.xincraft.magic.MagicTags;
 import com.xincraft.xincraft.common.SidedContainerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -87,7 +78,7 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
     private int transmuteTime = 1;
     // The recipe being worked on, to start again if it changes; not saved, so progress survives a reload
     private @Nullable ResourceKey<Recipe<?>> transmuting;
-    // On the client, the server's Config.altarRange, for rose-tinted glasses (client.EssenceReadout)
+    // On the client, the server's Config.altarRange, for rose-tinted glasses (magic.client.EssenceReadout)
     private int syncedRange = Config.altarRange;
 
     private final ContainerData data = new ContainerData() {

@@ -2,14 +2,12 @@ package com.xincraft.xincraft.magic;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
-import com.xincraft.xincraft.block.FloraBlockEntity;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MagicBlockEntities {
-    // All the elemental flora share one type (block.FloraBlock)
+    // All the elemental flora share one type (magic.FloraBlock)
     public static final RegistryObject<BlockEntityType<FloraBlockEntity>> FLORA = Registers.BLOCK_ENTITIES.register("flora",
         () -> new BlockEntityType<>(FloraBlockEntity::new,
             MagicBlocks.FLORA.values().stream().map(RegistryObject::get).collect(Collectors.toUnmodifiableSet())));

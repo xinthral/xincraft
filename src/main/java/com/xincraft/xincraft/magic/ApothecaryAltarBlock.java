@@ -1,6 +1,5 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.magic;
 
-import com.xincraft.xincraft.magic.MagicBlockEntities;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

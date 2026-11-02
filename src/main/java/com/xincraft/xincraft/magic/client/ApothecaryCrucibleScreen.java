@@ -1,8 +1,8 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.magic.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.inventory.ApothecaryCrucibleMenu;
-import com.xincraft.xincraft.item.ElementPowderItem;
+import com.xincraft.xincraft.magic.ApothecaryCrucibleMenu;
+import com.xincraft.xincraft.magic.ElementPowderItem;
 import com.xincraft.xincraft.magic.CrucibleInput;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import com.xincraft.xincraft.magic.Element;

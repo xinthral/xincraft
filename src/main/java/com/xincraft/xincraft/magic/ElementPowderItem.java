@@ -1,13 +1,9 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.magic;
 
 import java.util.function.Consumer;
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.flowers.AuraFlowerBlock;
 import com.xincraft.xincraft.flowers.FireflyPetuniaBlock;
-import com.xincraft.xincraft.block.FloraBlock;
-import com.xincraft.xincraft.block.FloraBlockEntity;
-import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.magic.MagicBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -26,7 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 // An element's powder, ground from flowers and vines with the mortar and pestle. Used on a small
-// flower, it turns it into that element's flora (block.FloraBlock), holding Config.floraInitialEssence;
+// flower, it turns it into that element's flora (magic.FloraBlock), holding Config.floraInitialEssence;
 // used on a flora of the same element, it adds Config.floraEssencePerPowder. The mod's exotic flowers
 // are left alone.
 public class ElementPowderItem extends Item {

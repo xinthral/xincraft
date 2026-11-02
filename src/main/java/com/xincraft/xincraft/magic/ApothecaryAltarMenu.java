@@ -1,7 +1,5 @@
-package com.xincraft.xincraft.inventory;
+package com.xincraft.xincraft.magic;
 
-import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
-import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -17,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 // The apothecary altar's plant slot and fuel slot (with the flame between them), the burn progress
 // arrow, which elements have flora in range, and the transmutation's base, material and result slots
-// (see client.ApothecaryAltarScreen)
+// (see magic.client.ApothecaryAltarScreen)
 public class ApothecaryAltarMenu extends AbstractContainerMenu {
     private static final int ALTAR_SLOTS_END = ApothecaryAltarBlockEntity.SLOT_COUNT;
     private static final int INVENTORY_SLOTS_END = ALTAR_SLOTS_END + 36;

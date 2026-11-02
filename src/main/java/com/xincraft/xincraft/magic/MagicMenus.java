@@ -1,7 +1,5 @@
 package com.xincraft.xincraft.magic;
 
-import com.xincraft.xincraft.inventory.ApothecaryAltarMenu;
-import com.xincraft.xincraft.inventory.ApothecaryCrucibleMenu;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;

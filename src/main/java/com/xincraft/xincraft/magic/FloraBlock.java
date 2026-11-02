@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.magic;
 
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.magic.Element;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
@@ -19,7 +18,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-// An elemental flora: a flower changed by an element's powder (item.ElementPowderItem) into a living
+// An elemental flora: a flower changed by an element's powder (magic.ElementPowderItem) into a living
 // store of that element's essence (FloraBlockEntity), for rituals to draw from. More of the same
 // powder tops it up. It has no item and drops nothing: broken, it's gone, along with its essence.
 // An empty hand shows how much it holds.

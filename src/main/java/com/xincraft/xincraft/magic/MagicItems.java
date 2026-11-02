@@ -3,8 +3,6 @@ package com.xincraft.xincraft.magic;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
-import com.xincraft.xincraft.item.ElementPowderItem;
-import com.xincraft.xincraft.item.MortarAndPestleItem;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;

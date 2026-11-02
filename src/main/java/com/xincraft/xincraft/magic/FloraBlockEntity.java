@@ -1,9 +1,6 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.magic;
 
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.magic.EssenceReservoir;
-import com.xincraft.xincraft.magic.MagicBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +17,7 @@ import org.jspecify.annotations.Nullable;
 
 // The essence an elemental flora holds (see FloraBlock), up to Config.floraCapacity. The block
 // state's FILL shows roughly how full it is; the amount and capacity are also synced to clients, for
-// rose-tinted glasses to read (client.EssenceReadout).
+// rose-tinted glasses to read (magic.client.EssenceReadout).
 public class FloraBlockEntity extends BlockEntity implements EssenceReservoir {
     private int essence;
     // On the client, the server's capacity, which may be configured differently from the client's

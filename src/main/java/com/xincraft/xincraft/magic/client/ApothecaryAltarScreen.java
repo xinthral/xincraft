@@ -1,7 +1,7 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.magic.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.inventory.ApothecaryAltarMenu;
+import com.xincraft.xincraft.magic.ApothecaryAltarMenu;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.xincraft.xincraft.registry.ModRecipes;
 import com.xincraft.xincraft.common.CommonComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

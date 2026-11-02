@@ -1,8 +1,6 @@
-package com.xincraft.xincraft.registry;
+package com.xincraft.xincraft.magic;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.magic.AltarRecipe;
-import com.xincraft.xincraft.magic.CrucibleRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeBookCategory;

@@ -3,7 +3,7 @@ package com.xincraft.xincraft.magic;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-// What's in the apothecary altar's transmutation slots (block.ApothecaryAltarBlockEntity): the item
+// What's in the apothecary altar's transmutation slots (magic.ApothecaryAltarBlockEntity): the item
 // being changed, and the material going into it
 public record AltarInput(ItemStack base, ItemStack material) implements RecipeInput {
     @Override

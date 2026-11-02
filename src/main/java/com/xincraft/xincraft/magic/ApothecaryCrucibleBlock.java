@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.magic;
 
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.inventory.ApothecaryCrucibleMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -24,7 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 // A small crucible that sits in the apothecary altar's basin, for inscribing mobs onto mob filters
-// (see inventory.ApothecaryCrucibleMenu). Like a crafting table it keeps nothing: whatever's left in
+// (see magic.ApothecaryCrucibleMenu). Like a crafting table it keeps nothing: whatever's left in
 // it goes back to the player when they close it. It only stands on an altar, and breaks off if the
 // altar goes.
 public class ApothecaryCrucibleBlock extends Block {

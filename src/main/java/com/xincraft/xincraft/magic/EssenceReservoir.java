@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.magic;
 
 // Something that stores essence of a single element, for rituals to draw from. The elemental flora
-// (block.FloraBlockEntity) is the first; EssenceHelper finds and drains them.
+// (magic.FloraBlockEntity) is the first; EssenceHelper finds and drains them.
 public interface EssenceReservoir {
     Element getElement();
 

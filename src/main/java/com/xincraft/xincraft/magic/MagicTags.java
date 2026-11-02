@@ -9,12 +9,12 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 public final class MagicTags {
-    // xincraft:element_powders - every elemental powder (item.ElementPowderItem)
+    // xincraft:element_powders - every elemental powder (magic.ElementPowderItem)
     public static final TagKey<Item> ELEMENT_POWDERS =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "element_powders"));
 
     // xincraft:essence/terra to /umbra - the plants the apothecary altar burns into each element's
-    // essence (see block.ApothecaryAltarBlockEntity). A plant can be in several, giving each.
+    // essence (see magic.ApothecaryAltarBlockEntity). A plant can be in several, giving each.
     private static final Map<Element, TagKey<Item>> ESSENCE = new EnumMap<>(Element.class);
 
     static {
