@@ -1,7 +1,44 @@
 {
-  "variants": {
-    "": {
-      "model": "xincraft:block/charging_station"
+  "multipart": [
+    {
+      "apply": {
+        "model": "xincraft:block/charging_station"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "xincraft:block/charging_station_arm"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "xincraft:block/charging_station_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "xincraft:block/charging_station_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "xincraft:block/charging_station_arm",
+        "y": 270
+      }
     }
-  }
+  ]
 }

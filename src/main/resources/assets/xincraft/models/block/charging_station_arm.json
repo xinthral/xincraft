@@ -1,0 +1,68 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "xincraft:block/charging_station",
+    "body": "xincraft:block/charging_station"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        3,
+        0
+      ],
+      "to": [
+        10,
+        8,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8,
+            10,
+            13
+          ],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [
+            0,
+            8,
+            2,
+            13
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0,
+            8,
+            2,
+            13
+          ],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            10,
+            2
+          ],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            6,
+            0,
+            10,
+            2
+          ],
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}

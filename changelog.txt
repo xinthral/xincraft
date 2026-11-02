@@ -6,11 +6,12 @@ Xincraft Changelog
    silver.generateOre
  - Electrum: raw gold and raw silver alloy into raw electrum, which smelts into ingots
  - Electrum Charging Rail: stores 20,000 FE, moves 4,000 FE per tick, and reaches further for power
- - Power networks: Charging Stations take in energy and Substations store it, joined with the
-   linking bar up to 64 blocks apart. Charging rails draw from the nearest one in range: 2 chunks
+ - Power networks: Charging Stations take in energy from turbines beside them, connected with the
+   linking bar, and Substations store it, joined with the linking bar up to 64 blocks apart. Charging rails draw from the nearest one in range: 2 chunks
    for bronze, 4 for electrum. Several stations can feed one network, and overlapping ranges cover
    for each other
- - Rose-Tinted Glasses show power networks: links traced in cyan, or red when a network has run dry,
+ - Rose-Tinted Glasses show power networks: links traced in cyan, amber when a network has run dry, or red with no
+   power source connected,
    and what a station, substation or charging rail holds when you look at it. A charging rail also
    shows which one it's drawing from, or warns that nothing in range has energy
  - Charging rails now store 5,000 FE, down from 50,000: the network passes energy along rather than

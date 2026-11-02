@@ -137,6 +137,16 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         }
     }
 
+    // Whether power enters the network here, which only a charging station with something connected does
+    public boolean hasSource() {
+        return false;
+    }
+
+    // Whether anything on this node's network has a power source connected
+    public boolean networkHasSource() {
+        return network().stream().anyMatch(node -> !node.isRemoved() && node.hasSource());
+    }
+
     // What this node's network holds between its nodes, and could hold
     public int networkEnergy() {
         return network().stream().filter(node -> !node.isRemoved()).mapToInt(PowerNodeBlockEntity::energy).sum();

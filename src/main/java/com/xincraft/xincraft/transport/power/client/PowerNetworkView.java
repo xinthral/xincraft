@@ -7,6 +7,7 @@ import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.common.RoseTintedGlassesItem;
 import com.xincraft.xincraft.common.client.CrosshairReadout;
 import com.xincraft.xincraft.common.client.CrosshairReadout.Line;
+import com.xincraft.xincraft.transport.power.ChargingStationBlockEntity;
 import com.xincraft.xincraft.transport.power.PowerNodeBlockEntity;
 import com.xincraft.xincraft.transport.rail.ChargingRailBlockEntity;
 import net.minecraft.client.DeltaTracker;
@@ -30,10 +31,10 @@ import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
 // While the player wears or holds rose-tinted glasses, the links of the power networks around them are
-// traced in dust: cyan where a network has energy, red where it's run dry. Looking at a charging
-// station or substation shows what it holds and what its network holds. Looking at a charging rail
-// shows what it holds and traces a line to the station or substation it's drawing from, or warns that
-// there isn't one. Amounts are synced from the server at most once every 5 seconds, and the client only knows
+// traced in dust: cyan where a network has energy, amber where its power source has run dry, and red
+// where it has no power source connected. Looking at a charging station or substation shows what it
+// holds and what its network holds. Looking at a charging rail shows what it holds and traces a line
+// to the station or substation it's drawing from, or warns that there isn't one. Amounts are synced from the server at most once every 5 seconds, and the client only knows
 // the parts of a network within its view distance.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class PowerNetworkView {
@@ -44,12 +45,14 @@ public final class PowerNetworkView {
     // Dust specks put along each link each tick, per 8 blocks of its length
     private static final double BLOCKS_PER_SPECK = 8.0;
     private static final DustParticleOptions LIVE = new DustParticleOptions(0x4AD8FF, 0.9F);
-    private static final DustParticleOptions DEAD = new DustParticleOptions(0xFF2A1A, 0.9F);
+    private static final DustParticleOptions DRY = new DustParticleOptions(0xFFB020, 0.9F);
+    private static final DustParticleOptions UNSOURCED = new DustParticleOptions(0xFF2A1A, 0.9F);
     private static final int HEADER_COLOR = 0xFFFFFFFF;
     private static final int LIVE_COLOR = 0xFF7FE3FF;
+    private static final int DRY_COLOR = 0xFFFFC85A;
     private static final int DEAD_COLOR = 0xFFFF6A5A;
 
-    private record Trace(Vec3 from, Vec3 to, boolean live) {}
+    private record Trace(Vec3 from, Vec3 to, DustParticleOptions dust) {}
 
     private static List<Trace> links = List.of();
     private static @Nullable Trace railTrace;
@@ -101,7 +104,7 @@ public final class PowerNetworkView {
         int count = (int) specks + (random.nextDouble() < specks - (int) specks ? 1 : 0);
         for (int i = 0; i < count; i++) {
             Vec3 at = trace.from().add(span.scale(random.nextDouble()));
-            level.addParticle(trace.live() ? LIVE : DEAD, at.x, at.y, at.z, 0.0, 0.0, 0.0);
+            level.addParticle(trace.dust(), at.x, at.y, at.z, 0.0, 0.0, 0.0);
         }
     }
 
@@ -110,32 +113,50 @@ public final class PowerNetworkView {
         List<Trace> found = new ArrayList<>();
         List<PowerNodeBlockEntity> nearby = PowerNodeBlockEntity.inRange(level, center, CHUNK_RANGE);
         for (PowerNodeBlockEntity node : nearby) {
-            boolean live = node.networkEnergy() > 0;
+            DustParticleOptions dust = dustFor(node);
             for (BlockPos other : node.links()) {
                 // From the lower position, unless the other end is too far away to draw it from there
                 if (node.getBlockPos().compareTo(other) < 0
                         || !(level.getBlockEntity(other) instanceof PowerNodeBlockEntity near && nearby.contains(near))) {
-                    found.add(new Trace(top(node.getBlockPos()), top(other), live));
+                    found.add(new Trace(top(node.getBlockPos()), top(other), dust));
                 }
             }
         }
         return found;
     }
 
+    private static DustParticleOptions dustFor(PowerNodeBlockEntity node) {
+        if (node.networkEnergy() > 0) {
+            return node.networkHasSource() ? LIVE : UNSOURCED;
+        }
+        return node.networkHasSource() ? DRY : UNSOURCED;
+    }
+
     private static void look(Level level, @Nullable BlockEntity target) {
         railTrace = null;
         if (target instanceof PowerNodeBlockEntity node) {
-            lines = List.of(
-                new Line(Component.translatable("hud.xincraft.power.held", node.getBlockState().getBlock().getName(),
-                    number(node.energy()), number(node.capacity())), HEADER_COLOR),
-                new Line(Component.translatable("hud.xincraft.power.network", number(node.networkEnergy()), number(node.networkCapacity())),
-                    node.networkEnergy() > 0 ? LIVE_COLOR : DEAD_COLOR),
-                new Line(Component.translatable("hud.xincraft.power.links", node.links().size(), node.maxLinks()), HEADER_COLOR));
+            lines = nodeLines(node);
         } else if (target instanceof ChargingRailBlockEntity rail) {
             lines = railLines(level, rail);
         } else {
             lines = List.of();
         }
+    }
+
+    private static List<Line> nodeLines(PowerNodeBlockEntity node) {
+        List<Line> found = new ArrayList<>();
+        found.add(new Line(Component.translatable("hud.xincraft.power.held", node.getBlockState().getBlock().getName(),
+            number(node.energy()), number(node.capacity())), HEADER_COLOR));
+        found.add(new Line(Component.translatable("hud.xincraft.power.network", number(node.networkEnergy()), number(node.networkCapacity())),
+            node.networkEnergy() > 0 ? LIVE_COLOR : DRY_COLOR));
+        found.add(new Line(Component.translatable("hud.xincraft.power.links", node.links().size(), node.maxLinks()), HEADER_COLOR));
+        if (node instanceof ChargingStationBlockEntity station) {
+            found.add(new Line(Component.translatable("hud.xincraft.power.sources", station.sourceCount()), HEADER_COLOR));
+        }
+        if (!node.networkHasSource()) {
+            found.add(new Line(Component.translatable("hud.xincraft.power.no_source"), DEAD_COLOR));
+        }
+        return found;
     }
 
     private static List<Line> railLines(Level level, ChargingRailBlockEntity rail) {
@@ -151,13 +172,19 @@ public final class PowerNetworkView {
         // As the rail chooses: the nearest one whose network has energy
         PowerNodeBlockEntity source = nodes.stream().filter(node -> node.networkEnergy() > 0).findFirst().orElse(null);
         if (source == null) {
-            found.add(new Line(Component.translatable("hud.xincraft.power.dry", rail.chunkRange()), DEAD_COLOR));
-            railTrace = new Trace(Vec3.atCenterOf(pos), top(nodes.getFirst().getBlockPos()), false);
+            PowerNodeBlockEntity nearest = nodes.getFirst();
+            boolean sourced = nodes.stream().anyMatch(PowerNodeBlockEntity::networkHasSource);
+            found.add(new Line(Component.translatable(sourced ? "hud.xincraft.power.dry" : "hud.xincraft.power.no_source_in_range", rail.chunkRange()),
+                sourced ? DRY_COLOR : DEAD_COLOR));
+            railTrace = new Trace(Vec3.atCenterOf(pos), top(nearest.getBlockPos()), dustFor(nearest));
             return found;
         }
         int blocks = (int) Math.round(Math.sqrt(source.getBlockPos().distSqr(pos)));
         found.add(new Line(Component.translatable("hud.xincraft.power.drawing_from", source.getBlockState().getBlock().getName(), blocks), LIVE_COLOR));
-        railTrace = new Trace(Vec3.atCenterOf(pos), top(source.getBlockPos()), true);
+        if (!source.networkHasSource()) {
+            found.add(new Line(Component.translatable("hud.xincraft.power.no_source"), DEAD_COLOR));
+        }
+        railTrace = new Trace(Vec3.atCenterOf(pos), top(source.getBlockPos()), dustFor(source));
         return found;
     }
 

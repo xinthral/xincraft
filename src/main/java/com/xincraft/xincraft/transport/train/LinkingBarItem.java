@@ -3,6 +3,9 @@ package com.xincraft.xincraft.transport.train;
 import java.util.function.Consumer;
 import com.xincraft.xincraft.transport.TransportComponents;
 import com.xincraft.xincraft.transport.TransportItems;
+import com.xincraft.xincraft.transport.power.ChargingStationBlock;
+import com.xincraft.xincraft.transport.power.ChargingStationBlockEntity;
+import com.xincraft.xincraft.XincraftMod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -18,12 +21,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.common.util.Result;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 // A bronze drawbar that hitches carts and boats into trains, or links two buoys into a path for
 // motorboats. The vehicles handle using it on them (transport.train.LinkedTransport); buoys are handled here.
 // Either way, the bar remembers the first vehicle or buoy it was used on, glinting until it's used
 // on the second, and one bar is used up per link.
+@Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public class LinkingBarItem extends Item {
     public LinkingBarItem(Item.Properties properties) {
         super(properties);
@@ -52,7 +62,7 @@ public class LinkingBarItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         BlockState state = context.getLevel().getBlockState(context.getClickedPos());
         if (!(state.getBlock() instanceof LinkableBlock linkable)) {
-            return InteractionResult.PASS;
+            return connectSource(context);
         }
         if (!(context.getLevel() instanceof ServerLevel level) || context.getPlayer() == null) {
             return InteractionResult.SUCCESS;
@@ -87,7 +97,7 @@ public class LinkingBarItem extends Item {
         }
         GlobalPos first = stack.get(TransportComponents.LINKING_BAR_BLOCK.get());
         if (first == null) {
-            if (block.isFull()) {
+            if (block.isFull() && !block.connectsSources()) {
                 player.sendOverlayMessage(block.message("full", block.maxLinks()));
                 return InteractionResult.FAIL;
             }
@@ -135,6 +145,63 @@ public class LinkingBarItem extends Item {
         level.playSound(null, pos, SoundEvents.CHAIN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.sendOverlayMessage(block.message("linked"));
         return InteractionResult.SUCCESS;
+    }
+
+    // With a charging station's end already tied on, used on an energy block right beside the
+    // station: connects the two
+    private InteractionResult connectSource(UseOnContext context) {
+        ItemStack stack = context.getItemInHand();
+        GlobalPos first = stack.get(TransportComponents.LINKING_BAR_BLOCK.get());
+        if (first == null || !isHoldingStation(context.getLevel(), first)) {
+            return InteractionResult.PASS;
+        }
+        if (!(context.getLevel() instanceof ServerLevel level) || context.getPlayer() == null) {
+            return InteractionResult.SUCCESS;
+        }
+        Player player = context.getPlayer();
+        ChargingStationBlockEntity station = (ChargingStationBlockEntity) level.getBlockEntity(first.pos());
+        BlockPos pos = context.getClickedPos();
+        clearPending(stack);
+        Direction side = null;
+        for (Direction direction : ChargingStationBlock.CONNECTED.keySet()) {
+            if (first.pos().relative(direction).equals(pos)) {
+                side = direction;
+            }
+        }
+        if (side == null) {
+            player.sendOverlayMessage(station.message("source_not_adjacent"));
+            return InteractionResult.FAIL;
+        }
+        if (station.isConnected(side)) {
+            player.sendOverlayMessage(station.message("source_already_connected"));
+            return InteractionResult.FAIL;
+        }
+        if (!ChargingStationBlockEntity.isSource(level, pos, side.getOpposite())) {
+            player.sendOverlayMessage(station.message("source_no_energy"));
+            return InteractionResult.FAIL;
+        }
+        station.connect(side);
+        stack.consume(1, player);
+        level.playSound(null, first.pos(), SoundEvents.CHAIN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        player.sendOverlayMessage(station.message("source_connected"));
+        return InteractionResult.SUCCESS;
+    }
+
+    private static boolean isHoldingStation(Level level, GlobalPos first) {
+        return first.dimension().equals(level.dimension()) && level.isLoaded(first.pos())
+            && level.getBlockEntity(first.pos()) instanceof ChargingStationBlockEntity;
+    }
+
+    // With a charging station's end tied on, a block with a menu of its own, such as a turbine, is
+    // connected to rather than opened. Runs on both sides, as both decide whether to use the block.
+    @SubscribeEvent
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        ItemStack stack = event.getItemStack();
+        Level level = event.getLevel();
+        GlobalPos first = stack.is(TransportItems.LINKING_BAR.get()) ? stack.get(TransportComponents.LINKING_BAR_BLOCK.get()) : null;
+        if (first != null && isHoldingStation(level, first) && !(level.getBlockState(event.getPos()).getBlock() instanceof LinkableBlock)) {
+            event.setUseBlock(Result.DENY);
+        }
     }
 
     // What it does, from item.xincraft.linking_bar.desc, and whether it's halfway through a link

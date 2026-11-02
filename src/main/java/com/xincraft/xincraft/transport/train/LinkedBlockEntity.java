@@ -39,6 +39,11 @@ public abstract class LinkedBlockEntity extends BlockEntity {
     // Whether this block can link to that one
     public abstract boolean accepts(LinkedBlockEntity other);
 
+    // Whether a linking bar can also connect it to an energy block beside it, which takes no link
+    public boolean connectsSources() {
+        return false;
+    }
+
     // Names this kind of block's linking bar messages: message.xincraft.linking_bar.<key>_started and so on
     protected abstract String messageKey();
 
