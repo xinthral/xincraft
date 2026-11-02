@@ -10,7 +10,7 @@
     {
       "type": "recipe",
       "recipe": "xincraft:charging_rail",
-      "text": "A bronze powered rail storing 5,000 FE, for carts with the [[energy_upgrade]]."
+      "text": "A bronze powered rail keeping 500 FE in reserve, for carts with the [[energy_upgrade]]."
     },
     {
       "type": "text",

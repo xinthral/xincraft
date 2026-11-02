@@ -49,7 +49,9 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
 
     public boolean isConnected(Direction side) {
         BooleanProperty property = ChargingStationBlock.CONNECTED.get(side);
-        return property != null && getBlockState().getValue(property);
+        // From the level, as a block entity's own copy of its state can lag behind
+        BlockState state = level != null ? level.getBlockState(worldPosition) : getBlockState();
+        return property != null && state.hasProperty(property) && state.getValue(property);
     }
 
     public int sourceCount() {

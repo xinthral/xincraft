@@ -71,7 +71,8 @@ public final class TransportBlocks {
         true
     );
 
-    // A charging rail that holds more energy, charges carts faster, and reaches further for power
+    // A charging rail that charges carts faster, reaches further for power, and passes charge along
+    // a line of its kind
     // (transport.rail.ElectrumChargingRailBlock)
     public static final RegistryObject<Block> ELECTRUM_CHARGING_RAIL = Registers.registerBlock(
         "electrum_charging_rail",

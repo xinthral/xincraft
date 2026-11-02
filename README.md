@@ -323,14 +323,14 @@ A bronze powered rail that stores Forge Energy (FE) for locomotive carts with th
 | --- | --- |
 | Powered Rail recipe with Bronze Ingots in place of Gold Ingots (6 Bronze Ingots + 1 Stick + 1 Redstone) | 6 |
 
-- **Filling it:** it draws from a [power network](#power-networks) within range, and from nothing else: a generator or cable touching it won't fill it. It holds up to **5,000 FE** and takes in up to 1,000 FE per tick.
-- **Charging a cart:** the rail passes up to 1,000 FE per tick into a locomotive cart with the energy upgrade sitting on it or rolling over it. It also charges other mods' carts that take Forge Energy.
+- **Filling it:** it draws from a [power network](#power-networks) within range, and from nothing else: a generator or cable touching it won't fill it. It keeps just **500 FE** in reserve.
+- **Charging a cart:** the rail passes up to 1,000 FE per tick into a locomotive cart with the energy upgrade sitting on it or rolling over it. The cart draws through the rail straight from the network, so the small reserve doesn't slow it. It also charges other mods' carts that take Forge Energy.
 - **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail in range of a powered network makes a **charging stop**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
 - Other mods' machines can draw energy back out of it too.
 
 ### Electrum Charging Rail
 
-The same rail made of electrum: it stores **20,000 FE**, moves up to **4,000 FE per tick**, and reaches twice as far for power.
+The same rail made of electrum: it moves up to **4,000 FE per tick**, reaches twice as far for power, and **passes charge along the track** to the electrum rails it's joined to, up to 500 FE per tick per rail. A line of them carries power past the range of any station or substation, though the far end of a long line fills slowly, and carts there charge from what reaches them. A gap in the track, or a bronze rail, stops the flow, and two lines running side by side don't share.
 
 | Recipe | Makes |
 | --- | --- |

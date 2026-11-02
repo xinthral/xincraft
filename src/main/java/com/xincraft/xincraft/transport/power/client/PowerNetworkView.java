@@ -166,7 +166,9 @@ public final class PowerNetworkView {
             number(rail.energy()), number(rail.capacity())), HEADER_COLOR));
         List<PowerNodeBlockEntity> nodes = PowerNodeBlockEntity.inRange(level, pos, rail.chunkRange());
         if (nodes.isEmpty()) {
-            found.add(new Line(Component.translatable("hud.xincraft.power.none_in_range", rail.chunkRange()), DEAD_COLOR));
+            found.add(rail.hasChargedNeighbour(level)
+                ? new Line(Component.translatable("hud.xincraft.power.passed"), LIVE_COLOR)
+                : new Line(Component.translatable("hud.xincraft.power.none_in_range", rail.chunkRange()), DEAD_COLOR));
             return found;
         }
         // As the rail chooses: the nearest one whose network has energy

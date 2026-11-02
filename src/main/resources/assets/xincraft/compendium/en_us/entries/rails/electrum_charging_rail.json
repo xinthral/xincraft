@@ -10,11 +10,11 @@
     {
       "type": "recipe",
       "recipe": "xincraft:electrum_charging_rail",
-      "text": "A [[charging_rail]] made of [[electrum]]: it stores 20,000 FE and moves up to 4,000 FE per tick."
+      "text": "A [[charging_rail]] made of [[electrum]]: it moves up to 4,000 FE per tick, keeping 500 FE in reserve."
     },
     {
       "type": "text",
-      "text": "It draws from a [[charging_station]] or [[substation]] within **4 chunks**, twice the charging rail's reach. A locomotive tops up much faster on it, as long as the power network can keep up."
+      "text": "It draws from a [[charging_station]] or [[substation]] within **4 chunks**, twice the charging rail's reach. A locomotive tops up much faster on it, as long as the power network can keep up.\n\n**Lines:** electrum rails joined along the track pass charge to each other, carrying power past that range. The far end of a long line fills slowly, and a gap or a bronze rail stops the flow."
     }
   ]
 }

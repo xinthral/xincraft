@@ -233,6 +233,7 @@
   "hud.xincraft.power.sources": "Power sources: %s",
   "hud.xincraft.power.no_source": "No power source connected to this network",
   "hud.xincraft.power.no_source_in_range": "No network within %s chunks has a power source",
+  "hud.xincraft.power.passed": "Charged along the line of rails",
   "hud.xincraft.power.none_in_range": "No charging station or substation within %s chunks",
   "hud.xincraft.power.dry": "Every network within %s chunks is out of energy",
   "hud.xincraft.power.drawing_from": "Drawing from: %s, %s blocks away",
