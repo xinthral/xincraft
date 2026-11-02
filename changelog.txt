@@ -20,6 +20,8 @@ Xincraft Changelog
  - Charging rails now keep just 500 FE in reserve, down from 50,000, and carts draw through them
    straight from the network. Any energy above that in a rail is lost when it loads
  - Locomotive carts take up to 4,000 FE per tick from a rail that offers it
+ - Locomotive Cart handbrake is now a toggle: press jump to throw it, with a lever on the cart showing
+   which way it's set. It stays on after you get out, and holds the cart still on powered rails
  - Charging rails count as powered while they have charge, boosting carts instead of holding them,
    so locomotives charge as they pass, and give off a full redstone signal
 

@@ -16,6 +16,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -55,8 +57,9 @@ import org.jspecify.annotations.Nullable;
 // Takes upgrades (see CartUpgrades). With the energy upgrade it also stores Forge Energy, charged
 // from charging rails, energy blocks under the track (or anything that hands energy to entities),
 // or by burning its fuel, and the engine runs only on that stored energy. Tows a train of up to
-// MAX_TOWED carts hitched behind it with linking bars (see LinkedTransport). A rider holding jump pulls
-// the handbrake: the engine cuts out and the cart brakes to a stop, and stays stopped while it's held.
+// MAX_TOWED carts hitched behind it with linking bars (see LinkedTransport). A rider pressing jump
+// throws the handbrake, shown by the lever on the cart: the engine cuts out and the cart brakes to a
+// stop, and stays there, even on a powered rail, until a rider presses jump again.
 // Only players and villagers ride it.
 public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart, LinkableTransport {
     public static final int FUEL_SLOT = 0;
@@ -68,6 +71,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_HANDBRAKE = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     // Engine force added each tick while burning. Strong enough to hold the cart at the speed
     // cap, including the raised cap on tin rails.
@@ -78,6 +82,9 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     // bringing it from full speed to a stop in under a second
     private static final double BRAKE_KEEP = 0.8;
     private static final double BRAKE_DROP = 0.02;
+    // Below this speed the handbrake holds the cart dead still. A powered rail's boost would otherwise
+    // balance the braking, leaving the cart rolling along forever at a few hundredths of a block per tick.
+    private static final double BRAKE_HOLD_SPEED = 0.06;
     // Most Forge Energy the energy upgrade takes in per tick, from blocks or anything else
     private static final int MAX_ENERGY_RECEIVE = 1_000;
     // What a rail or other source can push in per tick: enough for the electrum charging rail
@@ -96,8 +103,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> new Battery());
     // Horizontal unit vector the engine drives along; zero while parked, so no fuel is used
     private Vec3 heading = Vec3.ZERO;
-    // Whether the rider is holding the handbrake (the jump key) this tick
-    private boolean braking;
+    // Whether the jump key was down last tick, so that holding it throws the handbrake only once
+    private boolean jumpHeld;
 
     // Synced to an open menu for the flame. Menu data travels as 16-bit numbers, too small for
     // long burn times, so this sends the fraction of burn left in thousandths instead.
@@ -131,6 +138,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_LIT, false);
+        builder.define(DATA_HANDBRAKE, false);
         builder.define(DATA_UPGRADES, 0);
         builder.define(DATA_TOWED, LinkedTransport.NONE);
         builder.define(DATA_HITCHED, false);
@@ -164,7 +172,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         if (level() instanceof ServerLevel serverLevel) {
             transport.tick(serverLevel);
             upgrades.tickShimmer(serverLevel);
-            braking = getFirstPassenger() instanceof ServerPlayer rider && rider.getLastClientInput().jump();
+            ServerPlayer rider = getFirstPassenger() instanceof ServerPlayer player ? player : null;
+            updateHandbrake(rider, rider != null && rider.getLastClientInput().jump());
             updateHeading();
             if (litTime > 0) {
                 litTime--;
@@ -185,15 +194,45 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
             if (electric && random.nextInt(4) == 0) {
                 serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 0.6, getZ(), 2, 0.3, 0.1, 0.3, 0.0);
             }
-            if (braking && getDeltaMovement().horizontalDistanceSqr() > STOPPED_SPEED_SQR && random.nextInt(2) == 0) {
+            if (isHandbrakeOn() && getDeltaMovement().horizontalDistanceSqr() > STOPPED_SPEED_SQR && random.nextInt(2) == 0) {
                 // Sparks off the braking wheels
                 serverLevel.sendParticles(ParticleTypes.CRIT, getX(), getY() + 0.1, getZ(), 2, 0.4, 0.0, 0.4, 0.05);
             }
         }
         super.tick();
+        if (!level().isClientSide() && isHandbrakeOn()) {
+            holdBrake();
+        }
         if (isLit() && random.nextInt(4) == 0) {
             level().addParticle(ParticleTypes.LARGE_SMOKE, getX(), getY() + 0.8, getZ(), 0.0, 0.0, 0.0);
         }
+    }
+
+    public boolean isHandbrakeOn() {
+        return entityData.get(DATA_HANDBRAKE);
+    }
+
+    // Throws the handbrake each time the rider presses jump
+    private void updateHandbrake(@Nullable ServerPlayer rider, boolean jumping) {
+        if (jumping && !jumpHeld) {
+            boolean on = !isHandbrakeOn();
+            entityData.set(DATA_HANDBRAKE, on);
+            playSound(SoundEvents.LEVER_CLICK, 0.5F, on ? 0.6F : 0.5F);
+            if (rider != null) {
+                rider.sendOverlayMessage(Component.translatable(on ? "message.xincraft.locomotive.handbrake_on" : "message.xincraft.locomotive.handbrake_off"));
+            }
+        }
+        jumpHeld = jumping;
+    }
+
+    // Brakes again after the physics have run, then holds the cart still once it's slow enough. The
+    // physics add a powered rail's boost after applyNaturalSlowdown's braking, so that alone can't stop it.
+    private void holdBrake() {
+        Vec3 motion = getDeltaMovement();
+        double speed = motion.horizontalDistance();
+        double slowed = speed < BRAKE_HOLD_SPEED ? 0.0 : speed * BRAKE_KEEP - BRAKE_DROP;
+        double scale = speed > 0.0 ? slowed / speed : 0.0;
+        setDeltaMovement(motion.multiply(scale, 1.0, scale));
     }
 
     // With the energy upgrade, burning fuel charges the battery rather than driving the cart, moving
@@ -245,8 +284,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private void updateHeading() {
         Vec3 motion = getDeltaMovement().horizontal();
         boolean stopped = motion.lengthSqr() < STOPPED_SPEED_SQR;
-        if (braking) {
-            // The handbrake cuts the engine, and no new fuel is lit while it's held
+        if (isHandbrakeOn()) {
+            // The handbrake cuts the engine, and no new fuel is lit while it's on
             heading = Vec3.ZERO;
         } else if (stopped && getFirstPassenger() instanceof ServerPlayer rider
                 && rider.getLastClientMoveIntent().horizontalDistanceSqr() > 0) {
@@ -289,7 +328,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     // Same engine force as the furnace minecart, applied along the heading; or the handbrake
     @Override
     protected Vec3 applyNaturalSlowdown(Vec3 deltaMovement) {
-        if (braking) {
+        if (isHandbrakeOn()) {
             double speed = deltaMovement.horizontalDistance();
             double slowed = Math.max(0.0, speed * BRAKE_KEEP - BRAKE_DROP);
             double scale = speed > 0.0 ? slowed / speed : 0.0;
@@ -482,6 +521,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         output.putInt("LitTime", litTime);
         output.putInt("LitDuration", litDuration);
         output.putInt("Energy", energy);
+        output.putBoolean("Handbrake", isHandbrakeOn());
         output.putDouble("HeadingX", heading.x);
         output.putDouble("HeadingZ", heading.z);
         upgrades.save(output);
@@ -494,6 +534,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         litTime = input.getIntOr("LitTime", 0);
         litDuration = input.getIntOr("LitDuration", 0);
         energy = input.getIntOr("Energy", 0);
+        entityData.set(DATA_HANDBRAKE, input.getBooleanOr("Handbrake", false));
         heading = new Vec3(input.getDoubleOr("HeadingX", 0.0), 0.0, input.getDoubleOr("HeadingZ", 0.0));
         upgrades.load(input);
         transport.load(input);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.transport.cart.LocomotiveCart;
 import com.xincraft.xincraft.transport.train.CartUpgrade;
 import com.xincraft.xincraft.transport.train.UpgradableCart;
 import com.xincraft.xincraft.transport.TransportEntityTypes;
@@ -32,12 +33,16 @@ import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -52,8 +57,9 @@ import org.jspecify.annotations.Nullable;
 // renderer hardcodes its texture, so we hand it a collector that swaps the texture on the way
 // through and passes everything else along untouched. It also draws a cart's upgrades (see
 // transport.train.CartUpgrades) as small models of their blocks, one on top of each end of the cart (the cell
-// upgrade as a cage around the cart instead, see CellCage), and the linking bar from each cart in a
-// train to the cart it tows (LinkingBar).
+// upgrade as a cage around the cart instead, see CellCage), the linking bar from each cart in a
+// train to the cart it tows (LinkingBar), and a locomotive's handbrake as a lever on its side wall,
+// thrown one way or the other.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class RetexturedMinecartRenderer extends MinecartRenderer {
     // Upgrade blocks are drawn this size, sitting on the cart's end walls: the walls' top is 5/16
@@ -66,6 +72,10 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
     private static final float CART_HALF_LENGTH = 10.0F / 16.0F;
     private static final float CART_HALF_WIDTH = 8.0F / 16.0F;
     private static final float CAGE_HEIGHT = 0.8F;
+    // The handbrake lever is drawn this size, standing on the side wall by the rider, whose middle is
+    // 7/16 from the cart's centre
+    private static final float LEVER_SCALE = 0.5F;
+    private static final float SIDE_WALL = 7.0F / 16.0F;
 
     private final Identifier texture;
     private final BlockModelResolver blockModelResolver;
@@ -85,6 +95,8 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         public int upgradeCount;
         public final CellCage.Models cage = new CellCage.Models();
         public LinkingBar.@Nullable Link link;
+        public final BlockModelRenderState lever = new BlockModelRenderState();
+        public boolean hasLever;
     }
 
     @Override
@@ -109,6 +121,14 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
                 upgraded.upgradeModels.add(new BlockModelRenderState());
             }
             blockModelResolver.update(upgraded.upgradeModels.get(i), installed.get(i).block().defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
+        }
+        upgraded.hasLever = cart instanceof LocomotiveCart;
+        if (cart instanceof LocomotiveCart locomotive) {
+            // Facing along the cart, so it throws forward and back
+            blockModelResolver.update(upgraded.lever, Blocks.LEVER.defaultBlockState()
+                .setValue(LeverBlock.FACE, AttachFace.FLOOR)
+                .setValue(LeverBlock.FACING, Direction.EAST)
+                .setValue(LeverBlock.POWERED, locomotive.isHandbrakeOn()), BLOCK_DISPLAY_CONTEXT);
         }
         upgraded.link = LinkingBar.extract(cart, new Vec3(state.x, state.y, state.z), partialTicks);
         CellCage.extractEggs(itemModelResolver, upgraded.cage, cart, new Vec3(state.x, state.y, state.z), partialTicks);
@@ -155,6 +175,14 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         CellCage.submit(upgraded.cage, CART_HALF_LENGTH, CART_HALF_WIDTH, WALL_TOP, CAGE_HEIGHT, poseStack, collector,
             state.lightCoords, state.outlineColor);
         poseStack.popPose();
+        if (upgraded.hasLever) {
+            poseStack.pushPose();
+            poseStack.scale(-1.0F, -1.0F, 1.0F);
+            poseStack.translate(-LEVER_SCALE / 2.0F, WALL_TOP, SIDE_WALL - LEVER_SCALE / 2.0F);
+            poseStack.scale(LEVER_SCALE, LEVER_SCALE, LEVER_SCALE);
+            upgraded.lever.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+            poseStack.popPose();
+        }
         for (int i = 0; i < upgraded.upgradeCount; i++) {
             poseStack.pushPose();
             poseStack.scale(-1.0F, -1.0F, 1.0F);

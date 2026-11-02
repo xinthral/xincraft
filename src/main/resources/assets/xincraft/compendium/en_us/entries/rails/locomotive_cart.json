@@ -18,7 +18,7 @@
     },
     {
       "type": "text",
-      "text": "**Stopping:** an unpowered powered rail stops it; power the rail to go again.\n\n**Handbrake:** hold **jump** to brake to a stop, train and all.\n\n**Towing:** hitch up to 3 carts behind it with a [[linking_bar]].\n\nIt only lights fuel while trying to move. See also the [[energy_upgrade]]."
+      "text": "**Stopping:** an unpowered powered rail stops it; power the rail to go again.\n\n**Handbrake:** press **jump** to throw it, shown by the lever on the cart: it brakes to a stop, train and all, and stays there until you press jump again. Park on a [[charging_rail]] to charge.\n\n**Towing:** hitch up to 3 carts behind it with a [[linking_bar]].\n\nIt only lights fuel while trying to move. See also the [[energy_upgrade]]."
     }
   ]
 }

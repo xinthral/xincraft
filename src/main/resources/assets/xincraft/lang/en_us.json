@@ -120,6 +120,8 @@
   "item.xincraft.linking_bar": "Linking Bar",
   "item.xincraft.linking_bar.desc": "Use on two carts or boats to hitch them into a train, or on two buoys, charging stations or substations to link them; shift-use to unlink",
   "item.xincraft.linking_bar.started": "Holding one end: use on the other one to finish the link",
+  "message.xincraft.locomotive.handbrake_on": "Handbrake on",
+  "message.xincraft.locomotive.handbrake_off": "Handbrake off",
   "message.xincraft.linking_bar.started": "Linking bar hitched - now use it on the other cart or boat",
   "message.xincraft.linking_bar.cancelled": "Linking cancelled",
   "message.xincraft.linking_bar.linked": "Hitched",
