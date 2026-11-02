@@ -1,7 +1,7 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.compendium;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.client.compendium.CompendiumScreen;
+import com.xincraft.xincraft.compendium.client.CompendiumScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -13,9 +13,9 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
-// The Xincraft Compendium, the mod's guide book: using it opens it (client.compendium.CompendiumScreen)
+// The Xincraft Compendium, the mod's guide book: using it opens it (compendium.client.CompendiumScreen)
 // where it was left. With one anywhere in the inventory, the look-up key opens it at the entry for
-// whatever's under the mouse or crosshair (client.CompendiumKeys).
+// whatever's under the mouse or crosshair (compendium.client.CompendiumKeys).
 public class CompendiumItem extends Item {
     public CompendiumItem(Properties properties) {
         super(properties);

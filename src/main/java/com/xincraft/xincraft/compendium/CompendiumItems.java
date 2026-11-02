@@ -1,12 +1,11 @@
 package com.xincraft.xincraft.compendium;
 
-import com.xincraft.xincraft.item.CompendiumItem;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class CompendiumItems {
-    // The mod's guide book (item.CompendiumItem)
+    // The mod's guide book (compendium.CompendiumItem)
     public static final RegistryObject<Item> COMPENDIUM = Registers.registerItem("compendium", CompendiumItem::new,
         () -> new Item.Properties().stacksTo(1));
 

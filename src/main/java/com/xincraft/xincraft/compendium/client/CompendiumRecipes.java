@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.client.compendium;
+package com.xincraft.xincraft.compendium.client;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
-import com.xincraft.xincraft.network.CompendiumRecipesPacket;
+import com.xincraft.xincraft.compendium.CompendiumRecipesPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import org.jspecify.annotations.Nullable;
 
-// The recipes the server sent for the compendium (network.CompendiumRecipesPacket), by recipe id, and
+// The recipes the server sent for the compendium (compendium.CompendiumRecipesPacket), by recipe id, and
 // the crucible recipes by mob, and the altar recipes by id. Empty until the first sync, so pages showing recipes say so.
 public final class CompendiumRecipes {
     private static Map<Identifier, RecipeDisplay> byId = Map.of();

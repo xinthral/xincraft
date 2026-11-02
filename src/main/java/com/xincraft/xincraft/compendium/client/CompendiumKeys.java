@@ -1,9 +1,7 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.compendium.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.client.compendium.CompendiumData;
-import com.xincraft.xincraft.client.compendium.CompendiumScreen;
 import com.xincraft.xincraft.compendium.CompendiumItems;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

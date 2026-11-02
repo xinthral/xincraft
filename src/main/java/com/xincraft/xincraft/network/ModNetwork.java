@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.network;
 
 import com.xincraft.xincraft.XincraftMod;
+import com.xincraft.xincraft.compendium.CompendiumRecipesPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.OnDatapackSyncEvent;

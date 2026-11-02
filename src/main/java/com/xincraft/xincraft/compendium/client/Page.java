@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.client.compendium;
+package com.xincraft.xincraft.compendium.client;
 
 import java.util.ArrayList;
 import java.util.List;

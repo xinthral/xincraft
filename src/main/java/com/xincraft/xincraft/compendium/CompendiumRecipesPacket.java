@@ -1,9 +1,9 @@
-package com.xincraft.xincraft.network;
+package com.xincraft.xincraft.compendium;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.client.compendium.CompendiumRecipes;
+import com.xincraft.xincraft.compendium.client.CompendiumRecipes;
 import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,7 +18,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
-// Sends the compendium (client.compendium.CompendiumScreen) the recipes it shows, since 26.x doesn't
+// Sends the compendium (compendium.client.CompendiumScreen) the recipes it shows, since 26.x doesn't
 // send recipes to clients: how to make each of the mod's items (as the recipe book would show it),
 // and every apothecary crucible and altar recipe. Sent on login and /reload, so data packs that change them
 // show in the book.
