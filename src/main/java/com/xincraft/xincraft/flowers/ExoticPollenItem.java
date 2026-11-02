@@ -1,8 +1,7 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.flowers;
 
 import java.util.Map;
 import java.util.function.Supplier;
-import com.xincraft.xincraft.flowers.FlowerBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -16,8 +15,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Made on a mixing tray (block.MixingTrayBlockEntity). Used on certain vanilla flowers, it turns them
-// into the mod's exotic flowers; used on leaves, it makes them glow faintly (block.GlowingLeavesBlock).
+// Made on a mixing tray (flowers.MixingTrayBlockEntity). Used on certain vanilla flowers, it turns them
+// into the mod's exotic flowers; used on leaves, it makes them glow faintly (flowers.GlowingLeavesBlock).
 // On anything else it does nothing.
 public class ExoticPollenItem extends Item {
     // Which flower turns into which. Add new exotic flowers here.

@@ -2,8 +2,8 @@ package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.block.AuraFlowerBlock;
-import com.xincraft.xincraft.block.FireflyPetuniaBlock;
+import com.xincraft.xincraft.flowers.AuraFlowerBlock;
+import com.xincraft.xincraft.flowers.FireflyPetuniaBlock;
 import com.xincraft.xincraft.block.FloraBlock;
 import com.xincraft.xincraft.block.FloraBlockEntity;
 import com.xincraft.xincraft.magic.Element;

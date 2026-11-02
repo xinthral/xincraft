@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.flowers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Leaves dusted with exotic pollen (item.ExoticPollenItem): a copy of one kind of vanilla leaves that
+// Leaves dusted with exotic pollen (flowers.ExoticPollenItem): a copy of one kind of vanilla leaves that
 // gives off a faint light, like glow lichen. Everything else comes from the original leaves: its
 // look and tint (models and colours point at the original's), name, drops, decay, sounds and falling
 // leaf particles. Pick-block gives the original leaves.

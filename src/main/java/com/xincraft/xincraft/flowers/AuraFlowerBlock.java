@@ -1,10 +1,9 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.flowers;
 
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.flowers.FlowerBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 // An exotic flower that, like a small beacon, keeps giving a status effect to what's around it
-// (AuraFlowerBlockEntity). Grown with exotic pollen (item.ExoticPollenItem):
+// (AuraFlowerBlockEntity). Grown with exotic pollen (flowers.ExoticPollenItem):
 // - the mending lilac (from lily of the valley): Regeneration for players and peaceful mobs
 // - the moonlit dandelion (from golden dandelion): Night Vision for players
 // - the shimmer lily (from wither rose): Invisibility for players

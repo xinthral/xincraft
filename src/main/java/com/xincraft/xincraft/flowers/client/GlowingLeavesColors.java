@@ -1,8 +1,8 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.flowers.client;
 
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.block.GlowingLeavesBlock;
+import com.xincraft.xincraft.flowers.GlowingLeavesBlock;
 import com.xincraft.xincraft.flowers.FlowerBlocks;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraftforge.api.distmarker.Dist;

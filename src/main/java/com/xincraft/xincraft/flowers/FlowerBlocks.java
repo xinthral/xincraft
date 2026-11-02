@@ -3,10 +3,6 @@ package com.xincraft.xincraft.flowers;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import com.xincraft.xincraft.block.GlowingLeavesBlock;
-import com.xincraft.xincraft.block.MixingTrayBlock;
-import com.xincraft.xincraft.block.AuraFlowerBlock;
-import com.xincraft.xincraft.block.FireflyPetuniaBlock;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,7 +14,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class FlowerBlocks {
-    // Exotic flowers, grown from vanilla flowers with exotic pollen (item.ExoticPollenItem), made on
+    // Exotic flowers, grown from vanilla flowers with exotic pollen (flowers.ExoticPollenItem), made on
     // the mixing tray. Same properties as vanilla's small flowers.
     public static final RegistryObject<Block> MIXING_TRAY = Registers.registerBlock(
         "mixing_tray",
@@ -59,7 +55,7 @@ public final class FlowerBlocks {
     );
 
     // Glowing copies of each kind of vanilla leaves, made by using exotic pollen on them
-    // (block.GlowingLeavesBlock), keyed by the leaves they came from. No items: they drop and
+    // (flowers.GlowingLeavesBlock), keyed by the leaves they came from. No items: they drop and
     // pick-block as the original leaves.
     public static final Map<Block, RegistryObject<Block>> GLOWING_LEAVES = registerGlowingLeaves(
             Blocks.OAK_LEAVES,

@@ -1,6 +1,5 @@
 package com.xincraft.xincraft.flowers;
 
-import com.xincraft.xincraft.item.ExoticPollenItem;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;

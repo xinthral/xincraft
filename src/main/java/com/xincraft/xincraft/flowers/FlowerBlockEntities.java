@@ -1,8 +1,6 @@
 package com.xincraft.xincraft.flowers;
 
 import java.util.Set;
-import com.xincraft.xincraft.block.AuraFlowerBlockEntity;
-import com.xincraft.xincraft.block.MixingTrayBlockEntity;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
@@ -11,7 +9,7 @@ public final class FlowerBlockEntities {
     public static final RegistryObject<BlockEntityType<MixingTrayBlockEntity>> MIXING_TRAY = Registers.BLOCK_ENTITIES.register("mixing_tray",
         () -> new BlockEntityType<>(MixingTrayBlockEntity::new, Set.of(FlowerBlocks.MIXING_TRAY.get())));
 
-    // The aura flowers share one block entity class, with a type each (block.AuraFlowerBlock)
+    // The aura flowers share one block entity class, with a type each (flowers.AuraFlowerBlock)
     public static final RegistryObject<BlockEntityType<AuraFlowerBlockEntity>> MENDING_LILAC = Registers.BLOCK_ENTITIES.register("mending_lilac",
         () -> new BlockEntityType<>(AuraFlowerBlockEntity::new, Set.of(FlowerBlocks.MENDING_LILAC.get())));
 

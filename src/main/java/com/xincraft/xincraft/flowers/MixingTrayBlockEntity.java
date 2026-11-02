@@ -1,10 +1,7 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.flowers;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.xincraft.xincraft.flowers.FlowerBlockEntities;
-import com.xincraft.xincraft.flowers.FlowerItems;
-import com.xincraft.xincraft.flowers.FlowerTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;

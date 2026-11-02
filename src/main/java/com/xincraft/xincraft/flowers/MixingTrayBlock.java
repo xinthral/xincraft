@@ -1,7 +1,5 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.flowers;
 
-import com.xincraft.xincraft.flowers.FlowerBlockEntities;
-import com.xincraft.xincraft.flowers.FlowerItems;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
