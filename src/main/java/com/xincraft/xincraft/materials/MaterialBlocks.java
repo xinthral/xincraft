@@ -95,6 +95,18 @@ public final class MaterialBlocks {
         true
     );
 
+    // A pale gold, needing an iron pickaxe like a block of gold
+    public static final RegistryObject<Block> ELECTRUM_BLOCK = Registers.registerBlock(
+        "electrum_block",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.GOLD)
+            .strength(5.0F, 6.0F)
+            .sound(SoundType.METAL)
+            .requiresCorrectToolForDrops(),
+        true
+    );
+
     // Loading this class is what registers everything above
     static void init() {}
 

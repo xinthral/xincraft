@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:raw_materials/gold",
+    "#c:raw_materials/silver"
+  ],
+  "result": {
+    "id": "xincraft:raw_electrum",
+    "count": 2
+  }
+}

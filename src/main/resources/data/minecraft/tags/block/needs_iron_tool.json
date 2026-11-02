@@ -2,6 +2,7 @@
   "values": [
     "xincraft:silver_ore",
     "xincraft:deepslate_silver_ore",
-    "xincraft:silver_block"
+    "xincraft:silver_block",
+    "xincraft:electrum_block"
   ]
 }

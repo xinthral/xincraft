@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "electrum_ingot",
+  "ingredients": [
+    "#c:storage_blocks/electrum"
+  ],
+  "result": {
+    "id": "xincraft:electrum_ingot",
+    "count": 9
+  }
+}

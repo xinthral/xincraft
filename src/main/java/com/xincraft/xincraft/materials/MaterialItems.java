@@ -41,6 +41,13 @@ public final class MaterialItems {
     public static final RegistryObject<Item> BRONZE_INGOT =
         Registers.registerItem("bronze_ingot", Item::new, Item.Properties::new);
 
+    // Electrum: raw gold and raw silver craft into 2 raw electrum, which smelts into electrum ingots
+    public static final RegistryObject<Item> RAW_ELECTRUM =
+        Registers.registerItem("raw_electrum", Item::new, Item.Properties::new);
+
+    public static final RegistryObject<Item> ELECTRUM_INGOT =
+        Registers.registerItem("electrum_ingot", Item::new, Item.Properties::new);
+
     public static final RegistryObject<Item> BRONZE_HELMET = Registers.registerItem("bronze_helmet", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.HELMET));
     public static final RegistryObject<Item> BRONZE_CHESTPLATE = Registers.registerItem("bronze_chestplate", Item::new,
