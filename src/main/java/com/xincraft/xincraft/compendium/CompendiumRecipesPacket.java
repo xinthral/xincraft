@@ -1,11 +1,14 @@
 package com.xincraft.xincraft.compendium;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.compendium.client.CompendiumRecipes;
 import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
+import com.xincraft.xincraft.magic.client.MagicRecipes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -75,7 +78,10 @@ public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> 
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        CompendiumRecipes.set(recipes, crucible, altar);
+        CompendiumRecipes.set(recipes);
+        Map<Identifier, AltarRecipe> altarById = new HashMap<>();
+        altar.forEach(shown -> altarById.put(shown.id(), shown.recipe()));
+        MagicRecipes.set(crucible, altarById);
         context.setPacketHandled(true);
     }
 }

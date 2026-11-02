@@ -12,6 +12,7 @@ import com.xincraft.xincraft.magic.CrucibleRecipe;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.common.CommonItems;
 import com.xincraft.xincraft.magic.MagicItems;
+import com.xincraft.xincraft.magic.client.MagicRecipes;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -459,7 +460,7 @@ public interface Page {
 
     // The crucible's layout: a powder in each top corner, the catalyst between, and the mob below
     private static void drawCrucible(Context context, int x, int y, @Nullable EntityType<?> mob) {
-        CrucibleRecipe recipe = mob == null ? null : CompendiumRecipes.crucible(mob);
+        CrucibleRecipe recipe = mob == null ? null : MagicRecipes.crucible(mob);
         if (recipe == null) {
             context.centered(Component.translatable("compendium.xincraft.no_recipe"), x, y + 30, FAINT_COLOR);
             return;
@@ -477,7 +478,7 @@ public interface Page {
 
     // An altar transmutation: base and material, an arrow to the result, and the essence it draws
     private static void drawAltar(Context context, int x, int y, Identifier id) {
-        AltarRecipe recipe = CompendiumRecipes.altar(id);
+        AltarRecipe recipe = MagicRecipes.altar(id);
         if (recipe == null) {
             context.centered(Component.translatable("compendium.xincraft.no_recipe"), x, y + 30, FAINT_COLOR);
             return;
@@ -577,7 +578,7 @@ public interface Page {
 
     // Every crucible recipe, a row each: its powders, catalyst and mob
     private static void addCrucibleIndex(List<Page> pages, @Nullable Component title) {
-        List<CrucibleRecipe> recipes = CompendiumRecipes.crucible();
+        List<CrucibleRecipe> recipes = MagicRecipes.crucible();
         if (recipes.isEmpty()) {
             pages.add((context, x, y) -> {
                 if (title != null) {
