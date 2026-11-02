@@ -9,15 +9,19 @@ import com.xincraft.xincraft.transport.boat.BuoyBlock;
 import com.xincraft.xincraft.transport.rail.HoneyRailBlock;
 import com.xincraft.xincraft.transport.rail.BouncyRailBlock;
 import com.xincraft.xincraft.transport.rail.ChargingRailBlock;
+import com.xincraft.xincraft.transport.rail.ElectrumChargingRailBlock;
 import com.xincraft.xincraft.transport.rail.InspectorRailBlock;
 import com.xincraft.xincraft.transport.rail.EnderRailBlock;
 import com.xincraft.xincraft.transport.rail.ModPoweredRailBlock;
 import com.xincraft.xincraft.common.Registers;
+import com.xincraft.xincraft.transport.power.ChargingStationBlock;
+import com.xincraft.xincraft.transport.power.SubstationBlock;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
@@ -64,6 +68,44 @@ public final class TransportBlocks {
             .noCollision()
             .strength(0.7F)
             .sound(SoundType.COPPER),
+        true
+    );
+
+    // A charging rail that holds more energy, charges carts faster, and reaches further for power
+    // (transport.rail.ElectrumChargingRailBlock)
+    public static final RegistryObject<Block> ELECTRUM_CHARGING_RAIL = Registers.registerBlock(
+        "electrum_charging_rail",
+        ElectrumChargingRailBlock::new,
+        BlockBehaviour.Properties.of()
+            .noCollision()
+            .strength(0.7F)
+            .sound(SoundType.COPPER),
+        true
+    );
+
+    // Feeds a power network, for charging rails in range to draw from (transport.power.ChargingStationBlock)
+    public static final RegistryObject<Block> CHARGING_STATION = Registers.registerBlock(
+        "charging_station",
+        ChargingStationBlock::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_ORANGE)
+            .strength(3.5F)
+            .sound(SoundType.COPPER)
+            .noOcclusion()
+            .requiresCorrectToolForDrops(),
+        true
+    );
+
+    // Stores a little of a power network's energy, and extends its reach (transport.power.SubstationBlock)
+    public static final RegistryObject<Block> SUBSTATION = Registers.registerBlock(
+        "substation",
+        SubstationBlock::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.GOLD)
+            .strength(3.5F)
+            .sound(SoundType.METAL)
+            .noOcclusion()
+            .requiresCorrectToolForDrops(),
         true
     );
 

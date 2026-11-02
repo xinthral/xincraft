@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:lightning_rod",
+    "R": "minecraft:redstone",
+    "X": "#c:ingots/bronze"
+  },
+  "pattern": [
+    " A ",
+    "XRX",
+    "XXX"
+  ],
+  "result": {
+    "id": "xincraft:charging_station",
+    "count": 1
+  }
+}

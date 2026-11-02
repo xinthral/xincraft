@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:stick",
+    "R": "minecraft:redstone",
+    "X": "#c:ingots/electrum"
+  },
+  "pattern": [
+    "X X",
+    "X#X",
+    "XRX"
+  ],
+  "result": {
+    "id": "xincraft:electrum_charging_rail",
+    "count": 6
+  }
+}

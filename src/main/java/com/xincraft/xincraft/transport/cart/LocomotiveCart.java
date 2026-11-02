@@ -80,6 +80,8 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private static final double BRAKE_DROP = 0.02;
     // Most Forge Energy the energy upgrade takes in per tick, from blocks or anything else
     private static final int MAX_ENERGY_RECEIVE = 1_000;
+    // What a rail or other source can push in per tick: enough for the electrum charging rail
+    private static final int MAX_ENERGY_PUSHED = 4_000;
     // Menu data entries: burn left, then stored energy and capacity (each split in two, as menu
     // data travels as 16-bit numbers), then whether the energy upgrade is fitted
     public static final int DATA_COUNT = 6;
@@ -431,7 +433,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
             if (!canReceive()) {
                 return 0;
             }
-            int received = Math.max(0, Math.min(Math.min(maxReceive, MAX_ENERGY_RECEIVE), energyCapacity() - energy));
+            int received = Math.max(0, Math.min(Math.min(maxReceive, MAX_ENERGY_PUSHED), energyCapacity() - energy));
             if (!simulate) {
                 energy += received;
             }

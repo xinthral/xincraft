@@ -1,11 +1,14 @@
 package com.xincraft.xincraft.transport.rail;
 
 import com.xincraft.xincraft.transport.TransportBlockEntities;
+import java.util.List;
+import com.xincraft.xincraft.transport.power.PowerNodeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -19,22 +22,64 @@ import org.jspecify.annotations.Nullable;
 
 // The charging rail's energy buffer. Each tick it draws energy from the energy blocks around it
 // (generators, batteries and the like) and hands energy to the carts on it. It's also open to
-// cables on every side, taking energy in and letting anything draw it out, up to TRANSFER per
-// tick each way.
+// cables on every side, taking energy in and letting anything draw it out, up to its transfer rate
+// per tick each way (TRANSFER here; see ElectrumChargingRailBlockEntity for the faster rail). It also
+// draws from the nearest power network in range (see transport.power.PowerNodeBlockEntity).
 public class ChargingRailBlockEntity extends BlockEntity {
-    public static final int CAPACITY = 50_000;
+    public static final int CAPACITY = 5_000;
     public static final int TRANSFER = 1_000;
+    // How many chunks away, on each axis, it can draw from a power network
+    public static final int CHUNK_RANGE = 2;
+    // How often it looks again for the charging stations and substations in range, in ticks
+    private static final int NODE_SEARCH_TICKS = 40;
 
-    private final Buffer buffer = new Buffer();
-    private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> buffer);
+    private final int transfer;
+    private final int chunkRange;
+    private final Buffer buffer;
+    private List<PowerNodeBlockEntity> nodesInRange = List.of();
+    private long nextNodeSearch;
+    private LazyOptional<IEnergyStorage> energyCap;
 
     public ChargingRailBlockEntity(BlockPos pos, BlockState state) {
-        super(TransportBlockEntities.CHARGING_RAIL.get(), pos, state);
+        this(TransportBlockEntities.CHARGING_RAIL.get(), pos, state, CAPACITY, TRANSFER, CHUNK_RANGE);
+    }
+
+    protected ChargingRailBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int capacity, int transfer, int chunkRange) {
+        super(type, pos, state);
+        this.transfer = transfer;
+        this.chunkRange = chunkRange;
+        this.buffer = new Buffer(capacity);
+        this.energyCap = LazyOptional.of(() -> buffer);
     }
 
     void serverTick(Level level) {
         drawFromNeighbours(level);
+        drawFromNetwork(level);
         chargeCarts(level);
+    }
+
+    // Tops up from the nearest charging station or substation in range, moving on to the next if
+    // that one's network has run dry, so overlapping stations cover for each other
+    private void drawFromNetwork(Level level) {
+        int space = buffer.receiveEnergy(transfer, true);
+        if (space <= 0) {
+            return;
+        }
+        long now = level.getGameTime();
+        if (now >= nextNodeSearch) {
+            nodesInRange = PowerNodeBlockEntity.inRange(level, worldPosition, chunkRange);
+            nextNodeSearch = now + NODE_SEARCH_TICKS;
+        }
+        for (PowerNodeBlockEntity node : nodesInRange) {
+            if (space <= 0) {
+                return;
+            }
+            if (!node.isRemoved()) {
+                int drawn = node.drawFromNetwork(space);
+                buffer.receiveEnergy(drawn, false);
+                space -= drawn;
+            }
+        }
     }
 
     // Pulls from whatever's around the rail that gives energy out, for sources that don't push it
@@ -42,7 +87,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
     // and forth.
     private void drawFromNeighbours(Level level) {
         for (Direction direction : Direction.values()) {
-            int space = buffer.receiveEnergy(TRANSFER, true);
+            int space = buffer.receiveEnergy(transfer, true);
             if (space <= 0) {
                 return;
             }
@@ -66,7 +111,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
         for (AbstractMinecart cart : level.getEntitiesOfClass(AbstractMinecart.class, new AABB(worldPosition))) {
             cart.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(target -> {
                 if (target.canReceive()) {
-                    int offered = buffer.extractEnergy(TRANSFER, true);
+                    int offered = buffer.extractEnergy(transfer, true);
                     buffer.extractEnergy(target.receiveEnergy(offered, false), false);
                 }
             });
@@ -107,8 +152,8 @@ public class ChargingRailBlockEntity extends BlockEntity {
 
     // Marks the block entity for saving whenever its energy changes
     private class Buffer extends EnergyStorage {
-        Buffer() {
-            super(CAPACITY, TRANSFER, TRANSFER);
+        Buffer(int capacity) {
+            super(capacity, transfer, transfer);
         }
 
         void set(int amount) {

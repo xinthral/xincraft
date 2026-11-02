@@ -35,11 +35,15 @@ public class ChargingRailBlock extends ModPoweredRailBlock implements EntityBloc
         return new ChargingRailBlockEntity(pos, state);
     }
 
+    protected BlockEntityType<? extends ChargingRailBlockEntity> blockEntityType() {
+        return TransportBlockEntities.CHARGING_RAIL.get();
+    }
+
     // Only the server moves energy
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide() || type != TransportBlockEntities.CHARGING_RAIL.get()) {
+        if (level.isClientSide() || type != blockEntityType()) {
             return null;
         }
         return (BlockEntityTicker<T>) (BlockEntityTicker<ChargingRailBlockEntity>) (tickLevel, pos, tickState, rail) -> rail.serverTick(tickLevel);

@@ -1,0 +1,180 @@
+package com.xincraft.xincraft.transport.power;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
+import com.xincraft.xincraft.transport.train.LinkedBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+
+// A charging station or substation: a small energy store linked to others with a linking bar into a
+// network. Charging rails draw from the nodes in range of them (see inRange), and what a node doesn't
+// hold it finds elsewhere on its network. Only nodes in loaded chunks take part, so a network with
+// several stations keeps working when some of it is out of range of the player.
+public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
+    public static final int MAX_LINKS = 4;
+    public static final double LINK_RANGE = 64.0;
+    private static final int MAX_NETWORK_SIZE = 256;
+    private static final int NETWORK_REFRESH_TICKS = 20;
+    private static final Map<Level, Set<PowerNodeBlockEntity>> LOADED = new WeakHashMap<>();
+
+    private final int capacity;
+    private int energy;
+    private List<PowerNodeBlockEntity> network = List.of();
+    private long networkExpiresAt;
+
+    protected PowerNodeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int capacity) {
+        super(type, pos, state);
+        this.capacity = capacity;
+    }
+
+    // The loaded nodes within chunkRange chunks of pos (counting chunks on each axis), nearest first
+    public static List<PowerNodeBlockEntity> inRange(Level level, BlockPos pos, int chunkRange) {
+        Set<PowerNodeBlockEntity> loaded = LOADED.get(level);
+        if (loaded == null) {
+            return List.of();
+        }
+        int chunkX = SectionPos.blockToSectionCoord(pos.getX());
+        int chunkZ = SectionPos.blockToSectionCoord(pos.getZ());
+        return loaded.stream()
+            .filter(node -> Math.abs(SectionPos.blockToSectionCoord(node.worldPosition.getX()) - chunkX) <= chunkRange
+                && Math.abs(SectionPos.blockToSectionCoord(node.worldPosition.getZ()) - chunkZ) <= chunkRange)
+            .sorted(Comparator.comparingDouble(node -> node.worldPosition.distSqr(pos)))
+            .toList();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && !level.isClientSide()) {
+            LOADED.computeIfAbsent(level, key -> new LinkedHashSet<>()).add(this);
+        }
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        Set<PowerNodeBlockEntity> loaded = level == null ? null : LOADED.get(level);
+        if (loaded != null) {
+            loaded.remove(this);
+        }
+    }
+
+    @Override
+    public int maxLinks() {
+        return MAX_LINKS;
+    }
+
+    @Override
+    public double linkRange() {
+        return LINK_RANGE;
+    }
+
+    @Override
+    public boolean accepts(LinkedBlockEntity other) {
+        return other instanceof PowerNodeBlockEntity;
+    }
+
+    @Override
+    protected String messageKey() {
+        return "network";
+    }
+
+    public int energy() {
+        return energy;
+    }
+
+    public int capacity() {
+        return capacity;
+    }
+
+    // Adds energy up to what fits, returning how much did
+    protected int fill(int amount) {
+        int added = Math.max(0, Math.min(amount, capacity - energy));
+        if (added > 0) {
+            energy += added;
+            setChanged();
+        }
+        return added;
+    }
+
+    // Takes energy up to what's held, returning how much was
+    protected int drain(int amount) {
+        int taken = Math.max(0, Math.min(amount, energy));
+        if (taken > 0) {
+            energy -= taken;
+            setChanged();
+        }
+        return taken;
+    }
+
+    // Takes energy from this node, then the rest of its network
+    public int drawFromNetwork(int amount) {
+        int drawn = 0;
+        for (PowerNodeBlockEntity node : network()) {
+            if (drawn >= amount) {
+                break;
+            }
+            if (!node.isRemoved()) {
+                drawn += node.drain(amount - drawn);
+            }
+        }
+        return drawn;
+    }
+
+    // This node and the loaded nodes linked to it, nearest in links first. Rebuilt about once a second,
+    // so a change to the links takes up to that long to count.
+    protected List<PowerNodeBlockEntity> network() {
+        if (level == null) {
+            return List.of(this);
+        }
+        long now = level.getGameTime();
+        if (network.isEmpty() || now >= networkExpiresAt) {
+            network = findNetwork();
+            networkExpiresAt = now + NETWORK_REFRESH_TICKS;
+        }
+        return network;
+    }
+
+    private List<PowerNodeBlockEntity> findNetwork() {
+        List<PowerNodeBlockEntity> found = new ArrayList<>();
+        Set<BlockPos> seen = new HashSet<>();
+        Deque<PowerNodeBlockEntity> queue = new ArrayDeque<>();
+        seen.add(worldPosition);
+        queue.add(this);
+        while (!queue.isEmpty() && found.size() < MAX_NETWORK_SIZE) {
+            PowerNodeBlockEntity node = queue.poll();
+            found.add(node);
+            for (BlockPos pos : node.links()) {
+                if (seen.add(pos) && linkedAt(level, pos) instanceof PowerNodeBlockEntity next) {
+                    queue.add(next);
+                }
+            }
+        }
+        return found;
+    }
+
+    @Override
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        energy = Math.clamp(input.getIntOr("Energy", 0), 0, capacity);
+    }
+
+    @Override
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt("Energy", energy);
+    }
+}
