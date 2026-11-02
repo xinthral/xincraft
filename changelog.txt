@@ -20,6 +20,8 @@ Xincraft Changelog
  - Charging rails now keep just 500 FE in reserve, down from 50,000, and carts draw through them
    straight from the network. Any energy above that in a rail is lost when it loads
  - Locomotive carts take up to 4,000 FE per tick from a rail that offers it
+ - Charging rails count as powered while they have charge, boosting carts instead of holding them,
+   so locomotives charge as they pass, and give off a full redstone signal
 
 1.19.0
  - Carriage: a rideable passenger minecart in maroon lacquer, trimmed in bronze; an inspector rail

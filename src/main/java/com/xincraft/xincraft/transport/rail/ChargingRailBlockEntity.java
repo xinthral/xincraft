@@ -43,6 +43,8 @@ public class ChargingRailBlockEntity extends BlockEntity {
     // How often it looks again for the charging stations and substations in range, in ticks
     private static final int NODE_SEARCH_TICKS = 40;
     private static final int SYNC_TICKS = 100;
+    // How often it decides whether it counts as charged, in ticks, so it doesn't flicker
+    private static final int CHARGED_CHECK_TICKS = 10;
 
     private final int transfer;
     private final int chunkRange;
@@ -50,6 +52,9 @@ public class ChargingRailBlockEntity extends BlockEntity {
     private List<PowerNodeBlockEntity> nodesInRange = List.of();
     private long nextNodeSearch;
     private boolean energyChanged;
+    private boolean charged;
+    private boolean receivedSinceCheck;
+    private int chargedCheckIn;
     private long nextSync;
     private LazyOptional<IEnergyStorage> energyCap;
 
@@ -70,6 +75,32 @@ public class ChargingRailBlockEntity extends BlockEntity {
         passCharge(level);
         chargeCarts(level);
         syncEnergy(level);
+        updateCharged(level);
+    }
+
+    // Whether it's holding charge, or has been getting some: the rail is powered while it is
+    public boolean isCharged() {
+        return charged;
+    }
+
+    // Holding nothing doesn't mean it's cut off, as a cart can be drawing straight through it from the
+    // network, so what it's received lately counts too
+    private void updateCharged(Level level) {
+        if (--chargedCheckIn > 0) {
+            return;
+        }
+        chargedCheckIn = CHARGED_CHECK_TICKS;
+        boolean wasCharged = charged;
+        charged = energy() > 0 || receivedSinceCheck;
+        receivedSinceCheck = false;
+        BlockState state = level.getBlockState(worldPosition);
+        if (state.getBlock() instanceof ChargingRailBlock rail) {
+            rail.refreshPower(state, level, worldPosition);
+            // Its redstone signal goes with its charge, whether or not its powered state changed
+            if (charged != wasCharged) {
+                level.updateNeighborsAt(worldPosition, rail);
+            }
+        }
     }
 
     public int energy() {
@@ -213,7 +244,9 @@ public class ChargingRailBlockEntity extends BlockEntity {
                 if (target.canReceive()) {
                     int wanted = target.receiveEnergy(transfer, true);
                     int held = buffer.extractEnergy(wanted, false);
-                    int supplied = held + (wanted > held ? drawFromNodes(level, wanted - held) : 0);
+                    int direct = wanted > held ? drawFromNodes(level, wanted - held) : 0;
+                    int supplied = held + direct;
+                    receivedSinceCheck |= direct > 0;
                     int taken = target.receiveEnergy(supplied, false);
                     if (taken < supplied) {
                         buffer.receiveEnergy(supplied - taken, false);
@@ -313,6 +346,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
             int received = super.receiveEnergy(maxReceive, simulate);
             if (received > 0 && !simulate) {
                 energyChanged = true;
+                receivedSinceCheck = true;
                 setChanged();
             }
             return received;

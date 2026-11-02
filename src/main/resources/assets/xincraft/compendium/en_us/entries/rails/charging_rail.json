@@ -14,7 +14,7 @@
     },
     {
       "type": "text",
-      "text": "**Filling:** it draws from a [[charging_station]] or [[substation]] within **2 chunks**, up to 1,000 FE per tick, and from nothing else: a generator touching it won't fill it.\n\n**Charging:** it passes up to 1,000 FE per tick into an energy-upgraded cart on it.\n\n**Stopping:** unpowered it holds carts still, so the locomotive stops and charges; power it to send the cart on."
+      "text": "**Filling:** it draws from a [[charging_station]] or [[substation]] within **2 chunks**, up to 1,000 FE per tick, and from nothing else: a generator touching it won't fill it.\n\n**Charging:** it passes up to 1,000 FE per tick into an energy-upgraded cart on it.\n\n**Powered:** while it has charge it counts as powered, boosting carts along as they charge. Without charge it needs redstone, and otherwise holds carts still. With charge it also gives off a full redstone signal."
     }
   ]
 }
