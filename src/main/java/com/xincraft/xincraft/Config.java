@@ -13,6 +13,7 @@ public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.BooleanValue GENERATE_TIN_ORE;
+    private static final ForgeConfigSpec.BooleanValue GENERATE_SILVER_ORE;
     private static final ForgeConfigSpec.DoubleValue PADDED_RAIL_VOLUME;
     private static final ForgeConfigSpec.DoubleValue TIN_RAIL_SPEED_MULTIPLIER;
     private static final ForgeConfigSpec.DoubleValue HONEY_RAIL_SPEED_MULTIPLIER;
@@ -45,6 +46,13 @@ public class Config {
         BUILDER.comment("Tin").push("tin");
         GENERATE_TIN_ORE = BUILDER
                 .comment("Whether tin ore generates in the Overworld. Turn off if another mod already generates tin.",
+                        "Takes effect the next time a world is loaded, and only in chunks generated after that.")
+                .define("generateOre", true);
+        BUILDER.pop();
+
+        BUILDER.comment("Silver").push("silver");
+        GENERATE_SILVER_ORE = BUILDER
+                .comment("Whether silver ore generates in the Overworld. Turn off if another mod already generates silver.",
                         "Takes effect the next time a world is loaded, and only in chunks generated after that.")
                 .define("generateOre", true);
         BUILDER.pop();
@@ -172,6 +180,7 @@ public class Config {
     // Cached copies of the values above, refreshed whenever the config loads or reloads.
     // Initialized to the same defaults so they're usable before the config has loaded.
     public static boolean generateTinOre = true;
+    public static boolean generateSilverOre = true;
     public static float paddedRailVolume = 0.2F;
     public static double tinRailSpeedMultiplier = 2.0;
     public static double honeyRailSpeedMultiplier = 0.5;
@@ -213,6 +222,7 @@ public class Config {
 
     private static void refresh() {
         generateTinOre = GENERATE_TIN_ORE.get();
+        generateSilverOre = GENERATE_SILVER_ORE.get();
         paddedRailVolume = PADDED_RAIL_VOLUME.get().floatValue();
         tinRailSpeedMultiplier = TIN_RAIL_SPEED_MULTIPLIER.get();
         honeyRailSpeedMultiplier = HONEY_RAIL_SPEED_MULTIPLIER.get();

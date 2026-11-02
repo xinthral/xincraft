@@ -8,6 +8,9 @@
     "xincraft:heat_turbine",
     "xincraft:steam_turbine",
     "xincraft:apothecary_altar",
-    "xincraft:apothecary_crucible"
+    "xincraft:apothecary_crucible",
+    "xincraft:silver_ore",
+    "xincraft:deepslate_silver_ore",
+    "xincraft:silver_block"
   ]
 }

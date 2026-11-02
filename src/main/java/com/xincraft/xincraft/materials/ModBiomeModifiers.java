@@ -15,5 +15,8 @@ public final class ModBiomeModifiers {
     public static final RegistryObject<MapCodec<TinOreBiomeModifier>> TIN_ORE =
         SERIALIZERS.register("tin_ore", () -> TinOreBiomeModifier.CODEC);
 
+    public static final RegistryObject<MapCodec<SilverOreBiomeModifier>> SILVER_ORE =
+        SERIALIZERS.register("silver_ore", () -> SilverOreBiomeModifier.CODEC);
+
     private ModBiomeModifiers() {}
 }

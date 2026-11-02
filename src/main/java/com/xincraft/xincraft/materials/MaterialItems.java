@@ -28,6 +28,12 @@ public final class MaterialItems {
     public static final RegistryObject<Item> TIN_INGOT =
         Registers.registerItem("tin_ingot", Item::new, () -> new Item.Properties().trimMaterial(ModTrimMaterials.TIN));
 
+    public static final RegistryObject<Item> RAW_SILVER =
+        Registers.registerItem("raw_silver", Item::new, Item.Properties::new);
+
+    public static final RegistryObject<Item> SILVER_INGOT =
+        Registers.registerItem("silver_ingot", Item::new, Item.Properties::new);
+
     // Bronze: 3 raw copper and 1 raw tin craft into 4 raw bronze, which smelts into bronze ingots
     public static final RegistryObject<Item> RAW_BRONZE =
         Registers.registerItem("raw_bronze", Item::new, Item.Properties::new);

@@ -1,0 +1,6 @@
+{
+  "type": "xincraft:silver_ore",
+  "biomes": "#minecraft:is_overworld",
+  "features": "xincraft:ore_silver",
+  "step": "underground_ores"
+}

@@ -58,6 +58,43 @@ public final class MaterialBlocks {
         true
     );
 
+    // Silver ores generate deeper and more rarely than tin (data/xincraft/worldgen,
+    // data/xincraft/forge/biome_modifier, materials.SilverOreBiomeModifier) unless
+    // Config.generateSilverOre is off, and drop raw silver. Properties match vanilla's gold ores.
+    public static final RegistryObject<Block> SILVER_ORE = Registers.registerBlock(
+        "silver_ore",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(3.0F, 3.0F),
+        true
+    );
+
+    public static final RegistryObject<Block> DEEPSLATE_SILVER_ORE = Registers.registerBlock(
+        "deepslate_silver_ore",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.DEEPSLATE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(4.5F, 3.0F)
+            .sound(SoundType.DEEPSLATE),
+        true
+    );
+
+    public static final RegistryObject<Block> SILVER_BLOCK = Registers.registerBlock(
+        "silver_block",
+        Block::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.METAL)
+            .strength(5.0F, 6.0F)
+            .sound(SoundType.METAL)
+            .requiresCorrectToolForDrops(),
+        true
+    );
+
     // Loading this class is what registers everything above
     static void init() {}
 
