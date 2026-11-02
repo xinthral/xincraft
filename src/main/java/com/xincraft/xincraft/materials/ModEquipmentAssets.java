@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.registry;
+package com.xincraft.xincraft.materials;
 
 import com.xincraft.xincraft.XincraftMod;
 import net.minecraft.resources.Identifier;

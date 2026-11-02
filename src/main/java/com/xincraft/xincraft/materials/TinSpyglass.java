@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.materials;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.materials.MaterialComponents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 // The tin spyglass is a vanilla spyglass carrying the xincraft:tin_lens component rather than an
 // item of its own: vanilla's zoom, scope overlay, hand hiding and slowed mouse all check for
 // Items.SPYGLASS specifically (Player#isScoping), and not all of them can be hooked. Looking
-// through one gives night vision (below) and tints the view green (client.TinSpyglassTint); its
+// through one gives night vision (below) and tints the view green (materials.client.TinSpyglassTint); its
 // look comes from the component select in assets/minecraft/items/spyglass.json. The lonsdaleite
 // helmet gives the same night vision, and is handled here too, as a player can have both and taking
 // off one mustn't remove what the other gives.

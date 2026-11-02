@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.world;
+package com.xincraft.xincraft.materials;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;

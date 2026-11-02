@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.registry;
+package com.xincraft.xincraft.materials;
 
 import java.util.Map;
-import com.xincraft.xincraft.materials.MaterialTags;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;

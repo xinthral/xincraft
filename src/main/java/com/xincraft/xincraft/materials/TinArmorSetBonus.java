@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.materials;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

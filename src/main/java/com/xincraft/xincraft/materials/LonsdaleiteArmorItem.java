@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.materials;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +15,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 // it, as both use the same hidden effect); the chestplate keeps piglins neutral (the item tag
 // minecraft:piglin_safe_armor); the leggings' step height and the boots' speed are attribute
 // modifiers (materials.MaterialItems). Its red shimmer takes the place of vanilla's glint, which is turned
-// off: a model layer on the item, and client.LonsdaleiteGlintLayer when worn.
+// off: a model layer on the item, and materials.client.LonsdaleiteGlintLayer when worn.
 public class LonsdaleiteArmorItem extends Item {
     public LonsdaleiteArmorItem(Item.Properties properties) {
         super(properties);

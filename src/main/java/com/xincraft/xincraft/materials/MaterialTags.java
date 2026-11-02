@@ -19,7 +19,7 @@ public final class MaterialTags {
     // xincraft:repairs_lonsdaleite_armor - repair ingredient tag for lonsdaleite armor
     public static final TagKey<Item> REPAIRS_LONSDALEITE_ARMOR =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "repairs_lonsdaleite_armor"));
-    // xincraft:lonsdaleite_armor - the pieces client.LonsdaleiteGlintLayer draws its shimmer on
+    // xincraft:lonsdaleite_armor - the pieces materials.client.LonsdaleiteGlintLayer draws its shimmer on
     public static final TagKey<Item> LONSDALEITE_ARMOR =
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_armor"));
     // xincraft:repairs_bronze_armor - repair ingredient tag for bronze armor

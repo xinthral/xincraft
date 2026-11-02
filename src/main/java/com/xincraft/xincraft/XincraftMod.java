@@ -3,7 +3,7 @@ package com.xincraft.xincraft;
 import com.mojang.logging.LogUtils;
 import com.xincraft.xincraft.entity.XincraftMinecartBehavior;
 import com.xincraft.xincraft.network.ModNetwork;
-import com.xincraft.xincraft.registry.ModBiomeModifiers;
+import com.xincraft.xincraft.materials.ModBiomeModifiers;
 import com.xincraft.xincraft.registry.ModCreativeModeTabs;
 import com.xincraft.xincraft.registry.ModRecipes;
 import com.xincraft.xincraft.common.CommonContent;

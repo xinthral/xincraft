@@ -1,8 +1,7 @@
-package com.xincraft.xincraft.registry;
+package com.xincraft.xincraft.materials;
 
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.world.TinOreBiomeModifier;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

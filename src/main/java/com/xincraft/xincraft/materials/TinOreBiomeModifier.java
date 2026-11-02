@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.world;
+package com.xincraft.xincraft.materials;
 
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.Config;

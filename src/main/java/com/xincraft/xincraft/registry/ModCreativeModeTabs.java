@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.registry;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.item.TinSpyglass;
+import com.xincraft.xincraft.materials.TinSpyglass;
 import com.xincraft.xincraft.materials.MaterialItems;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.core.registries.Registries;

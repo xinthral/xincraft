@@ -1,9 +1,6 @@
 package com.xincraft.xincraft.materials;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.item.LonsdaleiteArmorItem;
-import com.xincraft.xincraft.registry.ModArmorMaterials;
-import com.xincraft.xincraft.registry.ModTrimMaterials;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -51,7 +48,7 @@ public final class MaterialItems {
     public static final RegistryObject<Item> LONSDALEITE_SHARD =
         Registers.registerItem("lonsdaleite_shard", Item::new, Item.Properties::new);
 
-    // Bronze armor upgraded at the apothecary altar (item.LonsdaleiteArmorItem)
+    // Bronze armor upgraded at the apothecary altar (materials.LonsdaleiteArmorItem)
     public static final RegistryObject<Item> LONSDALEITE_HELMET = Registers.registerItem("lonsdaleite_helmet", LonsdaleiteArmorItem::new,
         () -> lonsdaleiteArmor(ArmorType.HELMET, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.HELMET)));
     public static final RegistryObject<Item> LONSDALEITE_CHESTPLATE = Registers.registerItem("lonsdaleite_chestplate", LonsdaleiteArmorItem::new,
@@ -77,7 +74,7 @@ public final class MaterialItems {
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.BOOTS));
 
     // Applies the reinforced armor trim (data/xincraft/trim_pattern/reinforced.json); found in
-    // mineshaft chests (world.ReinforcedTrimLoot)
+    // mineshaft chests (materials.ReinforcedTrimLoot)
     public static final RegistryObject<Item> REINFORCED_ARMOR_TRIM_SMITHING_TEMPLATE = Registers.registerItem(
         "reinforced_armor_trim_smithing_template", SmithingTemplateItem::createArmorTrimTemplate,
         () -> new Item.Properties().rarity(Rarity.UNCOMMON));

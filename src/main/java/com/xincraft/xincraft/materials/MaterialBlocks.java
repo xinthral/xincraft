@@ -33,7 +33,7 @@ public final class MaterialBlocks {
     );
 
     // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier,
-    // world.TinOreBiomeModifier) unless Config.generateTinOre is off, and drop raw tin. Properties
+    // materials.TinOreBiomeModifier) unless Config.generateTinOre is off, and drop raw tin. Properties
     // match vanilla's iron ores.
     public static final RegistryObject<Block> TIN_ORE = Registers.registerBlock(
         "tin_ore",

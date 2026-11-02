@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.materials.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
@@ -32,7 +32,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// The red shimmer on worn lonsdaleite armor (item.LonsdaleiteArmorItem): vanilla's armor glint, drawn
+// The red shimmer on worn lonsdaleite armor (materials.LonsdaleiteArmorItem): vanilla's armor glint, drawn
 // the same way over the same models, with a red texture. Vanilla has no hook for the glint's colour,
 // so its own is off for these items and this layer draws theirs, on players, mannequins and armor
 // stands.

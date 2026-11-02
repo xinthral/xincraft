@@ -1,7 +1,7 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.materials.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.item.TinSpyglass;
+import com.xincraft.xincraft.materials.TinSpyglass;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
