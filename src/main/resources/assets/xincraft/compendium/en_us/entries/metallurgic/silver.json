@@ -1,0 +1,35 @@
+{
+  "title": "Silver",
+  "icon": "xincraft:silver_ingot",
+  "category": "metallurgic",
+  "sort": 13,
+  "items": [
+    "xincraft:silver_ore",
+    "xincraft:deepslate_silver_ore",
+    "xincraft:raw_silver",
+    "xincraft:silver_ingot",
+    "xincraft:silver_block"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:silver_ore",
+        "xincraft:deepslate_silver_ore",
+        "xincraft:raw_silver",
+        "xincraft:silver_ingot",
+        "xincraft:silver_block"
+      ],
+      "text": "Silver ore generates in every Overworld biome, rarer and deeper than tin: up to 6 veins of up to 9 blocks per chunk, between Y -48 and 48, most common around Y 0. It needs an **iron pickaxe** and drops **raw silver** (more with Fortune)."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:silver_ingot_from_smelting_raw_silver",
+      "text": "Ore smelts straight to ingots too, and 9 ingots make a block."
+    },
+    {
+      "type": "text",
+      "text": "Alloyed with gold, silver makes [[electrum]].\n\nIf another mod already generates silver, turn Xincraft's ore off with silver.generateOre in the config."
+    }
+  ]
+}

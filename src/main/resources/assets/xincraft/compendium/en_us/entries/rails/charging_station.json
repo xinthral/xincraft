@@ -1,0 +1,20 @@
+{
+  "title": "Charging Station",
+  "icon": "xincraft:charging_station",
+  "category": "rails",
+  "sort": 8,
+  "items": [
+    "xincraft:charging_station"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:charging_station",
+      "text": "Where energy enters a power network. A [[heat_turbine|turbine]], another mod's generator, or a cable feeds it from right next to it. It holds just 2,000 FE, passing the rest on."
+    },
+    {
+      "type": "text",
+      "text": "**Linking:** use a [[linking_bar]] on one station or [[substation]], then another, up to **64 blocks** apart. Each takes up to 4 links. Shift-use the bar to unlink and get the bars back.\n\n**Rails:** a [[charging_rail]] needs no linking: it draws from the nearest station or substation in range.\n\n**Several stations:** build them so their ranges overlap. If a rail is out of range of one or its network runs dry, it uses the next."
+    }
+  ]
+}

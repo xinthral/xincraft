@@ -1,6 +1,6 @@
 # Xincraft
 
-A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze charging rails, with heat and steam turbines to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, exotic flowers that give off area effects, and a nature magic system built on elemental flowers, whose altar and crucible make mob filters and lonsdaleite armor. An in-game guide book, the Xincraft Compendium, covers all of it.
+A Minecraft Forge mod that adds tin, bronze, silver and electrum, plus a set of rails: fast tin rails, quiet padded rails, speed-limiting honey rails, launching bouncy rails, cart-sorting inspector rails, teleporting ender rails, and bronze and electrum charging rails, with heat and steam turbines and a network of charging stations and substations to power them. It also adds minecarts: a self-driving locomotive cart and a music-playing jingle cart, motorboats, upgrades for both, exotic flowers that give off area effects, and a nature magic system built on elemental flowers, whose altar and crucible make mob filters and lonsdaleite armor. An in-game guide book, the Xincraft Compendium, covers all of it.
 
 - **Minecraft:** 26.2
 - **Forge:** 65.1.0 or newer
@@ -10,6 +10,8 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 
 - [Tin](#tin)
 - [Bronze](#bronze)
+- [Silver](#silver)
+- [Electrum](#electrum)
 - [Lonsdaleite Armor](#lonsdaleite-armor)
 - [Bronze Chest and Golems](#bronze-chest-and-golems)
 - [Tin Rails](#tin-rails)
@@ -20,6 +22,7 @@ A Minecraft Forge mod that adds tin and bronze, plus a set of rails: fast tin ra
 - [Inspector Rail](#inspector-rail)
 - [Ender Rails](#ender-rails)
 - [Charging Rail](#charging-rail)
+- [Power Networks](#power-networks)
 - [Turbines](#turbines)
 - [Minecart Frame](#minecart-frame)
 - [Ender Minecart](#ender-minecart)
@@ -101,6 +104,29 @@ Bronze is a muted golden orange, and the Block of Bronze has copper's polished s
 Bronze armor gives the same protection as iron, 2 / 6 / 5 / 2 armor points (helmet / chestplate / leggings / boots), but lasts longer, with a durability multiplier of 17 (iron is 15), and has an enchantability of 12. Repair it with bronze ingots in an anvil. It takes armor trims like vanilla armor. The Apothecary Altar can upgrade it to [Lonsdaleite Armor](#lonsdaleite-armor).
 
 **Full set bonus:** wearing all four pieces of bronze armor lets you **walk straight up one-block steps** without jumping, the way horses do (step height 1 block instead of 0.6). Take any piece off and it's back to normal at once.
+
+## Silver
+
+| Item | Notes |
+| --- | --- |
+| Silver Ore, Deepslate Silver Ore | Generate underground in the Overworld; need an iron pickaxe or better |
+| Raw Silver | Dropped by silver ore |
+| Silver Ingot | Smelted from raw silver or silver ore |
+| Block of Silver | Storage block for 9 silver ingots; needs an iron pickaxe or better |
+
+Silver ore generates in every Overworld biome, rarer and deeper than tin: up to 6 veins of up to 9 blocks per chunk, between Y −48 and Y 48, most common around Y 0. Mining it drops one Raw Silver, more with Fortune; Silk Touch drops the ore block itself. Silver uses the common `c:` tags, so other mods' silver works in Xincraft's recipes.
+
+If another mod in your pack already generates silver, you can turn this mod's silver ore off with `silver.generateOre` in `config/xincraft-common.toml`. The change takes effect the next time a world is loaded, and only in chunks generated after that.
+
+## Electrum
+
+An alloy of gold and silver, used for the [Electrum Charging Rail](#electrum-charging-rail) and [Substation](#power-networks).
+
+| Item | Recipe | Makes |
+| --- | --- | --- |
+| Raw Electrum | 1 Raw Gold + 1 Raw Silver, shapeless | 2 |
+| Electrum Ingot | Smelt or blast Raw Electrum | 1 |
+| Block of Electrum | 9 Electrum Ingots (and back into 9 ingots) | 1 |
 
 ## Lonsdaleite Armor
 
@@ -297,10 +323,35 @@ A bronze powered rail that stores Forge Energy (FE) for locomotive carts with th
 | --- | --- |
 | Powered Rail recipe with Bronze Ingots in place of Gold Ingots (6 Bronze Ingots + 1 Stick + 1 Redstone) | 6 |
 
-- **Filling it:** place a [Heat or Steam Turbine](#turbines), or another mod's generator, battery or energy cell, **right next to it** (beside, above or below), and the rail draws energy from it by itself. Cables connected to it work too. It holds up to **50,000 FE** and takes in up to 1,000 FE per tick.
+- **Filling it:** place a [Heat or Steam Turbine](#turbines), or another mod's generator, battery or energy cell, **right next to it** (beside, above or below), and the rail draws energy from it by itself. Cables connected to it work too. It also draws from a [power network](#power-networks) in range. It holds up to **5,000 FE** and takes in up to 1,000 FE per tick.
 - **Charging a cart:** the rail passes up to 1,000 FE per tick into a locomotive cart with the energy upgrade sitting on it or rolling over it. It also charges other mods' carts that take Forge Energy.
-- **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail with a generator beside it makes a **charging station**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
+- **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail with a generator beside it makes a **charging stop**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
 - Other mods' machines can draw energy back out of it too.
+
+### Electrum Charging Rail
+
+The same rail made of electrum: it stores **20,000 FE**, moves up to **4,000 FE per tick**, and reaches twice as far for power.
+
+| Recipe | Makes |
+| --- | --- |
+| Powered Rail recipe with Electrum Ingots in place of Gold Ingots (6 Electrum Ingots + 1 Stick + 1 Redstone) | 6 |
+
+## Power Networks
+
+Charging stations and substations carry energy to charging rails without a generator beside every rail.
+
+| Block | Recipe | Stores |
+| --- | --- | --- |
+| Charging Station | 1 Lightning Rod over 5 Bronze Ingots around 1 Redstone | 2,000 FE |
+| Substation | 1 Lightning Rod over 5 Electrum Ingots around 1 Redstone | 5,000 FE |
+
+- **Charging Station:** where energy enters the network. Place a [turbine](#turbines) or another mod's generator **right next to it**, or connect a cable. Energy only goes in.
+- **Substation:** stores energy passed to it by the stations on its network. It has no energy connection of its own.
+- **Linking:** right-click one with a [Linking Bar](#carriage-and-linking-bar), then another, up to **64 blocks** apart. Each takes up to **4 links**, so networks can branch, and one bar is used up per link. **Shift + right-click** to unlink and get the bars back. Breaking one drops its bars.
+- **Rails connect by themselves:** a rail draws from the nearest station or substation within **2 chunks** (bronze) or **4 chunks** (electrum), counting chunks along each axis. There's nothing to link. A rail can still fill from a generator touching it.
+- **Several stations:** any number of stations can feed one network. Space them so their ranges overlap, and a rail out of range of one, or whose nearest network has run dry, uses the next one in range.
+- **Loaded chunks only:** only the parts of a network in loaded chunks take part, so power can't pass through a node in an unloaded chunk.
+- Buffers are deliberately small: the network passes energy along rather than banking it, so charging speed depends on your generators.
 
 ## Turbines
 
@@ -563,7 +614,7 @@ Upgrades fit onto the Xincraft minecarts (ender minecart, locomotive cart, jingl
 
 For modpacks with Forge Energy (FE) mods. A locomotive cart with the energy upgrade holds up to **100,000 FE** and uses **20 FE per tick** while driving, about 4 minutes of driving on a full charge.
 
-- **Charging:** the cart draws up to 1,000 FE per tick from a [Charging Rail](#charging-rail) it's on, which makes a charging station. It also draws from an energy block (a battery, energy cell, generator and so on) **under the rail** it's on, the way a hopper under the rail empties a chest minecart, from other mods' charging rails, and from anything else that hands energy to entities. Energy can't be drawn back out of the cart.
+- **Charging:** the cart draws up to 1,000 FE per tick from a [Charging Rail](#charging-rail) it's on, or up to 4,000 FE from an [Electrum Charging Rail](#electrum-charging-rail), which makes a charging stop. It also draws from an energy block (a battery, energy cell, generator and so on) **under the rail** it's on, the way a hopper under the rail empties a chest minecart, from other mods' charging rails, and from anything else that hands energy to entities. Energy can't be drawn back out of the cart.
 - **Fuel charges the battery:** whenever the battery isn't full, the cart burns fuel from its fuel slot, moving or parked, and every tick of burning goes into the battery (20 FE by default, the same as a tick of driving uses). So fuel lasts just as long as it would without the upgrade. Once the battery is full it stops lighting new fuel, so a parked locomotive with fuel loaded tops itself up and then waits.
 - **The battery drives the cart:** with the upgrade, the engine runs only on stored energy, throwing off sparks (and smoke while fuel is burning). While moving with fuel loaded, the fuel refills the battery as fast as driving drains it; once the fuel runs out, the battery keeps it going until it's empty.
 - **Energy bar:** the cart's inventory screen shows the charge as a red bar left of the fuel slot. Hover over it for the exact amount.
@@ -834,6 +885,9 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 [tin]
 	generateOre = true
 
+[silver]
+	generateOre = true
+
 [paddedRails]
 	volume = 0.2
 
@@ -889,6 +943,7 @@ Xincraft's settings live in `config/xincraft-common.toml`. The file is created t
 | Setting | Default | Range | What it does |
 | --- | --- | --- | --- |
 | `tin.generateOre` | `true` | true / false | Whether tin ore generates in the Overworld. Turn it off if another mod already generates tin. Takes effect the next time a world is loaded, and only in chunks generated after that |
+| `silver.generateOre` | `true` | true / false | Whether silver ore generates in the Overworld. Turn it off if another mod already generates silver. Takes effect the next time a world is loaded, and only in chunks generated after that |
 | `paddedRails.volume` | `0.2` | 0.0 – 1.0 | Volume of minecart sounds on padded rails (0 = silent, 1 = vanilla volume) |
 | `tinRails.speedMultiplier` | `2.0` | 1.0 – 3.0 | How many times faster minecarts can travel on straight tin rails (slopes included) than on other rails |
 | `honeyRails.speedMultiplier` | `0.5` | 0.05 – 1.0 | Speed minecarts are held at on honey rails, as a fraction of their normal top speed |
@@ -946,7 +1001,8 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../transport/rail/` | Padded, tin, honey, bouncy, inspector, ender, and charging rails, and the minecart physics behind them (`XincraftMinecartBehavior`) |
 | `.../transport/cart/` | The ender minecart, locomotive cart, jingle cart, carriage, and freight cart |
 | `.../transport/boat/` | Motorboats, the party boat, ferry, and barge, buoys, and following buoy paths (`BuoyPath`) |
-| `.../transport/train/` | What carts and boats share: linking them into trains (`LinkedTransport`), upgrades (`CartUpgrades`), mob cells (`MobCell`), shulker box storage (`ShulkerHold`), and jukebox playback |
+| `.../transport/power/` | Power networks: charging stations and substations (`PowerNodeBlockEntity`) |
+| `.../transport/train/` | What carts and boats share: linking them into trains (`LinkedTransport`), upgrades (`CartUpgrades`), mob cells (`MobCell`), shulker box storage (`ShulkerHold`), jukebox playback, and blocks that link with the linking bar (`LinkedBlockEntity`) |
 | `.../turbines/` | The heat and steam turbines |
 | `.../flowers/` | The exotic flowers, glowing leaves, the mixing tray, and exotic pollen |
 | `.../magic/` | Elements, essence reservoirs and `EssenceHelper` (finding, filling and drawing on flora), elemental flora and powders, the apothecary altar and crucible, and their recipe types (`CrucibleRecipe`, `AltarRecipe`) |

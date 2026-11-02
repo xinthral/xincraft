@@ -1,0 +1,20 @@
+{
+  "title": "Substation",
+  "icon": "xincraft:substation",
+  "category": "rails",
+  "sort": 9,
+  "items": [
+    "xincraft:substation"
+  ],
+  "pages": [
+    {
+      "type": "recipe",
+      "recipe": "xincraft:substation",
+      "text": "Stores up to 5,000 FE for a power network, filled by the [[charging_station|charging stations]] linked to it. It takes no energy any other way."
+    },
+    {
+      "type": "text",
+      "text": "Link it with a [[linking_bar]] to carry power further along a line: [[charging_rail|charging rails]] in range draw from it as they would from a station, and it finds whatever it doesn't hold elsewhere on its network.\n\nOnly the parts of a network in loaded chunks take part."
+    }
+  ]
+}

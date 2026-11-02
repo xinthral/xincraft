@@ -1,0 +1,32 @@
+{
+  "title": "Electrum",
+  "icon": "xincraft:electrum_ingot",
+  "category": "metallurgic",
+  "sort": 14,
+  "items": [
+    "xincraft:raw_electrum",
+    "xincraft:electrum_ingot",
+    "xincraft:electrum_block"
+  ],
+  "pages": [
+    {
+      "type": "spotlight",
+      "items": [
+        "xincraft:raw_electrum",
+        "xincraft:electrum_ingot",
+        "xincraft:electrum_block"
+      ],
+      "text": "An alloy of gold and [[silver]], a pale gold and a fine conductor. **1 raw gold + 1 raw silver** make 2 raw electrum, which smelts into electrum ingots; 9 make a block."
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:raw_electrum",
+      "text": ""
+    },
+    {
+      "type": "recipe",
+      "recipe": "xincraft:electrum_ingot_from_smelting_raw_electrum",
+      "text": "Used for the [[electrum_charging_rail]] and [[substation]]."
+    }
+  ]
+}
