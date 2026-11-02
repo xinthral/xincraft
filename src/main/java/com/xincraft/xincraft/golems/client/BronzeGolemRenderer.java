@@ -1,7 +1,7 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.golems.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.entity.BronzeGolem;
+import com.xincraft.xincraft.golems.BronzeGolem;
 import com.xincraft.xincraft.golems.GolemEntityTypes;
 import net.minecraft.client.model.animal.golem.CopperGolemModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -21,7 +21,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Draws the bronze golem (entity.BronzeGolem) with vanilla's copper golem model and animations, in
+// Draws the bronze golem (golems.BronzeGolem) with vanilla's copper golem model and animations, in
 // its own texture. What it holds shows in its hands: the sword, whatever it's carrying, and the copper
 // nugget it offers iron golems, which isn't a real item in its hand.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)

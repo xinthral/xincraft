@@ -1,9 +1,7 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.golems;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.entity.BronzeGolem;
 import com.xincraft.xincraft.common.CommonComponents;
-import com.xincraft.xincraft.golems.GolemEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -20,7 +18,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 // A packed-up bronze golem, or combat golem with its sword in the xincraft:golem_sword component;
-// a golem shift + right-clicked with an empty hand (entity.BronzeGolem) becomes one, and using it on
+// a golem shift + right-clicked with an empty hand (golems.BronzeGolem) becomes one, and using it on
 // a block puts the golem back. The altar arms one (magic.AltarRecipe).
 public class BronzeGolemItem extends Item {
     public BronzeGolemItem(Item.Properties properties) {

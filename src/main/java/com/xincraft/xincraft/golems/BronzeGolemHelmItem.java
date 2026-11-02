@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.golems;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.golems.GolemEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
-// Used on a copper golem, at any stage of oxidation, turns it into a bronze golem (entity.BronzeGolem).
+// Used on a copper golem, at any stage of oxidation, turns it into a bronze golem (golems.BronzeGolem).
 // What it was carrying or had on its antenna drops.
 public class BronzeGolemHelmItem extends Item {
     public BronzeGolemHelmItem(Item.Properties properties) {

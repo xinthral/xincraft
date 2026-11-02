@@ -1,6 +1,5 @@
 package com.xincraft.xincraft.golems;
 
-import com.xincraft.xincraft.block.BronzeChestBlock;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.flag.FeatureFlags;

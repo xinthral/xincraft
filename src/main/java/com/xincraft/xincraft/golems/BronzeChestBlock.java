@@ -1,11 +1,8 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.golems;
 
 import java.util.Optional;
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.golems.GolemBlockEntities;
-import com.xincraft.xincraft.golems.GolemBlocks;
-import com.xincraft.xincraft.golems.GolemMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +30,7 @@ import org.jspecify.annotations.Nullable;
 
 // A copper chest with a fourth row: 36 slots, or 72 when two join into a double chest. It never
 // weathers. It's in the block tag minecraft:copper_chests, so copper golems take items from it as
-// from any copper chest, and it's the home a bronze golem (entity.BronzeGolem) stays around.
+// from any copper chest, and it's the home a bronze golem (golems.BronzeGolem) stays around.
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public class BronzeChestBlock extends ChestBlock {
     public static final MapCodec<BronzeChestBlock> CODEC = simpleCodec(BronzeChestBlock::new);

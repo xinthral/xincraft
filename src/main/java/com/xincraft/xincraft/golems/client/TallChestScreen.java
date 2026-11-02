@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.golems.client;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

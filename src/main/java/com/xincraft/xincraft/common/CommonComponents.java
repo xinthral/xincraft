@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class CommonComponents {
-    // The sword a combat golem item's golem holds (see item.BronzeGolemItem)
+    // The sword a combat golem item's golem holds (see golems.BronzeGolemItem)
     public static final RegistryObject<DataComponentType<ItemStack>> GOLEM_SWORD = Registers.COMPONENTS.register("golem_sword",
         () -> DataComponentType.<ItemStack>builder().persistent(ItemStack.CODEC).networkSynchronized(ItemStack.STREAM_CODEC).build());
 

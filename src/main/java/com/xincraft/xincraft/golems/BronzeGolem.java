@@ -1,13 +1,10 @@
-package com.xincraft.xincraft.entity;
+package com.xincraft.xincraft.golems;
 
 import com.xincraft.xincraft.common.MobHolder;
 import java.util.EnumSet;
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.block.BronzeChestBlockEntity;
 import com.xincraft.xincraft.common.CommonComponents;
-import com.xincraft.xincraft.golems.GolemEntityTypes;
-import com.xincraft.xincraft.golems.GolemItems;
 import com.xincraft.xincraft.materials.MaterialTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -71,7 +68,7 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// A copper golem refitted with a bronze golem helm (item.BronzeGolemHelmItem). It stays within the
+// A copper golem refitted with a bronze golem helm (golems.BronzeGolemHelmItem). It stays within the
 // range a copper golem searches (32 blocks across, 8 up and down) of the nearest bronze chest, and
 // moves no items. Near an iron golem it now and then holds out a copper nugget, as an iron golem
 // offers a villager a poppy.

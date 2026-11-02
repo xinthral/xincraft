@@ -1,6 +1,5 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.golems;
 
-import com.xincraft.xincraft.golems.GolemBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;

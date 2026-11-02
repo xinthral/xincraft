@@ -1,7 +1,6 @@
 package com.xincraft.xincraft.golems;
 
 import java.util.Set;
-import com.xincraft.xincraft.block.BronzeChestBlockEntity;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;

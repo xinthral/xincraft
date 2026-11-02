@@ -1,8 +1,8 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.golems.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.block.BronzeChestBlockEntity;
+import com.xincraft.xincraft.golems.BronzeChestBlockEntity;
 import com.xincraft.xincraft.golems.GolemBlockEntities;
 import com.xincraft.xincraft.golems.GolemMenus;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -24,7 +24,7 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-// Draws the bronze chest (block.BronzeChestBlock) like vanilla's chests, with its own textures:
+// Draws the bronze chest (golems.BronzeChestBlock) like vanilla's chests, with its own textures:
 // vanilla picks a chest's texture from a fixed list
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class BronzeChestRenderer extends ChestRenderer<BronzeChestBlockEntity> {
