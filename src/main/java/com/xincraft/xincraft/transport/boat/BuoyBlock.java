@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.transport.boat;
 
 import com.xincraft.xincraft.transport.TransportItems;
+import com.xincraft.xincraft.transport.train.LinkableBlock;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,7 +46,7 @@ import org.jspecify.annotations.Nullable;
 // Right-clicking either half switches its lamp off, and again back on: a boat coming to an unlit
 // buoy stops short of it and waits, engine off, until it's lit again. Both halves carry LIT. Links
 // reach linkRange() blocks; the advanced buoy (AdvancedBuoyBlock) reaches further.
-public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
+public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBlock, LinkableBlock {
     public static final MapCodec<BuoyBlock> CODEC = simpleCodec(BuoyBlock::new);
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -64,6 +65,12 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
     @Override
     protected MapCodec<? extends BuoyBlock> codec() {
         return CODEC;
+    }
+
+    // A buoy links by its lower half, whichever half the bar was used on
+    @Override
+    public BlockPos linkPos(BlockState state, BlockPos clicked) {
+        return lowerPos(state, clicked);
     }
 
     // Furthest this buoy links to another; a link reaches only as far as the shorter of its two buoys

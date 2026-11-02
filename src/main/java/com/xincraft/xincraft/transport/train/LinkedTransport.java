@@ -270,7 +270,7 @@ public final class LinkedTransport {
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.unlinked"));
             return InteractionResult.SUCCESS;
         }
-        if (LinkingBarItem.isLinkingBuoys(stack)) {
+        if (LinkingBarItem.isLinkingBlocks(stack)) {
             LinkingBarItem.clearPending(stack);
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.mixed"));
             return InteractionResult.FAIL;

@@ -1,8 +1,6 @@
 package com.xincraft.xincraft.transport.train;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.transport.boat.BuoyBlock;
-import com.xincraft.xincraft.transport.boat.BuoyBlockEntity;
 import com.xincraft.xincraft.transport.TransportComponents;
 import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.ChatFormatting;
@@ -31,28 +29,29 @@ public class LinkingBarItem extends Item {
         super(properties);
     }
 
-    // Whether the bar is halfway through linking carts, or buoys
+    // Whether the bar is halfway through linking carts, or blocks
     public static boolean isLinkingCarts(ItemStack stack) {
         return stack.has(TransportComponents.LINKING_BAR_START.get());
     }
 
-    public static boolean isLinkingBuoys(ItemStack stack) {
-        return stack.has(TransportComponents.LINKING_BAR_BUOY.get());
+    public static boolean isLinkingBlocks(ItemStack stack) {
+        return stack.has(TransportComponents.LINKING_BAR_BLOCK.get());
     }
 
-    // Forgets the first cart or buoy
+    // Forgets the first cart or block
     public static void clearPending(ItemStack stack) {
         stack.remove(TransportComponents.LINKING_BAR_START.get());
-        stack.remove(TransportComponents.LINKING_BAR_BUOY.get());
+        stack.remove(TransportComponents.LINKING_BAR_BLOCK.get());
         stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
     }
 
-    // Used on a buoy: shift-use unlinks it, handing back its bars (except in creative, where linking
-    // didn't use any up); otherwise the first buoy is remembered and the second is linked to it
+    // Used on a block that links (LinkableBlock, such as a buoy): shift-use unlinks it, handing back
+    // its bars (except in creative, where linking didn't use any up); otherwise the first block is
+    // remembered and the second is linked to it
     @Override
     public InteractionResult useOn(UseOnContext context) {
         BlockState state = context.getLevel().getBlockState(context.getClickedPos());
-        if (!(state.getBlock() instanceof BuoyBlock)) {
+        if (!(state.getBlock() instanceof LinkableBlock linkable)) {
             return InteractionResult.PASS;
         }
         if (!(context.getLevel() instanceof ServerLevel level) || context.getPlayer() == null) {
@@ -60,15 +59,15 @@ public class LinkingBarItem extends Item {
         }
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
-        BlockPos pos = BuoyBlock.lowerPos(state, context.getClickedPos());
-        BuoyBlockEntity buoy = BuoyBlockEntity.at(level, pos);
-        if (buoy == null) {
+        BlockPos pos = linkable.linkPos(state, context.getClickedPos());
+        LinkedBlockEntity block = LinkedBlockEntity.linkedAt(level, pos);
+        if (block == null) {
             return InteractionResult.FAIL;
         }
         if (player.isSecondaryUseActive()) {
-            int bars = buoy.unlinkAll();
+            int bars = block.unlinkAll();
             if (bars == 0) {
-                player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_not_linked"));
+                player.sendOverlayMessage(block.message("not_linked"));
                 return InteractionResult.FAIL;
             }
             if (!player.hasInfiniteMaterials()) {
@@ -78,7 +77,7 @@ public class LinkingBarItem extends Item {
                 }
             }
             level.playSound(null, pos, SoundEvents.CHAIN_HIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_unlinked"));
+            player.sendOverlayMessage(block.message("unlinked"));
             return InteractionResult.SUCCESS;
         }
         if (isLinkingCarts(stack)) {
@@ -86,16 +85,16 @@ public class LinkingBarItem extends Item {
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.mixed"));
             return InteractionResult.FAIL;
         }
-        GlobalPos first = stack.get(TransportComponents.LINKING_BAR_BUOY.get());
+        GlobalPos first = stack.get(TransportComponents.LINKING_BAR_BLOCK.get());
         if (first == null) {
-            if (buoy.isFull()) {
-                player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_full", BuoyBlockEntity.MAX_LINKS));
+            if (block.isFull()) {
+                player.sendOverlayMessage(block.message("full", block.maxLinks()));
                 return InteractionResult.FAIL;
             }
-            stack.set(TransportComponents.LINKING_BAR_BUOY.get(), GlobalPos.of(level.dimension(), pos));
+            stack.set(TransportComponents.LINKING_BAR_BLOCK.get(), GlobalPos.of(level.dimension(), pos));
             stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
             level.playSound(null, pos, SoundEvents.CHAIN_HIT, SoundSource.BLOCKS, 1.0F, 1.2F);
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_started"));
+            player.sendOverlayMessage(block.message("started"));
             return InteractionResult.SUCCESS;
         }
         clearPending(stack);
@@ -104,34 +103,37 @@ public class LinkingBarItem extends Item {
             return InteractionResult.SUCCESS;
         }
         if (!first.dimension().equals(level.dimension())) {
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_other_dimension"));
+            player.sendOverlayMessage(block.message("other_dimension"));
             return InteractionResult.FAIL;
         }
-        BuoyBlockEntity other = BuoyBlockEntity.at(level, first.pos());
+        LinkedBlockEntity other = LinkedBlockEntity.linkedAt(level, first.pos());
         if (other == null) {
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_missing"));
+            player.sendOverlayMessage(block.message("missing"));
             return InteractionResult.FAIL;
         }
-        // As far as the shorter-reaching of the two buoys
-        double distance = BuoyBlockEntity.legLength(pos, first.pos());
-        double range = Math.min(buoy.linkRange(), other.linkRange());
+        if (!block.accepts(other)) {
+            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.mixed_blocks"));
+            return InteractionResult.FAIL;
+        }
+        // As far as the shorter-reaching of the two
+        double distance = LinkedBlockEntity.distance(pos, first.pos());
+        double range = Math.min(block.linkRange(), other.linkRange());
         if (distance > range) {
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_too_far",
-                (int) Math.ceil(distance), (int) range));
+            player.sendOverlayMessage(block.message("too_far", (int) Math.ceil(distance), (int) range));
             return InteractionResult.FAIL;
         }
-        if (buoy.isLinkedTo(first.pos())) {
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_already_linked"));
+        if (block.isLinkedTo(first.pos())) {
+            player.sendOverlayMessage(block.message("already_linked"));
             return InteractionResult.FAIL;
         }
-        if (buoy.isFull() || other.isFull()) {
-            player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_full", BuoyBlockEntity.MAX_LINKS));
+        if (block.isFull() || other.isFull()) {
+            player.sendOverlayMessage(block.message("full", block.maxLinks()));
             return InteractionResult.FAIL;
         }
-        BuoyBlockEntity.link(other, buoy);
+        LinkedBlockEntity.link(other, block);
         stack.consume(1, player);
         level.playSound(null, pos, SoundEvents.CHAIN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_linked"));
+        player.sendOverlayMessage(block.message("linked"));
         return InteractionResult.SUCCESS;
     }
 
@@ -140,7 +142,7 @@ public class LinkingBarItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {
         tooltip.accept(Component.translatable(getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
-        if (isLinkingCarts(stack) || isLinkingBuoys(stack)) {
+        if (isLinkingCarts(stack) || isLinkingBlocks(stack)) {
             tooltip.accept(Component.translatable(getDescriptionId() + ".started").withStyle(ChatFormatting.GOLD));
         }
     }

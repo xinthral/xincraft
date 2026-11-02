@@ -22,8 +22,9 @@ public final class TransportComponents {
     public static final RegistryObject<DataComponentType<UUID>> LINKING_BAR_START = Registers.COMPONENTS.register("linking_bar_start",
         () -> DataComponentType.<UUID>builder().persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 
-    // The buoy a linking bar was used on first; using it on a second buoy links the two
-    public static final RegistryObject<DataComponentType<GlobalPos>> LINKING_BAR_BUOY = Registers.COMPONENTS.register("linking_bar_buoy",
+    // The block a linking bar was used on first; using it on a second links the two. Named for buoys,
+    // the first blocks to link, and kept so that bars already in worlds stay valid
+    public static final RegistryObject<DataComponentType<GlobalPos>> LINKING_BAR_BLOCK = Registers.COMPONENTS.register("linking_bar_buoy",
         () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 
     // Loading this class is what registers everything above
