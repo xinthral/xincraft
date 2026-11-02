@@ -991,7 +991,7 @@ Requires a JDK 25. Gradle downloads everything else.
 
 On Windows, use `gradlew.bat` in place of `./gradlew`.
 
-The mod version is set in one place, `mod_version` in `gradle.properties`. The build uses it for the jar's name and fills it into `mods.toml`, so change it there only.
+The version is set in one place, `gradle.properties`, and the jar is named `xincraft-<minecraft_version>-<mod_version>.jar`, for example `xincraft-26.2-1.21.0.jar`. The build also fills `mod_version` into `mods.toml`, so change them there only.
 
 ### Project layout
 

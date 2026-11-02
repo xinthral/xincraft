@@ -1,29 +1,31 @@
 Xincraft Changelog
 ==================
 
-1.20.0
- - Silver: a new ore, rarer and deeper than tin, needing an iron pickaxe; turn it off with
-   silver.generateOre
- - Electrum: raw gold and raw silver alloy into raw electrum, which smelts into ingots
+1.21.0
+ - Power networks: Charging Stations take in energy from turbines beside them, connected with the
+   linking bar, and Substations store it, joined with the linking bar up to 64 blocks apart.
+   Charging rails draw from the nearest one in range: 2 chunks for bronze, 4 for electrum. Several
+   stations can feed one network, and overlapping ranges cover for each other
  - Electrum Charging Rail: moves 4,000 FE per tick, reaches further for power, and passes charge
    along the track to the electrum rails it's joined to
- - Power networks: Charging Stations take in energy from turbines beside them, connected with the
-   linking bar, and Substations store it, joined with the linking bar up to 64 blocks apart. Charging rails draw from the nearest one in range: 2 chunks
-   for bronze, 4 for electrum. Several stations can feed one network, and overlapping ranges cover
-   for each other
- - Rose-Tinted Glasses show power networks: links traced in cyan, amber when a network has run dry, or red with no
-   power source connected,
-   and what a station, substation or charging rail holds when you look at it. A charging rail also
-   shows which one it's drawing from, or warns that nothing in range has energy
+ - Rose-Tinted Glasses show power networks: links traced in cyan, amber when a network has run dry,
+   or red with no power source connected, and what a station, substation or charging rail holds
+   when you look at it. A charging rail also shows which one it's drawing from, or warns that
+   nothing in range has energy
  - Charging rails now only fill from a power network: a generator or cable touching one no longer
    fills it, so existing charging stops need a Charging Station in range
  - Charging rails now keep just 500 FE in reserve, down from 50,000, and carts draw through them
    straight from the network. Any energy above that in a rail is lost when it loads
+ - Charging rails count as powered while they have charge, boosting carts instead of holding them,
+   so locomotives charge as they pass, and give off a full redstone signal
  - Locomotive carts take up to 4,000 FE per tick from a rail that offers it
  - Locomotive Cart handbrake is now a toggle: press jump to throw it, with a lever on the cart showing
    which way it's set. It stays on after you get out, and holds the cart still on powered rails
- - Charging rails count as powered while they have charge, boosting carts instead of holding them,
-   so locomotives charge as they pass, and give off a full redstone signal
+
+1.20.0
+ - Silver: a new ore, rarer and deeper than tin, needing an iron pickaxe; turn it off with
+   silver.generateOre
+ - Electrum: raw gold and raw silver alloy into raw electrum, which smelts into ingots
 
 1.19.0
  - Carriage: a rideable passenger minecart in maroon lacquer, trimmed in bronze; an inspector rail
