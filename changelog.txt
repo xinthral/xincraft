@@ -10,6 +10,9 @@ Xincraft Changelog
    linking bar up to 64 blocks apart. Charging rails draw from the nearest one in range: 2 chunks
    for bronze, 4 for electrum. Several stations can feed one network, and overlapping ranges cover
    for each other
+ - Rose-Tinted Glasses show power networks: links traced in cyan, or red when a network has run dry,
+   and what a station, substation or charging rail holds when you look at it. A charging rail also
+   shows which one it's drawing from, or warns that nothing in range has energy
  - Charging rails now store 5,000 FE, down from 50,000: the network passes energy along rather than
    banking it. Any energy above that in a rail is lost when it loads
  - Locomotive carts take up to 4,000 FE per tick from a rail that offers it

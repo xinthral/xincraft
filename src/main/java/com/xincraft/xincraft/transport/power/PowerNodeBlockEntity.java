@@ -2,6 +2,7 @@ package com.xincraft.xincraft.transport.power;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashSet;
@@ -28,12 +29,16 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
     public static final double LINK_RANGE = 64.0;
     private static final int MAX_NETWORK_SIZE = 256;
     private static final int NETWORK_REFRESH_TICKS = 20;
-    private static final Map<Level, Set<PowerNodeBlockEntity>> LOADED = new WeakHashMap<>();
+    private static final int SYNC_TICKS = 100;
+    // Per level, and so per thread: in single player the client and server run side by side
+    private static final Map<Level, Set<PowerNodeBlockEntity>> LOADED = Collections.synchronizedMap(new WeakHashMap<>());
 
     private final int capacity;
     private int energy;
     private List<PowerNodeBlockEntity> network = List.of();
     private long networkExpiresAt;
+    private boolean energyChanged;
+    private long nextSync;
 
     protected PowerNodeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int capacity) {
         super(type, pos, state);
@@ -58,7 +63,7 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level != null && !level.isClientSide()) {
+        if (level != null) {
             LOADED.computeIfAbsent(level, key -> new LinkedHashSet<>()).add(this);
         }
     }
@@ -105,6 +110,7 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         int added = Math.max(0, Math.min(amount, capacity - energy));
         if (added > 0) {
             energy += added;
+            energyChanged = true;
             setChanged();
         }
         return added;
@@ -115,9 +121,29 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         int taken = Math.max(0, Math.min(amount, energy));
         if (taken > 0) {
             energy -= taken;
+            energyChanged = true;
             setChanged();
         }
         return taken;
+    }
+
+    // Lets clients know a changed amount, for rose-tinted glasses, at most once every 5 seconds
+    protected void serverTick(Level level) {
+        long now = level.getGameTime();
+        if (energyChanged && now >= nextSync) {
+            energyChanged = false;
+            nextSync = now + SYNC_TICKS;
+            changed();
+        }
+    }
+
+    // What this node's network holds between its nodes, and could hold
+    public int networkEnergy() {
+        return network().stream().filter(node -> !node.isRemoved()).mapToInt(PowerNodeBlockEntity::energy).sum();
+    }
+
+    public int networkCapacity() {
+        return network().stream().filter(node -> !node.isRemoved()).mapToInt(PowerNodeBlockEntity::capacity).sum();
     }
 
     // Takes energy from this node, then the rest of its network

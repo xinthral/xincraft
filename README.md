@@ -351,6 +351,7 @@ Charging stations and substations carry energy to charging rails without a gener
 - **Rails connect by themselves:** a rail draws from the nearest station or substation within **2 chunks** (bronze) or **4 chunks** (electrum), counting chunks along each axis. There's nothing to link. A rail can still fill from a generator touching it.
 - **Several stations:** any number of stations can feed one network. Space them so their ranges overlap, and a rail out of range of one, or whose nearest network has run dry, uses the next one in range.
 - **Loaded chunks only:** only the parts of a network in loaded chunks take part, so power can't pass through a node in an unloaded chunk.
+- **To see a network**, wear or hold [Rose-Tinted Glasses](#rose-tinted-glasses).
 - Buffers are deliberately small: the network passes energy along rather than banking it, so charging speed depends on your generators.
 
 ## Turbines
@@ -580,6 +581,7 @@ Marker buoys linked into courses that motorboats with the **RC Upgrade** follow 
 ### Rose-Tinted Glasses
 
 - **Wear them** (they go in the helmet slot) **or hold them** to see the links between buoys within 48 blocks, traced over the water. Worn, they also give your view a faint rose tint. A course is traced in **yellow**, like glowstone, when it makes a **complete loop** (every buoy linked to two others), and in **red**, like powered redstone, when it doesn't: it has an end.
+- **See power networks:** the links between [charging stations and substations](#power-networks) nearby are traced in **cyan** where the network has energy and **red** where it's run dry. Look at a station or substation to read what it and its network hold, and how many links it has. Look at a charging rail to read what it holds and trace a line to the one it's drawing from, or get a warning if none in range has energy. Amounts update every 5 seconds at most, and only the parts of a network within your view distance count.
 - **Look at an elemental flora** through them to read the essence it holds out of its capacity, or **at an Apothecary Altar** to see the flora within its reach, element by element: how many there are, and how much essence they hold out of how much they can.
 - **See who's in a cell:** a mob carried in a [Cell Upgrade](#cart-upgrades) shows as its spawn egg, and through the glasses the egg is labelled with the mob's name, as a name tag would show it (its custom name, if it has one), from up to 64 blocks away.
 - **Right-click a motorboat with the RC Upgrade** with the glasses in hand when it's on a course with nobody steering to **start** it cruising, and again to **stop** it. A motorboat left on a loop will lap it until its fuel runs out.
@@ -1001,7 +1003,7 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 | `.../transport/rail/` | Padded, tin, honey, bouncy, inspector, ender, and charging rails, and the minecart physics behind them (`XincraftMinecartBehavior`) |
 | `.../transport/cart/` | The ender minecart, locomotive cart, jingle cart, carriage, and freight cart |
 | `.../transport/boat/` | Motorboats, the party boat, ferry, and barge, buoys, and following buoy paths (`BuoyPath`) |
-| `.../transport/power/` | Power networks: charging stations and substations (`PowerNodeBlockEntity`) |
+| `.../transport/power/` | Power networks: charging stations and substations (`PowerNodeBlockEntity`), and what rose-tinted glasses show of them (`PowerNetworkView`) |
 | `.../transport/train/` | What carts and boats share: linking them into trains (`LinkedTransport`), upgrades (`CartUpgrades`), mob cells (`MobCell`), shulker box storage (`ShulkerHold`), jukebox playback, and blocks that link with the linking bar (`LinkedBlockEntity`) |
 | `.../turbines/` | The heat and steam turbines |
 | `.../flowers/` | The exotic flowers, glowing leaves, the mixing tray, and exotic pollen |

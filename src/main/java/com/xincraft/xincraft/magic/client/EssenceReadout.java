@@ -8,12 +8,13 @@ import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.magic.ApothecaryAltarBlockEntity;
 import com.xincraft.xincraft.magic.FloraBlockEntity;
 import com.xincraft.xincraft.common.RoseTintedGlassesItem;
+import com.xincraft.xincraft.common.client.CrosshairReadout;
+import com.xincraft.xincraft.common.client.CrosshairReadout.Line;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.EssenceHelper;
 import com.xincraft.xincraft.magic.EssenceReservoir;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -33,14 +34,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class EssenceReadout {
     private static final Identifier LAYER = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "essence_readout");
-    // Gap between the crosshair and the readout, and padding around its text
-    private static final int OFFSET_Y = 12;
-    private static final int PADDING = 3;
-    private static final int BACKDROP = 0x90000000;
     private static final int HEADER_COLOR = 0xFFFFFFFF;
     private static final int NONE_COLOR = 0xFFAAAAAA;
-
-    private record Line(Component text, int color) {}
 
     // Rebuilt every client tick from what the player is looking at
     private static List<Line> lines = List.of();
@@ -104,25 +99,7 @@ public final class EssenceReadout {
     }
 
     private static void extract(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
-        Minecraft minecraft = Minecraft.getInstance();
-        List<Line> shown = lines;
-        if (shown.isEmpty()) {
-            return;
-        }
-        Font font = minecraft.font;
-        int width = 0;
-        for (Line line : shown) {
-            width = Math.max(width, font.width(line.text()));
-        }
-        int lineHeight = font.lineHeight + 1;
-        int centerX = graphics.guiWidth() / 2;
-        int top = graphics.guiHeight() / 2 + OFFSET_Y;
-        graphics.fill(centerX - width / 2 - PADDING, top - PADDING,
-            centerX + (width + 1) / 2 + PADDING, top + shown.size() * lineHeight - 1 + PADDING, BACKDROP);
-        for (int i = 0; i < shown.size(); i++) {
-            Line line = shown.get(i);
-            graphics.text(font, line.text(), centerX - font.width(line.text()) / 2, top + i * lineHeight, line.color(), true);
-        }
+        CrosshairReadout.draw(graphics, lines);
     }
 
     private EssenceReadout() {}

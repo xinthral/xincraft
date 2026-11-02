@@ -5,8 +5,14 @@ import java.util.List;
 import com.xincraft.xincraft.transport.power.PowerNodeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,12 +38,15 @@ public class ChargingRailBlockEntity extends BlockEntity {
     public static final int CHUNK_RANGE = 2;
     // How often it looks again for the charging stations and substations in range, in ticks
     private static final int NODE_SEARCH_TICKS = 40;
+    private static final int SYNC_TICKS = 100;
 
     private final int transfer;
     private final int chunkRange;
     private final Buffer buffer;
     private List<PowerNodeBlockEntity> nodesInRange = List.of();
     private long nextNodeSearch;
+    private boolean energyChanged;
+    private long nextSync;
     private LazyOptional<IEnergyStorage> energyCap;
 
     public ChargingRailBlockEntity(BlockPos pos, BlockState state) {
@@ -56,6 +65,29 @@ public class ChargingRailBlockEntity extends BlockEntity {
         drawFromNeighbours(level);
         drawFromNetwork(level);
         chargeCarts(level);
+        syncEnergy(level);
+    }
+
+    public int energy() {
+        return buffer.getEnergyStored();
+    }
+
+    public int capacity() {
+        return buffer.getMaxEnergyStored();
+    }
+
+    public int chunkRange() {
+        return chunkRange;
+    }
+
+    // Lets clients know a changed amount, for rose-tinted glasses, at most once every 5 seconds
+    private void syncEnergy(Level level) {
+        long now = level.getGameTime();
+        if (energyChanged && now >= nextSync) {
+            energyChanged = false;
+            nextSync = now + SYNC_TICKS;
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     // Tops up from the nearest charging station or substation in range, moving on to the next if
@@ -139,6 +171,16 @@ public class ChargingRailBlockEntity extends BlockEntity {
     }
 
     @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveCustomOnly(registries);
+    }
+
+    @Override
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         buffer.set(input.getIntOr("Energy", 0));
@@ -164,6 +206,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
         public int receiveEnergy(int maxReceive, boolean simulate) {
             int received = super.receiveEnergy(maxReceive, simulate);
             if (received > 0 && !simulate) {
+                energyChanged = true;
                 setChanged();
             }
             return received;
@@ -173,6 +216,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
         public int extractEnergy(int maxExtract, boolean simulate) {
             int extracted = super.extractEnergy(maxExtract, simulate);
             if (extracted > 0 && !simulate) {
+                energyChanged = true;
                 setChanged();
             }
             return extracted;

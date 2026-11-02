@@ -26,7 +26,9 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         super(TransportBlockEntities.CHARGING_STATION.get(), pos, state, CAPACITY);
     }
 
-    void serverTick(Level level) {
+    @Override
+    protected void serverTick(Level level) {
+        super.serverTick(level);
         drawFromNeighbours(level);
         for (PowerNodeBlockEntity node : network()) {
             if (energy() <= 0) {
