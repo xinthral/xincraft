@@ -7,7 +7,7 @@ import java.util.Map;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
 import com.xincraft.xincraft.block.FloraBlockEntity;
-import com.xincraft.xincraft.item.RoseTintedGlassesItem;
+import com.xincraft.xincraft.common.RoseTintedGlassesItem;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.EssenceHelper;
 import com.xincraft.xincraft.magic.EssenceReservoir;

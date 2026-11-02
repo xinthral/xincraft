@@ -1,7 +1,7 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.common.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.item.RoseTintedGlassesItem;
+import com.xincraft.xincraft.common.RoseTintedGlassesItem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

@@ -1,4 +1,4 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.common;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

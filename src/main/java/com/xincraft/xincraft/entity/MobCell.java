@@ -3,7 +3,7 @@ package com.xincraft.xincraft.entity;
 import com.xincraft.xincraft.common.MobHolder;
 import java.util.UUID;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.item.MobFilterItem;
+import com.xincraft.xincraft.common.MobFilterItem;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

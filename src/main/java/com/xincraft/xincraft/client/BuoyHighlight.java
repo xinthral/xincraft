@@ -10,7 +10,7 @@ import java.util.Set;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.BuoyBlockEntity;
 import com.xincraft.xincraft.entity.BuoyPath;
-import com.xincraft.xincraft.item.RoseTintedGlassesItem;
+import com.xincraft.xincraft.common.RoseTintedGlassesItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;

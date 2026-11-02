@@ -13,6 +13,7 @@ import com.xincraft.xincraft.magic.EssenceReservoir;
 import com.xincraft.xincraft.registry.ModRecipes;
 import com.xincraft.xincraft.magic.MagicBlockEntities;
 import com.xincraft.xincraft.magic.MagicTags;
+import com.xincraft.xincraft.common.SidedContainerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;

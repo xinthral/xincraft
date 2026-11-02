@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.common;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.common.CommonComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

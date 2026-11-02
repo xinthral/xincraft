@@ -1,6 +1,5 @@
 package com.xincraft.xincraft.common;
 
-import com.xincraft.xincraft.item.MobFilterContents;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.RegistryObject;
@@ -10,7 +9,7 @@ public final class CommonComponents {
     public static final RegistryObject<DataComponentType<ItemStack>> GOLEM_SWORD = Registers.COMPONENTS.register("golem_sword",
         () -> DataComponentType.<ItemStack>builder().persistent(ItemStack.CODEC).networkSynchronized(ItemStack.STREAM_CODEC).build());
 
-    // The mobs inscribed on a mob filter (see item.MobFilterItem)
+    // The mobs inscribed on a mob filter (see common.MobFilterItem)
     public static final RegistryObject<DataComponentType<MobFilterContents>> MOB_FILTER = Registers.COMPONENTS.register("mob_filter",
         () -> DataComponentType.<MobFilterContents>builder().persistent(MobFilterContents.CODEC).networkSynchronized(MobFilterContents.STREAM_CODEC).build());
 

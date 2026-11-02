@@ -1,13 +1,11 @@
 package com.xincraft.xincraft.common;
 
-import com.xincraft.xincraft.item.MobFilterItem;
-import com.xincraft.xincraft.item.RoseTintedGlassesItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class CommonItems {
-    // Fitted to a carriage or ferry, let only the mobs inscribed on them aboard (see item.MobFilterItem);
+    // Fitted to a carriage or ferry, let only the mobs inscribed on them aboard (see common.MobFilterItem);
     // the fuzzy one also lets through their babies and kin
     public static final RegistryObject<Item> MOB_FILTER = Registers.registerItem("mob_filter",
         properties -> new MobFilterItem(2, false, properties), () -> new Item.Properties().stacksTo(1));

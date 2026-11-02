@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.common;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.common.CommonItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +15,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 // (client.BuoyHighlight). They also read the essence in an elemental flora, or in all the flora
 // around an apothecary altar (client.EssenceReadout), and label the mobs in cells with their names
 // (client.CellCage). Worn, they tint the view rose
-// (client.RoseTintedGlassesTint). Used on a
+// (common.client.RoseTintedGlassesTint). Used on a
 // motorboat with the RC upgrade on a buoy path with nobody steering, they start or stop it (entity.Motorboat).
 public class RoseTintedGlassesItem extends Item {
     public RoseTintedGlassesItem(Item.Properties properties) {

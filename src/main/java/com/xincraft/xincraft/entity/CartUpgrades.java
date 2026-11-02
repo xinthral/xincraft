@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.xincraft.xincraft.item.CartUpgradeItem;
-import com.xincraft.xincraft.item.MobFilterItem;
+import com.xincraft.xincraft.common.MobFilterItem;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,7 +33,7 @@ import org.jspecify.annotations.Nullable;
 // be fitted once, and the cart drops them when broken. The installed set is synced to clients (as flags in an int the cart
 // defines) so they can show the upgrades on the cart.
 //
-// A carriage or ferry also takes a mob filter (item.MobFilterItem), kept apart from the upgrades
+// A carriage or ferry also takes a mob filter (common.MobFilterItem), kept apart from the upgrades
 // since it carries the mobs inscribed on it. Using another filter swaps them; shears snip the filter
 // off before any upgrade. Only the server needs it, to choose what comes aboard (see MobCell).
 public final class CartUpgrades {

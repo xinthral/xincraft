@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.block;
 
 import com.xincraft.xincraft.inventory.TurbineMenu;
+import com.xincraft.xincraft.common.SidedContainerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

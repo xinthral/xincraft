@@ -8,7 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 
 public final class CommonTags {
-    // xincraft:mob_family/<name> - mobs a fuzzy mob filter treats as kin (see item.MobFilterContents):
+    // xincraft:mob_family/<name> - mobs a fuzzy mob filter treats as kin (see common.MobFilterContents):
     // an entry for any one of a family lets the rest through too
     public static final List<TagKey<EntityType<?>>> MOB_FAMILIES = List.of(
             "zombies", "skeletons", "horses", "llamas", "camels", "cows", "piglins", "hoglins", "nautiluses",

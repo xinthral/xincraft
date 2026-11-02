@@ -1,8 +1,7 @@
-package com.xincraft.xincraft.item;
+package com.xincraft.xincraft.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.xincraft.xincraft.common.CommonTags;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
