@@ -940,18 +940,32 @@ The mod version is set in one place, `mod_version` in `gradle.properties`. The b
 
 | Path | Contents |
 | --- | --- |
-| `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point) and `Config` |
-| `.../registry/` | Registration of blocks, items, block entities, entities, menus, data components, recipe types, biome modifier types, tags, armor materials, the tin trim material, and the creative tab |
-| `.../block/` | Powered rail variants (padded, tin), the honey, bouncy, inspector, ender, and charging rails, the heat and steam turbines, the mixing tray, the exotic flowers, buoys, the apothecary altar and crucible, the bronze chest, and `SidedContainerBlockEntity`, the base class that makes hoppers and pipes follow a block's per-side rules (Forge's default item handler ignores them, so any new block with a container should extend it) |
-| `.../item/` | Ender rail item (attuning and glint), tin and bronze armor set bonuses, tin spyglass night vision, cart upgrade items, exotic pollen, the linking bar, the buoy item, mob filters, lonsdaleite armor, rose-tinted glasses, the bronze golem helm and items, and the compendium item |
-| `.../magic/` | Elements, essence reservoirs and `EssenceHelper` (finding, filling and drawing on flora), and the crucible and altar recipe types (`CrucibleRecipe`, `AltarRecipe`) |
-| `.../entity/` | Ender minecart, locomotive cart, jingle cart, carriage, freight cart, motorboats, upgrades for carts and boats (`CartUpgrades`), the ferry and barge, the bronze golem and its goals (`BronzeGolem`), linking carts and boats into trains (`LinkedTransport`), the freight cart's and barge's shulker box storage (`ShulkerHold`), following buoy paths (`BuoyPath`), and the minecart physics behind tin, honey, and bouncy rails (`XincraftMinecartBehavior`) |
-| `.../world/` | The biome modifier that adds tin ore, unless turned off in the config, and the reinforced trim template's mineshaft loot |
-| `.../inventory/` | Locomotive cart, turbine, apothecary altar and crucible menus |
-| `.../client/` | Client-only code: padded rail sound muffling, ender rail highlight, buoy path highlight, minecart and motorboat renderers (with upgrades and linking bars), locomotive cart screen (with energy bar), turbine, altar and crucible screens, jingle cart music, tin spyglass tint, the cell cage, lonsdaleite armor's worn shimmer (`LonsdaleiteGlintLayer`), the bronze chest's and golem's renderers, the double bronze chest's screen, and the compendium (`compendium/`) with its look-up key |
-| `.../network/` | The mod's network channel and the packet that sends recipes to the compendium |
+| `src/main/java/com/xincraft/xincraft/` | `XincraftMod` (entry point), `Config`, the creative tab (`ModCreativeModeTabs`), and the mod's network channel (`network/ModNetwork`) |
+| `.../common/` | What every feature shares: the Deferred Registers and their helpers (`Registers`), `SidedContainerBlockEntity`, the base class that makes hoppers and pipes follow a block's per-side rules (Forge's default item handler ignores them, so any new block with a container should extend it), mob filters, rose-tinted glasses, and `MobHolder`, for telling whether a mob is caged |
+| `.../materials/` | Tin, bronze, and lonsdaleite: ingots, blocks, ores, armor and its set bonuses, trims, the tin spyglass, tin ore generation, and the reinforced trim template's mineshaft loot |
+| `.../transport/rail/` | Padded, tin, honey, bouncy, inspector, ender, and charging rails, and the minecart physics behind them (`XincraftMinecartBehavior`) |
+| `.../transport/cart/` | The ender minecart, locomotive cart, jingle cart, carriage, and freight cart |
+| `.../transport/boat/` | Motorboats, the party boat, ferry, and barge, buoys, and following buoy paths (`BuoyPath`) |
+| `.../transport/train/` | What carts and boats share: linking them into trains (`LinkedTransport`), upgrades (`CartUpgrades`), mob cells (`MobCell`), shulker box storage (`ShulkerHold`), and jukebox playback |
+| `.../turbines/` | The heat and steam turbines |
+| `.../flowers/` | The exotic flowers, glowing leaves, the mixing tray, and exotic pollen |
+| `.../magic/` | Elements, essence reservoirs and `EssenceHelper` (finding, filling and drawing on flora), elemental flora and powders, the apothecary altar and crucible, and their recipe types (`CrucibleRecipe`, `AltarRecipe`) |
+| `.../golems/` | The bronze golem and its goals (`BronzeGolem`), its items, and the bronze chest |
+| `.../compendium/` | The compendium item, its screen, and the packet that sends it recipes |
+| `.../<feature>/client/` | That feature's client-only code: renderers, screens, and highlights |
 | `src/main/resources/assets/xincraft/` | Block states, models, textures, translations, and the compendium's text (`compendium/`) |
 | `src/main/resources/data/` | Recipes (with crucible and altar recipes in `recipe/crucible/` and `recipe/altar/`), loot tables, tags, and tin ore generation (`xincraft/worldgen/`, `xincraft/forge/biome_modifier/`) |
+
+Each feature registers its own content in holder classes (e.g. `TransportItems`, `MagicBlocks`), which its `*Content.init()` loads from `XincraftMod`. A new holder must be added to its feature's `init()`, or nothing in it gets registered.
+
+Features only depend downward, so that any of them could be pulled apart later:
+
+| Feature | May depend on |
+| --- | --- |
+| `compendium` | Any feature |
+| `magic` | `flowers`, `materials`, `common` |
+| `transport`, `golems` | `materials`, `common` |
+| `turbines`, `flowers`, `materials` | `common` |
 
 ## License
 
