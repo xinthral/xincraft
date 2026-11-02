@@ -1,5 +1,6 @@
 package com.xincraft.xincraft.entity;
 
+import com.xincraft.xincraft.common.MobHolder;
 import java.util.EnumSet;
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
@@ -156,7 +157,7 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
                 return isCombat() && !(getLastHurtByMob() instanceof Player) && super.canUse();
             }
         });
-        TargetingConditions.Selector hostile = (target, level) -> isCombat() && target instanceof Enemy && !MobCell.isCaged(target) && inArea(target);
+        TargetingConditions.Selector hostile = (target, level) -> isCombat() && target instanceof Enemy && !MobHolder.isCaged(target) && inArea(target);
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, false, hostile));
     }
 

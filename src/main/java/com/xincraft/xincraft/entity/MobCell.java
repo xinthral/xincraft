@@ -1,5 +1,6 @@
 package com.xincraft.xincraft.entity;
 
+import com.xincraft.xincraft.common.MobHolder;
 import java.util.UUID;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.item.MobFilterItem;
@@ -58,7 +59,7 @@ public final class MobCell {
     private MobCell() {}
 
     public static boolean holds(@Nullable Entity vehicle) {
-        return vehicle instanceof UpgradableCart cart && cart.upgrades().has(CartUpgrade.CELL);
+        return vehicle instanceof MobHolder holder && holder.holdsMobs();
     }
 
     public static boolean isReinforced(@Nullable Entity vehicle) {
@@ -83,7 +84,7 @@ public final class MobCell {
 
     // Whether the mob is sitting in a cell, on either side
     public static boolean isCaged(Entity entity) {
-        return entity instanceof Mob && holds(entity.getVehicle());
+        return MobHolder.isCaged(entity);
     }
 
     // Run by a carriage or ferry with a cell each server tick
