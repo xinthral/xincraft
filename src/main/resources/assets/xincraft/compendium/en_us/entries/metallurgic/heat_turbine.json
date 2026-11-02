@@ -14,7 +14,7 @@
     },
     {
       "type": "text",
-      "text": "**Fuel:** right-click to open, or feed with hoppers from above and the sides. A hopper underneath can only take the empty bucket a lava bucket leaves.\n\n**Output:** pushes up to 1,000 FE per tick into each neighbouring block that takes energy. Next to a [[charging_rail]] it keeps the rail charged; under the track it charges passing locomotives directly.\n\nIt stops lighting new fuel when its buffer is full."
+      "text": "**Fuel:** right-click to open, or feed with hoppers from above and the sides. A hopper underneath can only take the empty bucket a lava bucket leaves.\n\n**Output:** pushes up to 1,000 FE per tick into each neighbouring block that takes energy. Connected to a [[charging_station]] it keeps a network charged; under the track it charges passing locomotives directly.\n\nIt stops lighting new fuel when its buffer is full."
     }
   ]
 }

@@ -26,11 +26,10 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
-// The charging rail's energy buffer. Each tick it draws energy from the energy blocks around it
-// (generators, batteries and the like) and hands energy to the carts on it. It's also open to
-// cables on every side, taking energy in and letting anything draw it out, up to its transfer rate
-// per tick each way (TRANSFER here; see ElectrumChargingRailBlockEntity for the faster rail). It also
-// draws from the nearest power network in range (see transport.power.PowerNodeBlockEntity).
+// The charging rail's energy buffer. Each tick it draws energy from the nearest power network in range
+// (see transport.power.PowerNodeBlockEntity), its only source, and hands energy to the carts on it, up
+// to its transfer rate (TRANSFER here; see ElectrumChargingRailBlockEntity for the faster rail).
+// Generators and cables can't put energy into it, but anything can draw energy out.
 public class ChargingRailBlockEntity extends BlockEntity {
     public static final int CAPACITY = 5_000;
     public static final int TRANSFER = 1_000;
@@ -58,11 +57,10 @@ public class ChargingRailBlockEntity extends BlockEntity {
         this.transfer = transfer;
         this.chunkRange = chunkRange;
         this.buffer = new Buffer(capacity);
-        this.energyCap = LazyOptional.of(() -> buffer);
+        this.energyCap = LazyOptional.of(Output::new);
     }
 
     void serverTick(Level level) {
-        drawFromNeighbours(level);
         drawFromNetwork(level);
         chargeCarts(level);
         syncEnergy(level);
@@ -114,27 +112,6 @@ public class ChargingRailBlockEntity extends BlockEntity {
         }
     }
 
-    // Pulls from whatever's around the rail that gives energy out, for sources that don't push it
-    // in themselves. Other charging rails are skipped, so a line of them doesn't pass energy back
-    // and forth.
-    private void drawFromNeighbours(Level level) {
-        for (Direction direction : Direction.values()) {
-            int space = buffer.receiveEnergy(transfer, true);
-            if (space <= 0) {
-                return;
-            }
-            BlockEntity neighbour = level.getBlockEntity(worldPosition.relative(direction));
-            if (neighbour == null || neighbour instanceof ChargingRailBlockEntity) {
-                continue;
-            }
-            neighbour.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(source -> {
-                if (source.canExtract()) {
-                    buffer.receiveEnergy(source.extractEnergy(space, false), false);
-                }
-            });
-        }
-    }
-
     // Hands energy to any cart on the rail that takes it
     private void chargeCarts(Level level) {
         if (buffer.getEnergyStored() <= 0) {
@@ -167,7 +144,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
     @Override
     public void reviveCaps() {
         super.reviveCaps();
-        energyCap = LazyOptional.of(() -> buffer);
+        energyCap = LazyOptional.of(Output::new);
     }
 
     @Override
@@ -190,6 +167,39 @@ public class ChargingRailBlockEntity extends BlockEntity {
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         output.putInt("Energy", buffer.getEnergyStored());
+    }
+
+    // What generators, cables and machines see: energy can be drawn out, but none put in
+    private class Output implements IEnergyStorage {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            return 0;
+        }
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            return buffer.extractEnergy(maxExtract, simulate);
+        }
+
+        @Override
+        public int getEnergyStored() {
+            return buffer.getEnergyStored();
+        }
+
+        @Override
+        public int getMaxEnergyStored() {
+            return buffer.getMaxEnergyStored();
+        }
+
+        @Override
+        public boolean canExtract() {
+            return true;
+        }
+
+        @Override
+        public boolean canReceive() {
+            return false;
+        }
     }
 
     // Marks the block entity for saving whenever its energy changes

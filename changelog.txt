@@ -14,6 +14,8 @@ Xincraft Changelog
    power source connected,
    and what a station, substation or charging rail holds when you look at it. A charging rail also
    shows which one it's drawing from, or warns that nothing in range has energy
+ - Charging rails now only fill from a power network: a generator or cable touching one no longer
+   fills it, so existing charging stops need a Charging Station in range
  - Charging rails now store 5,000 FE, down from 50,000: the network passes energy along rather than
    banking it. Any energy above that in a rail is lost when it loads
  - Locomotive carts take up to 4,000 FE per tick from a rail that offers it

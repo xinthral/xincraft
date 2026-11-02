@@ -317,15 +317,15 @@ To keep servers stable, there's also a server-wide limit on how many teleports c
 
 ## Charging Rail
 
-A bronze powered rail that stores Forge Energy (FE) for locomotive carts with the [Energy Upgrade](#energy-upgrade). It doesn't make energy itself: power it with a [Turbine](#turbines), or with another mod's generators.
+A bronze powered rail that stores Forge Energy (FE) for locomotive carts with the [Energy Upgrade](#energy-upgrade). It doesn't make energy itself: power it through a [power network](#power-networks), fed by a [Turbine](#turbines) or another mod's generators.
 
 | Recipe | Makes |
 | --- | --- |
 | Powered Rail recipe with Bronze Ingots in place of Gold Ingots (6 Bronze Ingots + 1 Stick + 1 Redstone) | 6 |
 
-- **Filling it:** place a [Heat or Steam Turbine](#turbines), or another mod's generator, battery or energy cell, **right next to it** (beside, above or below), and the rail draws energy from it by itself. Cables connected to it work too. It also draws from a [power network](#power-networks) in range. It holds up to **5,000 FE** and takes in up to 1,000 FE per tick.
+- **Filling it:** it draws from a [power network](#power-networks) within range, and from nothing else: a generator or cable touching it won't fill it. It holds up to **5,000 FE** and takes in up to 1,000 FE per tick.
 - **Charging a cart:** the rail passes up to 1,000 FE per tick into a locomotive cart with the energy upgrade sitting on it or rolling over it. It also charges other mods' carts that take Forge Energy.
-- **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail with a generator beside it makes a **charging stop**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
+- **It's also a powered rail:** unpowered, it brakes carts and holds them still, like any powered rail; powered, it boosts them. So a charging rail in range of a powered network makes a **charging stop**: the locomotive rolls onto it, stops, and charges, and powering the rail (with a lever or button) sends it on its way. It shares power along a line with other powered rails.
 - Other mods' machines can draw energy back out of it too.
 
 ### Electrum Charging Rail
@@ -338,7 +338,7 @@ The same rail made of electrum: it stores **20,000 FE**, moves up to **4,000 FE 
 
 ## Power Networks
 
-Charging stations and substations carry energy to charging rails without a generator beside every rail.
+Charging stations and substations are how energy reaches charging rails, which have no other source.
 
 | Block | Recipe | Stores |
 | --- | --- | --- |
@@ -348,7 +348,7 @@ Charging stations and substations carry energy to charging rails without a gener
 - **Charging Station:** where energy enters the network. Place a [turbine](#turbines), another mod's generator or a cable **right next to it**, on any of its four sides, then right-click the **station** with a [Linking Bar](#carriage-and-linking-bar), and then that block. An arm reaches out to show it's connected, one bar is used up, and a station can have one source per side. Nothing feeds a station until it's connected. If the source is removed, the arm goes and the bar drops. Energy only goes in.
 - **Substation:** stores energy passed to it by the stations on its network. It has no energy connection of its own.
 - **Linking:** right-click one with a [Linking Bar](#carriage-and-linking-bar), then another, up to **64 blocks** apart. Each takes up to **4 links**, so networks can branch, and one bar is used up per link. **Shift + right-click** to unlink and get the bars back. Breaking one drops its bars.
-- **Rails connect by themselves:** a rail draws from the nearest station or substation within **2 chunks** (bronze) or **4 chunks** (electrum), counting chunks along each axis. There's nothing to link. A rail can still fill from a generator touching it.
+- **Rails connect by themselves:** a rail draws from the nearest station or substation within **2 chunks** (bronze) or **4 chunks** (electrum), counting chunks along each axis. There's nothing to link.
 - **Several stations:** any number of stations can feed one network. Space them so their ranges overlap, and a rail out of range of one, or whose nearest network has run dry, uses the next one in range.
 - **Loaded chunks only:** only the parts of a network in loaded chunks take part, so power can't pass through a node in an unloaded chunk.
 - **To see a network**, wear or hold [Rose-Tinted Glasses](#rose-tinted-glasses).
@@ -356,7 +356,7 @@ Charging stations and substations carry energy to charging rails without a gener
 
 ## Turbines
 
-Generators that burn furnace fuel into Forge Energy (FE), to power [Charging Rails](#charging-rail) without needing another mod (they work with other mods' cables and machines too).
+Generators that burn furnace fuel into Forge Energy (FE), to power [Charging Rails](#charging-rail) through a [Charging Station](#power-networks) without needing another mod (they work with other mods' cables and machines too).
 
 | Turbine | Recipe |
 | --- | --- |
@@ -372,7 +372,7 @@ Generators that burn furnace fuel into Forge Energy (FE), to power [Charging Rai
 | Water | None | 5 mB per tick (a bucket lasts 10 seconds); 8,000 mB tank |
 
 - **Fuel:** right-click to open it and put any furnace fuel in the fuel slot. **Hoppers** fill it too, from above or the sides. A lava bucket leaves its empty bucket behind, which a hopper underneath can pull out. Hoppers can't pull fuel back out (only empty buckets).
-- **Output:** it pushes up to 1,000 FE per tick into each neighbouring block that takes energy, so a turbine **next to a charging rail** keeps the rail charged. Other mods' cables can draw from it as well, and a turbine placed **under the track** charges a locomotive passing over it directly.
+- **Output:** it pushes up to 1,000 FE per tick into each neighbouring block that takes energy, so a turbine **connected to a charging station** keeps its network charged. Other mods' cables can draw from it as well, and a turbine placed **under the track** charges a locomotive passing over it directly.
 - **Full buffer:** once the buffer is full, the turbine stops lighting new fuel, so it doesn't eat through the fuel slot while nothing's drawing power. A fuel item that's already burning finishes burning, like in a furnace, and any energy it makes that won't fit is lost.
 - **Water (steam turbine):** right-click it with a **water bucket** to fill the tank, or pipe water in from another mod from any side. Without water it stops, and doesn't use fuel.
 - **Screen:** the flame shows how much of the current fuel is left, the red bar on the right the stored energy, and (steam turbine) the blue bar on the left the water. Hover over a bar for the exact amount.

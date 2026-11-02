@@ -26,7 +26,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
 // A generator: burns furnace fuel from its one slot into Forge Energy, held in an internal buffer and
-// pushed out to whatever's next to it that takes energy (a charging rail, or another mod's cables and
+// pushed out to whatever's next to it that takes energy (a connected charging station, or another mod's cables and
 // machines). New fuel is only lit while there's room in the buffer, so a full turbine doesn't eat
 // its fuel; an item already burning burns out regardless. Hoppers fill the fuel slot. HeatTurbineBlockEntity and SteamTurbineBlockEntity set
 // how fast it burns and how much energy each tick of burning makes.
@@ -155,7 +155,7 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         return true;
     }
 
-    // Hands energy to every neighbour that takes it, such as a charging rail
+    // Hands energy to every neighbour that takes it, such as a connected charging station
     private void pushEnergy(ServerLevel level) {
         for (Direction direction : Direction.values()) {
             if (energy <= 0) {

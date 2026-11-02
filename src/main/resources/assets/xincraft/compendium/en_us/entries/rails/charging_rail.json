@@ -14,7 +14,7 @@
     },
     {
       "type": "text",
-      "text": "**Filling:** it draws from a [[charging_station]] or [[substation]] within **2 chunks**, or from a [[heat_turbine|turbine]] or another mod's generator **right next to it**, up to 1,000 FE per tick.\n\n**Charging:** it passes up to 1,000 FE per tick into an energy-upgraded cart on it.\n\n**Stopping:** unpowered it holds carts still, so the locomotive stops and charges; power it to send the cart on."
+      "text": "**Filling:** it draws from a [[charging_station]] or [[substation]] within **2 chunks**, up to 1,000 FE per tick, and from nothing else: a generator touching it won't fill it.\n\n**Charging:** it passes up to 1,000 FE per tick into an energy-upgraded cart on it.\n\n**Stopping:** unpowered it holds carts still, so the locomotive stops and charges; power it to send the cart on."
     }
   ]
 }
