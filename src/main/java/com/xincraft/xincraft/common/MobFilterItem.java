@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 // A mob filter, fitted to a carriage or ferry so it only takes aboard the mobs inscribed on it (see
-// entity.CartUpgrades and entity.MobCell). Mobs are inscribed in the apothecary crucible
+// transport.train.CartUpgrades and transport.train.MobCell). Mobs are inscribed in the apothecary crucible
 // (magic.ApothecaryCrucibleBlock), up to the filter's capacity; washing it in a water cauldron wipes
 // it clean. A strict filter tells babies from adults and a mob from its kin; a fuzzy one doesn't.
 public class MobFilterItem extends Item {

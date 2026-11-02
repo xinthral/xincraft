@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.transport;
 
-import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
+import com.xincraft.xincraft.transport.cart.LocomotiveCartMenu;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;

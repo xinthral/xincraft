@@ -3,16 +3,16 @@ package com.xincraft.xincraft.transport;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
-import com.xincraft.xincraft.entity.Barge;
-import com.xincraft.xincraft.entity.Carriage;
-import com.xincraft.xincraft.entity.EnderMinecart;
-import com.xincraft.xincraft.entity.Ferry;
-import com.xincraft.xincraft.entity.JingleCart;
-import com.xincraft.xincraft.entity.LocomotiveCart;
-import com.xincraft.xincraft.entity.Motorboat;
-import com.xincraft.xincraft.entity.MotorboatType;
-import com.xincraft.xincraft.entity.PartyBoat;
-import com.xincraft.xincraft.entity.FreightCart;
+import com.xincraft.xincraft.transport.boat.Barge;
+import com.xincraft.xincraft.transport.cart.Carriage;
+import com.xincraft.xincraft.transport.cart.EnderMinecart;
+import com.xincraft.xincraft.transport.boat.Ferry;
+import com.xincraft.xincraft.transport.cart.JingleCart;
+import com.xincraft.xincraft.transport.cart.LocomotiveCart;
+import com.xincraft.xincraft.transport.boat.Motorboat;
+import com.xincraft.xincraft.transport.boat.MotorboatType;
+import com.xincraft.xincraft.transport.boat.PartyBoat;
+import com.xincraft.xincraft.transport.cart.FreightCart;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -60,7 +60,7 @@ public final class TransportEntityTypes {
             .clientTrackingRange(8)
             .build(Registers.ENTITY_TYPES.key("freight_cart")));
 
-    // A motorboat for each kind of boat (entity.MotorboatType), sized and tracked like vanilla boats
+    // A motorboat for each kind of boat (transport.boat.MotorboatType), sized and tracked like vanilla boats
     public static final Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> MOTORBOATS = registerMotorboats();
 
     private static Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> registerMotorboats() {
@@ -78,7 +78,7 @@ public final class TransportEntityTypes {
         return Collections.unmodifiableMap(types);
     }
 
-    // A motorboat with a jukebox, built on the oak boat (entity.PartyBoat)
+    // A motorboat with a jukebox, built on the oak boat (transport.boat.PartyBoat)
     public static final RegistryObject<EntityType<PartyBoat>> PARTY_BOAT = Registers.ENTITY_TYPES.register("party_boat",
         () -> EntityType.Builder.<PartyBoat>of(
                 (type, level) -> new PartyBoat(type, level, () -> TransportItems.PARTY_BOAT.get()), MobCategory.MISC)
@@ -88,7 +88,7 @@ public final class TransportEntityTypes {
             .clientTrackingRange(10)
             .build(Registers.ENTITY_TYPES.key("party_boat")));
 
-    // The carriage's and freight cart's boats, both built on the oak boat (entity.Ferry, entity.Barge)
+    // The carriage's and freight cart's boats, both built on the oak boat (transport.boat.Ferry, transport.boat.Barge)
     public static final RegistryObject<EntityType<Ferry>> FERRY = Registers.ENTITY_TYPES.register("ferry",
         () -> EntityType.Builder.<Ferry>of(
                 (type, level) -> new Ferry(type, level, () -> TransportItems.FERRY.get()), MobCategory.MISC)

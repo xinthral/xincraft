@@ -34,7 +34,7 @@ public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
     public static final MapCodec<AuraFlowerBlock> MENDING_LILAC_CODEC = simpleCodec(AuraFlowerBlock::mendingLilac);
     public static final MapCodec<AuraFlowerBlock> MOONLIT_DANDELION_CODEC = simpleCodec(AuraFlowerBlock::moonlitDandelion);
     public static final MapCodec<AuraFlowerBlock> SHIMMER_LILY_CODEC = simpleCodec(AuraFlowerBlock::shimmerLily);
-    // The shimmer upgrade's pink glint (entity.CartUpgrades)
+    // The shimmer upgrade's pink glint (transport.train.CartUpgrades)
     private static final DustParticleOptions SHIMMER = new DustParticleOptions(0xFF7FC8, 1.0F);
 
     private final Holder<MobEffect> aura;

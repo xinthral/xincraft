@@ -3,14 +3,14 @@ package com.xincraft.xincraft.transport;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
-import com.xincraft.xincraft.entity.CartUpgrade;
-import com.xincraft.xincraft.entity.MotorboatType;
-import com.xincraft.xincraft.item.BargeItem;
-import com.xincraft.xincraft.item.BuoyItem;
-import com.xincraft.xincraft.item.CartUpgradeItem;
-import com.xincraft.xincraft.item.LinkingBarItem;
-import com.xincraft.xincraft.item.FreightCartItem;
-import com.xincraft.xincraft.item.EnderRailItem;
+import com.xincraft.xincraft.transport.train.CartUpgrade;
+import com.xincraft.xincraft.transport.boat.MotorboatType;
+import com.xincraft.xincraft.transport.boat.BargeItem;
+import com.xincraft.xincraft.transport.boat.BuoyItem;
+import com.xincraft.xincraft.transport.train.CartUpgradeItem;
+import com.xincraft.xincraft.transport.train.LinkingBarItem;
+import com.xincraft.xincraft.transport.cart.FreightCartItem;
+import com.xincraft.xincraft.transport.rail.EnderRailItem;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.item.BoatItem;
 import net.minecraft.world.item.Item;
@@ -45,11 +45,11 @@ public final class TransportItems {
     public static final RegistryObject<Item> FREIGHT_CART = Registers.registerItem("freight_cart",
         FreightCartItem::new, () -> new Item.Properties().stacksTo(1));
 
-    // Hitches carts and boats into trains (see entity.LinkedTransport)
+    // Hitches carts and boats into trains (see transport.train.LinkedTransport)
     public static final RegistryObject<Item> LINKING_BAR = Registers.registerItem("linking_bar",
         LinkingBarItem::new, Item.Properties::new);
 
-    // Minecart upgrades (see entity.CartUpgrades)
+    // Minecart upgrades (see transport.train.CartUpgrades)
     public static final RegistryObject<Item> SHRIEKER_UPGRADE = Registers.registerItem("shrieker_upgrade",
         properties -> new CartUpgradeItem(CartUpgrade.SHRIEKER, properties), Item.Properties::new);
     public static final RegistryObject<Item> SCULK_SENSOR_UPGRADE = Registers.registerItem("sculk_sensor_upgrade",
@@ -75,7 +75,7 @@ public final class TransportItems {
     public static final RegistryObject<Item> PROPELLER =
         Registers.registerItem("propeller", Item::new, Item.Properties::new);
 
-    // A motorboat item for each kind of boat (entity.MotorboatType), placed like a boat
+    // A motorboat item for each kind of boat (transport.boat.MotorboatType), placed like a boat
     public static final Map<MotorboatType, RegistryObject<Item>> MOTORBOATS = registerMotorboats();
 
     private static Map<MotorboatType, RegistryObject<Item>> registerMotorboats() {
@@ -103,11 +103,11 @@ public final class TransportItems {
     public static final RegistryObject<Item> BARGE = Registers.registerItem("barge",
         BargeItem::new, () -> new Item.Properties().stacksTo(1));
 
-    // Placed in still water; linked into paths for motorboats with the RC upgrade (block.BuoyBlock)
+    // Placed in still water; linked into paths for motorboats with the RC upgrade (transport.boat.BuoyBlock)
     public static final RegistryObject<Item> BUOY = Registers.registerItem("buoy",
         properties -> new BuoyItem(TransportBlocks.BUOY.get(), properties),
         () -> new Item.Properties().useBlockDescriptionPrefix());
-    // A buoy whose links to other advanced buoys reach twice as far (block.AdvancedBuoyBlock)
+    // A buoy whose links to other advanced buoys reach twice as far (transport.boat.AdvancedBuoyBlock)
     public static final RegistryObject<Item> ADVANCED_BUOY = Registers.registerItem("advanced_buoy",
         properties -> new BuoyItem(TransportBlocks.ADVANCED_BUOY.get(), properties),
         () -> new Item.Properties().useBlockDescriptionPrefix());

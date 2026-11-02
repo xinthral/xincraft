@@ -1,9 +1,9 @@
 package com.xincraft.xincraft.transport;
 
 import java.util.Set;
-import com.xincraft.xincraft.block.BuoyBlockEntity;
-import com.xincraft.xincraft.block.ChargingRailBlockEntity;
-import com.xincraft.xincraft.block.EnderRailBlockEntity;
+import com.xincraft.xincraft.transport.boat.BuoyBlockEntity;
+import com.xincraft.xincraft.transport.rail.ChargingRailBlockEntity;
+import com.xincraft.xincraft.transport.rail.EnderRailBlockEntity;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;

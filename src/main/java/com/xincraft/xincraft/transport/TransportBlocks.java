@@ -4,14 +4,14 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
-import com.xincraft.xincraft.block.AdvancedBuoyBlock;
-import com.xincraft.xincraft.block.BuoyBlock;
-import com.xincraft.xincraft.block.HoneyRailBlock;
-import com.xincraft.xincraft.block.BouncyRailBlock;
-import com.xincraft.xincraft.block.ChargingRailBlock;
-import com.xincraft.xincraft.block.InspectorRailBlock;
-import com.xincraft.xincraft.block.EnderRailBlock;
-import com.xincraft.xincraft.block.ModPoweredRailBlock;
+import com.xincraft.xincraft.transport.boat.AdvancedBuoyBlock;
+import com.xincraft.xincraft.transport.boat.BuoyBlock;
+import com.xincraft.xincraft.transport.rail.HoneyRailBlock;
+import com.xincraft.xincraft.transport.rail.BouncyRailBlock;
+import com.xincraft.xincraft.transport.rail.ChargingRailBlock;
+import com.xincraft.xincraft.transport.rail.InspectorRailBlock;
+import com.xincraft.xincraft.transport.rail.EnderRailBlock;
+import com.xincraft.xincraft.transport.rail.ModPoweredRailBlock;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +24,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public final class TransportBlocks {
     // One padded rail per wool colour (e.g. red_padded_rail): plain rails whose minecart sounds
-    // are muffled client-side (see client.PaddedRailSounds). Every one is in TransportTags.PADDED_RAILS.
+    // are muffled client-side (see transport.rail.client.PaddedRailSounds). Every one is in TransportTags.PADDED_RAILS.
     public static final Map<DyeColor, RegistryObject<Block>> PADDED_RAILS =
         registerColored("padded_rail", RailBlock::new);
 
@@ -33,7 +33,7 @@ public final class TransportBlocks {
         registerColored("padded_powered_rail", ModPoweredRailBlock::new);
 
     // Tin rails let minecarts travel faster than on other rails on straight track (slopes included),
-    // slowing to the normal cap for corners (see entity.XincraftMinecartBehavior). Both are in
+    // slowing to the normal cap for corners (see transport.rail.XincraftMinecartBehavior). Both are in
     // TransportTags.TIN_RAILS.
     public static final RegistryObject<Block> TIN_RAIL = Registers.registerBlock(
         "tin_rail",
@@ -56,7 +56,7 @@ public final class TransportBlocks {
     );
 
     // A bronze powered rail holding Forge Energy for locomotive carts with the energy upgrade to
-    // charge from (block.ChargingRailBlock)
+    // charge from (transport.rail.ChargingRailBlock)
     public static final RegistryObject<Block> CHARGING_RAIL = Registers.registerBlock(
         "charging_rail",
         ChargingRailBlock::new,
@@ -68,7 +68,7 @@ public final class TransportBlocks {
     );
 
     // Holds minecarts at a reduced speed (half by default, Config.honeyRailSpeedMultiplier), slowing
-    // fast carts and pushing slow ones (see entity.XincraftMinecartBehavior). In TransportTags.HONEY_RAILS.
+    // fast carts and pushing slow ones (see transport.rail.XincraftMinecartBehavior). In TransportTags.HONEY_RAILS.
     public static final RegistryObject<Block> HONEY_RAIL = Registers.registerBlock(
         "honey_rail",
         HoneyRailBlock::new,
@@ -80,7 +80,7 @@ public final class TransportBlocks {
     );
 
     // Launches minecarts upward, higher the stronger its redstone signal, up to
-    // Config.bouncyRailMaxHeight (see entity.XincraftMinecartBehavior). In TransportTags.BOUNCY_RAILS.
+    // Config.bouncyRailMaxHeight (see transport.rail.XincraftMinecartBehavior). In TransportTags.BOUNCY_RAILS.
     public static final RegistryObject<Block> BOUNCY_RAIL = Registers.registerBlock(
         "bouncy_rail",
         BouncyRailBlock::new,
@@ -114,7 +114,7 @@ public final class TransportBlocks {
         false
     );
 
-    // Two-block marker buoy in still water, linked into paths for motorboats (block.BuoyBlock; item
+    // Two-block marker buoy in still water, linked into paths for motorboats (transport.boat.BuoyBlock; item
     // in TransportItems). The lamp on top glows while it's switched on.
     public static final RegistryObject<Block> BUOY = Registers.registerBlock(
         "buoy",
@@ -129,7 +129,7 @@ public final class TransportBlocks {
         false
     );
 
-    // A buoy with a longer reach and a brighter lamp, linked into long legs (block.AdvancedBuoyBlock)
+    // A buoy with a longer reach and a brighter lamp, linked into long legs (transport.boat.AdvancedBuoyBlock)
     public static final RegistryObject<Block> ADVANCED_BUOY = Registers.registerBlock(
         "advanced_buoy",
         AdvancedBuoyBlock::new,
