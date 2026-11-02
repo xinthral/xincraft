@@ -1,9 +1,8 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.turbines;
 
 import com.mojang.serialization.MapCodec;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
-import com.xincraft.xincraft.turbines.TurbineBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

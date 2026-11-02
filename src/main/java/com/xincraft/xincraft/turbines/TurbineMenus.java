@@ -1,6 +1,5 @@
 package com.xincraft.xincraft.turbines;
 
-import com.xincraft.xincraft.inventory.TurbineMenu;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;

@@ -1,7 +1,5 @@
-package com.xincraft.xincraft.inventory;
+package com.xincraft.xincraft.turbines;
 
-import com.xincraft.xincraft.block.TurbineBlockEntity;
-import com.xincraft.xincraft.turbines.TurbineMenus;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -16,7 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 // A turbine's fuel slot (with the furnace flame above it), plus the energy and water readouts
-// (see client.TurbineScreen). Shared by the heat and steam turbines; the heat turbine reports a
+// (see turbines.client.TurbineScreen). Shared by the heat and steam turbines; the heat turbine reports a
 // water tank of size 0, so the screen leaves the water gauge out.
 public class TurbineMenu extends AbstractContainerMenu {
     private static final int TURBINE_SLOTS_END = 1;

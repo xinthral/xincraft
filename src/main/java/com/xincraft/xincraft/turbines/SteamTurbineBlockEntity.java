@@ -1,7 +1,6 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.turbines;
 
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.turbines.TurbineBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;

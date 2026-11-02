@@ -1,6 +1,5 @@
-package com.xincraft.xincraft.block;
+package com.xincraft.xincraft.turbines;
 
-import com.xincraft.xincraft.inventory.TurbineMenu;
 import com.xincraft.xincraft.common.SidedContainerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -1,8 +1,6 @@
 package com.xincraft.xincraft.turbines;
 
 import java.util.Set;
-import com.xincraft.xincraft.block.HeatTurbineBlockEntity;
-import com.xincraft.xincraft.block.SteamTurbineBlockEntity;
 import com.xincraft.xincraft.common.Registers;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;

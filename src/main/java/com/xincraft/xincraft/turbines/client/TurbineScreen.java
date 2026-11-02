@@ -1,7 +1,7 @@
-package com.xincraft.xincraft.client;
+package com.xincraft.xincraft.turbines.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.inventory.TurbineMenu;
+import com.xincraft.xincraft.turbines.TurbineMenu;
 import com.xincraft.xincraft.turbines.TurbineMenus;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens;
