@@ -2,9 +2,9 @@ package com.xincraft.xincraft.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.xincraft.xincraft.common.CommonTags;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.xincraft.xincraft.registry.ModTags;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -70,7 +70,7 @@ public record MobFilterContents(List<Entry> entries) {
         }
 
         private static boolean sameFamily(EntityType<?> a, EntityType<?> b) {
-            for (TagKey<EntityType<?>> family : ModTags.MOB_FAMILIES) {
+            for (TagKey<EntityType<?>> family : CommonTags.MOB_FAMILIES) {
                 if (a.builtInRegistryHolder().is(family) && b.builtInRegistryHolder().is(family)) {
                     return true;
                 }

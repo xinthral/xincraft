@@ -13,8 +13,8 @@ import com.xincraft.xincraft.entity.Motorboat;
 import com.xincraft.xincraft.entity.MotorboatType;
 import com.xincraft.xincraft.entity.PartyBoat;
 import com.xincraft.xincraft.entity.UpgradableCart;
-import com.xincraft.xincraft.registry.ModEntityTypes;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportEntityTypes;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -96,11 +96,11 @@ public class ModBoatRenderer<T extends AbstractBoat & UpgradableCart> extends En
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         for (MotorboatType kind : MotorboatType.values()) {
-            event.registerEntityRenderer(ModEntityTypes.MOTORBOATS.get(kind).get(), context -> new ModBoatRenderer<>(context, kind));
+            event.registerEntityRenderer(TransportEntityTypes.MOTORBOATS.get(kind).get(), context -> new ModBoatRenderer<>(context, kind));
         }
-        event.registerEntityRenderer(ModEntityTypes.PARTY_BOAT.get(), context -> new ModBoatRenderer<PartyBoat>(context, MotorboatType.OAK));
-        event.registerEntityRenderer(ModEntityTypes.BARGE.get(), context -> new ModBoatRenderer<Barge>(context, MotorboatType.OAK));
-        event.registerEntityRenderer(ModEntityTypes.FERRY.get(), context -> new ModBoatRenderer<Ferry>(context, MotorboatType.BAMBOO));
+        event.registerEntityRenderer(TransportEntityTypes.PARTY_BOAT.get(), context -> new ModBoatRenderer<PartyBoat>(context, MotorboatType.OAK));
+        event.registerEntityRenderer(TransportEntityTypes.BARGE.get(), context -> new ModBoatRenderer<Barge>(context, MotorboatType.OAK));
+        event.registerEntityRenderer(TransportEntityTypes.FERRY.get(), context -> new ModBoatRenderer<Ferry>(context, MotorboatType.BAMBOO));
     }
 
     // Vanilla's boat state plus the propeller, upgrades, cargo and linking bar
@@ -132,7 +132,7 @@ public class ModBoatRenderer<T extends AbstractBoat & UpgradableCart> extends En
         boat.extractRenderState(entity, state, partialTicks);
         state.hasPropeller = entity instanceof Motorboat;
         if (entity instanceof Motorboat motorboat) {
-            itemModelResolver.updateForTopItem(state.propeller, new ItemStack(ModItems.PROPELLER.get()), ItemDisplayContext.FIXED,
+            itemModelResolver.updateForTopItem(state.propeller, new ItemStack(TransportItems.PROPELLER.get()), ItemDisplayContext.FIXED,
                 entity.level(), null, entity.getId());
             state.propellerAngle = motorboat.isCruising() && !motorboat.isWaiting() ? (entity.tickCount + partialTicks) * PROPELLER_SPEED : 0.0F;
         }

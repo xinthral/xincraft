@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.block;
 
-import com.xincraft.xincraft.registry.ModBlockEntities;
+import com.xincraft.xincraft.golems.GolemBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,7 @@ public class BronzeChestBlockEntity extends ChestBlockEntity {
     public static final int ROWS = 4;
 
     public BronzeChestBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.BRONZE_CHEST.get(), pos, state);
+        super(GolemBlockEntities.BRONZE_CHEST.get(), pos, state);
         setItems(NonNullList.withSize(getContainerSize(), ItemStack.EMPTY));
     }
 

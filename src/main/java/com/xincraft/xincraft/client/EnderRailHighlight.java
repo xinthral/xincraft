@@ -1,8 +1,8 @@
 package com.xincraft.xincraft.client;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModBlocks;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportBlocks;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,11 +24,11 @@ public final class EnderRailHighlight {
         var level = minecraft.level;
         if (player == null || level == null || minecraft.isPaused()
                 || !(minecraft.hitResult instanceof BlockHitResult hit)
-                || !(player.getMainHandItem().is(ModItems.ENDER_RAIL.get()) || player.getOffhandItem().is(ModItems.ENDER_RAIL.get()))) {
+                || !(player.getMainHandItem().is(TransportItems.ENDER_RAIL.get()) || player.getOffhandItem().is(TransportItems.ENDER_RAIL.get()))) {
             return;
         }
         BlockPos pos = hit.getBlockPos();
-        if (!level.getBlockState(pos).is(ModBlocks.ENDER_RAIL.get())) {
+        if (!level.getBlockState(pos).is(TransportBlocks.ENDER_RAIL.get())) {
             return;
         }
         RandomSource random = level.getRandom();

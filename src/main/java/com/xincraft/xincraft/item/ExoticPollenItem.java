@@ -2,7 +2,7 @@ package com.xincraft.xincraft.item;
 
 import java.util.Map;
 import java.util.function.Supplier;
-import com.xincraft.xincraft.registry.ModBlocks;
+import com.xincraft.xincraft.flowers.FlowerBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -22,10 +22,10 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ExoticPollenItem extends Item {
     // Which flower turns into which. Add new exotic flowers here.
     private static final Map<Block, Supplier<Block>> CONVERSIONS = Map.of(
-        Blocks.LILY_OF_THE_VALLEY, ModBlocks.MENDING_LILAC,
-        Blocks.DANDELION, ModBlocks.FIREFLY_PETUNIA,
-        Blocks.GOLDEN_DANDELION, ModBlocks.MOONLIT_DANDELION,
-        Blocks.WITHER_ROSE, ModBlocks.SHIMMER_LILY);
+        Blocks.LILY_OF_THE_VALLEY, FlowerBlocks.MENDING_LILAC,
+        Blocks.DANDELION, FlowerBlocks.FIREFLY_PETUNIA,
+        Blocks.GOLDEN_DANDELION, FlowerBlocks.MOONLIT_DANDELION,
+        Blocks.WITHER_ROSE, FlowerBlocks.SHIMMER_LILY);
 
     public ExoticPollenItem(Item.Properties properties) {
         super(properties);
@@ -38,7 +38,7 @@ public class ExoticPollenItem extends Item {
         BlockState state = level.getBlockState(pos);
         Supplier<Block> exotic = CONVERSIONS.get(state.getBlock());
         if (exotic == null) {
-            exotic = ModBlocks.GLOWING_LEAVES.get(state.getBlock());
+            exotic = FlowerBlocks.GLOWING_LEAVES.get(state.getBlock());
         }
         if (exotic == null) {
             return InteractionResult.PASS;

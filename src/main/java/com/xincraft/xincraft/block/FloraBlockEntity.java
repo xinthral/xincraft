@@ -3,7 +3,7 @@ package com.xincraft.xincraft.block;
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.EssenceReservoir;
-import com.xincraft.xincraft.registry.ModBlockEntities;
+import com.xincraft.xincraft.magic.MagicBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +27,7 @@ public class FloraBlockEntity extends BlockEntity implements EssenceReservoir {
     private int syncedCapacity = Config.floraCapacity;
 
     public FloraBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.FLORA.get(), pos, state);
+        super(MagicBlockEntities.FLORA.get(), pos, state);
     }
 
     @Override

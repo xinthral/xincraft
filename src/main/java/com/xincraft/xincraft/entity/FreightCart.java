@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.entity;
 
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -155,12 +155,12 @@ public class FreightCart extends AbstractMinecartContainer implements Upgradable
 
     @Override
     protected Item getDropItem() {
-        return ModItems.FREIGHT_CART.get();
+        return TransportItems.FREIGHT_CART.get();
     }
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.FREIGHT_CART.get());
+        return new ItemStack(TransportItems.FREIGHT_CART.get());
     }
 
     @Override

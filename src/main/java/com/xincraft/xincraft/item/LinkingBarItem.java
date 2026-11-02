@@ -3,8 +3,8 @@ package com.xincraft.xincraft.item;
 import java.util.function.Consumer;
 import com.xincraft.xincraft.block.BuoyBlock;
 import com.xincraft.xincraft.block.BuoyBlockEntity;
-import com.xincraft.xincraft.registry.ModDataComponents;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportComponents;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -33,17 +33,17 @@ public class LinkingBarItem extends Item {
 
     // Whether the bar is halfway through linking carts, or buoys
     public static boolean isLinkingCarts(ItemStack stack) {
-        return stack.has(ModDataComponents.LINKING_BAR_START.get());
+        return stack.has(TransportComponents.LINKING_BAR_START.get());
     }
 
     public static boolean isLinkingBuoys(ItemStack stack) {
-        return stack.has(ModDataComponents.LINKING_BAR_BUOY.get());
+        return stack.has(TransportComponents.LINKING_BAR_BUOY.get());
     }
 
     // Forgets the first cart or buoy
     public static void clearPending(ItemStack stack) {
-        stack.remove(ModDataComponents.LINKING_BAR_START.get());
-        stack.remove(ModDataComponents.LINKING_BAR_BUOY.get());
+        stack.remove(TransportComponents.LINKING_BAR_START.get());
+        stack.remove(TransportComponents.LINKING_BAR_BUOY.get());
         stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
     }
 
@@ -72,7 +72,7 @@ public class LinkingBarItem extends Item {
                 return InteractionResult.FAIL;
             }
             if (!player.hasInfiniteMaterials()) {
-                ItemStack returned = new ItemStack(ModItems.LINKING_BAR.get(), bars);
+                ItemStack returned = new ItemStack(TransportItems.LINKING_BAR.get(), bars);
                 if (!player.getInventory().add(returned)) {
                     player.drop(returned, false);
                 }
@@ -86,13 +86,13 @@ public class LinkingBarItem extends Item {
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.mixed"));
             return InteractionResult.FAIL;
         }
-        GlobalPos first = stack.get(ModDataComponents.LINKING_BAR_BUOY.get());
+        GlobalPos first = stack.get(TransportComponents.LINKING_BAR_BUOY.get());
         if (first == null) {
             if (buoy.isFull()) {
                 player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_full", BuoyBlockEntity.MAX_LINKS));
                 return InteractionResult.FAIL;
             }
-            stack.set(ModDataComponents.LINKING_BAR_BUOY.get(), GlobalPos.of(level.dimension(), pos));
+            stack.set(TransportComponents.LINKING_BAR_BUOY.get(), GlobalPos.of(level.dimension(), pos));
             stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
             level.playSound(null, pos, SoundEvents.CHAIN_HIT, SoundSource.BLOCKS, 1.0F, 1.2F);
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.buoy_started"));

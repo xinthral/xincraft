@@ -3,7 +3,7 @@ package com.xincraft.xincraft.client;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.inventory.ApothecaryAltarMenu;
 import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -41,7 +41,7 @@ public class ApothecaryAltarScreen extends AbstractContainerScreen<ApothecaryAlt
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(ModMenuTypes.APOTHECARY_ALTAR.get(), ApothecaryAltarScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(MagicMenus.APOTHECARY_ALTAR.get(), ApothecaryAltarScreen::new));
     }
 
     @Override

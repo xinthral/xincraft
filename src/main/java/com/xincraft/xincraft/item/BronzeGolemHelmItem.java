@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.registry.ModEntityTypes;
+import com.xincraft.xincraft.golems.GolemEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +38,7 @@ public class BronzeGolemHelmItem extends Item {
                     golem.setItemSlot(slot, ItemStack.EMPTY);
                 }
             }
-            golem.convertTo(ModEntityTypes.BRONZE_GOLEM.get(), ConversionParams.single(golem, false, false), converted ->
+            golem.convertTo(GolemEntityTypes.BRONZE_GOLEM.get(), ConversionParams.single(golem, false, false), converted ->
                 converted.playSound(SoundEvents.COPPER_GOLEM_SPAWN));
             stack.consume(1, player);
         }

@@ -4,14 +4,17 @@ import com.mojang.logging.LogUtils;
 import com.xincraft.xincraft.entity.XincraftMinecartBehavior;
 import com.xincraft.xincraft.network.ModNetwork;
 import com.xincraft.xincraft.registry.ModBiomeModifiers;
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModBlocks;
 import com.xincraft.xincraft.registry.ModCreativeModeTabs;
-import com.xincraft.xincraft.registry.ModDataComponents;
-import com.xincraft.xincraft.registry.ModEntityTypes;
-import com.xincraft.xincraft.registry.ModMenuTypes;
-import com.xincraft.xincraft.registry.ModItems;
 import com.xincraft.xincraft.registry.ModRecipes;
+import com.xincraft.xincraft.common.CommonContent;
+import com.xincraft.xincraft.compendium.CompendiumContent;
+import com.xincraft.xincraft.flowers.FlowersContent;
+import com.xincraft.xincraft.golems.GolemsContent;
+import com.xincraft.xincraft.magic.MagicContent;
+import com.xincraft.xincraft.materials.MaterialsContent;
+import com.xincraft.xincraft.common.Registers;
+import com.xincraft.xincraft.transport.TransportContent;
+import com.xincraft.xincraft.turbines.TurbinesContent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -36,13 +39,23 @@ public final class XincraftMod {
         // Register the commonSetup method for modloading
         FMLCommonSetupEvent.getBus(modBusGroup).addListener(this::commonSetup);
 
+        // Load each feature's content into the Deferred Registers. This order is the creative tab's.
+        CompendiumContent.init();
+        MaterialsContent.init();
+        TransportContent.init();
+        TurbinesContent.init();
+        FlowersContent.init();
+        MagicContent.init();
+        GolemsContent.init();
+        CommonContent.init();
+
         // Register each content module's Deferred Register to the mod event bus
-        ModBlocks.BLOCKS.register(modBusGroup);
-        ModItems.ITEMS.register(modBusGroup);
-        ModBlockEntities.BLOCK_ENTITIES.register(modBusGroup);
-        ModEntityTypes.ENTITY_TYPES.register(modBusGroup);
-        ModMenuTypes.MENU_TYPES.register(modBusGroup);
-        ModDataComponents.COMPONENTS.register(modBusGroup);
+        Registers.BLOCKS.register(modBusGroup);
+        Registers.ITEMS.register(modBusGroup);
+        Registers.BLOCK_ENTITIES.register(modBusGroup);
+        Registers.ENTITY_TYPES.register(modBusGroup);
+        Registers.MENU_TYPES.register(modBusGroup);
+        Registers.COMPONENTS.register(modBusGroup);
         ModCreativeModeTabs.TABS.register(modBusGroup);
         ModBiomeModifiers.SERIALIZERS.register(modBusGroup);
         ModRecipes.RECIPE_TYPES.register(modBusGroup);

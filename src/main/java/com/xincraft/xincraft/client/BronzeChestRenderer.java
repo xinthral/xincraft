@@ -2,10 +2,9 @@ package com.xincraft.xincraft.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.block.BronzeChestBlock;
 import com.xincraft.xincraft.block.BronzeChestBlockEntity;
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.golems.GolemBlockEntities;
+import com.xincraft.xincraft.golems.GolemMenus;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.renderer.MultiblockChestResources;
@@ -56,11 +55,11 @@ public final class BronzeChestRenderer extends ChestRenderer<BronzeChestBlockEnt
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.BRONZE_CHEST.get(), BronzeChestRenderer::new);
+        event.registerBlockEntityRenderer(GolemBlockEntities.BRONZE_CHEST.get(), BronzeChestRenderer::new);
     }
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(ModMenuTypes.BRONZE_CHEST_DOUBLE.get(), TallChestScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(GolemMenus.BRONZE_CHEST_DOUBLE.get(), TallChestScreen::new));
     }
 }

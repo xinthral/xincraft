@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.inventory;
 
 import com.xincraft.xincraft.block.ApothecaryAltarBlockEntity;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -32,7 +32,7 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
     }
 
     public ApothecaryAltarMenu(int containerId, Inventory inventory, Container container, ContainerData data) {
-        super(ModMenuTypes.APOTHECARY_ALTAR.get(), containerId);
+        super(MagicMenus.APOTHECARY_ALTAR.get(), containerId);
         checkContainerSize(container, ALTAR_SLOTS_END);
         checkContainerDataCount(data, ApothecaryAltarBlockEntity.DATA_COUNT);
         this.container = container;

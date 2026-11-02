@@ -2,7 +2,7 @@ package com.xincraft.xincraft.client;
 
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.transport.TransportMenus;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -35,7 +35,7 @@ public class LocomotiveCartScreen extends AbstractContainerScreen<LocomotiveCart
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(ModMenuTypes.LOCOMOTIVE_CART.get(), LocomotiveCartScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(TransportMenus.LOCOMOTIVE_CART.get(), LocomotiveCartScreen::new));
     }
 
     @Override

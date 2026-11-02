@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.block;
 
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.registry.ModBlockEntities;
+import com.xincraft.xincraft.turbines.TurbineBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -10,7 +10,7 @@ public class HeatTurbineBlockEntity extends TurbineBlockEntity {
     public static final int CAPACITY = 50_000;
 
     public HeatTurbineBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.HEAT_TURBINE.get(), pos, state);
+        super(TurbineBlockEntities.HEAT_TURBINE.get(), pos, state);
     }
 
     @Override

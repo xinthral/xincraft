@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.block;
 
+import com.xincraft.xincraft.magic.MagicBlockEntities;
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -54,7 +54,7 @@ public class ApothecaryAltarBlock extends BaseEntityBlock {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (!(level instanceof ServerLevel serverLevel) || type != ModBlockEntities.APOTHECARY_ALTAR.get()) {
+        if (!(level instanceof ServerLevel serverLevel) || type != MagicBlockEntities.APOTHECARY_ALTAR.get()) {
             return null;
         }
         return (BlockEntityTicker<T>) (BlockEntityTicker<ApothecaryAltarBlockEntity>)

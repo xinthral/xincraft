@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.common.CommonItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -25,12 +25,12 @@ public class RoseTintedGlassesItem extends Item {
 
     // Whether someone is wearing the glasses
     public static boolean isWearing(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.ROSE_TINTED_GLASSES.get());
+        return entity.getItemBySlot(EquipmentSlot.HEAD).is(CommonItems.ROSE_TINTED_GLASSES.get());
     }
 
     // Whether someone sees what the glasses show: wearing them, or holding them in either hand
     public static boolean isUsing(LivingEntity entity) {
-        Item glasses = ModItems.ROSE_TINTED_GLASSES.get();
+        Item glasses = CommonItems.ROSE_TINTED_GLASSES.get();
         return isWearing(entity) || entity.getMainHandItem().is(glasses) || entity.getOffhandItem().is(glasses);
     }
 

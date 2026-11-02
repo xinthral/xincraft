@@ -6,7 +6,7 @@ import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.magic.CrucibleInput;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -49,7 +49,7 @@ public class ApothecaryCrucibleScreen extends AbstractContainerScreen<Apothecary
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(ModMenuTypes.APOTHECARY_CRUCIBLE.get(), ApothecaryCrucibleScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(MagicMenus.APOTHECARY_CRUCIBLE.get(), ApothecaryCrucibleScreen::new));
     }
 
     @Override

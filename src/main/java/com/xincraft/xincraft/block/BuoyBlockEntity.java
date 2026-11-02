@@ -2,8 +2,8 @@ package com.xincraft.xincraft.block;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportBlockEntities;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +34,7 @@ public class BuoyBlockEntity extends BlockEntity {
     private final List<BlockPos> links = new ArrayList<>(MAX_LINKS);
 
     public BuoyBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.BUOY.get(), pos, state);
+        super(TransportBlockEntities.BUOY.get(), pos, state);
     }
 
     // The buoy linked at pos, if it's loaded
@@ -111,7 +111,7 @@ public class BuoyBlockEntity extends BlockEntity {
         if (level != null && !level.isClientSide()) {
             int bars = unlinkAll();
             if (bars > 0) {
-                Block.popResource(level, pos, new ItemStack(ModItems.LINKING_BAR.get(), bars));
+                Block.popResource(level, pos, new ItemStack(TransportItems.LINKING_BAR.get(), bars));
             }
         }
     }

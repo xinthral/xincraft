@@ -6,8 +6,8 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.xincraft.xincraft.registry.ModDataComponents;
 import com.xincraft.xincraft.registry.ModRecipes;
+import com.xincraft.xincraft.common.CommonComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -76,7 +76,7 @@ public record AltarRecipe(Ingredient base, Optional<Ingredient> material, int ma
     public ItemStack assemble(AltarInput input) {
         ItemStack made = input.base().transmuteCopy(result, 1);
         if (storeMaterial) {
-            made.set(ModDataComponents.GOLEM_SWORD.get(), input.material().copyWithCount(1));
+            made.set(CommonComponents.GOLEM_SWORD.get(), input.material().copyWithCount(1));
         }
         return made;
     }

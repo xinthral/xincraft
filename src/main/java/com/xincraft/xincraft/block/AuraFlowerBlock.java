@@ -4,7 +4,7 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.registry.ModBlockEntities;
+import com.xincraft.xincraft.flowers.FlowerBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -70,20 +70,20 @@ public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
 
     public static AuraFlowerBlock mendingLilac(BlockBehaviour.Properties properties) {
         return new AuraFlowerBlock(properties, MobEffects.REGENERATION, 8.0F, MobEffects.REGENERATION, 100, true, true,
-            () -> Config.mendingLilacRange, ParticleTypes.HAPPY_VILLAGER, false, ModBlockEntities.MENDING_LILAC, MENDING_LILAC_CODEC);
+            () -> Config.mendingLilacRange, ParticleTypes.HAPPY_VILLAGER, false, FlowerBlockEntities.MENDING_LILAC, MENDING_LILAC_CODEC);
     }
 
     // Night Vision makes the screen flicker in its last 10 seconds, so each refresh lasts longer than that
     public static AuraFlowerBlock moonlitDandelion(BlockBehaviour.Properties properties) {
         return new AuraFlowerBlock(properties, MobEffects.NIGHT_VISION, 5.0F, MobEffects.NIGHT_VISION, 300, false, true,
-            () -> Config.moonlitDandelionRange, ParticleTypes.END_ROD, false, ModBlockEntities.MOONLIT_DANDELION, MOONLIT_DANDELION_CODEC);
+            () -> Config.moonlitDandelionRange, ParticleTypes.END_ROD, false, FlowerBlockEntities.MOONLIT_DANDELION, MOONLIT_DANDELION_CODEC);
     }
 
     // Like the shimmer upgrade: no effect swirl to give players away, just the odd pink glint at the
     // flower. Grows wherever the wither rose it came from could.
     public static AuraFlowerBlock shimmerLily(BlockBehaviour.Properties properties) {
         return new AuraFlowerBlock(properties, MobEffects.INVISIBILITY, 8.0F, MobEffects.INVISIBILITY, 100, false, false,
-            () -> Config.shimmerLilyRange, SHIMMER, true, ModBlockEntities.SHIMMER_LILY, SHIMMER_LILY_CODEC);
+            () -> Config.shimmerLilyRange, SHIMMER, true, FlowerBlockEntities.SHIMMER_LILY, SHIMMER_LILY_CODEC);
     }
 
     public Holder<MobEffect> getAura() {

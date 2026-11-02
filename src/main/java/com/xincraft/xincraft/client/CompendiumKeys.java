@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.client.compendium.CompendiumData;
 import com.xincraft.xincraft.client.compendium.CompendiumScreen;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.compendium.CompendiumItems;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
@@ -78,7 +78,7 @@ public final class CompendiumKeys {
     }
 
     private static boolean hasCompendium(LocalPlayer player) {
-        return player.getInventory().contains(stack -> stack.is(ModItems.COMPENDIUM.get()));
+        return player.getInventory().contains(stack -> stack.is(CompendiumItems.COMPENDIUM.get()));
     }
 
     private static void open(LocalPlayer player, CompendiumData.@Nullable Entry entry) {

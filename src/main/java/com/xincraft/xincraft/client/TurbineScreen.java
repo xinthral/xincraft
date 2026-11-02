@@ -2,7 +2,7 @@ package com.xincraft.xincraft.client;
 
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.inventory.TurbineMenu;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.turbines.TurbineMenus;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -37,7 +37,7 @@ public class TurbineScreen extends AbstractContainerScreen<TurbineMenu> {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(ModMenuTypes.TURBINE.get(), TurbineScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(TurbineMenus.TURBINE.get(), TurbineScreen::new));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.block;
 
+import com.xincraft.xincraft.transport.TransportItems;
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -98,7 +98,7 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
             InteractionHand hand, BlockHitResult hit) {
-        return stack.is(ModItems.LINKING_BAR.get()) ? InteractionResult.PASS : InteractionResult.TRY_WITH_EMPTY_HAND;
+        return stack.is(TransportItems.LINKING_BAR.get()) ? InteractionResult.PASS : InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     // Switches the lamp off, or back on, on both halves

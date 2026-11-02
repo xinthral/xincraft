@@ -1,8 +1,8 @@
 package com.xincraft.xincraft.block;
 
+import com.xincraft.xincraft.flowers.FlowerBlockEntities;
+import com.xincraft.xincraft.flowers.FlowerItems;
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -70,7 +70,7 @@ public class MixingTrayBlock extends BaseEntityBlock {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (!(level instanceof ServerLevel serverLevel) || state.getValue(LEVEL) != FULL || type != ModBlockEntities.MIXING_TRAY.get()) {
+        if (!(level instanceof ServerLevel serverLevel) || state.getValue(LEVEL) != FULL || type != FlowerBlockEntities.MIXING_TRAY.get()) {
             return null;
         }
         return (BlockEntityTicker<T>) (BlockEntityTicker<MixingTrayBlockEntity>)
@@ -116,7 +116,7 @@ public class MixingTrayBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
         if (level instanceof ServerLevel serverLevel) {
-            ItemStack pollen = new ItemStack(ModItems.EXOTIC_POLLEN.get());
+            ItemStack pollen = new ItemStack(FlowerItems.EXOTIC_POLLEN.get());
             if (!player.getInventory().add(pollen)) {
                 player.drop(pollen, false);
             }

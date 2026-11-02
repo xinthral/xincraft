@@ -10,7 +10,8 @@ import com.google.gson.JsonObject;
 import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.CrucibleRecipe;
 import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.common.CommonItems;
+import com.xincraft.xincraft.magic.MagicItems;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -468,7 +469,7 @@ public interface Page {
         context.item(powder(recipe.elements().get(0)), middle - 26, y + 14, true);
         context.item(powder(recipe.elements().get(1)), middle + 26, y + 14, true);
         context.item(context.cycle(recipe.catalyst().display()), middle, y + 30, true);
-        context.item(new ItemStack(ModItems.MOB_FILTER.get()), middle, y + 48, true);
+        context.item(new ItemStack(CommonItems.MOB_FILTER.get()), middle, y + 48, true);
         if (recipe.baby()) {
             context.centered(Component.translatable("compendium.xincraft.crucible_baby"), x, y + 66, FAINT_COLOR);
         }
@@ -504,7 +505,7 @@ public interface Page {
     }
 
     private static ItemStack powder(Element element) {
-        return new ItemStack(ModItems.ELEMENT_POWDERS.get(element).get());
+        return new ItemStack(MagicItems.ELEMENT_POWDERS.get(element).get());
     }
 
     // ---- Lists ----

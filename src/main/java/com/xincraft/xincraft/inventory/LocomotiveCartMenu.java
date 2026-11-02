@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.inventory;
 
 import com.xincraft.xincraft.entity.LocomotiveCart;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.transport.TransportMenus;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -31,7 +31,7 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
     }
 
     public LocomotiveCartMenu(int containerId, Inventory inventory, Container container, ContainerData data) {
-        super(ModMenuTypes.LOCOMOTIVE_CART.get(), containerId);
+        super(TransportMenus.LOCOMOTIVE_CART.get(), containerId);
         checkContainerSize(container, LocomotiveCart.SLOT_COUNT);
         checkContainerDataCount(data, LocomotiveCart.DATA_COUNT);
         this.container = container;

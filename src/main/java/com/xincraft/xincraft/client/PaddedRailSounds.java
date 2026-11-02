@@ -4,7 +4,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.transport.TransportTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.MinecartSoundInstance;
 import net.minecraft.client.resources.sounds.RidingMinecartSoundInstance;
@@ -56,8 +56,8 @@ public final class PaddedRailSounds {
     // block or, on slopes and with experimental minecart movement, the block just below it
     private static boolean isOnPaddedRail(Level level, Vec3 pos) {
         BlockPos blockPos = BlockPos.containing(pos);
-        return level.getBlockState(blockPos).is(ModTags.PADDED_RAILS)
-            || level.getBlockState(blockPos.below()).is(ModTags.PADDED_RAILS);
+        return level.getBlockState(blockPos).is(TransportTags.PADDED_RAILS)
+            || level.getBlockState(blockPos.below()).is(TransportTags.PADDED_RAILS);
     }
 
     private static final class Muffled implements TickableSoundInstance {

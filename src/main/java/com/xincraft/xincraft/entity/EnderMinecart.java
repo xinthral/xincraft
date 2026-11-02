@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.entity;
 
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -70,12 +70,12 @@ public class EnderMinecart extends Minecart implements UpgradableCart {
 
     @Override
     protected Item getDropItem() {
-        return ModItems.ENDER_MINECART.get();
+        return TransportItems.ENDER_MINECART.get();
     }
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.ENDER_MINECART.get());
+        return new ItemStack(TransportItems.ENDER_MINECART.get());
     }
 
     @Override

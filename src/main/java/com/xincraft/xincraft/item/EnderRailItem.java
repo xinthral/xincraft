@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.registry.ModDataComponents;
+import com.xincraft.xincraft.transport.TransportComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -30,17 +30,17 @@ public class EnderRailItem extends BlockItem {
     // Gives the stack an enchantment glint for one second; inventoryTick takes it away again
     public static void flashGlint(ItemStack stack, Level level) {
         stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
-        stack.set(ModDataComponents.GLINT_UNTIL.get(), level.getGameTime() + GLINT_TICKS);
+        stack.set(TransportComponents.GLINT_UNTIL.get(), level.getGameTime() + GLINT_TICKS);
     }
 
     public static void clearGlint(ItemStack stack) {
         stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
-        stack.remove(ModDataComponents.GLINT_UNTIL.get());
+        stack.remove(TransportComponents.GLINT_UNTIL.get());
     }
 
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
-        Long until = stack.get(ModDataComponents.GLINT_UNTIL.get());
+        Long until = stack.get(TransportComponents.GLINT_UNTIL.get());
         if (until != null && level.getGameTime() >= until) {
             clearGlint(stack);
         }
@@ -49,7 +49,7 @@ public class EnderRailItem extends BlockItem {
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display,
             Consumer<Component> builder, TooltipFlag flag) {
-        GlobalPos link = stack.get(ModDataComponents.ENDER_RAIL_LINK.get());
+        GlobalPos link = stack.get(TransportComponents.ENDER_RAIL_LINK.get());
         if (link != null) {
             BlockPos pos = link.pos();
             builder.accept(Component.translatable("item.xincraft.ender_rail.attuned", pos.getX(), pos.getY(), pos.getZ())

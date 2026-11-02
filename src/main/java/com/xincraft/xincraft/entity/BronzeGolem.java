@@ -5,10 +5,10 @@ import java.util.EnumSet;
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.BronzeChestBlockEntity;
-import com.xincraft.xincraft.registry.ModDataComponents;
-import com.xincraft.xincraft.registry.ModEntityTypes;
-import com.xincraft.xincraft.registry.ModItems;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.common.CommonComponents;
+import com.xincraft.xincraft.golems.GolemEntityTypes;
+import com.xincraft.xincraft.golems.GolemItems;
+import com.xincraft.xincraft.materials.MaterialTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -335,7 +335,7 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(ModTags.REPAIRS_BRONZE_ARMOR) && getHealth() < getMaxHealth()) {
+        if (stack.is(MaterialTags.REPAIRS_BRONZE_ARMOR) && getHealth() < getMaxHealth()) {
             if (level() instanceof ServerLevel) {
                 heal(getMaxHealth() / 4.0F);
                 playSound(SoundEvents.COPPER_GOLEM_ITEM_GET, 1.0F, 1.2F);
@@ -358,9 +358,9 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
 
     // The golem as an item, sword and name included
     private ItemStack toItem() {
-        ItemStack item = new ItemStack(isCombat() ? ModItems.COMBAT_GOLEM.get() : ModItems.BRONZE_GOLEM.get());
+        ItemStack item = new ItemStack(isCombat() ? GolemItems.COMBAT_GOLEM.get() : GolemItems.BRONZE_GOLEM.get());
         if (isCombat()) {
-            item.set(ModDataComponents.GOLEM_SWORD.get(), getItemBySlot(SWORD_SLOT).copy());
+            item.set(CommonComponents.GOLEM_SWORD.get(), getItemBySlot(SWORD_SLOT).copy());
         }
         if (hasCustomName()) {
             item.set(DataComponents.CUSTOM_NAME, getCustomName());
@@ -370,7 +370,7 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(isCombat() ? ModItems.COMBAT_GOLEM.get() : ModItems.BRONZE_GOLEM.get());
+        return new ItemStack(isCombat() ? GolemItems.COMBAT_GOLEM.get() : GolemItems.BRONZE_GOLEM.get());
     }
 
     // ---- The rest of being a mob ----
@@ -687,6 +687,6 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
 
     @SubscribeEvent
     public static void onEntityAttributes(EntityAttributeCreationEvent event) {
-        event.put(ModEntityTypes.BRONZE_GOLEM.get(), createAttributes().build());
+        event.put(GolemEntityTypes.BRONZE_GOLEM.get(), createAttributes().build());
     }
 }

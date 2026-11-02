@@ -3,7 +3,7 @@ package com.xincraft.xincraft.client;
 import java.util.List;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.block.GlowingLeavesBlock;
-import com.xincraft.xincraft.registry.ModBlocks;
+import com.xincraft.xincraft.flowers.FlowerBlocks;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class GlowingLeavesColors {
     @SubscribeEvent
     public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
-        for (var glowing : ModBlocks.GLOWING_LEAVES.values()) {
+        for (var glowing : FlowerBlocks.GLOWING_LEAVES.values()) {
             GlowingLeavesBlock block = (GlowingLeavesBlock) glowing.get();
             List<BlockTintSource> tints = event.getBlockColors().getTintSources(block.getSource().defaultBlockState());
             if (!tints.isEmpty()) {

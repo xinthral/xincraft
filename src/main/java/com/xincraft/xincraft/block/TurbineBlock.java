@@ -1,9 +1,9 @@
 package com.xincraft.xincraft.block;
 
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.registry.ModBlockEntities;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import com.xincraft.xincraft.turbines.TurbineBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -44,11 +44,11 @@ public class TurbineBlock extends AbstractFurnaceBlock {
     }
 
     public static TurbineBlock heat(BlockBehaviour.Properties properties) {
-        return new TurbineBlock(properties, ModBlockEntities.HEAT_TURBINE, HeatTurbineBlockEntity::new, false);
+        return new TurbineBlock(properties, TurbineBlockEntities.HEAT_TURBINE, HeatTurbineBlockEntity::new, false);
     }
 
     public static TurbineBlock steam(BlockBehaviour.Properties properties) {
-        return new TurbineBlock(properties, ModBlockEntities.STEAM_TURBINE, SteamTurbineBlockEntity::new, true);
+        return new TurbineBlock(properties, TurbineBlockEntities.STEAM_TURBINE, SteamTurbineBlockEntity::new, true);
     }
 
     // Each turbine has its own codec, since which one it is isn't stored in its properties

@@ -2,7 +2,7 @@ package com.xincraft.xincraft.entity;
 
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.block.BouncyRailBlock;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.transport.TransportTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -76,7 +76,7 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
     private boolean canGoTinSpeed(ServerLevel level) {
         BlockPos pos = minecart.getCurrentBlockPosOrRailBelow();
         BlockState state = level.getBlockState(pos);
-        if (!state.is(ModTags.TIN_RAILS) || isCurve(railShape(level, state, pos))) {
+        if (!state.is(TransportTags.TIN_RAILS) || isCurve(railShape(level, state, pos))) {
             return false;
         }
         BlockPos ahead = railAhead(level, pos);
@@ -209,9 +209,9 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         if (!shouldDoRailFunctions()) {
             return;
         }
-        if (rail.is(ModTags.HONEY_RAILS)) {
+        if (rail.is(TransportTags.HONEY_RAILS)) {
             applyHoneyRail(level);
-        } else if (rail.is(ModTags.BOUNCY_RAILS)) {
+        } else if (rail.is(TransportTags.BOUNCY_RAILS)) {
             int power = rail.getValueOrElse(BouncyRailBlock.POWER, 0);
             if (power > 0) {
                 launch(level, power);

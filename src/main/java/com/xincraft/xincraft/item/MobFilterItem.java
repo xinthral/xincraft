@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.registry.ModDataComponents;
+import com.xincraft.xincraft.common.CommonComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -43,7 +43,7 @@ public class MobFilterItem extends Item {
     }
 
     public static MobFilterContents contents(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponents.MOB_FILTER.get(), MobFilterContents.EMPTY);
+        return stack.getOrDefault(CommonComponents.MOB_FILTER.get(), MobFilterContents.EMPTY);
     }
 
     public static boolean isFull(ItemStack stack) {
@@ -72,7 +72,7 @@ public class MobFilterItem extends Item {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide()) {
-            stack.remove(ModDataComponents.MOB_FILTER.get());
+            stack.remove(CommonComponents.MOB_FILTER.get());
             LayeredCauldronBlock.lowerFillLevel(state, level, pos);
             level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.6F, 1.2F);
         }

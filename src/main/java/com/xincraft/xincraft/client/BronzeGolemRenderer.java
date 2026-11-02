@@ -2,7 +2,7 @@ package com.xincraft.xincraft.client;
 
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.BronzeGolem;
-import com.xincraft.xincraft.registry.ModEntityTypes;
+import com.xincraft.xincraft.golems.GolemEntityTypes;
 import net.minecraft.client.model.animal.golem.CopperGolemModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -60,6 +60,6 @@ public final class BronzeGolemRenderer extends MobRenderer<BronzeGolem, CopperGo
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntityTypes.BRONZE_GOLEM.get(), BronzeGolemRenderer::new);
+        event.registerEntityRenderer(GolemEntityTypes.BRONZE_GOLEM.get(), BronzeGolemRenderer::new);
     }
 }

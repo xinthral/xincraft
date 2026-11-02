@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.inventory;
 
 import com.xincraft.xincraft.block.TurbineBlockEntity;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.turbines.TurbineMenus;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -32,7 +32,7 @@ public class TurbineMenu extends AbstractContainerMenu {
     }
 
     public TurbineMenu(int containerId, Inventory inventory, Container container, ContainerData data) {
-        super(ModMenuTypes.TURBINE.get(), containerId);
+        super(TurbineMenus.TURBINE.get(), containerId);
         checkContainerSize(container, 1);
         checkContainerDataCount(data, TurbineBlockEntity.DATA_COUNT);
         this.container = container;

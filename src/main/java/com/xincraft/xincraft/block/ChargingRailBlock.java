@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.block;
 
+import com.xincraft.xincraft.transport.TransportBlockEntities;
 import com.mojang.serialization.MapCodec;
-import com.xincraft.xincraft.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
@@ -39,7 +39,7 @@ public class ChargingRailBlock extends ModPoweredRailBlock implements EntityBloc
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide() || type != ModBlockEntities.CHARGING_RAIL.get()) {
+        if (level.isClientSide() || type != TransportBlockEntities.CHARGING_RAIL.get()) {
             return null;
         }
         return (BlockEntityTicker<T>) (BlockEntityTicker<ChargingRailBlockEntity>) (tickLevel, pos, tickState, rail) -> rail.serverTick(tickLevel);

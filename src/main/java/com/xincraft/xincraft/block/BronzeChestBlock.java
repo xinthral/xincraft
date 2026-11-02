@@ -3,9 +3,9 @@ package com.xincraft.xincraft.block;
 import java.util.Optional;
 import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModBlocks;
-import com.xincraft.xincraft.registry.ModMenuTypes;
+import com.xincraft.xincraft.golems.GolemBlockEntities;
+import com.xincraft.xincraft.golems.GolemBlocks;
+import com.xincraft.xincraft.golems.GolemMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -40,7 +40,7 @@ public class BronzeChestBlock extends ChestBlock {
     public static final int DOUBLE_ROWS = BronzeChestBlockEntity.ROWS * 2;
 
     public BronzeChestBlock(BlockBehaviour.Properties properties) {
-        super(ModBlockEntities.BRONZE_CHEST::get, SoundEvents.COPPER_CHEST_OPEN, SoundEvents.COPPER_CHEST_CLOSE, properties);
+        super(GolemBlockEntities.BRONZE_CHEST::get, SoundEvents.COPPER_CHEST_OPEN, SoundEvents.COPPER_CHEST_CLOSE, properties);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class BronzeChestBlock extends ChestBlock {
                         }
                         first.unpackLootTable(player);
                         second.unpackLootTable(player);
-                        return new ChestMenu(ModMenuTypes.BRONZE_CHEST_DOUBLE.get(), containerId, inventory, container, DOUBLE_ROWS);
+                        return new ChestMenu(GolemMenus.BRONZE_CHEST_DOUBLE.get(), containerId, inventory, container, DOUBLE_ROWS);
                     }
 
                     @Override
@@ -99,11 +99,11 @@ public class BronzeChestBlock extends ChestBlock {
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         BlockState placed = event.getState();
         LevelAccessor level = event.getLevel();
-        if (level.isClientSide() || !placed.is(BlockTags.COPPER_CHESTS) || placed.is(ModBlocks.BRONZE_CHEST.get())
+        if (level.isClientSide() || !placed.is(BlockTags.COPPER_CHESTS) || placed.is(GolemBlocks.BRONZE_CHEST.get())
                 || placed.getValue(TYPE) == ChestType.SINGLE) {
             return;
         }
-        if (level.getBlockState(getConnectedBlockPos(event.getPos(), placed)).is(ModBlocks.BRONZE_CHEST.get())) {
+        if (level.getBlockState(getConnectedBlockPos(event.getPos(), placed)).is(GolemBlocks.BRONZE_CHEST.get())) {
             level.setBlock(event.getPos(), placed.setValue(TYPE, ChestType.SINGLE), 3);
         }
     }

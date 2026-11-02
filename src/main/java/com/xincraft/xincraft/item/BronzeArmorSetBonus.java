@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -39,10 +39,10 @@ public final class BronzeArmorSetBonus {
     }
 
     private static boolean isWearingFullSet(Player player) {
-        return player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.BRONZE_HELMET.get())
-            && player.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.BRONZE_CHESTPLATE.get())
-            && player.getItemBySlot(EquipmentSlot.LEGS).is(ModItems.BRONZE_LEGGINGS.get())
-            && player.getItemBySlot(EquipmentSlot.FEET).is(ModItems.BRONZE_BOOTS.get());
+        return player.getItemBySlot(EquipmentSlot.HEAD).is(MaterialItems.BRONZE_HELMET.get())
+            && player.getItemBySlot(EquipmentSlot.CHEST).is(MaterialItems.BRONZE_CHESTPLATE.get())
+            && player.getItemBySlot(EquipmentSlot.LEGS).is(MaterialItems.BRONZE_LEGGINGS.get())
+            && player.getItemBySlot(EquipmentSlot.FEET).is(MaterialItems.BRONZE_BOOTS.get());
     }
 
     private BronzeArmorSetBonus() {}

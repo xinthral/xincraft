@@ -14,9 +14,9 @@ import com.xincraft.xincraft.magic.CrucibleRecipe;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.EssenceHelper;
 import com.xincraft.xincraft.magic.EssenceReservoir;
-import com.xincraft.xincraft.registry.ModBlocks;
-import com.xincraft.xincraft.registry.ModMenuTypes;
 import com.xincraft.xincraft.registry.ModRecipes;
+import com.xincraft.xincraft.magic.MagicBlocks;
+import com.xincraft.xincraft.magic.MagicMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -80,7 +80,7 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
     }
 
     public ApothecaryCrucibleMenu(int containerId, Inventory inventory, ContainerLevelAccess access) {
-        super(ModMenuTypes.APOTHECARY_CRUCIBLE.get(), containerId);
+        super(MagicMenus.APOTHECARY_CRUCIBLE.get(), containerId);
         this.access = access;
         this.level = inventory.player.level();
 
@@ -244,7 +244,7 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(access, player, ModBlocks.APOTHECARY_CRUCIBLE.get());
+        return stillValid(access, player, MagicBlocks.APOTHECARY_CRUCIBLE.get());
     }
 
     // Like a crafting table, the crucible keeps nothing

@@ -10,9 +10,9 @@ import com.xincraft.xincraft.magic.AltarRecipe;
 import com.xincraft.xincraft.magic.Element;
 import com.xincraft.xincraft.magic.EssenceHelper;
 import com.xincraft.xincraft.magic.EssenceReservoir;
-import com.xincraft.xincraft.registry.ModBlockEntities;
 import com.xincraft.xincraft.registry.ModRecipes;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.magic.MagicBlockEntities;
+import com.xincraft.xincraft.magic.MagicTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -42,7 +42,7 @@ import org.jspecify.annotations.Nullable;
 
 // The apothecary altar burns plants into elemental essence, which flows into the elemental flora
 // (FloraBlock) within Config.altarRange blocks. Which elements a plant gives is set by the item tags
-// xincraft:essence/<element> (registry.ModTags); only plants in at least one of them go in. Each
+// xincraft:essence/<element> (magic.MagicTags); only plants in at least one of them go in. Each
 // burnt plant gives Config.altarEssencePerElement of each of its elements, after
 // Config.altarBurnTicks of burning furnace fuel.
 //
@@ -113,7 +113,7 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
     };
 
     public ApothecaryAltarBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.APOTHECARY_ALTAR.get(), pos, state);
+        super(MagicBlockEntities.APOTHECARY_ALTAR.get(), pos, state);
     }
 
     // How far, in blocks, the altar reaches flora (a cube)
@@ -131,7 +131,7 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         int mask = 0;
         if (!stack.isEmpty()) {
             for (Element element : Element.values()) {
-                if (stack.is(ModTags.essence(element))) {
+                if (stack.is(MagicTags.essence(element))) {
                     mask |= 1 << element.ordinal();
                 }
             }

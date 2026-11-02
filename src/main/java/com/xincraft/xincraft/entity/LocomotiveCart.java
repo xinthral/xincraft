@@ -3,7 +3,7 @@ package com.xincraft.xincraft.entity;
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.block.ChargingRailBlockEntity;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -462,12 +462,12 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
 
     @Override
     protected Item getDropItem() {
-        return ModItems.LOCOMOTIVE_CART.get();
+        return TransportItems.LOCOMOTIVE_CART.get();
     }
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.LOCOMOTIVE_CART.get());
+        return new ItemStack(TransportItems.LOCOMOTIVE_CART.get());
     }
 
     @Override

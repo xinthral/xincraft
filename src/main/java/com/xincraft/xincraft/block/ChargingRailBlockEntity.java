@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.block;
 
-import com.xincraft.xincraft.registry.ModBlockEntities;
+import com.xincraft.xincraft.transport.TransportBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
@@ -29,7 +29,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
     private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> buffer);
 
     public ChargingRailBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.CHARGING_RAIL.get(), pos, state);
+        super(TransportBlockEntities.CHARGING_RAIL.get(), pos, state);
     }
 
     void serverTick(Level level) {

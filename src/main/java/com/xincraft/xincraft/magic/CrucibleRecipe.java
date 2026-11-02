@@ -10,8 +10,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.xincraft.xincraft.item.ElementPowderItem;
 import com.xincraft.xincraft.item.MobFilterContents;
 import com.xincraft.xincraft.item.MobFilterItem;
-import com.xincraft.xincraft.registry.ModDataComponents;
 import com.xincraft.xincraft.registry.ModRecipes;
+import com.xincraft.xincraft.common.CommonComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -118,7 +118,7 @@ public record CrucibleRecipe(List<Element> elements, Ingredient catalyst, Entity
             return ItemStack.EMPTY;
         }
         ItemStack result = input.filter().copyWithCount(1);
-        result.set(ModDataComponents.MOB_FILTER.get(), MobFilterItem.contents(result).with(entry));
+        result.set(CommonComponents.MOB_FILTER.get(), MobFilterItem.contents(result).with(entry));
         return result;
     }
 

@@ -7,7 +7,7 @@ import com.xincraft.xincraft.block.FireflyPetuniaBlock;
 import com.xincraft.xincraft.block.FloraBlock;
 import com.xincraft.xincraft.block.FloraBlockEntity;
 import com.xincraft.xincraft.magic.Element;
-import com.xincraft.xincraft.registry.ModBlocks;
+import com.xincraft.xincraft.magic.MagicBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -52,7 +52,7 @@ public class ElementPowderItem extends Item {
         if (!isConvertible(state)) {
             return InteractionResult.PASS;
         }
-        BlockState floraState = ModBlocks.FLORA.get(element).get().defaultBlockState();
+        BlockState floraState = MagicBlocks.FLORA.get(element).get().defaultBlockState();
         if (!floraState.canSurvive(level, pos)) {
             return InteractionResult.FAIL;
         }

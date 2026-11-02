@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 // netherite's protection and one power per piece. The helmet gives night vision (TinSpyglass runs
 // it, as both use the same hidden effect); the chestplate keeps piglins neutral (the item tag
 // minecraft:piglin_safe_armor); the leggings' step height and the boots' speed are attribute
-// modifiers (registry.ModItems). Its red shimmer takes the place of vanilla's glint, which is turned
+// modifiers (materials.MaterialItems). Its red shimmer takes the place of vanilla's glint, which is turned
 // off: a model layer on the item, and client.LonsdaleiteGlintLayer when worn.
 public class LonsdaleiteArmorItem extends Item {
     public LonsdaleiteArmorItem(Item.Properties properties) {
@@ -23,7 +23,7 @@ public class LonsdaleiteArmorItem extends Item {
     }
 
     public static boolean isWearingHelmet(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.LONSDALEITE_HELMET.get());
+        return entity.getItemBySlot(EquipmentSlot.HEAD).is(MaterialItems.LONSDALEITE_HELMET.get());
     }
 
     // What the piece does, from item.xincraft.lonsdaleite_<piece>.desc

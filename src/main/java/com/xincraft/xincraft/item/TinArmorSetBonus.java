@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -33,10 +33,10 @@ public final class TinArmorSetBonus {
     }
 
     private static boolean isWearingFullSet(Player player) {
-        return player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.TIN_HELMET.get())
-            && player.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.TIN_CHESTPLATE.get())
-            && player.getItemBySlot(EquipmentSlot.LEGS).is(ModItems.TIN_LEGGINGS.get())
-            && player.getItemBySlot(EquipmentSlot.FEET).is(ModItems.TIN_BOOTS.get());
+        return player.getItemBySlot(EquipmentSlot.HEAD).is(MaterialItems.TIN_HELMET.get())
+            && player.getItemBySlot(EquipmentSlot.CHEST).is(MaterialItems.TIN_CHESTPLATE.get())
+            && player.getItemBySlot(EquipmentSlot.LEGS).is(MaterialItems.TIN_LEGGINGS.get())
+            && player.getItemBySlot(EquipmentSlot.FEET).is(MaterialItems.TIN_BOOTS.get());
     }
 
     private TinArmorSetBonus() {}

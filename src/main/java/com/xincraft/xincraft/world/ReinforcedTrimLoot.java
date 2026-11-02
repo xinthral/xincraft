@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.world;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.materials.MaterialItems;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -27,7 +27,7 @@ public final class ReinforcedTrimLoot {
         }
         table.addPool(LootPool.lootPool()
             .name(XincraftMod.MODID + ":reinforced_armor_trim_smithing_template")
-            .add(LootItem.lootTableItem(ModItems.REINFORCED_ARMOR_TRIM_SMITHING_TEMPLATE.get()))
+            .add(LootItem.lootTableItem(MaterialItems.REINFORCED_ARMOR_TRIM_SMITHING_TEMPLATE.get()))
             .when(LootItemRandomChanceCondition.randomChance(CHANCE))
             .build());
     }

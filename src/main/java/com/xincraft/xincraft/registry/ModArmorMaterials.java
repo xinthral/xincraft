@@ -1,6 +1,7 @@
 package com.xincraft.xincraft.registry;
 
 import java.util.Map;
+import com.xincraft.xincraft.materials.MaterialTags;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -20,7 +21,7 @@ public final class ModArmorMaterials {
         SoundEvents.ARMOR_EQUIP_IRON,
         0.0F,
         0.0F,
-        ModTags.REPAIRS_TIN_ARMOR,
+        MaterialTags.REPAIRS_TIN_ARMOR,
         ModEquipmentAssets.TIN
     );
 
@@ -38,7 +39,7 @@ public final class ModArmorMaterials {
         SoundEvents.ARMOR_EQUIP_COPPER,
         0.0F,
         0.0F,
-        ModTags.REPAIRS_BRONZE_ARMOR,
+        MaterialTags.REPAIRS_BRONZE_ARMOR,
         ModEquipmentAssets.BRONZE
     );
 
@@ -56,7 +57,7 @@ public final class ModArmorMaterials {
         SoundEvents.ARMOR_EQUIP_NETHERITE,
         3.0F,
         0.1F,
-        ModTags.REPAIRS_LONSDALEITE_ARMOR,
+        MaterialTags.REPAIRS_LONSDALEITE_ARMOR,
         ModEquipmentAssets.LONSDALEITE
     );
 

@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.block;
 
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModDataComponents;
+import com.xincraft.xincraft.transport.TransportBlockEntities;
+import com.xincraft.xincraft.transport.TransportComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
@@ -17,7 +17,7 @@ public class EnderRailBlockEntity extends BlockEntity {
     private @Nullable BlockPos link;
 
     public EnderRailBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.ENDER_RAIL.get(), pos, state);
+        super(TransportBlockEntities.ENDER_RAIL.get(), pos, state);
     }
 
     public @Nullable BlockPos getLink() {
@@ -46,8 +46,8 @@ public class EnderRailBlockEntity extends BlockEntity {
     @Override
     protected void applyImplicitComponents(DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        components.get(ModDataComponents.ENDER_RAIL_LINK.get());
-        components.get(ModDataComponents.GLINT_UNTIL.get());
+        components.get(TransportComponents.ENDER_RAIL_LINK.get());
+        components.get(TransportComponents.GLINT_UNTIL.get());
         components.get(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
     }
 

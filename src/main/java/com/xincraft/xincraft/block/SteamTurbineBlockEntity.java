@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.block;
 
 import com.xincraft.xincraft.Config;
-import com.xincraft.xincraft.registry.ModBlockEntities;
+import com.xincraft.xincraft.turbines.TurbineBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,7 +32,7 @@ public class SteamTurbineBlockEntity extends TurbineBlockEntity {
     private LazyOptional<IFluidHandler> fluidCap = LazyOptional.of(() -> tank);
 
     public SteamTurbineBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.STEAM_TURBINE.get(), pos, state);
+        super(TurbineBlockEntities.STEAM_TURBINE.get(), pos, state);
     }
 
     @Override

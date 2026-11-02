@@ -5,7 +5,7 @@ import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.block.BuoyBlock;
 import com.xincraft.xincraft.block.BuoyBlockEntity;
 import com.xincraft.xincraft.inventory.LocomotiveCartMenu;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.common.CommonItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -561,7 +561,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         if (linked != InteractionResult.PASS) {
             return linked;
         }
-        if (player.getItemInHand(hand).is(ModItems.ROSE_TINTED_GLASSES.get()) && upgrades.has(CartUpgrade.RC)
+        if (player.getItemInHand(hand).is(CommonItems.ROSE_TINTED_GLASSES.get()) && upgrades.has(CartUpgrade.RC)
                 && getControllingPassenger() == null) {
             if (!level().isClientSide()) {
                 if (pathTarget == null && !tryJoinPath()) {

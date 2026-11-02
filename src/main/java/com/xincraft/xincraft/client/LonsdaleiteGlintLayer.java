@@ -2,7 +2,7 @@ package com.xincraft.xincraft.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.materials.MaterialTags;
 import net.minecraft.client.entity.ClientMannequin;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -67,7 +67,7 @@ public final class LonsdaleiteGlintLayer<S extends HumanoidRenderState, M extend
     }
 
     private void submitPiece(PoseStack poseStack, SubmitNodeCollector collector, ItemStack stack, EquipmentSlot slot, int light, S state) {
-        if (stack.is(ModTags.LONSDALEITE_ARMOR)) {
+        if (stack.is(MaterialTags.LONSDALEITE_ARMOR)) {
             A model = (state.isBaby && state.entityType != EntityTypes.ARMOR_STAND ? babyModels : models).get(slot);
             collector.order(ORDER).submitModel(model, state, poseStack, GLINT, light, OverlayTexture.NO_OVERLAY, -1, null, 0, null);
         }

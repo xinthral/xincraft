@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.entity.Carriage;
 import com.xincraft.xincraft.entity.FreightCart;
 import com.xincraft.xincraft.entity.ShulkerHold;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.transport.TransportTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +36,7 @@ import net.minecraft.world.phys.AABB;
 
 // A detector rail whose redstone signal depends on which kind of minecart is on it, rather than
 // always 15. The strength for each cart type comes from the entity type tags
-// xincraft:inspector_rail_signal/<1-15> (see ModTags.inspectorRailSignal); untagged carts give 0.
+// xincraft:inspector_rail_signal/<1-15> (see TransportTags.inspectorRailSignal); untagged carts give 0.
 // A carriage with someone aboard gives one more than its tag's signal, and a freight cart's signal
 // shows how full it is instead (storageSignal).
 // Otherwise it behaves like vanilla's DetectorRailBlock, which this is adapted from.
@@ -69,7 +69,7 @@ public class InspectorRailBlock extends BaseRailBlock {
             return storageSignal(storage);
         }
         for (int signal = 15; signal > 0; signal--) {
-            if (cart.is(ModTags.inspectorRailSignal(signal))) {
+            if (cart.is(TransportTags.inspectorRailSignal(signal))) {
                 return cart instanceof Carriage && cart.isVehicle() ? Math.min(signal + 1, 15) : signal;
             }
         }

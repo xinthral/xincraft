@@ -6,8 +6,8 @@ import com.mojang.serialization.MapCodec;
 import com.xincraft.xincraft.Config;
 import com.xincraft.xincraft.entity.EnderMinecart;
 import com.xincraft.xincraft.item.EnderRailItem;
-import com.xincraft.xincraft.registry.ModDataComponents;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportComponents;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -88,11 +88,11 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!stack.is(ModItems.ENDER_RAIL.get())) {
+        if (!stack.is(TransportItems.ENDER_RAIL.get())) {
             return super.useItemOn(stack, state, level, pos, player, hand, hit);
         }
         if (level instanceof ServerLevel serverLevel) {
-            stack.set(ModDataComponents.ENDER_RAIL_LINK.get(), GlobalPos.of(level.dimension(), pos));
+            stack.set(TransportComponents.ENDER_RAIL_LINK.get(), GlobalPos.of(level.dimension(), pos));
             EnderRailItem.flashGlint(stack, level);
             glow(serverLevel, pos);
             player.sendOverlayMessage(Component.translatable("message.xincraft.ender_rail.attuned"));
@@ -104,12 +104,12 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity by, ItemStack stack) {
         super.setPlacedBy(level, pos, state, by, stack);
-        GlobalPos target = stack.get(ModDataComponents.ENDER_RAIL_LINK.get());
+        GlobalPos target = stack.get(TransportComponents.ENDER_RAIL_LINK.get());
         if (target == null || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
         // The rest of the stack goes back to being unattuned
-        stack.remove(ModDataComponents.ENDER_RAIL_LINK.get());
+        stack.remove(TransportComponents.ENDER_RAIL_LINK.get());
         EnderRailItem.clearGlint(stack);
 
         Component failure = null;

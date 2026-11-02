@@ -42,7 +42,7 @@ public class FloraBlock extends FlowerBlock implements EntityBlock {
         return element;
     }
 
-    // Light level for a fill level, used in the block properties (registry.ModBlocks)
+    // Light level for a fill level, used in the block properties (magic.MagicBlocks)
     public static int lightLevel(BlockState state) {
         return state.getValue(FILL) * 2;
     }

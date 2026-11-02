@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.xincraft.xincraft.XincraftMod;
 import com.xincraft.xincraft.entity.CartUpgrade;
 import com.xincraft.xincraft.entity.UpgradableCart;
-import com.xincraft.xincraft.registry.ModEntityTypes;
+import com.xincraft.xincraft.transport.TransportEntityTypes;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -119,15 +119,15 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntityTypes.ENDER_MINECART.get(),
+        event.registerEntityRenderer(TransportEntityTypes.ENDER_MINECART.get(),
             context -> new RetexturedMinecartRenderer(context, "ender_minecart"));
-        event.registerEntityRenderer(ModEntityTypes.LOCOMOTIVE_CART.get(),
+        event.registerEntityRenderer(TransportEntityTypes.LOCOMOTIVE_CART.get(),
             context -> new RetexturedMinecartRenderer(context, "locomotive_cart"));
-        event.registerEntityRenderer(ModEntityTypes.JINGLE_CART.get(),
+        event.registerEntityRenderer(TransportEntityTypes.JINGLE_CART.get(),
             context -> new RetexturedMinecartRenderer(context, "jingle_cart"));
-        event.registerEntityRenderer(ModEntityTypes.CARRIAGE.get(),
+        event.registerEntityRenderer(TransportEntityTypes.CARRIAGE.get(),
             context -> new RetexturedMinecartRenderer(context, "carriage"));
-        event.registerEntityRenderer(ModEntityTypes.FREIGHT_CART.get(),
+        event.registerEntityRenderer(TransportEntityTypes.FREIGHT_CART.get(),
             context -> new RetexturedMinecartRenderer(context, "freight_cart"));
     }
 

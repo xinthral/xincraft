@@ -2,9 +2,9 @@ package com.xincraft.xincraft.block;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.xincraft.xincraft.registry.ModBlockEntities;
-import com.xincraft.xincraft.registry.ModItems;
-import com.xincraft.xincraft.registry.ModTags;
+import com.xincraft.xincraft.flowers.FlowerBlockEntities;
+import com.xincraft.xincraft.flowers.FlowerItems;
+import com.xincraft.xincraft.flowers.FlowerTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -30,11 +30,11 @@ public class MixingTrayBlockEntity extends BlockEntity {
     private final List<Item> flowers = new ArrayList<>();
 
     public MixingTrayBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.MIXING_TRAY.get(), pos, state);
+        super(FlowerBlockEntities.MIXING_TRAY.get(), pos, state);
     }
 
     public static boolean isMixable(ItemStack stack) {
-        return stack.is(ModTags.SMALL_FLOWERS);
+        return stack.is(FlowerTags.SMALL_FLOWERS);
     }
 
     // Whether this flower can go in: it's a small flower that isn't in the mash already
@@ -74,7 +74,7 @@ public class MixingTrayBlockEntity extends BlockEntity {
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);
         if (level != null && state.getValue(MixingTrayBlock.LEVEL) == MixingTrayBlock.READY) {
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.EXOTIC_POLLEN.get()));
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(FlowerItems.EXOTIC_POLLEN.get()));
         }
     }
 

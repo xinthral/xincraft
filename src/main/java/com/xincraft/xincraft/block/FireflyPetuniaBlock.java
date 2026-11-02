@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
 // An exotic flower, grown by using exotic pollen on a dandelion (item.ExoticPollenItem). It glows a
-// soft yellow (its light level is set in ModBlocks) with fireflies drifting around it.
+// soft yellow (its light level is set in flowers.FlowerBlocks) with fireflies drifting around it.
 public class FireflyPetuniaBlock extends FlowerBlock {
     public static final MapCodec<FireflyPetuniaBlock> CODEC = simpleCodec(FireflyPetuniaBlock::new);
 

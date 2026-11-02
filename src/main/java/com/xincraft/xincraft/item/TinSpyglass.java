@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.item;
 
 import com.xincraft.xincraft.XincraftMod;
-import com.xincraft.xincraft.registry.ModDataComponents;
+import com.xincraft.xincraft.materials.MaterialComponents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,13 +32,13 @@ public final class TinSpyglass {
     // A tin spyglass as crafted (see data/xincraft/recipe/tin_spyglass.json, which must match)
     public static ItemStack create() {
         ItemStack stack = new ItemStack(Items.SPYGLASS);
-        stack.set(ModDataComponents.TIN_LENS.get(), Unit.INSTANCE);
+        stack.set(MaterialComponents.TIN_LENS.get(), Unit.INSTANCE);
         stack.set(DataComponents.ITEM_NAME, Component.translatable("item.xincraft.tin_spyglass"));
         return stack;
     }
 
     public static boolean isTinSpyglass(ItemStack stack) {
-        return stack.is(Items.SPYGLASS) && stack.has(ModDataComponents.TIN_LENS.get());
+        return stack.is(Items.SPYGLASS) && stack.has(MaterialComponents.TIN_LENS.get());
     }
 
     public static boolean isLookingThrough(Player player) {

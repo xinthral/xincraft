@@ -2,8 +2,8 @@ package com.xincraft.xincraft.entity;
 
 import java.util.UUID;
 import com.xincraft.xincraft.item.LinkingBarItem;
-import com.xincraft.xincraft.registry.ModDataComponents;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportComponents;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -238,7 +238,7 @@ public final class LinkedTransport {
     // interaction.
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!stack.is(ModItems.LINKING_BAR.get())) {
+        if (!stack.is(TransportItems.LINKING_BAR.get())) {
             return InteractionResult.PASS;
         }
         if (!(vehicle.level() instanceof ServerLevel level)) {
@@ -262,7 +262,7 @@ public final class LinkedTransport {
             }
             // In creative, linking didn't use up a bar, so there's none to hand back
             if (!player.hasInfiniteMaterials()) {
-                ItemStack bar = new ItemStack(ModItems.LINKING_BAR.get());
+                ItemStack bar = new ItemStack(TransportItems.LINKING_BAR.get());
                 if (!player.getInventory().add(bar)) {
                     vehicle.spawnAtLocation(level, bar);
                 }
@@ -276,13 +276,13 @@ public final class LinkedTransport {
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.mixed"));
             return InteractionResult.FAIL;
         }
-        UUID first = stack.get(ModDataComponents.LINKING_BAR_START.get());
+        UUID first = stack.get(TransportComponents.LINKING_BAR_START.get());
         if (first == null) {
             if (ahead.partner != null && behind.partner != null) {
                 player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.already_linked"));
                 return InteractionResult.FAIL;
             }
-            stack.set(ModDataComponents.LINKING_BAR_START.get(), vehicle.getUUID());
+            stack.set(TransportComponents.LINKING_BAR_START.get(), vehicle.getUUID());
             stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
             vehicle.playSound(SoundEvents.CHAIN_HIT, 1.0F, 1.2F);
             player.sendOverlayMessage(Component.translatable("message.xincraft.linking_bar.started"));
@@ -404,7 +404,7 @@ public final class LinkedTransport {
 
     private static void dropBar(ServerLevel level, Entity at) {
         if (level.getGameRules().get(GameRules.ENTITY_DROPS)) {
-            at.spawnAtLocation(level, new ItemStack(ModItems.LINKING_BAR.get()));
+            at.spawnAtLocation(level, new ItemStack(TransportItems.LINKING_BAR.get()));
         }
     }
 

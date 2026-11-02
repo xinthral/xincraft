@@ -2,8 +2,8 @@ package com.xincraft.xincraft.item;
 
 import java.util.function.Consumer;
 import com.xincraft.xincraft.entity.BronzeGolem;
-import com.xincraft.xincraft.registry.ModDataComponents;
-import com.xincraft.xincraft.registry.ModEntityTypes;
+import com.xincraft.xincraft.common.CommonComponents;
+import com.xincraft.xincraft.golems.GolemEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -34,12 +34,12 @@ public class BronzeGolemItem extends Item {
         }
         ItemStack stack = context.getItemInHand();
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
-        BronzeGolem golem = ModEntityTypes.BRONZE_GOLEM.get().create(level, EntitySpawnReason.SPAWN_ITEM_USE);
+        BronzeGolem golem = GolemEntityTypes.BRONZE_GOLEM.get().create(level, EntitySpawnReason.SPAWN_ITEM_USE);
         if (golem == null) {
             return InteractionResult.FAIL;
         }
         golem.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        ItemStack sword = stack.get(ModDataComponents.GOLEM_SWORD.get());
+        ItemStack sword = stack.get(CommonComponents.GOLEM_SWORD.get());
         if (sword != null) {
             golem.arm(sword.copy());
         }
@@ -56,7 +56,7 @@ public class BronzeGolemItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {
         tooltip.accept(Component.translatable(getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
-        ItemStack sword = stack.get(ModDataComponents.GOLEM_SWORD.get());
+        ItemStack sword = stack.get(CommonComponents.GOLEM_SWORD.get());
         if (sword != null) {
             tooltip.accept(Component.translatable("item.xincraft.combat_golem.sword", sword.getMaxDamage() - sword.getDamageValue(), sword.getMaxDamage())
                 .withStyle(ChatFormatting.GRAY));

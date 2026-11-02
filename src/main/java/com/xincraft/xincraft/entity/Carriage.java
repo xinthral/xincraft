@@ -1,6 +1,6 @@
 package com.xincraft.xincraft.entity;
 
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -117,12 +117,12 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableTransp
 
     @Override
     protected Item getDropItem() {
-        return ModItems.CARRIAGE.get();
+        return TransportItems.CARRIAGE.get();
     }
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.CARRIAGE.get());
+        return new ItemStack(TransportItems.CARRIAGE.get());
     }
 
     @Override

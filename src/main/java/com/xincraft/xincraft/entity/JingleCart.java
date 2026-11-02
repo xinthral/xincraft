@@ -1,7 +1,7 @@
 package com.xincraft.xincraft.entity;
 
 import com.xincraft.xincraft.client.JukeboxVehicleSound;
-import com.xincraft.xincraft.registry.ModItems;
+import com.xincraft.xincraft.transport.TransportItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -212,12 +212,12 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
 
     @Override
     protected Item getDropItem() {
-        return ModItems.JINGLE_CART.get();
+        return TransportItems.JINGLE_CART.get();
     }
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.JINGLE_CART.get());
+        return new ItemStack(TransportItems.JINGLE_CART.get());
     }
 
     @Override
