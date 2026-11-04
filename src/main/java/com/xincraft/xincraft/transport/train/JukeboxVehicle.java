@@ -1,6 +1,10 @@
 package com.xincraft.xincraft.transport.train;
 
-// A vehicle carrying a jukebox (JukeboxPlayback): the jingle cart and the party boat
+/**
+ * @brief A vehicle carrying a jukebox: the jingle cart and the party boat.
+ *
+ * @see JukeboxPlayback
+ */
 public interface JukeboxVehicle {
     JukeboxPlayback jukebox();
 }

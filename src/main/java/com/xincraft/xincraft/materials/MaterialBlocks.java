@@ -20,7 +20,7 @@ public final class MaterialBlocks {
         true
     );
 
-    // As hard as tin and iron blocks, with copper's sound
+    /** @brief As hard as tin and iron blocks, with copper's sound. */
     public static final RegistryObject<Block> BRONZE_BLOCK = Registers.registerBlock(
         "bronze_block",
         Block::new,
@@ -32,9 +32,14 @@ public final class MaterialBlocks {
         true
     );
 
-    // Tin ores generate in the Overworld (data/xincraft/worldgen, data/xincraft/forge/biome_modifier,
-    // materials.TinOreBiomeModifier) unless Config.generateTinOre is off, and drop raw tin. Properties
-    // match vanilla's iron ores.
+    /**
+     * @brief Tin ores, which generate in the Overworld unless Config.generateTinOre is off, and
+     *        drop raw tin.
+     *
+     * Properties match vanilla's iron ores.
+     *
+     * @see TinOreBiomeModifier
+     */
     public static final RegistryObject<Block> TIN_ORE = Registers.registerBlock(
         "tin_ore",
         Block::new,
@@ -58,9 +63,14 @@ public final class MaterialBlocks {
         true
     );
 
-    // Silver ores generate deeper and more rarely than tin (data/xincraft/worldgen,
-    // data/xincraft/forge/biome_modifier, materials.SilverOreBiomeModifier) unless
-    // Config.generateSilverOre is off, and drop raw silver. Properties match vanilla's gold ores.
+    /**
+     * @brief Silver ores, which generate deeper and more rarely than tin unless
+     *        Config.generateSilverOre is off, and drop raw silver.
+     *
+     * Properties match vanilla's gold ores.
+     *
+     * @see SilverOreBiomeModifier
+     */
     public static final RegistryObject<Block> SILVER_ORE = Registers.registerBlock(
         "silver_ore",
         Block::new,
@@ -95,7 +105,7 @@ public final class MaterialBlocks {
         true
     );
 
-    // A pale gold, needing an iron pickaxe like a block of gold
+    /** @brief A pale gold, needing an iron pickaxe like a block of gold. */
     public static final RegistryObject<Block> ELECTRUM_BLOCK = Registers.registerBlock(
         "electrum_block",
         Block::new,
@@ -107,7 +117,7 @@ public final class MaterialBlocks {
         true
     );
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private MaterialBlocks() {}

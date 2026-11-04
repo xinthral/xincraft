@@ -11,7 +11,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-// A chest with a fourth row; see BronzeChestBlock
+/**
+ * @brief A chest with a fourth row.
+ *
+ * @see BronzeChestBlock
+ */
 public class BronzeChestBlockEntity extends ChestBlockEntity {
     public static final int ROWS = 4;
 

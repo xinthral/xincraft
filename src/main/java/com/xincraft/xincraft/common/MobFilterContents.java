@@ -12,9 +12,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 
-// The mobs inscribed on a mob filter (MobFilterItem), in the order they were inscribed. Each entry is
-// a mob and whether it's the baby: a strict filter lets through only exactly that, while a fuzzy one
-// lets through the mob at any age and any of its kin (the xincraft:mob_family/* tags).
+/**
+ * @brief The mobs inscribed on a mob filter, in the order they were inscribed.
+ *
+ * Each entry is a mob and whether it's the baby. A strict filter lets through only exactly that,
+ * while a fuzzy one lets through the mob at any age and any of its kin.
+ *
+ * @param entries The inscribed mobs, oldest first.
+ * @see MobFilterItem
+ * @see CommonTags#MOB_FAMILIES
+ */
 public record MobFilterContents(List<Entry> entries) {
     public static final MobFilterContents EMPTY = new MobFilterContents(List.of());
 
@@ -63,7 +70,11 @@ public record MobFilterContents(List<Entry> entries) {
             return mob.getType() == type || sameFamily(mob.getType(), type);
         }
 
-        // "Chicken" or "Baby Chicken"
+        /**
+         * @brief The entry's display name, such as "Chicken" or "Baby Chicken".
+         *
+         * @return The name to show.
+         */
         public Component name() {
             return baby ? Component.translatable("item.xincraft.mob_filter.baby", type.getDescription()) : type.getDescription();
         }

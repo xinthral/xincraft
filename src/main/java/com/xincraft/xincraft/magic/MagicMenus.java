@@ -12,7 +12,7 @@ public final class MagicMenus {
     public static final RegistryObject<MenuType<ApothecaryCrucibleMenu>> APOTHECARY_CRUCIBLE = Registers.MENU_TYPES.register("apothecary_crucible",
         () -> new MenuType<>(ApothecaryCrucibleMenu::new, FeatureFlags.VANILLA_SET));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private MagicMenus() {}

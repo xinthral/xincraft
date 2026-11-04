@@ -27,13 +27,19 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
-// A low wooden tray for making exotic pollen, filled like a composter. Each different small flower
-// right-clicked onto it is mashed in, raising the layer of flower mash a step; four make a full
-// tray. Honeycomb, right-clicked on or thrown onto a full tray, turns the mash into pollen, which an
-// empty hand takes off. Which flowers are in the mash is kept by MixingTrayBlockEntity.
+/**
+ * @brief A low wooden tray for making exotic pollen, filled like a composter.
+ *
+ * Each different small flower right-clicked onto it is mashed in, raising the layer of flower mash
+ * a step; four make a full tray. Honeycomb, right-clicked on or thrown onto a full tray, turns the
+ * mash into pollen, which an empty hand takes off. Which flowers are in the mash is kept by
+ * MixingTrayBlockEntity.
+ */
 public class MixingTrayBlock extends BaseEntityBlock {
     public static final MapCodec<MixingTrayBlock> CODEC = simpleCodec(MixingTrayBlock::new);
-    // Flowers mashed in so far (0 to FULL), then READY once honeycomb has made it pollen
+    /**
+     * @brief Flowers mashed in so far (0 to FULL), then READY once honeycomb has made it pollen.
+     */
     public static final int FULL = 4;
     public static final int READY = 5;
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, READY);
@@ -64,7 +70,7 @@ public class MixingTrayBlock extends BaseEntityBlock {
         return new MixingTrayBlockEntity(pos, state);
     }
 
-    // Only a full tray needs ticking, to catch thrown honeycomb
+    /** @brief Only a full tray needs ticking, to catch thrown honeycomb. */
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
@@ -107,7 +113,7 @@ public class MixingTrayBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    // An empty hand takes the finished pollen off
+    /** @brief An empty hand takes the finished pollen off. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!player.getMainHandItem().isEmpty() || state.getValue(LEVEL) != READY) {
@@ -127,7 +133,13 @@ public class MixingTrayBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    // Honeycomb on a full tray: the mash becomes pollen
+    /**
+     * @brief Honeycomb on a full tray: the mash becomes pollen.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @param state The block's state.
+     */
     static void finish(ServerLevel level, BlockPos pos, BlockState state) {
         level.setBlock(pos, state.setValue(LEVEL, READY), Block.UPDATE_ALL);
         level.playSound(null, pos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);

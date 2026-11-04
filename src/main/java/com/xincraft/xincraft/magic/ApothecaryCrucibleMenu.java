@@ -26,13 +26,16 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-// The apothecary crucible: a powder in each top corner, the catalyst between them, and a mob filter
-// below. When they make a crucible recipe (magic.CrucibleRecipe), the output is the filter with the
-// mob inscribed. Taking it burns the powders and catalyst and, for nature's balance, draws
-// Config.crucibleBalanceEssence essence per powder of every other element from the flora around the
-// altar beneath (within Config.altarRange). Nothing comes out if any of those flora are short, the
-// filter is full, or it already lists the mob; the screen (magic.client.ApothecaryCrucibleScreen) shows
-// which.
+/**
+ * @brief The apothecary crucible's menu, which inscribes a mob onto a mob filter.
+ *
+ * Taking the output burns the powders and catalyst and, for nature's balance, draws essence of
+ * every other element from the flora around the altar beneath. Nothing comes out if any of those
+ * flora are short, the filter is full, or it already lists the mob.
+ *
+ * @see CrucibleRecipe
+ * @see magic.client.ApothecaryCrucibleScreen
+ */
 public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
     public static final int LEFT_SLOT = 0;
     public static final int RIGHT_SLOT = 1;
@@ -43,13 +46,19 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
     private static final int INVENTORY_SLOTS_END = INVENTORY_SLOTS_START + 36;
     private static final int POWDERS = 2;
 
-    // What's stopping (or not) an inscription, synced for the screen
+    /**
+     * @name Inscription status
+     *
+     * What's stopping (or not) an inscription, synced for the screen.
+     * @{
+     */
     public static final int STATUS_NONE = 0;
     public static final int STATUS_READY = 1;
     public static final int STATUS_NO_FILTER = 2;
     public static final int STATUS_FULL = 3;
     public static final int STATUS_DUPLICATE = 4;
     public static final int STATUS_SHORT = 5;
+    /** @} */
 
     private final ContainerLevelAccess access;
     private final Level level;
@@ -61,11 +70,17 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         }
     };
     private final ResultContainer result = new ResultContainer();
-    // Bitmask (by Element ordinal) of the elements whose flora are short, and the status
+    /** @brief Bitmask (by Element ordinal) of the elements whose flora are short. */
     private final DataSlot shortMask = DataSlot.standalone();
+    /** @brief What's stopping (or not) an inscription: one of the STATUS values. */
     private final DataSlot status = DataSlot.standalone();
 
-    // Client side: the slots and data are filled in by syncing from the server
+    /**
+     * @brief Client side: the slots and data are filled in by syncing from the server.
+     *
+     * @param containerId The menu's sync id.
+     * @param inventory The player's inventory.
+     */
     public ApothecaryCrucibleMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, ContainerLevelAccess.NULL);
     }
@@ -93,7 +108,11 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         return status.get();
     }
 
-    // Whether the filter in its slot can't take the mob: it's full, or already lists it
+    /**
+     * @brief Whether the filter in its slot can't take the mob: it's full, or already lists it.
+     *
+     * @return True if The filter in its slot can't take the mob.
+     */
     public boolean isFilterBlocked() {
         return status.get() == STATUS_FULL || status.get() == STATUS_DUPLICATE;
     }
@@ -112,7 +131,13 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         });
     }
 
-    // Works out the output and status afresh from what's in the crucible and the flora around
+    /**
+     * @brief Works out the output and status afresh from what's in the crucible and the flora
+     *        around.
+     *
+     * @param serverLevel The server's level.
+     * @param pos The block's position.
+     */
     private void refresh(ServerLevel serverLevel, BlockPos pos) {
         CrucibleInput input = input();
         Optional<RecipeHolder<CrucibleRecipe>> recipe = serverLevel.getServer().getRecipeManager()
@@ -144,25 +169,45 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         broadcastChanges();
     }
 
-    // Essence the inscription draws from each other element's flora
+    /**
+     * @brief Essence the inscription draws from each other element's flora.
+     *
+     * @return The essence per powder.
+     */
     private static int balanceCost() {
         return Config.crucibleBalanceEssence * POWDERS;
     }
 
-    // The flora in reach of the altar under the crucible, by element
+    /**
+     * @brief The flora in reach of the altar under the crucible, by element.
+     *
+     * @param level The level to work in.
+     * @param cruciblePos The crucible's position.
+     * @return The flora, by element.
+     */
     private static Map<Element, List<EssenceReservoir>> flora(Level level, BlockPos cruciblePos) {
         return EssenceHelper.byElement(level, cruciblePos.below(), Config.altarRange);
     }
 
-    // Bitmask of the elements whose flora between them hold too little essence for the balance
+    /**
+     * @brief Bitmask of the elements whose flora between them hold too little essence for the
+     *        balance.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @param input What's in the crucible.
+     * @return The bitmask, by Element ordinal.
+     */
     private static int shortfall(Level level, BlockPos pos, CrucibleInput input) {
         Map<Element, Integer> cost = new EnumMap<>(Element.class);
         CrucibleRecipe.balancing(input).forEach(element -> cost.put(element, balanceCost()));
         return EssenceHelper.shortfall(flora(level, pos), cost);
     }
 
-    // Burns the powders and catalyst and draws the balance from the flora, with a stream of each
-    // element's dust from every flora drawn on to the crucible
+    /**
+     * @brief Burns the powders and catalyst and draws the balance from the flora, with a stream of
+     *        each element's dust from every flora drawn on to the crucible.
+     */
     private void inscribe() {
         CrucibleInput input = input();
         Set<Element> balancing = CrucibleRecipe.balancing(input);
@@ -184,9 +229,12 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         }
     }
 
-    // Shift-click: the output and the crucible's slots go to the player's inventory; from the
-    // inventory, powders go to the top corners, filters to the bottom and anything else to the
-    // catalyst
+    /**
+     * @brief Shift-click: the output and the crucible's slots go to the player's inventory.
+     *
+     * From the inventory, powders go to the top corners, filters to the bottom and anything else to
+     * the catalyst.
+     */
     @Override
     public ItemStack quickMoveStack(Player player, int slotIndex) {
         Slot slot = slots.get(slotIndex);
@@ -238,14 +286,14 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         return stillValid(access, player, MagicBlocks.APOTHECARY_CRUCIBLE.get());
     }
 
-    // Like a crafting table, the crucible keeps nothing
+    /** @brief Like a crafting table, the crucible keeps nothing. */
     @Override
     public void removed(Player player) {
         super.removed(player);
         access.execute((accessLevel, pos) -> clearContainer(player, container));
     }
 
-    // Takes only elemental powders
+    /** @brief Takes only elemental powders. */
     private static class PowderSlot extends Slot {
         PowderSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
@@ -257,7 +305,7 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         }
     }
 
-    // Takes one mob filter
+    /** @brief Takes one mob filter. */
     private static class FilterSlot extends Slot {
         FilterSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
@@ -274,8 +322,12 @@ public class ApothecaryCrucibleMenu extends AbstractContainerMenu {
         }
     }
 
-    // The inscribed filter. On the server it's checked again before it can be taken, in case the
-    // flora have been drawn on since; taking it does the inscribing.
+    /**
+     * @brief The inscribed filter.
+     *
+     * On the server it's checked again before it can be taken, in case the flora have been drawn on
+     * since; taking it does the inscribing.
+     */
     private class InscribedSlot extends Slot {
         InscribedSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);

@@ -3,8 +3,12 @@ package com.xincraft.xincraft.transport.boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
-// The kinds of motorboat: one for each vanilla boat (and the bamboo raft), made by crafting that
-// boat with a propeller. Each is its own entity type and item, and looks like the boat it came from.
+/**
+ * @brief The kinds of motorboat: one for each vanilla boat (and the bamboo raft), made by crafting
+ *        that boat with a propeller.
+ *
+ * Each is its own entity type and item, and looks like the boat it came from.
+ */
 public enum MotorboatType {
     OAK("oak", Items.OAK_BOAT, false),
     SPRUCE("spruce", Items.SPRUCE_BOAT, false),
@@ -31,12 +35,21 @@ public enum MotorboatType {
         return wood;
     }
 
-    // The registry name of the motorboat's item and entity type, e.g. oak_motorboat, bamboo_motor_raft
+    /**
+     * @brief The registry name of the motorboat's item and entity type, e.g. oak_motorboat,
+     *        bamboo_motor_raft.
+     *
+     * @return The name, such as oak_motorboat or bamboo_motor_raft.
+     */
     public String id() {
         return wood + (raft ? "_motor_raft" : "_motorboat");
     }
 
-    // The vanilla boat it's made from
+    /**
+     * @brief The vanilla boat it's made from.
+     *
+     * @return The boat item.
+     */
     public Item boat() {
         return boat;
     }

@@ -32,10 +32,18 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-// A minecart carrying a shulker box, and working like one (see ShulkerHold): opened by
-// right-clicking, and breaks into a single item with everything still inside. Hoppers load and
-// unload it. Can be hitched into a locomotive's train with a linking
-// bar (see LinkedTransport). Takes upgrades (see CartUpgrades).
+/**
+ * @brief A minecart carrying a shulker box, and working like one.
+ *
+ * Opened by right-clicking, and breaks into a single item with everything still inside.
+ *
+ * Hoppers load and unload it. Can be hitched into a locomotive's train with a linking bar. Takes
+ * upgrades.
+ *
+ * @see transport.train.ShulkerHold
+ * @see transport.train.LinkedTransport
+ * @see transport.train.CartUpgrades
+ */
 public class FreightCart extends AbstractMinecartContainer implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(FreightCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(FreightCart.class, EntityDataSerializers.INT);
@@ -76,7 +84,7 @@ public class FreightCart extends AbstractMinecartContainer implements Upgradable
         return 8;
     }
 
-    // The linking bar and upgrades first; then right-click opens the box
+    /** @brief The linking bar and upgrades first; then right-click opens the box. */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult result = transport.interact(player, hand);
@@ -147,7 +155,10 @@ public class FreightCart extends AbstractMinecartContainer implements Upgradable
         return ShulkerHold.SLOT_COUNT;
     }
 
-    // No shulker boxes, freight carts or anything else that can't go inside a container item
+    /**
+     * @brief No shulker boxes, freight carts or anything else that can't go inside a container
+     *        item.
+     */
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return ShulkerHold.canHold(stack);

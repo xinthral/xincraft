@@ -29,17 +29,28 @@ import net.minecraftforge.common.util.Result;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// A bronze drawbar that hitches carts and boats into trains, or links two buoys into a path for
-// motorboats. The vehicles handle using it on them (transport.train.LinkedTransport); buoys are handled here.
-// Either way, the bar remembers the first vehicle or buoy it was used on, glinting until it's used
-// on the second, and one bar is used up per link.
+/**
+ * @brief A bronze drawbar that hitches carts and boats into trains, or links two buoys into a path
+ *        for motorboats.
+ *
+ * The vehicles handle using it on them; buoys are handled here. Either way, the bar remembers the
+ * first vehicle or buoy it was used on, glinting until it's used on the second, and one bar is used
+ * up per link.
+ *
+ * @see LinkedTransport
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public class LinkingBarItem extends Item {
     public LinkingBarItem(Item.Properties properties) {
         super(properties);
     }
 
-    // Whether the bar is halfway through linking carts, or blocks
+    /**
+     * @brief Whether the bar is halfway through linking carts, or blocks.
+     *
+     * @param stack The item stack.
+     * @return True if The bar is halfway through linking carts, or blocks.
+     */
     public static boolean isLinkingCarts(ItemStack stack) {
         return stack.has(TransportComponents.LINKING_BAR_START.get());
     }
@@ -48,16 +59,23 @@ public class LinkingBarItem extends Item {
         return stack.has(TransportComponents.LINKING_BAR_BLOCK.get());
     }
 
-    // Forgets the first cart or block
+    /**
+     * @brief Forgets the first cart or block.
+     *
+     * @param stack The item stack.
+     */
     public static void clearPending(ItemStack stack) {
         stack.remove(TransportComponents.LINKING_BAR_START.get());
         stack.remove(TransportComponents.LINKING_BAR_BLOCK.get());
         stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
     }
 
-    // Used on a block that links (LinkableBlock, such as a buoy): shift-use unlinks it, handing back
-    // its bars (except in creative, where linking didn't use any up); otherwise the first block is
-    // remembered and the second is linked to it
+    /**
+     * @brief Used on a block that links (LinkableBlock, such as a buoy).
+     *
+     * Shift-use unlinks it, handing back its bars (except in creative, where linking didn't use any
+     * up); otherwise the first block is remembered and the second is linked to it.
+     */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         BlockState state = context.getLevel().getBlockState(context.getClickedPos());
@@ -147,8 +165,13 @@ public class LinkingBarItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    // With a charging station's end already tied on, used on an energy block right beside the
-    // station: connects the two
+    /**
+     * @brief With a charging station's end already tied on, used on an energy block right beside
+     *        the station: connects the two.
+     *
+     * @param context The page's drawing context.
+     * @return PASS if it didn't apply.
+     */
     private InteractionResult connectSource(UseOnContext context) {
         ItemStack stack = context.getItemInHand();
         GlobalPos first = stack.get(TransportComponents.LINKING_BAR_BLOCK.get());
@@ -192,8 +215,14 @@ public class LinkingBarItem extends Item {
             && level.getBlockEntity(first.pos()) instanceof ChargingStationBlockEntity;
     }
 
-    // With a charging station's end tied on, a block with a menu of its own, such as a turbine, is
-    // connected to rather than opened. Runs on both sides, as both decide whether to use the block.
+    /**
+     * @brief With a charging station's end tied on, a block with a menu of its own, such as a
+     *        turbine, is connected to rather than opened.
+     *
+     * Runs on both sides, as both decide whether to use the block.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
@@ -204,7 +233,7 @@ public class LinkingBarItem extends Item {
         }
     }
 
-    // What it does, from item.xincraft.linking_bar.desc, and whether it's halfway through a link
+    /** @brief Adds what it does, and whether it's halfway through a link, to the tooltip. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

@@ -10,8 +10,10 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Tints glowing leaves the same way as the leaves they came from (biome foliage colour for oak, a
-// fixed green for spruce and birch, none for cherry and azalea)
+/**
+ * @brief Tints glowing leaves the same way as the leaves they came from (biome foliage colour for
+ *        oak, a fixed green for spruce and birch, none for cherry and azalea).
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class GlowingLeavesColors {
     @SubscribeEvent

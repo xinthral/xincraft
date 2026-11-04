@@ -14,21 +14,36 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// The tin spyglass is a vanilla spyglass carrying the xincraft:tin_lens component rather than an
-// item of its own: vanilla's zoom, scope overlay, hand hiding and slowed mouse all check for
-// Items.SPYGLASS specifically (Player#isScoping), and not all of them can be hooked. Looking
-// through one gives night vision (below) and tints the view green (materials.client.TinSpyglassTint); its
-// look comes from the component select in assets/minecraft/items/spyglass.json. The lonsdaleite
-// helmet gives the same night vision, and is handled here too, as a player can have both and taking
-// off one mustn't remove what the other gives.
+/**
+ * @brief A vanilla spyglass carrying a component, rather than an item of its own, which gives night
+ *        vision.
+ *
+ * Vanilla's zoom and scope overlay check for the spyglass item specifically, and not all of those
+ * checks can be hooked. Looking through one also tints the view green. The lonsdaleite helmet gives
+ * the same night vision and is handled here too, as taking off one mustn't remove what the other
+ * gives.
+ *
+ * @see materials.client.TinSpyglassTint
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public final class TinSpyglass {
-    // Night vision flickers in its last 10 seconds (GameRenderer#nightVisionScale), so the effect
-    // is kept above that by renewing it early, and removed as soon as the player stops looking
+    /**
+     * @brief How long each dose of night vision lasts, in ticks.
+     *
+     * Night vision flickers in its last 10 seconds, so it's renewed early to stay above that, and
+     * removed as soon as the player stops looking.
+     */
     private static final int DURATION_TICKS = 15 * 20;
+    /** @brief Time left, in ticks, at which the effect is renewed. */
     private static final int RENEW_TICKS = 11 * 20;
 
-    // A tin spyglass as crafted (see data/xincraft/recipe/tin_spyglass.json, which must match)
+    /**
+     * @brief Makes a tin spyglass, as it comes from crafting.
+     *
+     * This must match the tin spyglass recipe.
+     *
+     * @return The new stack.
+     */
     public static ItemStack create() {
         ItemStack stack = new ItemStack(Items.SPYGLASS);
         stack.set(MaterialComponents.TIN_LENS.get(), Unit.INSTANCE);
@@ -62,8 +77,15 @@ public final class TinSpyglass {
         }
     }
 
-    // Recognised by its hidden particles and icon, which potions and beacons don't use, so no
-    // state needs saving and any left over (e.g. after a crash) is cleared on the next tick
+    /**
+     * @brief Whether an effect came from the spyglass.
+     *
+     * It's recognised by its hidden particles and icon, which potions and beacons don't use, so no
+     * state needs saving and any left over (e.g. after a crash) is cleared on the next tick.
+     *
+     * @param effect The effect to check.
+     * @return True if it came from the spyglass.
+     */
     private static boolean isFromSpyglass(MobEffectInstance effect) {
         return !effect.isAmbient() && !effect.isVisible() && !effect.showIcon() && effect.getDuration() <= DURATION_TICKS;
     }

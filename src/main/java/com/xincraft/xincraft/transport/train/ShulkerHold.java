@@ -15,16 +15,26 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gamerules.GameRules;
 
-// What the freight cart and the barge share with the shulker box they carry: 27 slots, the box's
-// sounds, no shulker boxes (or anything else that can't go inside a container item) inside, and
-// breaking as a single item holding everything, which places back down full.
+/**
+ * @brief What the freight cart and the barge share with the shulker box they carry.
+ *
+ * 27 slots, the box's sounds, no shulker boxes (or anything else that can't go inside a container
+ * item) inside, and breaking as a single item holding everything, which places back down full.
+ */
 public final class ShulkerHold {
     public static final int SLOT_COUNT = 27;
     public static final int ROW_SIZE = 9;
 
     private ShulkerHold() {}
 
-    // Breaks the vehicle into its item, holding the contents rather than spilling them
+    /**
+     * @brief Breaks the vehicle into its item, holding the contents rather than spilling them.
+     *
+     * @tparam T The vehicle's class.
+     * @param vehicle The vehicle.
+     * @param level The level to work in.
+     * @param dropItem The item it breaks into.
+     */
     public static <T extends VehicleEntity & ContainerEntity> void destroy(T vehicle, ServerLevel level, Item dropItem) {
         ItemStack drop = new ItemStack(dropItem);
         drop.set(DataComponents.CUSTOM_NAME, vehicle.getCustomName());
@@ -37,7 +47,12 @@ public final class ShulkerHold {
         }
     }
 
-    // Placed from an item that's holding contents, the vehicle starts with them
+    /**
+     * @brief Placed from an item that's holding contents, the vehicle starts with them.
+     *
+     * @param components The placing item's components.
+     * @param into The vehicle's slots.
+     */
     public static void unpack(DataComponentGetter components, NonNullList<ItemStack> into) {
         ItemContainerContents contents = components.get(DataComponents.CONTAINER);
         if (contents != null) {

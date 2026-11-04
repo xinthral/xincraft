@@ -15,32 +15,59 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.Nullable;
 
-// The upgrades that can be fitted to the mod's minecarts and motorboats (see CartUpgrades). Each is
-// an item used on the vehicle, and is shown on it as a small model of its block.
+/**
+ * @brief The upgrades that can be fitted to the mod's minecarts and motorboats.
+ *
+ * Each is an item used on the vehicle, and is shown on it as a small model of its block.
+ *
+ * @see CartUpgrades
+ */
 public enum CartUpgrade {
-    // Clears mobs and players out of the vehicle's path, so it never picks them up or slows for them
+    /**
+     * @brief Clears mobs and players out of the vehicle's path, so it never picks them up or slows
+     *        for them.
+     */
     SHRIEKER("shrieker", TransportItems.SHRIEKER_UPGRADE, Blocks.SCULK_SHRIEKER, List.of()),
-    // A jingle cart or party boat only plays while a player is within earshot
+    /** @brief A jingle cart or party boat only plays while a player is within earshot. */
     SCULK_SENSOR("sculk_sensor", TransportItems.SCULK_SENSOR_UPGRADE, Blocks.SCULK_SENSOR, List.of(JingleCart.class, PartyBoat.class)),
-    // The engine runs on a Forge Energy battery, which its fuel charges
+    /** @brief The engine runs on a Forge Energy battery, which its fuel charges. */
     ENERGY("energy", TransportItems.ENERGY_UPGRADE, Blocks.REDSTONE_BLOCK, List.of(LocomotiveCart.class, Motorboat.class)),
-    // A motorboat breaks the ice in front of it
+    /** @brief A motorboat breaks the ice in front of it. */
     ICE_BREAKER("ice_breaker", TransportItems.ICE_BREAKER_UPGRADE, Blocks.STONECUTTER, List.of(Motorboat.class)),
-    // A motorboat goes faster, burning its fuel faster
+    /** @brief A motorboat goes faster, burning its fuel faster. */
     SPEED("speed", TransportItems.SPEED_UPGRADE, Blocks.BLAST_FURNACE, List.of(Motorboat.class)),
-    // Riders are invisible, but for the odd pink glint (the rideable vehicles only)
+    /** @brief Riders are invisible, but for the odd pink glint (the rideable vehicles only). */
     SHIMMER("shimmer", TransportItems.SHIMMER_UPGRADE, Blocks.TINTED_GLASS,
         List.of(EnderMinecart.class, LocomotiveCart.class, Carriage.class, Motorboat.class, Ferry.class)),
-    // A motorboat that comes across a buoy path follows it on its own (see transport.boat.BuoyBlock)
+    /**
+     * @brief A motorboat that comes across a buoy path follows it on its own.
+     *
+     * @see transport.boat.BuoyBlock
+     */
     RC("rc", TransportItems.RC_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class)),
-    // A mob riding a carriage or ferry is caged, its AI off, until it's let out (see MobCell)
+    /**
+     * @brief A mob riding a carriage or ferry is caged, its AI off, until it's let out.
+     *
+     * @see MobCell
+     */
     CELL("cell", TransportItems.CELL_UPGRADE, Blocks.IRON_BARS, List.of(Carriage.class, Ferry.class)),
-    // Extends the RC upgrade's mast so the boat can follow the long legs between advanced buoys
-    // (transport.boat.AdvancedBuoyBlock). Fits over the RC upgrade, and is drawn as its mast extended.
+    /**
+     * @brief Extends the RC upgrade's mast so the boat can follow the long legs between advanced
+     *        buoys.
+     *
+     * Fits over the RC upgrade, and is drawn as its mast extended.
+     *
+     * @see transport.boat.AdvancedBuoyBlock
+     */
     ANTENNA("antenna", TransportItems.ADVANCED_ANTENNA_UPGRADE, Blocks.LIGHTNING_ROD.weathering().unaffected(), List.of(Motorboat.class)),
-    // Backs the cell's bars with obsidian, so it holds any mob at all but the ender dragon, hauling
-    // aboard even those that won't ride (see MobCell). Fits over the cell, and is drawn as part of
-    // its cage.
+    /**
+     * @brief Backs the cell's bars with obsidian, so it holds any mob at all but the ender dragon,
+     *        hauling aboard even those that won't ride.
+     *
+     * Fits over the cell, and is drawn as part of its cage.
+     *
+     * @see MobCell
+     */
     REINFORCED_CAGE("reinforced_cage", TransportItems.REINFORCED_CAGE_UPGRADE, Blocks.OBSIDIAN, List.of(Carriage.class, Ferry.class));
 
     private final String id;
@@ -55,7 +82,12 @@ public enum CartUpgrade {
         this.fits = fits;
     }
 
-    // Saved name; never changes, unlike the order upgrades are declared in
+    /**
+     * @brief The upgrade's saved name, which never changes, unlike the order upgrades are declared
+     *        in.
+     *
+     * @return The saved name.
+     */
     public String id() {
         return id;
     }
@@ -68,7 +100,11 @@ public enum CartUpgrade {
         return block;
     }
 
-    // The upgrade that has to be fitted before this one, if any
+    /**
+     * @brief The upgrade that has to be fitted before this one, if any.
+     *
+     * @return The required upgrade, or null if there's none.
+     */
     public @Nullable CartUpgrade requires() {
         return switch (this) {
             case ANTENNA -> RC;
@@ -77,12 +113,20 @@ public enum CartUpgrade {
         };
     }
 
-    // The kinds of vehicle this upgrade fits; empty if it fits them all
+    /**
+     * @brief The kinds of vehicle this upgrade fits; empty if it fits them all.
+     *
+     * @return The vehicle classes, or an empty list if it fits them all.
+     */
     public List<Class<? extends UpgradableCart>> fits() {
         return fits;
     }
 
-    // This upgrade's flag in the synced set of installed upgrades
+    /**
+     * @brief This upgrade's flag in the synced set of installed upgrades.
+     *
+     * @return The flag.
+     */
     int bit() {
         return 1 << ordinal();
     }

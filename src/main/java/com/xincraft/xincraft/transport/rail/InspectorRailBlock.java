@@ -34,19 +34,25 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.AABB;
 
-// A detector rail whose redstone signal depends on which kind of minecart is on it, rather than
-// always 15. The strength for each cart type comes from the entity type tags
-// xincraft:inspector_rail_signal/<1-15> (see TransportTags.inspectorRailSignal); untagged carts give 0.
-// A carriage with someone aboard gives one more than its tag's signal, and a freight cart's signal
-// shows how full it is instead (storageSignal).
-// Otherwise it behaves like vanilla's DetectorRailBlock, which this is adapted from.
+/**
+ * @brief A detector rail whose redstone signal depends on which kind of minecart is on it.
+ *
+ * The strength for each cart type comes from entity type tags, and untagged carts give 0. A
+ * carriage with someone aboard gives one more than its tag's signal, and a freight cart's signal
+ * shows how full it is instead.
+ *
+ * @see transport.TransportTags#inspectorRailSignal
+ */
 public class InspectorRailBlock extends BaseRailBlock {
     public static final MapCodec<InspectorRailBlock> CODEC = simpleCodec(InspectorRailBlock::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
-    // While powered, how often to check whether the cart has left (same as the detector rail)
+    /**
+     * @brief While powered, how often to check whether the cart has left (same as the detector
+     *        rail).
+     */
     private static final int PRESSED_CHECK_PERIOD = 20;
-    // A freight cart at least this full gives a full signal
+    /** @brief A freight cart at least this full gives a full signal. */
     private static final double FULL_SHARE = 0.85;
 
     public InspectorRailBlock(BlockBehaviour.Properties properties) {
@@ -62,8 +68,14 @@ public class InspectorRailBlock extends BaseRailBlock {
         return CODEC;
     }
 
-    // The signal strength a cart produces, from the highest inspector_rail_signal tag its type is in;
-    // one more for an occupied carriage, so a station can tell a full carriage from an empty one
+    /**
+     * @brief The signal strength a cart produces, from the highest signal tag its type is in.
+     *
+     * An occupied carriage gives one more, so a station can tell a full carriage from an empty one.
+     *
+     * @param cart The cart on the rail.
+     * @return The signal strength.
+     */
     public static int signalFor(AbstractMinecart cart) {
         if (cart instanceof FreightCart storage) {
             return storageSignal(storage);
@@ -76,9 +88,15 @@ public class InspectorRailBlock extends BaseRailBlock {
         return 0;
     }
 
-    // A freight cart's fullness, counted in rows of full stacks (as a comparator counts it, each
-    // stack as its share of a full one): 1 empty, 5 at one row, 10 at two, and 15 at three, or
-    // from FULL_SHARE of the cart on. Steps evenly in between, and never 1 with anything inside.
+    /**
+     * @brief A freight cart's fullness, as a signal strength, counted in rows of full stacks.
+     *
+     * It gives 1 empty, 5 at one row, 10 at two, and 15 at three, or from FULL_SHARE of the cart
+     * on. It steps evenly in between, and is never 1 with anything inside.
+     *
+     * @param cart The cart on the rail.
+     * @return The signal strength.
+     */
     private static int storageSignal(FreightCart cart) {
         double stacks = 0.0;
         for (int slot = 0; slot < cart.getContainerSize(); slot++) {
@@ -114,14 +132,17 @@ public class InspectorRailBlock extends BaseRailBlock {
         return state.getValue(POWER);
     }
 
-    // Strong power into the block below, like the detector rail
+    /** @brief Strong power into the block below, like the detector rail. */
     @Override
     protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return direction == Direction.UP ? state.getValue(POWER) : 0;
     }
 
-    // A cart arriving that gives a stronger signal updates right away; weaker signals and carts
-    // leaving are picked up by the periodic check
+    /**
+     * @brief A cart arriving that gives a stronger signal updates right away.
+     *
+     * Weaker signals and carts leaving are picked up by the periodic check.
+     */
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity,
             InsideBlockEffectApplier effectApplier, boolean isPrecise) {
@@ -137,7 +158,13 @@ public class InspectorRailBlock extends BaseRailBlock {
         }
     }
 
-    // Sets the power to the strongest signal among the carts on the rail
+    /**
+     * @brief Sets the power to the strongest signal among the carts on the rail.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @param state The block's state.
+     */
     private void checkPressed(Level level, BlockPos pos, BlockState state) {
         if (!canSurvive(state, level, pos)) {
             return;
@@ -174,7 +201,9 @@ public class InspectorRailBlock extends BaseRailBlock {
         }
     }
 
-    // Comparators read how full a container cart on the rail is, as with the detector rail
+    /**
+     * @brief Comparators read how full a container cart on the rail is, as with the detector rail.
+     */
     @Override
     protected boolean hasAnalogOutputSignal(BlockState state) {
         return true;

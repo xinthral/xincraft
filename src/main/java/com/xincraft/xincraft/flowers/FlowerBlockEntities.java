@@ -9,7 +9,11 @@ public final class FlowerBlockEntities {
     public static final RegistryObject<BlockEntityType<MixingTrayBlockEntity>> MIXING_TRAY = Registers.BLOCK_ENTITIES.register("mixing_tray",
         () -> new BlockEntityType<>(MixingTrayBlockEntity::new, Set.of(FlowerBlocks.MIXING_TRAY.get())));
 
-    // The aura flowers share one block entity class, with a type each (flowers.AuraFlowerBlock)
+    /**
+     * @brief The aura flowers share one block entity class, with a type each.
+     *
+     * @see AuraFlowerBlock
+     */
     public static final RegistryObject<BlockEntityType<AuraFlowerBlockEntity>> MENDING_LILAC = Registers.BLOCK_ENTITIES.register("mending_lilac",
         () -> new BlockEntityType<>(AuraFlowerBlockEntity::new, Set.of(FlowerBlocks.MENDING_LILAC.get())));
 
@@ -19,7 +23,7 @@ public final class FlowerBlockEntities {
     public static final RegistryObject<BlockEntityType<AuraFlowerBlockEntity>> SHIMMER_LILY = Registers.BLOCK_ENTITIES.register("shimmer_lily",
         () -> new BlockEntityType<>(AuraFlowerBlockEntity::new, Set.of(FlowerBlocks.SHIMMER_LILY.get())));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private FlowerBlockEntities() {}

@@ -42,26 +42,41 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// A straight rail that teleports ender minecarts (and their riders) to the ender rail it's linked
-// to, keeping their speed; other minecarts only if the config allows it. To link: right-click a placed ender rail with an ender rail item to attune
-// the item to it, then place that item anywhere in the same dimension.
+/**
+ * @brief A straight rail that teleports ender minecarts (and their riders) to the ender rail it's
+ *        linked to, keeping their speed.
+ *
+ * Other minecarts only if the config allows it.
+ *
+ * To link: right-click a placed ender rail with an ender rail item to attune the item to it, then
+ * place that item anywhere in the same dimension.
+ */
 public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
     public static final MapCodec<EnderRailBlock> CODEC = simpleCodec(EnderRailBlock::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
     public static final BooleanProperty LINKED = BooleanProperty.create("linked");
-    // True for a moment after linking; drives the bright texture and light level
+    /** @brief True for a moment after linking; drives the bright texture and light level. */
     public static final BooleanProperty GLOWING = BooleanProperty.create("glowing");
 
     private static final int GLOW_TICKS = 20;
-    // A cart moving slower than this is treated as parked and isn't teleported
+    /** @brief A cart moving slower than this is treated as parked and isn't teleported. */
     private static final double MIN_TELEPORT_SPEED_SQR = 1.0E-4;
-    // Minecart persistent-data keys recording the rail a cart was teleported onto, so it isn't
-    // immediately sent back while it's still rolling off that rail
+    /**
+     * @brief Minecart persistent-data keys recording the rail a cart was teleported onto, so it
+     *        isn't immediately sent back while it's still rolling off that rail.
+     */
     private static final String ARRIVAL_POS = "xincraft:ender_rail_arrival_pos";
     private static final String ARRIVAL_TICK = "xincraft:ender_rail_arrival_tick";
-    // Game time before which the cart can't be teleported again (see Config.enderRailCooldownTicks)
+    /**
+     * @brief Game time before which the cart can't be teleported again.
+     *
+     * @see Config#enderRailCooldownTicks
+     */
     private static final String COOLDOWN_UNTIL = "xincraft:ender_rail_cooldown_until";
-    // Server tick of each teleport in the last second, oldest first (only touched on the server thread)
+    /**
+     * @brief Server tick of each teleport in the last second, oldest first (only touched on the
+     *        server thread).
+     */
     private static final ArrayDeque<Integer> RECENT_TELEPORTS = new ArrayDeque<>();
 
     public EnderRailBlock(BlockBehaviour.Properties properties) {
@@ -83,7 +98,7 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
         return new EnderRailBlockEntity(pos, state);
     }
 
-    // Right-clicking with an ender rail item attunes the item to this rail
+    /** @brief Right-clicking with an ender rail item attunes the item to this rail. */
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -99,7 +114,7 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    // Placing an attuned item links the new rail to the one it was attuned to
+    /** @brief Placing an attuned item links the new rail to the one it was attuned to. */
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity by, ItemStack stack) {
         super.setPlacedBy(level, pos, state, by, stack);
@@ -133,7 +148,13 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
         }
     }
 
-    // Links a and b to each other, unlinking whatever either was previously linked to
+    /**
+     * @brief Links a and b to each other, unlinking whatever either was previously linked to.
+     *
+     * @param level The level to work in.
+     * @param a One rail's position.
+     * @param b The other rail's position.
+     */
     static void link(ServerLevel level, BlockPos a, BlockPos b) {
         for (BlockPos pos : new BlockPos[] {a, b}) {
             if (level.getBlockEntity(pos) instanceof EnderRailBlockEntity rail) {
@@ -162,7 +183,13 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
         }
     }
 
-    // A one-second enchanting glow: bright texture and light, enchantment particles and sound
+    /**
+     * @brief A one-second enchanting glow: bright texture and light, enchantment particles and
+     *        sound.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     */
     private static void glow(ServerLevel level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof EnderRailBlock block)) {
@@ -237,8 +264,14 @@ public class EnderRailBlock extends BaseRailBlock implements EntityBlock {
         data.putLong(COOLDOWN_UNTIL, now + Config.enderRailCooldownTicks);
     }
 
-    // Whether fewer than Config.enderRailMaxTeleportsPerSecond teleports have happened anywhere
-    // on the server in the last second (20 ticks)
+    /**
+     * @brief Whether fewer than Config.enderRailMaxTeleportsPerSecond teleports have happened
+     *        anywhere on the server in the last second (20 ticks).
+     *
+     * @param level The level to work in.
+     * @return True if Fewer than Config.enderRailMaxTeleportsPerSecond teleports have happened
+     *     anywhere on the server in the last second (20 ticks).
+     */
     private static boolean serverHasTeleportBudget(ServerLevel level) {
         int limit = Config.enderRailMaxTeleportsPerSecond;
         if (limit <= 0) {

@@ -33,10 +33,19 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// The freight cart's boat: an oak boat carrying a shulker box in place of seats, and working like
-// one (see ShulkerHold): opened by right-clicking, and breaks into a single item with everything
-// still inside. Nobody rides it. Hitched behind a motorboat with a linking bar, it's towed in its
-// train (see LinkedTransport). Takes upgrades (see CartUpgrades).
+/**
+ * @brief The freight cart's boat.
+ *
+ * An oak boat carrying a shulker box in place of seats, and working like one: opened by
+ * right-clicking, and breaks into a single item with everything still inside.
+ *
+ * Nobody rides it. Hitched behind a motorboat with a linking bar, it's towed in its train. Takes
+ * upgrades.
+ *
+ * @see transport.train.ShulkerHold
+ * @see transport.train.LinkedTransport
+ * @see transport.train.CartUpgrades
+ */
 public class Barge extends AbstractChestBoat implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Barge.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Barge.class, EntityDataSerializers.INT);
@@ -72,7 +81,7 @@ public class Barge extends AbstractChestBoat implements UpgradableCart, Linkable
         return dimensions.height() / 3.0F;
     }
 
-    // The shulker box takes up the whole boat
+    /** @brief The shulker box takes up the whole boat. */
     @Override
     protected int getMaxPassengers() {
         return 0;
@@ -89,7 +98,7 @@ public class Barge extends AbstractChestBoat implements UpgradableCart, Linkable
         super.tick();
     }
 
-    // The linking bar and upgrades first; then right-click opens the box
+    /** @brief The linking bar and upgrades first; then right-click opens the box. */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult result = transport.interact(player, hand);

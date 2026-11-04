@@ -11,8 +11,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import org.jspecify.annotations.Nullable;
 
-// The apothecary crucible and altar recipes the server sent, since 26.x doesn't send recipes to
-// clients. Empty until the first sync, and replaced on /reload.
+/**
+ * @brief The apothecary crucible and altar recipes the server sent, since 26.x doesn't send recipes
+ *        to clients.
+ *
+ * Empty until the first sync, and replaced on /reload.
+ */
 public final class MagicRecipes {
     private static Map<EntityType<?>, CrucibleRecipe> crucibleByMob = Map.of();
     private static List<CrucibleRecipe> crucible = List.of();
@@ -41,7 +45,11 @@ public final class MagicRecipes {
         return crucibleByMob.get(mob);
     }
 
-    // Every crucible recipe, sorted by mob name
+    /**
+     * @brief Every crucible recipe, sorted by mob name.
+     *
+     * @return The recipes, sorted by mob name.
+     */
     public static List<CrucibleRecipe> crucible() {
         return crucible;
     }
@@ -50,7 +58,11 @@ public final class MagicRecipes {
         return altarById.get(id);
     }
 
-    // Every altar recipe, sorted by id
+    /**
+     * @brief Every altar recipe, sorted by id.
+     *
+     * @return The recipes, sorted by id.
+     */
     public static List<AltarRecipe> altar() {
         return altar;
     }

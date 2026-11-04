@@ -53,28 +53,37 @@ import net.minecraftforge.fml.common.Mod;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.Nullable;
 
-// Draws the mod's minecarts as vanilla minecarts with their own textures. Vanilla's minecart
-// renderer hardcodes its texture, so we hand it a collector that swaps the texture on the way
-// through and passes everything else along untouched. It also draws a cart's upgrades (see
-// transport.train.CartUpgrades) as small models of their blocks, one on top of each end of the cart (the cell
-// upgrade as a cage around the cart instead, see CellCage), the linking bar from each cart in a
-// train to the cart it tows (LinkingBar), and a locomotive's handbrake as a lever on its side wall,
-// thrown one way or the other.
+/**
+ * @brief Draws the mod's minecarts as vanilla minecarts with their own textures.
+ *
+ * Vanilla's minecart renderer hardcodes its texture, so this hands it a collector that swaps the
+ * texture on the way through. It also draws a cart's upgrades as small models of their blocks, the
+ * linking bar to the cart it tows, and a locomotive's handbrake lever.
+ *
+ * @see transport.train.CartUpgrades
+ * @see transport.train.client.CellCage
+ * @see transport.train.client.LinkingBar
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class RetexturedMinecartRenderer extends MinecartRenderer {
-    // Upgrade blocks are drawn this size, sitting on the cart's end walls: the walls' top is 5/16
-    // above the cart's centre and their middle is 9/16 either side of it (MinecartModel)
+    /** @brief The size upgrade blocks are drawn at, sitting on the cart's end walls. */
     private static final float UPGRADE_SCALE = 0.25F;
+    /** @brief How far the end walls' top is above the cart's centre. */
     private static final float WALL_TOP = 5.0F / 16.0F;
+    /** @brief How far the end walls' middle is either side of the cart's centre. */
     private static final float END_WALL = 9.0F / 16.0F;
-    // The cell upgrade's cage stands on the walls, around the cart's half-length and half-width, tall
-    // enough to hold the spawn egg shown for the mob inside
+    /** @brief Half-length of the cell upgrade's cage, which stands on the cart's walls. */
     private static final float CART_HALF_LENGTH = 10.0F / 16.0F;
+    /** @brief Half-width of the cell upgrade's cage. */
     private static final float CART_HALF_WIDTH = 8.0F / 16.0F;
+    /**
+     * @brief Height of the cell upgrade's cage, tall enough to hold the spawn egg shown for the mob
+     *        inside.
+     */
     private static final float CAGE_HEIGHT = 0.8F;
-    // The handbrake lever is drawn this size, standing on the side wall by the rider, whose middle is
-    // 7/16 from the cart's centre
+    /** @brief The size the handbrake lever is drawn at. */
     private static final float LEVER_SCALE = 0.5F;
+    /** @brief How far the side wall the lever stands on is from the cart's centre. */
     private static final float SIDE_WALL = 7.0F / 16.0F;
 
     private final Identifier texture;
@@ -88,8 +97,10 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         this.itemModelResolver = context.getItemModelResolver();
     }
 
-    // Vanilla's render state plus the upgrade block models, and the linking bar to a towed cart, if
-    // it tows one
+    /**
+     * @brief Vanilla's render state plus the upgrade block models, and the linking bar to a towed
+     *        cart, if it tows one.
+     */
     public static class UpgradedMinecartRenderState extends MinecartRenderState {
         public final List<BlockModelRenderState> upgradeModels = new ArrayList<>();
         public int upgradeCount;
@@ -164,8 +175,14 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         super.submit(state, poseStack, new Retextured(collector, model, model.renderType(texture), state), camera);
     }
 
-    // Draws the upgrade blocks in the cart model's own frame (flipped upside down, as vanilla draws
-    // the model), so they move and tilt with the cart
+    /**
+     * @brief Draws the upgrade blocks in the cart model's own frame (flipped upside down, as
+     *        vanilla draws the model), so they move and tilt with the cart.
+     *
+     * @param state The cart's render state.
+     * @param poseStack The current transform.
+     * @param collector Collects what gets drawn.
+     */
     private static void submitUpgrades(MinecartRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
         if (!(state instanceof UpgradedMinecartRenderState upgraded)) {
             return;
@@ -194,8 +211,16 @@ public class RetexturedMinecartRenderer extends MinecartRenderer {
         }
     }
 
-    // Every submitModel overload funnels into the abstract one, so that's the only place the
-    // cart model's render type needs replacing, and where the upgrades are added to the cart
+    /**
+     * @brief Every submitModel overload funnels into the abstract one, so that's the only place the
+     *        cart model's render type needs replacing, and where the upgrades are added to the
+     *        cart.
+     *
+     * @param delegate The collector everything else is passed along to.
+     * @param target The cart model.
+     * @param renderType The render type to use in its place.
+     * @param cart The cart being drawn.
+     */
     private record Retextured(SubmitNodeCollector delegate, Model<?> target, RenderType renderType, MinecartRenderState cart)
             implements SubmitNodeCollector {
         @Override

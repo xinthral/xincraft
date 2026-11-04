@@ -24,15 +24,20 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
-// An apothecary crucible recipe (data/<namespace>/recipe/crucible/*.json): two elemental powders and
-// a catalyst that together name a mob, inscribed onto the mob filter in the crucible. Vita stands for
-// youth: no recipe uses it, and for a mob that has babies, swapping either powder for Vita inscribes
-// the baby instead. In a recipe with Umbra, though, Vita has to take the Umbra's place, life driving
-// out death; that keeps undead kin that share a catalyst (zombie and husk) apart. The powders may go
-// in either top slot.
-//
-//   {"type": "xincraft:crucible", "elements": ["aer", "terra"], "catalyst": "minecraft:feather",
-//    "mob": "minecraft:chicken", "baby": true}
+/**
+ * @brief An apothecary crucible recipe: two elemental powders and a catalyst that together name a
+ *        mob.
+ *
+ * The mob is inscribed onto the filter in the crucible, and the powders may go in either top slot.
+ * Vita stands for youth: no recipe uses it, and swapping either powder for Vita inscribes the baby
+ * instead. In a recipe with Umbra, Vita has to take the Umbra's place, which keeps undead kin that
+ * share a catalyst (zombie and husk) apart.
+ *
+ * @param elements The two powders' elements.
+ * @param catalyst The catalyst.
+ * @param mob The mob it inscribes.
+ * @param baby Whether the mob has a baby form to inscribe with Vita.
+ */
 public record CrucibleRecipe(List<Element> elements, Ingredient catalyst, EntityType<?> mob, boolean baby)
         implements Recipe<CrucibleInput> {
     public static final Element YOUTH = Element.VITA;
@@ -63,8 +68,12 @@ public record CrucibleRecipe(List<Element> elements, Ingredient catalyst, Entity
         return catalyst.test(input.catalyst()) && age(input) != null;
     }
 
-    // Whether the powders in the crucible inscribe the adult (false) or the baby (true); null if
-    // they don't make this mob at all
+    /**
+     * @brief Works out which age of this mob the powders in the crucible inscribe.
+     *
+     * @param input What's in the crucible.
+     * @return False for the adult, true for the baby, or null if they don't make this mob at all.
+     */
     public @Nullable Boolean age(CrucibleInput input) {
         Element left = element(input.left());
         Element right = element(input.right());
@@ -89,13 +98,25 @@ public record CrucibleRecipe(List<Element> elements, Ingredient catalyst, Entity
         return null;
     }
 
-    // The entry this inscribes onto the filter in the crucible, or null if the powders don't match
+    /**
+     * @brief The entry this inscribes onto the filter in the crucible, or null if the powders don't
+     *        match.
+     *
+     * @param input What's in the crucible.
+     * @return The entry, or null if the powders don't match.
+     */
     public MobFilterContents.@Nullable Entry entry(CrucibleInput input) {
         Boolean isBaby = age(input);
         return isBaby == null ? null : MobFilterItem.entryFor(input.filter(), mob, isBaby);
     }
 
-    // Nature's balance: each powder burnt draws on every element that isn't among the powders
+    /**
+     * @brief Nature's balance: each powder burnt draws on every element that isn't among the
+     *        powders.
+     *
+     * @param input What's in the crucible.
+     * @return The elements it draws on.
+     */
     public static Set<Element> balancing(CrucibleInput input) {
         Set<Element> others = EnumSet.allOf(Element.class);
         others.remove(element(input.left()));
@@ -107,8 +128,12 @@ public record CrucibleRecipe(List<Element> elements, Ingredient catalyst, Entity
         return stack.getItem() instanceof ElementPowderItem powder ? powder.element() : null;
     }
 
-    // The filter with the mob added; nothing if there's no filter (the crucible itself checks it
-    // has room and doesn't already list the mob)
+    /**
+     * @brief The filter with the mob added.
+     *
+     * Nothing if there's no filter (the crucible itself checks it has room and doesn't already list
+     * the mob).
+     */
     @Override
     public ItemStack assemble(CrucibleInput input) {
         MobFilterContents.Entry entry = entry(input);

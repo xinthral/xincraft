@@ -24,8 +24,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-// A stone altar with a fire basin that burns plants into elemental essence for the flora around it
-// (see ApothecaryAltarBlockEntity). Right-click opens it; its contents drop when it's broken.
+/**
+ * @brief A stone altar with a fire basin that burns plants into elemental essence for the flora
+ *        around it.
+ *
+ * Right-click opens it; its contents drop when it's broken.
+ *
+ * @see ApothecaryAltarBlockEntity
+ */
 public class ApothecaryAltarBlock extends BaseEntityBlock {
     public static final MapCodec<ApothecaryAltarBlock> CODEC = simpleCodec(ApothecaryAltarBlock::new);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -68,7 +74,10 @@ public class ApothecaryAltarBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    // Flames and smoke rising from the basin, with the odd crackle; none with a crucible sitting in it
+    /**
+     * @brief Flames and smoke rising from the basin, with the odd crackle; none with a crucible
+     *        sitting in it.
+     */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (!state.getValue(LIT) || level.getBlockState(pos.above()).getBlock() instanceof ApothecaryCrucibleBlock) {

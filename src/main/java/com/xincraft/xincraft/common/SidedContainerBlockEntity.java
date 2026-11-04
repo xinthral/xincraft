@@ -13,12 +13,14 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import org.jspecify.annotations.Nullable;
 
-// A block entity whose WorldlyContainer methods decide what hoppers and pipes can do on each side.
-// Forge's hoppers and pipes go through the item handler capability rather than those methods, and the
-// one BaseContainerBlockEntity gives out ignores them, so anything could be pulled out of any slot;
-// this gives out handlers that follow them, as vanilla's furnace does. A horizontal side is asked
-// about as north. Opening the menu isn't affected, and a caller naming no side gets the whole
-// container, as it does from a furnace.
+/**
+ * @brief A block entity whose WorldlyContainer methods decide what hoppers and pipes can do on each
+ *        side.
+ *
+ * BaseContainerBlockEntity's item handler ignores those methods, so anything could be pulled out of
+ * any slot. This one follows them, as a furnace does. A horizontal side is asked about as north.
+ * Opening the menu isn't affected.
+ */
 public abstract class SidedContainerBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
     private LazyOptional<? extends IItemHandler>[] handlers = createHandlers();
 

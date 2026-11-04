@@ -25,10 +25,18 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-// A rideable passenger minecart, lacquered and trimmed in bronze, for hitching into a locomotive's train
-// with a linking bar (see LinkedTransport). Otherwise an ordinary minecart. Takes upgrades (see
-// CartUpgrades). It won't take hostile mobs aboard unless it has the cell upgrade, which carries
-// them caged (see MobCell), and with a mob filter fitted it only takes the mobs on it.
+/**
+ * @brief A rideable passenger minecart, lacquered and trimmed in bronze, for hitching into a
+ *        locomotive's train with a linking bar.
+ *
+ * Otherwise an ordinary minecart. Takes upgrades. It won't take hostile mobs aboard unless it has
+ * the cell upgrade, which carries them caged, and with a mob filter fitted it only takes the mobs
+ * on it.
+ *
+ * @see transport.train.LinkedTransport
+ * @see transport.train.CartUpgrades
+ * @see transport.train.MobCell
+ */
 public class Carriage extends Minecart implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Carriage.class, EntityDataSerializers.INT);
@@ -64,9 +72,14 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableTransp
         return true;
     }
 
-    // The linking bar and upgrades first; then, with a mob in the cell, right-click lets it out
-    // (or with a lead, ties one ready for it; see MobCell); otherwise right-click to ride, as
-    // any minecart
+    /**
+     * @brief The linking bar and upgrades first.
+     *
+     * Then, with a mob in the cell, right-click lets it out (or with a lead, ties one ready for
+     * it); otherwise right-click to ride, as any minecart.
+     *
+     * @see transport.train.MobCell
+     */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult result = transport.interact(player, hand);
@@ -91,7 +104,10 @@ public class Carriage extends Minecart implements UpgradableCart, LinkableTransp
         super.tick();
     }
 
-    // Hostile mobs only ride in a cell; this also keeps a cart without one from picking them up
+    /**
+     * @brief Hostile mobs only ride in a cell; this also keeps a cart without one from picking them
+     *        up.
+     */
     @Override
     protected boolean canAddPassenger(Entity passenger) {
         return MobCell.canCarry(this, passenger) && super.canAddPassenger(passenger);

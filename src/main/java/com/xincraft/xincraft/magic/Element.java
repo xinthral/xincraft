@@ -3,9 +3,15 @@ package com.xincraft.xincraft.magic;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.StringRepresentable;
 
-// The primal elements of the mod's nature magic. Each has a powder ground with the mortar and pestle
-// (magic.ElementPowderItem) and an elemental flora that stores its essence (magic.FloraBlock), named
-// with the element's Latin genitive (flora ignis, flora aquae, ...).
+/**
+ * @brief The primal elements of the mod's nature magic.
+ *
+ * Each has a powder ground with the mortar and pestle and an elemental flora that stores its
+ * essence, named with the element's Latin genitive (flora ignis, flora aquae, ...).
+ *
+ * @see ElementPowderItem
+ * @see FloraBlock
+ */
 public enum Element implements StringRepresentable {
     TERRA("terra", "terrae", 0x8B6B3D),
     AQUA("aqua", "aquae", 0x3F76E4),
@@ -29,12 +35,20 @@ public enum Element implements StringRepresentable {
         this.particle = new DustParticleOptions(color, 1.0F);
     }
 
-    // Registry name of this element's powder (e.g. ignis_powder)
+    /**
+     * @brief Registry name of this element's powder (e.g. ignis_powder).
+     *
+     * @return The name, such as ignis_powder.
+     */
     public String powderId() {
         return name + "_powder";
     }
 
-    // Registry name of this element's flora (e.g. flora_ignis)
+    /**
+     * @brief Registry name of this element's flora (e.g. flora_ignis).
+     *
+     * @return The name, such as flora_ignis.
+     */
     public String floraId() {
         return "flora_" + genitive;
     }

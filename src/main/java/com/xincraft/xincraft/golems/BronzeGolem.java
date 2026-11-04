@@ -68,32 +68,35 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// A copper golem refitted with a bronze golem helm (golems.BronzeGolemHelmItem). It stays within the
-// range a copper golem searches (32 blocks across, 8 up and down) of the nearest bronze chest, and
-// moves no items. Near an iron golem it now and then holds out a copper nugget, as an iron golem
-// offers a villager a poppy.
-//
-// Made at the apothecary altar with a diamond sword, it's a combat golem: the same mob with the sword
-// in its main hand. The sword is what it fights with, so its damage and enchantments apply as they do
-// on any mob, and looting comes from it too. It hunts hostile mobs in its area and carries what they
-// drop, one stack at a time in its off hand, to the chest. Killing comes first, but it empties its
-// hands before it fights. Each hit wears the sword. When the sword breaks, or the golem takes a
-// killing blow (which destroys the sword), it's a bronze golem again, at full health.
-//
-// Goal order is what gives those priorities: depositing is above fighting, and fighting is above
-// picking up.
+/**
+ * @brief A copper golem refitted with a bronze golem helm, which stays near the nearest bronze
+ *        chest.
+ *
+ * Made at the apothecary altar with a diamond sword, it becomes a combat golem. A combat golem
+ * hunts hostile mobs in its area and carries what they drop to the chest. When the sword breaks, or
+ * the golem takes a killing blow, it's a bronze golem again.
+ *
+ * Goal order is what gives its priorities: depositing is above fighting, and fighting is above
+ * picking up.
+ *
+ * @see BronzeGolemHelmItem
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public class BronzeGolem extends AbstractGolem implements ContainerUser {
     public static final int AREA_HORIZONTAL = 32;
     public static final int AREA_VERTICAL = 8;
     private static final int HOME_CHECK_TICKS = 100;
-    // How often it looks for drops. Goals are only checked every other tick, on odd or even ticks
-    // according to the mob's id, so this counts rather than testing for particular ticks.
+    /**
+     * @brief How often it looks for drops.
+     *
+     * Goals are only checked every other tick, on odd or even ticks according to the mob's id, so
+     * this counts rather than testing for particular ticks.
+     */
     private static final int DROP_CHECK_TICKS = 10;
     private static final double CHEST_REACH_SQR = 6.25;
     private static final EquipmentSlot SWORD_SLOT = EquipmentSlot.MAINHAND;
     private static final EquipmentSlot CARRY_SLOT = EquipmentSlot.OFFHAND;
-    // Marks an item dropped by something a golem killed, as it leaves other items alone
+    /** @brief Marks an item dropped by something a golem killed, as it leaves other items alone. */
     private static final String DROP_KEY = XincraftMod.MODID + ":GolemDrop";
 
     private static final EntityDataAccessor<CopperGolemState> DATA_STATE =
@@ -119,7 +122,12 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         setPathfindingMalus(PathType.FIRE, -1.0F);
     }
 
-    // Base attack damage of 1, as a player's, so a diamond sword's bonus makes the 7 it does for a player
+    /**
+     * @brief Base attack damage of 1, as a player's, so a diamond sword's bonus makes the 7 it does
+     *        for a player.
+     *
+     * @return The golem's attributes.
+     */
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
             .add(Attributes.MOVEMENT_SPEED, 0.2F)
@@ -177,7 +185,11 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         return getItemBySlot(CARRY_SLOT);
     }
 
-    // For the renderer
+    /**
+     * @brief Whether it's holding out a copper nugget, for the renderer.
+     *
+     * @return True if It's holding out a copper nugget, for the renderer.
+     */
     public boolean isOfferingNugget() {
         return entityData.get(DATA_OFFERING);
     }
@@ -204,7 +216,11 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
             && Math.abs(entity.getY() - home.getY()) <= AREA_VERTICAL;
     }
 
-    // Keeps to the chest it has, or finds the nearest; with none around it wanders freely
+    /**
+     * @brief Keeps to the chest it has, or finds the nearest; with none around it wanders freely.
+     *
+     * @param level The level to work in.
+     */
     private void updateHome(ServerLevel level) {
         if (home != null && !(level.isLoaded(home) && level.getBlockEntity(home) instanceof BronzeChestBlockEntity)) {
             home = null;
@@ -245,7 +261,7 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
 
     // ---- Fighting ----
 
-    // Wears the sword for the hit, unless the sword's own attack already has
+    /** @brief Wears the sword for the hit, unless the sword's own attack already has. */
     @Override
     public boolean doHurtTarget(ServerLevel level, Entity target) {
         ItemStack sword = getItemBySlot(SWORD_SLOT);
@@ -263,7 +279,7 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         return hit;
     }
 
-    // A killing blow takes the sword instead of the golem
+    /** @brief A killing blow takes the sword instead of the golem. */
     @Override
     public void die(DamageSource source) {
         if (level() instanceof ServerLevel level && isCombat()) {
@@ -273,7 +289,11 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         super.die(source);
     }
 
-    // Back to being a bronze golem, whatever it was carrying dropped where it stands
+    /**
+     * @brief Back to being a bronze golem, whatever it was carrying dropped where it stands.
+     *
+     * @param level The level to work in.
+     */
     private void disarm(ServerLevel level) {
         setItemSlot(SWORD_SLOT, ItemStack.EMPTY);
         dropCarried(level);
@@ -291,7 +311,12 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         }
     }
 
-    // Marks what a golem's victim drops, for it to pick up
+    /**
+     * @brief Marks what a golem's victim drops, for it to pick up.
+     *
+     * @param event The event.
+     * @return Always false, so the drops still happen.
+     */
     @SubscribeEvent
     public static boolean onLivingDrops(LivingDropsEvent event) {
         if (event.getSource().getEntity() instanceof BronzeGolem) {
@@ -300,7 +325,13 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         return false;
     }
 
-    // The nearest drop it could carry: one that stacks with what it holds, if it holds anything
+    /**
+     * @brief The nearest drop it could carry: one that stacks with what it holds, if it holds
+     *        anything.
+     *
+     * @param level The level to work in.
+     * @return The drop, or null if there isn't one.
+     */
     private @Nullable ItemEntity findDrop(ServerLevel level) {
         ItemStack carried = carried();
         if (!carried.isEmpty() && carried.getCount() >= carried.getMaxStackSize()) {
@@ -318,7 +349,12 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         return nearest;
     }
 
-    // The result of findDrop, looked up afresh every so often
+    /**
+     * @brief The result of findDrop, looked up afresh every so often.
+     *
+     * @param level The level to work in.
+     * @return The drop, or null if there isn't one.
+     */
     private @Nullable ItemEntity nearbyDrop(ServerLevel level) {
         if (tickCount >= nextDropCheck) {
             nextDropCheck = tickCount + DROP_CHECK_TICKS;
@@ -353,7 +389,11 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         return super.mobInteract(player, hand);
     }
 
-    // The golem as an item, sword and name included
+    /**
+     * @brief The golem as an item, sword and name included.
+     *
+     * @return The new item.
+     */
     private ItemStack toItem() {
         ItemStack item = new ItemStack(isCombat() ? GolemItems.COMBAT_GOLEM.get() : GolemItems.BRONZE_GOLEM.get());
         if (isCombat()) {
@@ -464,9 +504,13 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
 
     // ---- Goals ----
 
-    // Takes what it's carrying to the chest: at once if there's something to fight, or when it can
-    // carry no more. If it can't get there, it gives up for a while rather than standing idle while
-    // something attacks it. What won't fit in the chest it leaves on the ground beside it, unmarked.
+    /**
+     * @brief Takes what it's carrying to the chest: at once if there's something to fight, or when
+     *        it can carry no more.
+     *
+     * If it can't get there, it gives up for a while rather than standing idle while something
+     * attacks it. What won't fit in the chest it leaves on the ground beside it, unmarked.
+     */
     private class DepositGoal extends Goal {
         private static final int GIVE_UP_TICKS = 300;
         private static final int RETRY_TICKS = 200;
@@ -563,7 +607,7 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         }
     }
 
-    // Collects what its victims dropped, while there's nothing left to fight
+    /** @brief Collects what its victims dropped, while there's nothing left to fight. */
     private class PickUpDropsGoal extends Goal {
         private static final double REACH_SQR = 2.25;
         private @Nullable ItemEntity drop;
@@ -631,7 +675,10 @@ public class BronzeGolem extends AbstractGolem implements ContainerUser {
         }
     }
 
-    // Stands and holds out a copper nugget to an iron golem nearby, now and then, with a free hand
+    /**
+     * @brief Stands and holds out a copper nugget to an iron golem nearby, now and then, with a
+     *        free hand.
+     */
     private class OfferNuggetGoal extends Goal {
         private static final double RANGE = 6.0;
         private static final int CHANCE = 400;

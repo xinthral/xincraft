@@ -21,8 +21,15 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-// A rideable minecart on ender wheels. Unless the config allows other minecarts, it's the only
-// cart that ender rails will teleport (see transport.rail.EnderRailBlock). Takes upgrades (see CartUpgrades).
+/**
+ * @brief A rideable minecart on ender wheels.
+ *
+ * Unless the config allows other minecarts, it's the only cart that ender rails will teleport.
+ * Takes upgrades.
+ *
+ * @see transport.rail.EnderRailBlock
+ * @see transport.train.CartUpgrades
+ */
 public class EnderMinecart extends Minecart implements UpgradableCart {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(EnderMinecart.class, EntityDataSerializers.INT);
 

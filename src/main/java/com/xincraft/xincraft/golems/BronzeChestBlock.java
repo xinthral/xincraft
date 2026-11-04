@@ -28,9 +28,14 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// A copper chest with a fourth row: 36 slots, or 72 when two join into a double chest. It never
-// weathers. It's in the block tag minecraft:copper_chests, so copper golems take items from it as
-// from any copper chest, and it's the home a bronze golem (golems.BronzeGolem) stays around.
+/**
+ * @brief A copper chest with a fourth row: 36 slots, or 72 when two join into a double chest.
+ *
+ * It never weathers. It's in the block tag minecraft:copper_chests, so copper golems take items
+ * from it as from any copper chest, and it's the home a bronze golem stays around.
+ *
+ * @see BronzeGolem
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public class BronzeChestBlock extends ChestBlock {
     public static final MapCodec<BronzeChestBlock> CODEC = simpleCodec(BronzeChestBlock::new);
@@ -50,7 +55,7 @@ public class BronzeChestBlock extends ChestBlock {
         return new BronzeChestBlockEntity(pos, state);
     }
 
-    // Vanilla's double chest menu is six rows; ours is eight
+    /** @brief Vanilla's double chest menu is six rows; ours is eight. */
     @Override
     protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return combine(state, level, pos, false).apply(new DoubleBlockCombiner.Combiner<ChestBlockEntity, Optional<MenuProvider>>() {
@@ -90,8 +95,14 @@ public class BronzeChestBlock extends ChestBlock {
         }).orElse(null);
     }
 
-    // Copper chests join anything in the copper chest tag, which this has to be in for copper golems
-    // to use it, so a copper chest placed against one would half-join it; this puts it back to single
+    /**
+     * @brief Puts a copper chest placed against a bronze chest back to single.
+     *
+     * Copper chests join anything in the copper chest tag, which this has to be in for copper
+     * golems to use it, so otherwise it would half-join.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         BlockState placed = event.getState();

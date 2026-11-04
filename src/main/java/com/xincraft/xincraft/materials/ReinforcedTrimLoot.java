@@ -10,9 +10,13 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Puts the reinforced armor trim template in abandoned mineshaft chests, the way vanilla's templates
-// are found in structure chests. Added as an extra pool when the table loads, rather than by
-// replacing vanilla's table, so other mods' and datapacks' changes to it are kept.
+/**
+ * @brief Puts the reinforced armor trim template in abandoned mineshaft chests, the way vanilla's
+ *        templates are found in structure chests.
+ *
+ * Added as an extra pool when the table loads, rather than by replacing vanilla's table, so other
+ * mods' and datapacks' changes to it are kept.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public final class ReinforcedTrimLoot {
     private static final Identifier MINESHAFT_CHEST = Identifier.withDefaultNamespace("chests/abandoned_mineshaft");

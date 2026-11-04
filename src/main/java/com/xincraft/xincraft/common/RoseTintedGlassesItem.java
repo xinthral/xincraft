@@ -10,30 +10,48 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
-// Worn on the head (or just held), they show the links between buoys (transport.boat.BuoyBlock), traced in
-// yellow along a path that makes a complete loop and red along one that doesn't
-// (transport.boat.client.BuoyHighlight). They also read the essence in an elemental flora, or in all the flora
-// around an apothecary altar (magic.client.EssenceReadout), and label the mobs in cells with their names
-// (transport.train.client.CellCage). Worn, they tint the view rose
-// (common.client.RoseTintedGlassesTint). Used on a
-// motorboat with the RC upgrade on a buoy path with nobody steering, they start or stop it (transport.boat.Motorboat).
+/**
+ * @brief Glasses that show hidden information when worn on the head or held.
+ *
+ * They trace the links between buoys, in yellow along a complete loop and red along anything else.
+ * They also read the essence in flora and label caged mobs. Worn, they tint the view rose, and used
+ * on a motorboat with the RC upgrade, they start or stop it on a buoy path.
+ *
+ * @see transport.boat.BuoyBlock
+ * @see transport.boat.client.BuoyHighlight
+ * @see magic.client.EssenceReadout
+ * @see transport.train.client.CellCage
+ * @see common.client.RoseTintedGlassesTint
+ * @see transport.boat.Motorboat
+ */
 public class RoseTintedGlassesItem extends Item {
     public RoseTintedGlassesItem(Item.Properties properties) {
         super(properties);
     }
 
-    // Whether someone is wearing the glasses
+    /**
+     * @brief Whether someone is wearing the glasses.
+     *
+     * @param entity The entity to check.
+     * @return True if Someone is wearing the glasses.
+     */
     public static boolean isWearing(LivingEntity entity) {
         return entity.getItemBySlot(EquipmentSlot.HEAD).is(CommonItems.ROSE_TINTED_GLASSES.get());
     }
 
-    // Whether someone sees what the glasses show: wearing them, or holding them in either hand
+    /**
+     * @brief Whether someone sees what the glasses show: wearing them, or holding them in either
+     *        hand.
+     *
+     * @param entity The entity to check.
+     * @return True if Someone sees what the glasses show.
+     */
     public static boolean isUsing(LivingEntity entity) {
         Item glasses = CommonItems.ROSE_TINTED_GLASSES.get();
         return isWearing(entity) || entity.getMainHandItem().is(glasses) || entity.getOffhandItem().is(glasses);
     }
 
-    // What they do, from item.xincraft.rose_tinted_glasses.desc
+    /** @brief Adds what they do to the tooltip. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

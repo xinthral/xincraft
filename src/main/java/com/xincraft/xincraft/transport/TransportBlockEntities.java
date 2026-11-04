@@ -24,7 +24,7 @@ public final class TransportBlockEntities {
     public static final RegistryObject<BlockEntityType<BuoyBlockEntity>> BUOY = Registers.BLOCK_ENTITIES.register("buoy",
         () -> new BlockEntityType<>(BuoyBlockEntity::new, Set.of(TransportBlocks.BUOY.get(), TransportBlocks.ADVANCED_BUOY.get())));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     public static final RegistryObject<BlockEntityType<ChargingStationBlockEntity>> CHARGING_STATION = Registers.BLOCK_ENTITIES.register("charging_station",

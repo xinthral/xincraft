@@ -10,12 +10,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
-// Lonsdaleite armor, made from bronze armor at the apothecary altar (magic.AltarRecipe), with
-// netherite's protection and one power per piece. The helmet gives night vision (TinSpyglass runs
-// it, as both use the same hidden effect); the chestplate keeps piglins neutral (the item tag
-// minecraft:piglin_safe_armor); the leggings' step height and the boots' speed are attribute
-// modifiers (materials.MaterialItems). Its red shimmer takes the place of vanilla's glint, which is turned
-// off: a model layer on the item, and materials.client.LonsdaleiteGlintLayer when worn.
+/**
+ * @brief Lonsdaleite armor, made from bronze armor at the apothecary altar, with netherite's
+ *        protection and one power per piece.
+ *
+ * The helmet gives night vision, the chestplate keeps piglins neutral, and the leggings and boots
+ * raise step height and speed. A red shimmer takes the place of vanilla's glint.
+ *
+ * @see magic.AltarRecipe
+ * @see TinSpyglass
+ * @see MaterialItems
+ * @see materials.client.LonsdaleiteGlintLayer
+ */
 public class LonsdaleiteArmorItem extends Item {
     public LonsdaleiteArmorItem(Item.Properties properties) {
         super(properties);
@@ -25,7 +31,7 @@ public class LonsdaleiteArmorItem extends Item {
         return entity.getItemBySlot(EquipmentSlot.HEAD).is(MaterialItems.LONSDALEITE_HELMET.get());
     }
 
-    // What the piece does, from item.xincraft.lonsdaleite_<piece>.desc
+    /** @brief Adds what the piece does to the tooltip. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

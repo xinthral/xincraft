@@ -18,30 +18,56 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// Draws the linking bar from a vehicle to the one it tows (transport.train.LinkedTransport), for both the
-// minecart and boat renderers: a flat bronze drawbar spanning the gap between them, with an upright
-// pin through each end where it pivots. It always runs straight from one vehicle's centre toward the
-// other's, so it swings with them around corners.
+/**
+ * @brief Draws the linking bar from a vehicle to the one it tows, for both the minecart and boat
+ *        renderers.
+ *
+ * A flat bronze drawbar spanning the gap between them, with an upright pin through each end where
+ * it pivots.
+ *
+ * It always runs straight from one vehicle's centre toward the other's, so it swings with them
+ * around corners.
+ *
+ * @see transport.train.LinkedTransport
+ */
 public final class LinkingBar {
     private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(
         Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/entity/linking_bar.png"));
-    // Height of the bar above a vehicle's position: just above a cart's floor, or a boat's waterline
+    /** @brief Height of the bar above a cart's position: just above its floor. */
     private static final double CART_HEIGHT = 0.25;
+    /** @brief Height of the bar above a boat's position: just above its waterline. */
     private static final double BOAT_HEIGHT = 0.3;
-    // How far inside each vehicle's end the bar starts
+    /** @brief How far inside each vehicle's end the bar starts. */
     private static final double BAR_INSET = 0.025;
-    // Half the bar's width and thickness, and half a pin's width and height
+    /** @brief Half the bar's width. */
     private static final float BAR_HALF_WIDTH = 3.0F / 32.0F;
+    /** @brief Half the bar's thickness. */
     private static final float BAR_HALF_THICKNESS = 1.0F / 16.0F;
+    /** @brief Half a pin's width. */
     private static final float PIN_HALF_WIDTH = 1.0F / 8.0F;
+    /** @brief Half a pin's height. */
     private static final float PIN_HALF_HEIGHT = 5.0F / 32.0F;
     private static final Vec3 UP = new Vec3(0.0, 1.0, 0.0);
 
-    // A vehicle's bar to the one it tows, as a renderer keeps it: both ends relative to the vehicle's
-    // position, and how far each end is from its vehicle's centre to the end of its body
+    /**
+     * @brief A vehicle's bar to the one it tows, as a renderer keeps it.
+     *
+     * Both ends relative to the vehicle's position, and how far each end is from its vehicle's
+     * centre to the end of its body.
+     *
+     * @param from Where the bar starts, relative to the vehicle's position.
+     * @param to Where the bar ends, relative to the vehicle's position.
+     * @param fromHalf How far the start is from its vehicle's centre to the end of its body.
+     * @param toHalf How far the end is from its vehicle's centre to the end of its body.
+     */
     public record Link(Vec3 from, Vec3 to, double fromHalf, double toHalf) {}
 
-    // The vehicle this one tows with a linking bar, as the client knows it
+    /**
+     * @brief The vehicle this one tows with a linking bar, as the client knows it.
+     *
+     * @param vehicle The vehicle.
+     * @return The towed vehicle, or null if it tows none.
+     */
     public static @Nullable Entity towed(Entity vehicle) {
         if (!(vehicle instanceof LinkableTransport linkable)) {
             return null;
@@ -50,7 +76,14 @@ public final class LinkingBar {
         return id == LinkedTransport.NONE ? null : vehicle.level().getEntity(id);
     }
 
-    // The bar from vehicle, drawn at origin, to the one it tows, or null if it tows none
+    /**
+     * @brief The bar from vehicle, drawn at origin, to the one it tows, or null if it tows none.
+     *
+     * @param vehicle The vehicle.
+     * @param origin Where the vehicle is drawn.
+     * @param partialTicks How far through the current tick this frame is.
+     * @return The bar, or null if it tows none.
+     */
     public static @Nullable Link extract(Entity vehicle, Vec3 origin, float partialTicks) {
         Entity towed = towed(vehicle);
         if (towed == null) {
@@ -62,13 +95,25 @@ public final class LinkingBar {
         return new Link(from, to, LinkedTransport.halfLength(vehicle), LinkedTransport.halfLength(towed));
     }
 
-    // Keeps a vehicle drawn, and with it the bar, while the one it tows is in view
+    /**
+     * @brief Keeps a vehicle drawn, and with it the bar, while the one it tows is in view.
+     *
+     * @param vehicle The vehicle.
+     * @param box The vehicle's own culling box.
+     * @return The box, stretched to take in the towed vehicle.
+     */
     public static AABB cullingBox(Entity vehicle, AABB box) {
         return towed(vehicle) instanceof Entity towed ? box.minmax(towed.getBoundingBox()) : box;
     }
 
-    // Where a vehicle's body is drawn: vanilla draws a cart on old-style track along the rail rather
-    // than at its exact position (AbstractMinecartRenderer#oldRender)
+    /**
+     * @brief Where a vehicle's body is drawn, as vanilla draws a cart on old-style track along the
+     *        rail rather than at its exact position.
+     *
+     * @param vehicle The vehicle.
+     * @param position The vehicle's position.
+     * @return The body's centre.
+     */
     private static Vec3 bodyCentre(Entity vehicle, Vec3 position) {
         if (vehicle instanceof AbstractMinecart cart && cart.getBehavior() instanceof OldMinecartBehavior behavior) {
             Vec3 onRail = behavior.getPos(position.x, position.y, position.z);
@@ -111,8 +156,18 @@ public final class LinkingBar {
         });
     }
 
-    // Draws boxes aligned to three axes x, y, z (right-handed: x cross y is z), each face showing the
-    // full width of the texture between rows v0 and v1
+    /**
+     * @brief Draws boxes aligned to three axes x, y, z (right-handed.
+     *
+     * X cross y is z), each face showing the full width of the texture between rows v0 and v1.
+     *
+     * @param pose The current pose.
+     * @param consumer The vertex consumer to draw to.
+     * @param light The packed light level.
+     * @param x The box's x axis.
+     * @param y The box's y axis.
+     * @param z The box's z axis.
+     */
     private record Cuboid(PoseStack.Pose pose, VertexConsumer consumer, int light, Vec3 x, Vec3 y, Vec3 z) {
         void draw(Vec3 centre, float halfX, float halfY, float halfZ, float v0, float v1) {
             Vec3 hx = x.scale(halfX);

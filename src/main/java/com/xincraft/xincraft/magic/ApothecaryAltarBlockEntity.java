@@ -32,22 +32,20 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// The apothecary altar burns plants into elemental essence, which flows into the elemental flora
-// (FloraBlock) within Config.altarRange blocks. Which elements a plant gives is set by the item tags
-// xincraft:essence/<element> (magic.MagicTags); only plants in at least one of them go in. Each
-// burnt plant gives Config.altarEssencePerElement of each of its elements, after
-// Config.altarBurnTicks of burning furnace fuel.
-//
-// It only lights new fuel and makes progress while a flora of one of the plant's elements has room,
-// so plants and fuel aren't wasted with nowhere for the essence to go. Fuel already burning burns
-// out like in a furnace. Hoppers put plants in from above and fuel from the sides, and take empty
-// buckets out from below.
-//
-// It also transmutes (magic.AltarRecipe): with a base item in its slot and the material beside it, it
-// burns the same fuel for the recipe's time, then draws the recipe's essence from the flora, and the
-// result comes out in the third slot. It waits, keeping its progress, while the flora are short or
-// the result slot is full; taking the base out or changing it starts again. Hoppers put base items
-// in from above and materials from the sides, and take results out from below.
+/**
+ * @brief Burns plants into elemental essence for the flora around it, and transmutes items.
+ *
+ * Which elements a plant gives is set by item tags. The altar only lights new fuel and makes
+ * progress while a flora of one of the plant's elements has room, so nothing is wasted. Fuel
+ * already burning burns out like in a furnace.
+ *
+ * To transmute, it burns the same fuel for the recipe's time, then draws the recipe's essence from
+ * the flora. It waits, keeping its progress, while the flora are short or the result slot is full.
+ *
+ * @see FloraBlock
+ * @see MagicTags
+ * @see AltarRecipe
+ */
 public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
     public static final int PLANT_SLOT = 0;
     public static final int FUEL_SLOT = 1;
@@ -55,9 +53,13 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
     public static final int MATERIAL_SLOT = 3;
     public static final int RESULT_SLOT = 4;
     public static final int SLOT_COUNT = 5;
-    // Menu data entries: fuel burn left, plant burn progress (both out of 1000), and bitmasks (by
-    // Element ordinal) of the elements with a flora in range, and with one that has room; then
-    // transmutation progress (out of 1000), and bitmasks of the elements it needs, and is short of
+    /**
+     * @brief Menu data entries.
+     *
+     * Fuel burn left, plant burn progress (both out of 1000), and bitmasks (by Element ordinal) of
+     * the elements with a flora in range, and with one that has room; then transmutation progress
+     * (out of 1000), and bitmasks of the elements it needs, and is short of.
+     */
     public static final int DATA_COUNT = 7;
     private static final int SCAN_INTERVAL_TICKS = 20;
     private static final int[] SLOTS_FOR_UP = {PLANT_SLOT, BASE_SLOT};
@@ -65,20 +67,27 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
     private static final int[] SLOTS_FOR_DOWN = {FUEL_SLOT, RESULT_SLOT};
 
     private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
-    // Burn time left in the current fuel item, in furnace ticks
+    /** @brief Burn time left in the current fuel item, in furnace ticks. */
     private int litTime;
     private int litDuration;
     private int burnProgress;
-    // From the last scan for flora
+    /** @brief From the last scan for flora. */
     private int floraMask;
     private int roomMask;
     private int costMask;
     private int shortMask;
     private int transmuteProgress;
     private int transmuteTime = 1;
-    // The recipe being worked on, to start again if it changes; not saved, so progress survives a reload
+    /**
+     * @brief The recipe being worked on, to start again if it changes; not saved, so progress
+     *        survives a reload.
+     */
     private @Nullable ResourceKey<Recipe<?>> transmuting;
-    // On the client, the server's Config.altarRange, for rose-tinted glasses (magic.client.EssenceReadout)
+    /**
+     * @brief On the client, the server's Config.altarRange, for rose-tinted glasses.
+     *
+     * @see magic.client.EssenceReadout
+     */
     private int syncedRange = Config.altarRange;
 
     private final ContainerData data = new ContainerData() {
@@ -108,17 +117,32 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         super(MagicBlockEntities.APOTHECARY_ALTAR.get(), pos, state);
     }
 
-    // How far, in blocks, the altar reaches flora (a cube)
+    /**
+     * @brief How far, in blocks, the altar reaches flora (a cube).
+     *
+     * @return The range, in blocks.
+     */
     public int getRange() {
         return level != null && level.isClientSide() ? syncedRange : Config.altarRange;
     }
 
-    // Whether the altar burns this item: it's in at least one xincraft:essence/<element> tag
+    /**
+     * @brief Whether the altar burns this item: it's in at least one `xincraft:essence/<element>`
+     *        tag.
+     *
+     * @param stack The item stack.
+     * @return True if The altar burns this item.
+     */
     public static boolean isPlant(ItemStack stack) {
         return elementMask(stack) != 0;
     }
 
-    // The elements a plant gives, as a bitmask by Element ordinal
+    /**
+     * @brief The elements a plant gives, as a bitmask by Element ordinal.
+     *
+     * @param stack The plant.
+     * @return The bitmask, by Element ordinal.
+     */
     public static int elementMask(ItemStack stack) {
         int mask = 0;
         if (!stack.isEmpty()) {
@@ -136,13 +160,28 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
             : level.getServer().getRecipeManager().getRecipeFor(ModRecipes.ALTAR_TRANSMUTATION.get(), new AltarInput(base, ItemStack.EMPTY), level);
     }
 
-    // Whether the item starts a transmutation. Only the server knows the recipes; the client's guess
-    // gets corrected.
+    /**
+     * @brief Whether the item starts a transmutation.
+     *
+     * Only the server knows the recipes; the client's guess gets corrected.
+     *
+     * @param level The level to work in.
+     * @param stack The item stack.
+     * @return True if The item starts a transmutation.
+     */
     public static boolean isBase(Level level, ItemStack stack) {
         return !(level instanceof ServerLevel server) || recipeFor(server, stack).isPresent();
     }
 
-    // Whether the item is a material in any transmutation, for a player placing it before the base
+    /**
+     * @brief Whether the item is a material in any transmutation, for a player placing it before
+     *        the base.
+     *
+     * @param level The level to work in.
+     * @param stack The item stack.
+     * @return True if The item is a material in any transmutation, for a player placing it before
+     *     the base.
+     */
     public static boolean isMaterial(Level level, ItemStack stack) {
         return !(level instanceof ServerLevel server) || server.getServer().getRecipeManager().getRecipes().stream()
             .anyMatch(holder -> holder.value() instanceof AltarRecipe recipe && recipe.usesMaterial(stack));
@@ -152,8 +191,13 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         return new AltarInput(items.get(BASE_SLOT), items.get(MATERIAL_SLOT));
     }
 
-    // Whether it can get on with the recipe, going by the last scan of the flora; finishing checks
-    // them again
+    /**
+     * @brief Whether it can get on with the recipe, going by the last scan of the flora; finishing
+     *        checks them again.
+     *
+     * @param recipe The recipe to check.
+     * @return True if It can get on with the recipe, going by the last scan of the flora.
+     */
     private boolean canTransmute(AltarRecipe recipe) {
         ItemStack output = items.get(RESULT_SLOT);
         boolean fits = output.isEmpty() || output.is(recipe.result()) && output.getCount() < output.getMaxStackSize()
@@ -227,8 +271,13 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         shortMask = EssenceHelper.shortfall(flora, cost);
     }
 
-    // Draws the essence and makes the result; if the flora have been drawn on since the last scan, it
-    // waits until they've refilled
+    /**
+     * @brief Draws the essence and makes the result; if the flora have been drawn on since the last
+     *        scan, it waits until they've refilled.
+     *
+     * @param level The level to work in.
+     * @param recipe The recipe to finish.
+     */
     private void finishTransmuting(ServerLevel level, AltarRecipe recipe) {
         Map<Element, List<EssenceReservoir>> flora = findFlora(level);
         shortMask = EssenceHelper.shortfall(flora, recipe.essence());
@@ -255,7 +304,12 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         scan(level);
     }
 
-    // Lights the next fuel item, the same way a furnace does
+    /**
+     * @brief Lights the next fuel item, the same way a furnace does.
+     *
+     * @param level The level to work in.
+     * @return True if it lit one.
+     */
     private boolean lightFuel(ServerLevel level) {
         ItemStack fuel = items.get(FUEL_SLOT);
         int duration = level.fuelValues().burnDuration(fuel);
@@ -274,8 +328,14 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         return true;
     }
 
-    // Burns one plant, sending its essence to the flora around, with a stream of the element's
-    // colour to each flora that takes some. Flora are looked up afresh, in case any have gone.
+    /**
+     * @brief Burns one plant, sending its essence to the flora around, with a stream of the
+     *        element's colour to each flora that takes some.
+     *
+     * Flora are looked up afresh, in case any have gone.
+     *
+     * @param level The level to work in.
+     */
     private void burnPlant(ServerLevel level) {
         ItemStack plant = items.get(PLANT_SLOT);
         int mask = elementMask(plant);
@@ -298,7 +358,13 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         scan(level);
     }
 
-    // A line of the element's dust from the basin to the flora
+    /**
+     * @brief A line of the element's dust from the basin to the flora.
+     *
+     * @param level The level to work in.
+     * @param element The element, which sets the dust's colour.
+     * @param target The flora's position.
+     */
     private void stream(ServerLevel level, Element element, BlockPos target) {
         EssenceHelper.stream(level, element, Vec3.atCenterOf(worldPosition).add(0.0, 0.7, 0.0), Vec3.atCenterOf(target));
     }
@@ -384,7 +450,9 @@ public class ApothecaryAltarBlockEntity extends SidedContainerBlockEntity {
         output.putInt("TransmuteProgress", transmuteProgress);
     }
 
-    // Clients are only told the range, when the chunk loads; the contents go to the menu
+    /**
+     * @brief Clients are only told the range, when the chunk loads; the contents go to the menu.
+     */
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();

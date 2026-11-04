@@ -46,16 +46,20 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// Draws the mod's boats as the vanilla boat (or raft) each is built on, using vanilla's own renderer,
-// with their upgrades as small blocks along the gunwales and the linking bar to a boat they tow
-// (LinkingBar). A motorboat also has a propeller at the stern, spinning while it cruises. The
-// advanced antenna isn't a block of its own: it's drawn as the RC upgrade's mast extended, in
-// narrower sections like a car aerial; nor is the cell, drawn as a cage around the boat (CellCage).
-// The party boat is an oak motorboat with a jukebox in its back seat, the barge an oak boat carrying
-// a shulker box, and the ferry a bamboo raft.
+/**
+ * @brief Draws the mod's boats as the vanilla boat or raft each is built on, using vanilla's own
+ *        renderer.
+ *
+ * It adds their upgrades as small blocks along the gunwales, the linking bar to a boat they tow,
+ * and on a motorboat, a propeller at the stern. The party boat is an oak motorboat with a jukebox
+ * in its back seat, the barge an oak boat carrying a shulker box, and the ferry a bamboo raft.
+ *
+ * @see transport.train.client.LinkingBar
+ * @see transport.train.client.CellCage
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class ModBoatRenderer<T extends AbstractBoat & UpgradableCart> extends EntityRenderer<T, ModBoatRenderer.State> {
-    // Vanilla's model for each kind of boat
+    /** @brief Vanilla's model for each kind of boat. */
     private static final Map<MotorboatType, ModelLayerLocation> MODELS = Map.of(
         MotorboatType.OAK, ModelLayers.OAK_BOAT,
         MotorboatType.SPRUCE, ModelLayers.SPRUCE_BOAT,
@@ -67,20 +71,23 @@ public class ModBoatRenderer<T extends AbstractBoat & UpgradableCart> extends En
         MotorboatType.PALE_OAK, ModelLayers.PALE_OAK_BOAT,
         MotorboatType.MANGROVE, ModelLayers.MANGROVE_BOAT,
         MotorboatType.BAMBOO, ModelLayers.BAMBOO_RAFT);
-    // Degrees the propeller turns each tick while cruising
+    /** @brief Degrees the propeller turns each tick while cruising. */
     private static final float PROPELLER_SPEED = 45.0F;
     private static final float PROPELLER_SCALE = 0.5F;
     private static final float UPGRADE_SCALE = 0.25F;
-    // The advanced antenna's sections above the RC mast, each this much narrower than the one below
+    /** @brief How many sections of the advanced antenna rise above the RC mast. */
     private static final int ANTENNA_SECTIONS = 2;
+    /** @brief How much narrower each antenna section is than the one below. */
     private static final float ANTENNA_TAPER = 0.05F;
     private static final float JUKEBOX_SCALE = 0.5F;
     private static final float SHULKER_BOX_SCALE = 0.75F;
-    // The cell upgrade's cage around the ferry: its half-width and half-length, and where it stands,
-    // from the deck up past the spawn egg shown for a mob sitting on it
+    /** @brief Half-width of the cell upgrade's cage around the ferry. */
     private static final float CAGE_HALF_WIDTH = 0.625F;
+    /** @brief Half-length of the cell upgrade's cage around the ferry. */
     private static final float CAGE_HALF_LENGTH = 0.875F;
+    /** @brief Where the cage stands, at the ferry's deck. */
     private static final float CAGE_BOTTOM = -0.2F;
+    /** @brief How tall the cage is, up past the spawn egg shown for a mob sitting on the deck. */
     private static final float CAGE_HEIGHT = 1.2F;
 
     private final AbstractBoatRenderer boat;
@@ -105,20 +112,22 @@ public class ModBoatRenderer<T extends AbstractBoat & UpgradableCart> extends En
         event.registerEntityRenderer(TransportEntityTypes.FERRY.get(), context -> new ModBoatRenderer<Ferry>(context, MotorboatType.BAMBOO));
     }
 
-    // Vanilla's boat state plus the propeller, upgrades, cargo and linking bar
+    /** @brief Vanilla's boat state plus the propeller, upgrades, cargo and linking bar. */
     public static class State extends BoatRenderState {
         public final ItemStackRenderState propeller = new ItemStackRenderState();
         public boolean hasPropeller;
         public float propellerAngle;
         public final List<BlockModelRenderState> upgradeModels = new ArrayList<>();
         public int upgradeCount;
-        // Which of the upgrades is the RC mast the advanced antenna extends, or -1
+        /** @brief Which of the upgrades is the RC mast the advanced antenna extends, or -1. */
         public int antennaMast = -1;
-        // The block it carries (the party boat's jukebox, the barge's shulker box), drawn at cargoScale
-        // with its corner at cargoCorner in the boat's frame
+        /** @brief The block it carries: the party boat's jukebox or the barge's shulker box. */
         public final BlockModelRenderState cargo = new BlockModelRenderState();
+        /** @brief Whether it carries a block. */
         public boolean hasCargo;
+        /** @brief How big the carried block is drawn. */
         public float cargoScale;
+        /** @brief Where the carried block's corner is, in the boat's frame. */
         public Vec3 cargoCorner = Vec3.ZERO;
         public final CellCage.Models cage = new CellCage.Models();
         public LinkingBar.@Nullable Link link;

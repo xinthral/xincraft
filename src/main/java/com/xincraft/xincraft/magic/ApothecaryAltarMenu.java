@@ -13,9 +13,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-// The apothecary altar's plant slot and fuel slot (with the flame between them), the burn progress
-// arrow, which elements have flora in range, and the transmutation's base, material and result slots
-// (see magic.client.ApothecaryAltarScreen)
+/**
+ * @brief The apothecary altar's plant slot and fuel slot (with the flame between them), the burn
+ *        progress arrow, which elements have flora in range, and the transmutation's base, material
+ *        and result slots.
+ *
+ * @see magic.client.ApothecaryAltarScreen
+ */
 public class ApothecaryAltarMenu extends AbstractContainerMenu {
     private static final int ALTAR_SLOTS_END = ApothecaryAltarBlockEntity.SLOT_COUNT;
     private static final int INVENTORY_SLOTS_END = ALTAR_SLOTS_END + 36;
@@ -24,7 +28,12 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Level level;
 
-    // Client side: the real slots and data are filled in by syncing from the server
+    /**
+     * @brief Client side: the real slots and data are filled in by syncing from the server.
+     *
+     * @param containerId The menu's sync id.
+     * @param inventory The player's inventory.
+     */
     public ApothecaryAltarMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, new SimpleContainer(ALTAR_SLOTS_END), new SimpleContainerData(ApothecaryAltarBlockEntity.DATA_COUNT));
     }
@@ -47,7 +56,11 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    // Fraction of the current fuel item left to burn, for the flame
+    /**
+     * @brief Fraction of the current fuel item left to burn, for the flame.
+     *
+     * @return The fraction left, from 0 to 1.
+     */
     public float getLitProgress() {
         return Mth.clamp(data.get(0) / 1000.0F, 0.0F, 1.0F);
     }
@@ -56,12 +69,21 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         return data.get(0) > 0;
     }
 
-    // How far through burning the current plant it is, for the arrow
+    /**
+     * @brief How far through burning the current plant it is, for the arrow.
+     *
+     * @return The fraction done, from 0 to 1.
+     */
     public float getBurnProgress() {
         return Mth.clamp(data.get(1) / 1000.0F, 0.0F, 1.0F);
     }
 
-    // Bitmasks by Element ordinal: elements with a flora in range, and with one that has room
+    /**
+     * @brief Bitmasks by Element ordinal: elements with a flora in range, and with one that has
+     *        room.
+     *
+     * @return The bitmask of elements with a flora in range. getRoomMask gives those with room.
+     */
     public int getFloraMask() {
         return data.get(2);
     }
@@ -70,17 +92,30 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         return data.get(3);
     }
 
-    // The elements the plant in the slot gives
+    /**
+     * @brief The elements the plant in the slot gives.
+     *
+     * @return The bitmask, by Element ordinal.
+     */
     public int getPlantMask() {
         return ApothecaryAltarBlockEntity.elementMask(slots.get(ApothecaryAltarBlockEntity.PLANT_SLOT).getItem());
     }
 
-    // How far through the transmutation it is, for its arrow
+    /**
+     * @brief How far through the transmutation it is, for its arrow.
+     *
+     * @return The fraction done, from 0 to 1.
+     */
     public float getTransmuteProgress() {
         return Mth.clamp(data.get(4) / 1000.0F, 0.0F, 1.0F);
     }
 
-    // Bitmasks by Element ordinal: the elements the transmutation needs, and those it's short of
+    /**
+     * @brief Bitmasks by Element ordinal: the elements the transmutation needs, and those it's
+     *        short of.
+     *
+     * @return The bitmask of elements it needs. getShortMask gives those it's short of.
+     */
     public int getCostMask() {
         return data.get(5);
     }
@@ -93,9 +128,12 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         return level.fuelValues().isFuel(stack);
     }
 
-    // Shift-click: the altar's slots go to the player's inventory; from the inventory, plants go to
-    // the plant slot (even ones that also burn as fuel, like saplings), fuel to the fuel slot, and
-    // transmutation ingredients to their slots
+    /**
+     * @brief Shift-click: the altar's slots go to the player's inventory.
+     *
+     * From the inventory, plants go to the plant slot (even ones that also burn as fuel, like
+     * saplings), fuel to the fuel slot, and transmutation ingredients to their slots.
+     */
     @Override
     public ItemStack quickMoveStack(Player player, int slotIndex) {
         Slot slot = slots.get(slotIndex);
@@ -138,7 +176,7 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         container.stopOpen(player);
     }
 
-    // Takes what starts a transmutation
+    /** @brief Takes what starts a transmutation. */
     private class BaseSlot extends Slot {
         BaseSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
@@ -150,7 +188,7 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         }
     }
 
-    // Takes any transmutation's material, so it can go in before the base
+    /** @brief Takes any transmutation's material, so it can go in before the base. */
     private class MaterialSlot extends Slot {
         MaterialSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
@@ -162,7 +200,7 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         }
     }
 
-    // What's been made, to take out
+    /** @brief What's been made, to take out. */
     private static class ResultSlot extends Slot {
         ResultSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
@@ -174,7 +212,7 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         }
     }
 
-    // Takes only plants the altar can burn
+    /** @brief Takes only plants the altar can burn. */
     private static class PlantSlot extends Slot {
         PlantSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
@@ -186,7 +224,7 @@ public class ApothecaryAltarMenu extends AbstractContainerMenu {
         }
     }
 
-    // Takes fuel, plus the empty bucket a burnt-out lava bucket leaves behind
+    /** @brief Takes fuel, plus the empty bucket a burnt-out lava bucket leaves behind. */
     private class FuelSlot extends Slot {
         FuelSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);

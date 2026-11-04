@@ -6,7 +6,11 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class GolemEntityTypes {
-    // The size of the copper golem it's made from (golems.BronzeGolem)
+    /**
+     * @brief The size of the copper golem it's made from.
+     *
+     * @see BronzeGolem
+     */
     public static final RegistryObject<EntityType<BronzeGolem>> BRONZE_GOLEM = Registers.ENTITY_TYPES.register("bronze_golem",
         () -> EntityType.Builder.<BronzeGolem>of(BronzeGolem::new, MobCategory.MISC)
             .noLootTable()
@@ -15,7 +19,7 @@ public final class GolemEntityTypes {
             .clientTrackingRange(10)
             .build(Registers.ENTITY_TYPES.key("bronze_golem")));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private GolemEntityTypes() {}

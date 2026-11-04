@@ -23,9 +23,12 @@ import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-// The compendium look-up key (G by default). With a compendium anywhere in the inventory, it opens the
-// book at the entry for the item under the mouse in any inventory screen, or for the block or entity
-// under the crosshair.
+/**
+ * @brief The compendium look-up key (G by default).
+ *
+ * With a compendium anywhere in the inventory, it opens the book at the entry for the item under
+ * the mouse in any inventory screen, or for the block or entity under the crosshair.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class CompendiumKeys {
     public static final KeyMapping LOOK_UP = new KeyMapping("key.xincraft.compendium_look_up",
@@ -38,7 +41,11 @@ public final class CompendiumKeys {
         event.register(LOOK_UP);
     }
 
-    // In the world: the block or entity under the crosshair
+    /**
+     * @brief In the world: the block or entity under the crosshair.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -59,7 +66,12 @@ public final class CompendiumKeys {
         }
     }
 
-    // In an inventory: the item under the mouse
+    /**
+     * @brief In an inventory: the item under the mouse.
+     *
+     * @param event The event.
+     * @return True if the book was opened, which cancels the key press.
+     */
     @SubscribeEvent
     public static boolean onScreenKey(ScreenEvent.KeyPressed.Pre event) {
         if (!(event.getScreen() instanceof AbstractContainerScreen<?> screen) || !LOOK_UP.matches(event.getInfo())

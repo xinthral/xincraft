@@ -16,8 +16,10 @@ import net.minecraft.util.GsonHelper;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
-// The compendium's bookmarks and the page it was last left open at, kept on this computer in
-// config/xincraft-compendium.json so they last between sessions and worlds
+/**
+ * @brief The compendium's bookmarks and the page it was last left open at, kept on this computer in
+ *        config/xincraft-compendium.json so they last between sessions and worlds.
+ */
 public final class Bookmarks {
     public static final int MAX = 8;
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -41,7 +43,12 @@ public final class Bookmarks {
         return bookmarks.contains(entry);
     }
 
-    // Adds or removes a bookmark; false if there's no room for another
+    /**
+     * @brief Adds or removes a bookmark.
+     *
+     * @param entry The entry to bookmark.
+     * @return False if there's no room for another bookmark.
+     */
     public static boolean toggle(String entry) {
         load();
         if (!bookmarks.remove(entry)) {
@@ -54,7 +61,12 @@ public final class Bookmarks {
         return true;
     }
 
-    // Where the book was left open: a view key (see CompendiumScreen.View) and the spread
+    /**
+     * @brief Where the book was left open.
+     *
+     * @return The view key.
+     * @see CompendiumScreen
+     */
     public static String lastView() {
         load();
         return lastView;

@@ -50,22 +50,28 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
-// A rideable minecart that drives itself forward while it has fuel burning, like a furnace
-// minecart you can sit in. It has a fuel slot (anything that burns in a furnace, lasting
-// Config.locomotiveFuelMultiplier times as long) and one storage slot, both reachable by
-// shift-right-clicking the cart, pressing the inventory key while riding, or a hopper above it.
-// Takes upgrades (see CartUpgrades). With the energy upgrade it also stores Forge Energy, charged
-// from charging rails, energy blocks under the track (or anything that hands energy to entities),
-// or by burning its fuel, and the engine runs only on that stored energy. Tows a train of up to
-// MAX_TOWED carts hitched behind it with linking bars (see LinkedTransport). A rider pressing jump
-// throws the handbrake, shown by the lever on the cart: the engine cuts out and the cart brakes to a
-// stop, and stays there, even on a powered rail, until a rider presses jump again.
-// Only players and villagers ride it.
+/**
+ * @brief A rideable minecart that drives itself forward while it has fuel burning.
+ *
+ * It has a fuel slot and one storage slot, and takes upgrades. With the energy upgrade, the engine
+ * runs only on stored Forge Energy, charged from charging rails, energy blocks or its own fuel.
+ *
+ * It tows a train of up to MAX_TOWED carts. A rider pressing jump throws the handbrake, which holds
+ * the cart still, even on a powered rail, until a rider presses jump again. Only players and
+ * villagers ride it.
+ *
+ * @see transport.train.CartUpgrades
+ * @see transport.train.LinkedTransport
+ */
 public class LocomotiveCart extends AbstractMinecartContainer implements HasCustomInventoryScreen, UpgradableCart, LinkableTransport {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
     public static final int SLOT_COUNT = 2;
-    // Most carts it tows in a train behind it. An advanced locomotive is planned that tows more.
+    /**
+     * @brief Most carts it tows in a train behind it.
+     *
+     * An advanced locomotive is planned that tows more.
+     */
     public static final int MAX_TOWED = 3;
 
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
@@ -73,24 +79,44 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_HANDBRAKE = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(LocomotiveCart.class, EntityDataSerializers.BOOLEAN);
-    // Engine force added each tick while burning. Strong enough to hold the cart at the speed
-    // cap, including the raised cap on tin rails.
+    /**
+     * @brief Engine force added each tick while burning.
+     *
+     * Strong enough to hold the cart at the speed cap, including the raised cap on tin rails.
+     */
     private static final double PUSH = 0.25;
-    // Below this horizontal speed (squared) the cart counts as stopped
+    /** @brief Below this horizontal speed (squared) the cart counts as stopped. */
     private static final double STOPPED_SPEED_SQR = 1.0E-4;
-    // Handbrake: the share of its speed the cart keeps each tick, and the speed taken off on top,
-    // bringing it from full speed to a stop in under a second
+    /**
+     * @brief Handbrake: the share of its speed the cart keeps each tick.
+     *
+     * Together with BRAKE_DROP, this brings it from full speed to a stop in under a second.
+     */
     private static final double BRAKE_KEEP = 0.8;
+    /** @brief Handbrake: the speed taken off each tick, on top of BRAKE_KEEP. */
     private static final double BRAKE_DROP = 0.02;
-    // Below this speed the handbrake holds the cart dead still. A powered rail's boost would otherwise
-    // balance the braking, leaving the cart rolling along forever at a few hundredths of a block per tick.
+    /**
+     * @brief Below this speed the handbrake holds the cart dead still.
+     *
+     * A powered rail's boost would otherwise balance the braking, leaving the cart rolling along
+     * forever at a few hundredths of a block per tick.
+     */
     private static final double BRAKE_HOLD_SPEED = 0.06;
-    // Most Forge Energy the energy upgrade takes in per tick, from blocks or anything else
+    /**
+     * @brief Most Forge Energy the energy upgrade takes in per tick, from blocks or anything else.
+     */
     private static final int MAX_ENERGY_RECEIVE = 1_000;
-    // What a rail or other source can push in per tick: enough for the electrum charging rail
+    /**
+     * @brief What a rail or other source can push in per tick: enough for the electrum charging
+     *        rail.
+     */
     private static final int MAX_ENERGY_PUSHED = 4_000;
-    // Menu data entries: burn left, then stored energy and capacity (each split in two, as menu
-    // data travels as 16-bit numbers), then whether the energy upgrade is fitted
+    /**
+     * @brief Menu data entries.
+     *
+     * Burn left, then stored energy and capacity (each split in two, as menu data travels as 16-bit
+     * numbers), then whether the energy upgrade is fitted.
+     */
     public static final int DATA_COUNT = 6;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
@@ -98,16 +124,25 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
     private int litTime;
     private int litDuration;
     private int energy;
-    // Whether the engine is running on energy this tick
+    /** @brief Whether the engine is running on energy this tick. */
     private boolean electric;
     private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> new Battery());
-    // Horizontal unit vector the engine drives along; zero while parked, so no fuel is used
+    /**
+     * @brief Horizontal unit vector the engine drives along; zero while parked, so no fuel is used.
+     */
     private Vec3 heading = Vec3.ZERO;
-    // Whether the jump key was down last tick, so that holding it throws the handbrake only once
+    /**
+     * @brief Whether the jump key was down last tick, so that holding it throws the handbrake only
+     *        once.
+     */
     private boolean jumpHeld;
 
-    // Synced to an open menu for the flame. Menu data travels as 16-bit numbers, too small for
-    // long burn times, so this sends the fraction of burn left in thousandths instead.
+    /**
+     * @brief Synced to an open menu for the flame.
+     *
+     * Menu data travels as 16-bit numbers, too small for long burn times, so this sends the
+     * fraction of burn left in thousandths instead.
+     */
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
@@ -212,7 +247,12 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return entityData.get(DATA_HANDBRAKE);
     }
 
-    // Throws the handbrake each time the rider presses jump
+    /**
+     * @brief Throws the handbrake each time the rider presses jump.
+     *
+     * @param rider The player riding it, or null.
+     * @param jumping Whether the rider is pressing jump.
+     */
     private void updateHandbrake(@Nullable ServerPlayer rider, boolean jumping) {
         if (jumping && !jumpHeld) {
             boolean on = !isHandbrakeOn();
@@ -225,8 +265,13 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         jumpHeld = jumping;
     }
 
-    // Brakes again after the physics have run, then holds the cart still once it's slow enough. The
-    // physics add a powered rail's boost after applyNaturalSlowdown's braking, so that alone can't stop it.
+    /**
+     * @brief Brakes again after the physics have run, then holds the cart still once it's slow
+     *        enough.
+     *
+     * The physics add a powered rail's boost after applyNaturalSlowdown's braking, so that alone
+     * can't stop it.
+     */
     private void holdBrake() {
         Vec3 motion = getDeltaMovement();
         double speed = motion.horizontalDistance();
@@ -235,9 +280,15 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         setDeltaMovement(motion.multiply(scale, 1.0, scale));
     }
 
-    // With the energy upgrade, burning fuel charges the battery rather than driving the cart, moving
-    // or parked. Each tick of burn stores as much energy as a tick of driving uses, so fuel goes as
-    // far as it would without the upgrade. Lights new fuel only while the battery isn't full.
+    /**
+     * @brief With the energy upgrade, burning fuel charges the battery rather than driving the
+     *        cart, moving or parked.
+     *
+     * Each tick of burn stores as much energy as a tick of driving uses, so fuel goes as far as it
+     * would without the upgrade. Lights new fuel only while the battery isn't full.
+     *
+     * @param level The level to work in.
+     */
     private void chargeFromFuel(ServerLevel level) {
         if (energy >= energyCapacity()) {
             return;
@@ -250,10 +301,18 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         }
     }
 
-    // Draws energy from whatever's under the cart that gives it out: the rail itself (for other
-    // mods' charging rails), then the block beneath the rail (e.g. a battery). The mod's own
-    // charging rail pushes energy into the cart instead (transport.rail.ChargingRailBlockEntity), so it's
-    // skipped here rather than charging the cart twice over.
+    /**
+     * @brief Draws energy from whatever's under the cart that gives it out.
+     *
+     * The rail itself (for other mods' charging rails), then the block beneath the rail (e.g. a
+     * battery).
+     *
+     * The mod's own charging rail pushes energy into the cart instead, so it's skipped here rather
+     * than charging the cart twice over.
+     *
+     * @param level The level to work in.
+     * @see transport.rail.ChargingRailBlockEntity
+     */
     private void chargeFromTrack(ServerLevel level) {
         if (energy >= energyCapacity()) {
             return;
@@ -280,7 +339,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         }
     }
 
-    // Works out which way the engine should drive this tick
+    /** @brief Works out which way the engine should drive this tick. */
     private void updateHeading() {
         Vec3 motion = getDeltaMovement().horizontal();
         boolean stopped = motion.lengthSqr() < STOPPED_SPEED_SQR;
@@ -307,7 +366,11 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return state.getBlock() instanceof PoweredRailBlock rail && !rail.isActivatorRail() && !state.getValue(PoweredRailBlock.POWERED);
     }
 
-    // Lights the next fuel item, the same way a furnace does, but burning longer
+    /**
+     * @brief Lights the next fuel item, the same way a furnace does, but burning longer.
+     *
+     * @param level The level to work in.
+     */
     private void burnFuel(ServerLevel level) {
         ItemStack fuel = getItem(FUEL_SLOT);
         int duration = (int) Math.round(level.fuelValues().burnDuration(fuel) * Config.locomotiveFuelMultiplier);
@@ -325,7 +388,10 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         }
     }
 
-    // Same engine force as the furnace minecart, applied along the heading; or the handbrake
+    /**
+     * @brief Same engine force as the furnace minecart, applied along the heading; or the
+     *        handbrake.
+     */
     @Override
     protected Vec3 applyNaturalSlowdown(Vec3 deltaMovement) {
         if (isHandbrakeOn()) {
@@ -345,8 +411,10 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return super.applyNaturalSlowdown(deltaMovement);
     }
 
-    // The linking bar and upgrades first; then right-click to ride, shift-right-click to open the
-    // fuel and storage slots
+    /**
+     * @brief The linking bar and upgrades first; then right-click to ride, shift-right-click to
+     *        open the fuel and storage slots.
+     */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult linked = transport.interact(player, hand);
@@ -373,7 +441,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
     }
 
-    // Opened by the inventory key while riding
+    /** @brief Opened by the inventory key while riding. */
     @Override
     public void openCustomInventoryScreen(Player player) {
         player.openMenu(this);
@@ -411,7 +479,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         level().gameEvent(GameEvent.CONTAINER_CLOSE, position(), GameEvent.Context.of(user.getLivingEntity()));
     }
 
-    // Only players and villagers ride a locomotive: it doesn't pick up other mobs
+    /** @brief Only players and villagers ride a locomotive: it doesn't pick up other mobs. */
     @Override
     protected boolean canAddPassenger(Entity passenger) {
         return (passenger instanceof Player || passenger instanceof Villager) && super.canAddPassenger(passenger);
@@ -427,13 +495,15 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return SLOT_COUNT;
     }
 
-    // Hoppers (and anything else inserting) can only put burnable items in the fuel slot
+    /**
+     * @brief Hoppers (and anything else inserting) can only put burnable items in the fuel slot.
+     */
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return slot != FUEL_SLOT || level().fuelValues().isFuel(stack);
     }
 
-    // Like a furnace, only empty buckets can be pulled back out of the fuel slot
+    /** @brief Like a furnace, only empty buckets can be pulled back out of the fuel slot. */
     @Override
     public boolean canTakeItem(Container into, int slot, ItemStack stack) {
         return slot != FUEL_SLOT || stack.is(Items.BUCKET);
@@ -444,7 +514,7 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         return new LocomotiveCartMenu(containerId, inventory, this, data);
     }
 
-    // The energy upgrade's storage, for other mods' cables, chargers and the like
+    /** @brief The energy upgrade's storage, for other mods' cables, chargers and the like. */
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
         if (capability == ForgeCapabilities.ENERGY && isAlive() && upgrades.has(CartUpgrade.ENERGY)) {
@@ -465,7 +535,11 @@ public class LocomotiveCart extends AbstractMinecartContainer implements HasCust
         energyCap = LazyOptional.of(() -> new Battery());
     }
 
-    // Takes energy in only; nothing can draw it back out. Takes nothing once the upgrade is removed.
+    /**
+     * @brief Takes energy in only; nothing can draw it back out.
+     *
+     * Takes nothing once the upgrade is removed.
+     */
     private class Battery implements IEnergyStorage {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {

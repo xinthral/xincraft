@@ -27,18 +27,32 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class TransportBlocks {
-    // One padded rail per wool colour (e.g. red_padded_rail): plain rails whose minecart sounds
-    // are muffled client-side (see transport.rail.client.PaddedRailSounds). Every one is in TransportTags.PADDED_RAILS.
+    /**
+     * @brief One padded rail per wool colour (e.g. red_padded_rail): plain rails whose minecart
+     *        sounds are muffled client-side.
+     *
+     * Every one is in TransportTags.PADDED_RAILS.
+     *
+     * @see transport.rail.client.PaddedRailSounds
+     */
     public static final Map<DyeColor, RegistryObject<Block>> PADDED_RAILS =
         registerColored("padded_rail", RailBlock::new);
 
-    // Powered rails with the same muffling, one per wool colour (e.g. red_padded_powered_rail)
+    /**
+     * @brief Powered rails with the same muffling, one per wool colour (e.g.
+     *        red_padded_powered_rail).
+     */
     public static final Map<DyeColor, RegistryObject<Block>> PADDED_POWERED_RAILS =
         registerColored("padded_powered_rail", ModPoweredRailBlock::new);
 
-    // Tin rails let minecarts travel faster than on other rails on straight track (slopes included),
-    // slowing to the normal cap for corners (see transport.rail.XincraftMinecartBehavior). Both are in
-    // TransportTags.TIN_RAILS.
+    /**
+     * @brief Tin rails let minecarts travel faster than on other rails on straight track (slopes
+     *        included), slowing to the normal cap for corners.
+     *
+     * Both are in TransportTags.TIN_RAILS.
+     *
+     * @see transport.rail.XincraftMinecartBehavior
+     */
     public static final RegistryObject<Block> TIN_RAIL = Registers.registerBlock(
         "tin_rail",
         RailBlock::new,
@@ -59,8 +73,12 @@ public final class TransportBlocks {
         true
     );
 
-    // A bronze powered rail holding Forge Energy for locomotive carts with the energy upgrade to
-    // charge from (transport.rail.ChargingRailBlock)
+    /**
+     * @brief A bronze powered rail holding Forge Energy for locomotive carts with the energy
+     *        upgrade to charge from.
+     *
+     * @see transport.rail.ChargingRailBlock
+     */
     public static final RegistryObject<Block> CHARGING_RAIL = Registers.registerBlock(
         "charging_rail",
         ChargingRailBlock::new,
@@ -71,9 +89,12 @@ public final class TransportBlocks {
         true
     );
 
-    // A charging rail that charges carts faster, reaches further for power, and passes charge along
-    // a line of its kind
-    // (transport.rail.ElectrumChargingRailBlock)
+    /**
+     * @brief A charging rail that charges carts faster, reaches further for power, and passes
+     *        charge along a line of its kind.
+     *
+     * @see transport.rail.ElectrumChargingRailBlock
+     */
     public static final RegistryObject<Block> ELECTRUM_CHARGING_RAIL = Registers.registerBlock(
         "electrum_charging_rail",
         ElectrumChargingRailBlock::new,
@@ -84,7 +105,11 @@ public final class TransportBlocks {
         true
     );
 
-    // Feeds a power network, for charging rails in range to draw from (transport.power.ChargingStationBlock)
+    /**
+     * @brief Feeds a power network, for charging rails in range to draw from.
+     *
+     * @see transport.power.ChargingStationBlock
+     */
     public static final RegistryObject<Block> CHARGING_STATION = Registers.registerBlock(
         "charging_station",
         ChargingStationBlock::new,
@@ -97,7 +122,11 @@ public final class TransportBlocks {
         true
     );
 
-    // Stores a little of a power network's energy, and extends its reach (transport.power.SubstationBlock)
+    /**
+     * @brief Stores a little of a power network's energy, and extends its reach.
+     *
+     * @see transport.power.SubstationBlock
+     */
     public static final RegistryObject<Block> SUBSTATION = Registers.registerBlock(
         "substation",
         SubstationBlock::new,
@@ -110,8 +139,14 @@ public final class TransportBlocks {
         true
     );
 
-    // Holds minecarts at a reduced speed (half by default, Config.honeyRailSpeedMultiplier), slowing
-    // fast carts and pushing slow ones (see transport.rail.XincraftMinecartBehavior). In TransportTags.HONEY_RAILS.
+    /**
+     * @brief Holds minecarts at a reduced speed (half by default, Config.honeyRailSpeedMultiplier),
+     *        slowing fast carts and pushing slow ones.
+     *
+     * In TransportTags.HONEY_RAILS.
+     *
+     * @see transport.rail.XincraftMinecartBehavior
+     */
     public static final RegistryObject<Block> HONEY_RAIL = Registers.registerBlock(
         "honey_rail",
         HoneyRailBlock::new,
@@ -122,8 +157,14 @@ public final class TransportBlocks {
         true
     );
 
-    // Launches minecarts upward, higher the stronger its redstone signal, up to
-    // Config.bouncyRailMaxHeight (see transport.rail.XincraftMinecartBehavior). In TransportTags.BOUNCY_RAILS.
+    /**
+     * @brief Launches minecarts upward, higher the stronger its redstone signal, up to
+     *        Config.bouncyRailMaxHeight.
+     *
+     * In TransportTags.BOUNCY_RAILS.
+     *
+     * @see transport.rail.XincraftMinecartBehavior
+     */
     public static final RegistryObject<Block> BOUNCY_RAIL = Registers.registerBlock(
         "bouncy_rail",
         BouncyRailBlock::new,
@@ -134,7 +175,10 @@ public final class TransportBlocks {
         true
     );
 
-    // Inspector rail: gives a redstone signal whose strength depends on the type of minecart on it
+    /**
+     * @brief Inspector rail: gives a redstone signal whose strength depends on the type of minecart
+     *        on it.
+     */
     public static final RegistryObject<Block> INSPECTOR_RAIL = Registers.registerBlock(
         "inspector_rail",
         InspectorRailBlock::new,
@@ -145,7 +189,10 @@ public final class TransportBlocks {
         true
     );
 
-    // Teleports minecarts to the ender rail it's linked to (item registered in TransportItems)
+    /**
+     * @brief Teleports minecarts to the ender rail it's linked to (item registered in
+     *        TransportItems).
+     */
     public static final RegistryObject<Block> ENDER_RAIL = Registers.registerBlock(
         "ender_rail",
         EnderRailBlock::new,
@@ -157,8 +204,14 @@ public final class TransportBlocks {
         false
     );
 
-    // Two-block marker buoy in still water, linked into paths for motorboats (transport.boat.BuoyBlock; item
-    // in TransportItems). The lamp on top glows while it's switched on.
+    /**
+     * @brief Two-block marker buoy in still water, linked into paths for motorboats.
+     *
+     * The lamp on top glows while it's switched on.
+     *
+     * @see transport.boat.BuoyBlock
+     * @see TransportItems
+     */
     public static final RegistryObject<Block> BUOY = Registers.registerBlock(
         "buoy",
         BuoyBlock::new,
@@ -172,7 +225,11 @@ public final class TransportBlocks {
         false
     );
 
-    // A buoy with a longer reach and a brighter lamp, linked into long legs (transport.boat.AdvancedBuoyBlock)
+    /**
+     * @brief A buoy with a longer reach and a brighter lamp, linked into long legs.
+     *
+     * @see transport.boat.AdvancedBuoyBlock
+     */
     public static final RegistryObject<Block> ADVANCED_BUOY = Registers.registerBlock(
         "advanced_buoy",
         AdvancedBuoyBlock::new,
@@ -203,7 +260,7 @@ public final class TransportBlocks {
         return Collections.unmodifiableMap(blocks);
     }
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private TransportBlocks() {}

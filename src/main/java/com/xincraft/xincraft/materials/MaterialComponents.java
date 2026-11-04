@@ -6,11 +6,15 @@ import net.minecraft.util.Unit;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MaterialComponents {
-    // Marks a vanilla spyglass as a tin spyglass (see materials.TinSpyglass)
+    /**
+     * @brief Marks a vanilla spyglass as a tin spyglass.
+     *
+     * @see TinSpyglass
+     */
     public static final RegistryObject<DataComponentType<Unit>> TIN_LENS = Registers.COMPONENTS.register("tin_lens",
         () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(Unit.STREAM_CODEC).build());
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private MaterialComponents() {}

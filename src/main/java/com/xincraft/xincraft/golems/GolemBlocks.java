@@ -7,7 +7,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class GolemBlocks {
-    // A copper chest with a fourth row, and a bronze golem's home (golems.BronzeChestBlock)
+    /**
+     * @brief A copper chest with a fourth row, and a bronze golem's home.
+     *
+     * @see BronzeChestBlock
+     */
     public static final RegistryObject<Block> BRONZE_CHEST = Registers.registerBlock(
         "bronze_chest",
         BronzeChestBlock::new,
@@ -15,7 +19,7 @@ public final class GolemBlocks {
         true
     );
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private GolemBlocks() {}

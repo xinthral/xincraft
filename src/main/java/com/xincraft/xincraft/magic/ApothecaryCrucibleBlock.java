@@ -22,10 +22,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-// A small crucible that sits in the apothecary altar's basin, for inscribing mobs onto mob filters
-// (see magic.ApothecaryCrucibleMenu). Like a crafting table it keeps nothing: whatever's left in
-// it goes back to the player when they close it. It only stands on an altar, and breaks off if the
-// altar goes.
+/**
+ * @brief A small crucible that sits in the apothecary altar's basin, for inscribing mobs onto mob
+ *        filters.
+ *
+ * Like a crafting table it keeps nothing: whatever's left in it goes back to the player when they
+ * close it. It only stands on an altar, and breaks off if the altar goes.
+ *
+ * @see ApothecaryCrucibleMenu
+ */
 public class ApothecaryCrucibleBlock extends Block {
     public static final MapCodec<ApothecaryCrucibleBlock> CODEC = simpleCodec(ApothecaryCrucibleBlock::new);
     private static final VoxelShape SHAPE = Block.column(12.0, 0.0, 8.0);

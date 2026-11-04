@@ -3,9 +3,15 @@ package com.xincraft.xincraft.transport.boat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-// A buoy whose links reach ADVANCED_LINK_RANGE blocks, but only to another advanced buoy: linked to
-// an ordinary buoy, it reaches as far as that one does. Motorboats need the advanced antenna upgrade
-// to follow a leg longer than an ordinary buoy's (see transport.boat.BuoyPath).
+/**
+ * @brief A buoy whose links reach ADVANCED_LINK_RANGE blocks, but only to another advanced buoy.
+ *
+ * Linked to an ordinary buoy, it reaches as far as that one does.
+ *
+ * Motorboats need the advanced antenna upgrade to follow a leg longer than an ordinary buoy's.
+ *
+ * @see BuoyPath
+ */
 public class AdvancedBuoyBlock extends BuoyBlock {
     public static final MapCodec<AdvancedBuoyBlock> CODEC = simpleCodec(AdvancedBuoyBlock::new);
 

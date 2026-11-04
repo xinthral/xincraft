@@ -13,9 +13,15 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
-// The Xincraft Compendium, the mod's guide book: using it opens it (compendium.client.CompendiumScreen)
-// where it was left. With one anywhere in the inventory, the look-up key opens it at the entry for
-// whatever's under the mouse or crosshair (compendium.client.CompendiumKeys).
+/**
+ * @brief The Xincraft Compendium, the mod's guide book: using it opens it where it was left.
+ *
+ * With one anywhere in the inventory, the look-up key opens it at the entry for whatever's under
+ * the mouse or crosshair.
+ *
+ * @see compendium.client.CompendiumScreen
+ * @see compendium.client.CompendiumKeys
+ */
 public class CompendiumItem extends Item {
     public CompendiumItem(Properties properties) {
         super(properties);
@@ -29,7 +35,7 @@ public class CompendiumItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    // What it is, from item.xincraft.compendium.desc
+    /** @brief Adds what it is to the tooltip. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

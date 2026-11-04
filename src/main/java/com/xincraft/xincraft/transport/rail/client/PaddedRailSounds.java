@@ -27,13 +27,18 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// Muffles minecart rolling sounds while the cart is on a padded rail. Vanilla's minecart sound
-// instances compute their own volume each tick, so we wrap them as they start playing and scale
-// whatever volume they produce.
+/**
+ * @brief Muffles minecart rolling sounds while the cart is on a padded rail.
+ *
+ * Vanilla's minecart sound instances compute their own volume each tick, so we wrap them as they
+ * start playing and scale whatever volume they produce.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class PaddedRailSounds {
-    // Fraction of the way the volume moves toward its target each tick, so entering or leaving
-    // a padded section fades instead of cutting abruptly
+    /**
+     * @brief Fraction of the way the volume moves toward its target each tick, so entering or
+     *        leaving a padded section fades instead of cutting abruptly.
+     */
     private static final float FADE_RATE = 0.25F;
 
     @SubscribeEvent
@@ -52,8 +57,14 @@ public final class PaddedRailSounds {
         }
     }
 
-    // Mirrors AbstractMinecart#getCurrentBlockPosOrRailBelow: the rail is either in the cart's
-    // block or, on slopes and with experimental minecart movement, the block just below it
+    /**
+     * @brief Whether the cart is on a padded rail: the rail is either in the cart's block or the
+     *        block just below it.
+     *
+     * @param level The level to work in.
+     * @param pos The cart's position.
+     * @return True if The cart is on a padded rail.
+     */
     private static boolean isOnPaddedRail(Level level, Vec3 pos) {
         BlockPos blockPos = BlockPos.containing(pos);
         return level.getBlockState(blockPos).is(TransportTags.PADDED_RAILS)

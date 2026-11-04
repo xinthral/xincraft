@@ -23,12 +23,17 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-// A bronze-lined motorboat carrying a jukebox where the second seat would be. It's a motorboat in
-// every other way (engine, fuel, storage, upgrades, buoy paths), and plays its disc while it's on
-// the move, like the jingle cart (see JukeboxPlayback); with a sculk sensor upgrade, only while a
-// player is within earshot. Right-click with a music disc to put it in (swapping out any disc
-// already there); shift-right-click with an empty hand takes the disc out, or opens the boat's
-// slots when there's no disc.
+/**
+ * @brief A bronze-lined motorboat carrying a jukebox where the second seat would be.
+ *
+ * It's a motorboat in every other way (engine, fuel, storage, upgrades, buoy paths), and plays its
+ * disc while it's on the move, like the jingle cart; with a sculk sensor upgrade, only while a
+ * player is within earshot. Right-click with a music disc to put it in (swapping out any disc
+ * already there); shift-right-click with an empty hand takes the disc out, or opens the boat's
+ * slots when there's no disc.
+ *
+ * @see transport.train.JukeboxPlayback
+ */
 public class PartyBoat extends Motorboat implements JukeboxVehicle {
     private static final EntityDataAccessor<ItemStack> DATA_DISC = SynchedEntityData.defineId(PartyBoat.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_SESSION = SynchedEntityData.defineId(PartyBoat.class, EntityDataSerializers.INT);
@@ -51,7 +56,7 @@ public class PartyBoat extends Motorboat implements JukeboxVehicle {
         return jukebox;
     }
 
-    // The jukebox takes the back seat
+    /** @brief The jukebox takes the back seat. */
     @Override
     protected int getMaxPassengers() {
         return 1;

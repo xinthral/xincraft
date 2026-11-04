@@ -21,11 +21,16 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-// The apothecary crucible's screen: the two powders, catalyst and filter in a triangle, an arrow to
-// the inscribed filter, and a row of element pips for nature's balance. A pip lights up when the
-// inscription draws on its element, and turns red when the flora around the altar are short of it.
-// The filter slot glows red when the filter is full or already lists the mob. Hovering a pip, or the
-// empty output, says why.
+/**
+ * @brief The apothecary crucible's screen.
+ *
+ * The two powders, catalyst and filter in a triangle, an arrow to the inscribed filter, and a row
+ * of element pips for nature's balance.
+ *
+ * A pip lights up when the inscription draws on its element, and turns red when the flora around
+ * the altar are short of it. The filter slot glows red when the filter is full or already lists the
+ * mob. Hovering a pip, or the empty output, says why.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class ApothecaryCrucibleScreen extends AbstractContainerScreen<ApothecaryCrucibleMenu> {
     private static final Identifier TEXTURE =
@@ -58,7 +63,11 @@ public class ApothecaryCrucibleScreen extends AbstractContainerScreen<Apothecary
         titleLabelX = (imageWidth - font.width(title)) / 2;
     }
 
-    // The elements the powders in the crucible would draw on, as a bitmask; none until both are in
+    /**
+     * @brief The elements the powders in the crucible would draw on.
+     *
+     * @return The bitmask, or none until both powders are in.
+     */
     private int balancingMask() {
         ItemStack left = menu.getSlot(ApothecaryCrucibleMenu.LEFT_SLOT).getItem();
         ItemStack right = menu.getSlot(ApothecaryCrucibleMenu.RIGHT_SLOT).getItem();

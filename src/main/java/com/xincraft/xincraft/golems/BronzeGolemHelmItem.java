@@ -17,8 +17,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
-// Used on a copper golem, at any stage of oxidation, turns it into a bronze golem (golems.BronzeGolem).
-// What it was carrying or had on its antenna drops.
+/**
+ * @brief Used on a copper golem, at any stage of oxidation, turns it into a bronze golem.
+ *
+ * What it was carrying or had on its antenna drops.
+ *
+ * @see BronzeGolem
+ */
 public class BronzeGolemHelmItem extends Item {
     public BronzeGolemHelmItem(Item.Properties properties) {
         super(properties);

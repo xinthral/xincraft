@@ -7,32 +7,45 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.JukeboxSong;
 
-// The jukebox carried by a vehicle (the jingle cart and the party boat): which disc is in, and when
-// its song plays. It plays while the vehicle is moving, starting the song over each time it sets off
-// again (a song can't be resumed partway) and looping it for as long as it keeps moving; with a
-// sculk sensor upgrade, only while a player is within earshot. Clients play the music themselves
-// (transport.train.client.JukeboxVehicleSound), starting it when the synced play-through number changes.
+/**
+ * @brief The jukebox carried by a vehicle: which disc is in, and when its song plays.
+ *
+ * It plays while the vehicle is moving, starting the song over each time it sets off again and
+ * looping it for as long as it keeps moving. Clients play the music themselves, starting it when
+ * the synced play-through number changes.
+ *
+ * @see transport.train.client.JukeboxVehicleSound
+ */
 public final class JukeboxPlayback {
-    // Below this horizontal speed (squared) the vehicle counts as stopped
+    /** @brief Below this horizontal speed (squared) the vehicle counts as stopped. */
     public static final double STOPPED_SPEED_SQR = 1.0E-4;
-    // Earshot for the sculk sensor upgrade: plays while a player is within this many blocks
+    /**
+     * @brief Earshot for the sculk sensor upgrade: plays while a player is within this many blocks.
+     */
     public static final double SENSOR_RANGE = 32.0;
-    // How long it can sit still before the music stops, so a brief stop (e.g. topping a hill)
-    // doesn't cut it off
+    /**
+     * @brief How long it can sit still before the music stops, so a brief stop (e.g. topping a
+     *        hill) doesn't cut it off.
+     */
     private static final int STOP_DELAY_TICKS = 10;
-    // Pause before the song plays again from the top
+    /** @brief Pause before the song plays again from the top. */
     private static final int LOOP_PAUSE_TICKS = 20;
 
     private final Entity vehicle;
     private final EntityDataAccessor<ItemStack> discData;
-    // Which play-through of the song is under way, so clients can tell a new one from the one
-    // they're already playing; 0 while silent
+    /**
+     * @brief Which play-through of the song is under way, so clients can tell a new one from the
+     *        one they're already playing; 0 while silent.
+     */
     private final EntityDataAccessor<Integer> sessionData;
     private int stillTicks = STOP_DELAY_TICKS;
     private int songTicks;
     private int pauseTicks;
     private int lastSession;
-    // Client only: the play-through this client has heard start, or -1 before its first tick
+    /**
+     * @brief Client only: the play-through this client has heard start, or -1 before its first
+     *        tick.
+     */
     private int clientSession = -1;
 
     public JukeboxPlayback(Entity vehicle, EntityDataAccessor<ItemStack> discData, EntityDataAccessor<Integer> sessionData) {
@@ -45,8 +58,12 @@ public final class JukeboxPlayback {
         return vehicle.getEntityData().get(discData);
     }
 
-    // Putting the same disc back (as a hopper does when it can't take it after all) leaves the song
-    // playing; a different disc stops it
+    /**
+     * @brief Putting the same disc back (as a hopper does when it can't take it after all) leaves
+     *        the song playing; a different disc stops it.
+     *
+     * @param disc The disc going in.
+     */
     public void setDisc(ItemStack disc) {
         boolean changed = !ItemStack.matches(getDisc(), disc);
         vehicle.getEntityData().set(discData, disc);
@@ -71,7 +88,12 @@ public final class JukeboxPlayback {
         clientSession = session;
     }
 
-    // Run each server tick with how far the vehicle moved and whether a player can hear it
+    /**
+     * @brief Run each server tick with how far the vehicle moved and whether a player can hear it.
+     *
+     * @param horizontalSpeedSqr How far the vehicle moved, as a squared horizontal speed.
+     * @param heard Whether a player can hear it.
+     */
     public void serverTick(double horizontalSpeedSqr, boolean heard) {
         stillTicks = horizontalSpeedSqr < STOPPED_SPEED_SQR ? stillTicks + 1 : 0;
         if (pauseTicks > 0) {

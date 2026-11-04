@@ -14,12 +14,17 @@ import net.minecraftforge.client.gui.overlay.ForgeLayeredDraw;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Tints the view a faint rose while wearing rose-tinted glasses, in first person. Drawn just below
-// vanilla's camera overlay, like the tin spyglass's tint (TinSpyglassTint).
+/**
+ * @brief Tints the view a faint rose while wearing rose-tinted glasses, in first person.
+ *
+ * Drawn just below vanilla's camera overlay, like the tin spyglass's tint.
+ *
+ * @see materials.client.TinSpyglassTint
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class RoseTintedGlassesTint {
     private static final Identifier LAYER = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "rose_tinted_glasses_tint");
-    // Faint, translucent rose (ARGB)
+    /** @brief Faint, translucent rose (ARGB). */
     private static final int TINT = 0x1CFF5C8A;
 
     @SubscribeEvent

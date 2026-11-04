@@ -8,12 +8,16 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MagicItems {
-    // Grinds flowers and vines into elemental powders in the crafting grid, wearing down instead of
-    // being used up
+    /**
+     * @brief Grinds flowers and vines into elemental powders in the crafting grid, wearing down
+     *        instead of being used up.
+     */
     public static final RegistryObject<Item> MORTAR_AND_PESTLE = Registers.registerItem("mortar_and_pestle", MortarAndPestleItem::new,
         () -> new Item.Properties().durability(64));
 
-    // One powder per element (e.g. ignis_powder); turns small flowers into elemental flora
+    /**
+     * @brief One powder per element (e.g. ignis_powder); turns small flowers into elemental flora.
+     */
     public static final Map<Element, RegistryObject<Item>> ELEMENT_POWDERS = registerElementPowders();
 
     private static Map<Element, RegistryObject<Item>> registerElementPowders() {
@@ -25,7 +29,7 @@ public final class MagicItems {
         return Collections.unmodifiableMap(items);
     }
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private MagicItems() {}

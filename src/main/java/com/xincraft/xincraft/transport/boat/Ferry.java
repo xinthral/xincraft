@@ -27,11 +27,17 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// The carriage's boat: a passenger raft, seating two, for hitching behind a motorboat with a linking
-// bar (see LinkedTransport). Its passengers ride but don't paddle or steer, so it goes where it's
-// towed and otherwise drifts. Like the carriage, it won't take hostile mobs aboard unless it has the
-// cell upgrade, which carries them caged (see MobCell). Takes upgrades (see CartUpgrades), and a mob
-// filter, which lets only the mobs on it aboard.
+/**
+ * @brief The carriage's boat: a passenger raft seating two, for hitching behind a motorboat.
+ *
+ * Its passengers ride but don't paddle or steer, so it goes where it's towed and otherwise drifts.
+ * Like the carriage, it won't take hostile mobs aboard without the cell upgrade, and a mob filter
+ * lets only the mobs on it aboard.
+ *
+ * @see transport.train.LinkedTransport
+ * @see transport.train.MobCell
+ * @see transport.train.CartUpgrades
+ */
 public class Ferry extends AbstractBoat implements UpgradableCart, LinkableTransport {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Ferry.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Ferry.class, EntityDataSerializers.INT);
@@ -67,19 +73,19 @@ public class Ferry extends AbstractBoat implements UpgradableCart, LinkableTrans
         return true;
     }
 
-    // As vanilla's raft
+    /** @brief As vanilla's raft. */
     @Override
     protected double rideHeight(EntityDimensions dimensions) {
         return dimensions.height() * 0.8888889F;
     }
 
-    // Passengers only ride: nobody steers a ferry
+    /** @brief Passengers only ride: nobody steers a ferry. */
     @Override
     public @Nullable LivingEntity getControllingPassenger() {
         return null;
     }
 
-    // Hostile mobs only ride in a cell; this also keeps it from picking them up
+    /** @brief Hostile mobs only ride in a cell; this also keeps it from picking them up. */
     @Override
     protected boolean canAddPassenger(Entity passenger) {
         return MobCell.canCarry(this, passenger) && super.canAddPassenger(passenger);
@@ -100,9 +106,14 @@ public class Ferry extends AbstractBoat implements UpgradableCart, LinkableTrans
         super.tick();
     }
 
-    // The linking bar and upgrades first; then, with a mob in the cell, right-click lets it out
-    // (or with a lead, ties one ready for it; see MobCell); otherwise right-click to ride, as
-    // any boat
+    /**
+     * @brief The linking bar and upgrades first.
+     *
+     * Then, with a mob in the cell, right-click lets it out (or with a lead, ties one ready for
+     * it); otherwise right-click to ride, as any boat.
+     *
+     * @see transport.train.MobCell
+     */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult result = transport.interact(player, hand);

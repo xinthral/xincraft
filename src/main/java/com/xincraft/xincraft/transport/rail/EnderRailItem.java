@@ -19,7 +19,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.Nullable;
 
-// Ender rail item; can carry an attunement to a placed ender rail (see transport.rail.EnderRailBlock)
+/**
+ * @brief Ender rail item; can carry an attunement to a placed ender rail.
+ *
+ * @see EnderRailBlock
+ */
 public class EnderRailItem extends BlockItem {
     private static final int GLINT_TICKS = 20;
 
@@ -27,7 +31,13 @@ public class EnderRailItem extends BlockItem {
         super(block, properties);
     }
 
-    // Gives the stack an enchantment glint for one second; inventoryTick takes it away again
+    /**
+     * @brief Gives the stack an enchantment glint for one second; inventoryTick takes it away
+     *        again.
+     *
+     * @param stack The item stack.
+     * @param level The level to work in.
+     */
     public static void flashGlint(ItemStack stack, Level level) {
         stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
         stack.set(TransportComponents.GLINT_UNTIL.get(), level.getGameTime() + GLINT_TICKS);

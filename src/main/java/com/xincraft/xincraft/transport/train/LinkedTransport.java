@@ -24,57 +24,66 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// A vehicle's links to the vehicles ahead of and behind it in a train, made with a linking bar
-// (transport.train.LinkingBarItem): use the bar on one and then the other. Minecarts make trains on rails and
-// boats make trains on water, by the same rules, but a cart can't be linked to a boat. Each vehicle
-// takes one link at each end, so they hitch together in a line. Every train is led by a vehicle that
-// can tow (a locomotive, or a motorboat), which tows at most LinkableTransport.maxTowed() vehicles
-// behind it, counting every one down the line. When two are linked, the one used first goes in front
-// if that makes a train; otherwise the other one does. Shift-using a bar on a vehicle unhitches it
-// from the one ahead (or, at the front of a train, from the one behind) and hands the bar back;
-// breaking a vehicle, or a link snapping (pulled too far apart, as by an ender rail), drops the bar.
-//
-// Each link holds its vehicles a bar's length apart, end to end, like a stiff spring with damping:
-// each tick a vehicle pulls (or pushes) the one behind it, and is held back by it in turn, along the
-// line between them. On rails, vanilla turns that into motion along the track, so each cart follows
-// the one ahead around curves and over slopes, pivoting about the bar; a towed boat is also turned
-// to face the boat ahead. A hitched boat can't be steered, so nobody aboard fights the tow. Linked
-// vehicles don't collide with or bump each other, so they can't jam on a tight corner. Each side
-// keeps the other's UUID, which is saved; each vehicle also syncs the entity id of the one behind it
-// to clients to draw the bar (transport.train.client.LinkingBar), and whether it's hitched behind another.
+/**
+ * @brief A vehicle's links to the vehicles ahead of and behind it in a train, made with a linking
+ *        bar.
+ *
+ * Minecarts make trains on rails and boats make trains on water, by the same rules, but a cart
+ * can't be linked to a boat. Every train is led by a vehicle that can tow, up to
+ * LinkableTransport#maxTowed vehicles. Shift-using a bar on a vehicle unhitches it, and a link
+ * snaps if pulled too far apart.
+ *
+ * Each link holds its vehicles a bar's length apart, like a stiff spring with damping. On rails,
+ * vanilla turns that into motion along the track, so each cart follows the one ahead around curves
+ * and over slopes. Linked vehicles don't collide, so they can't jam on a tight corner.
+ *
+ * @see LinkingBarItem
+ * @see transport.train.client.LinkingBar
+ */
 public final class LinkedTransport {
-    // Half a cart's and a boat's length, and the gap the bar spans between two of them, end to end
+    /** @brief Half a cart's length. */
     public static final double CART_HALF_LENGTH = 0.625;
+    /** @brief Half a boat's length. */
     public static final double BOAT_HALF_LENGTH = 0.875;
+    /** @brief The gap the bar spans between two vehicles, end to end. */
     public static final double BAR_GAP = 0.7;
-    // How far each end of the bar, where it pivots, is beyond its vehicle's end
+    /** @brief How far each end of the bar, where it pivots, is beyond its vehicle's end. */
     public static final double PIVOT_OVERHANG = 0.0625;
     public static final int NONE = -1;
-    // How much further apart than their spacing two vehicles can be hitched from, and how far a
-    // link stretches beyond its spacing before it snaps
+    /** @brief How much further apart than their spacing two vehicles can be hitched from. */
     private static final double LINK_REACH = 1.55;
+    /** @brief How far a link stretches beyond its spacing before it snaps. */
     private static final double SNAP_STRETCH = 3.05;
-    // Share of the stretch taken up, and of the difference in speed along the bar evened out, each
-    // tick; and the most the spring changes either vehicle's speed in a tick
+    /** @brief Share of the stretch taken up each tick. */
     private static final double STIFFNESS = 0.4;
+    /** @brief Share of the difference in speed along the bar evened out each tick. */
     private static final double DAMPING = 0.4;
+    /** @brief The most the spring changes either vehicle's speed in a tick. */
     private static final double MAX_PULL = 0.5;
-    // Most degrees a towed boat turns each tick to face the boat ahead
+    /** @brief Most degrees a towed boat turns each tick to face the boat ahead. */
     private static final float BOAT_TURN = 10.0F;
-    // A partner that's gone missing (moved to another dimension, or removed without notice) is
-    // forgotten after this long; a partner that's just unloaded for a moment comes back sooner
+    /**
+     * @brief A partner that's gone missing (moved to another dimension, or removed without notice)
+     *        is forgotten after this long.
+     *
+     * A partner that's just unloaded for a moment comes back sooner.
+     */
     private static final int MISSING_TICKS = 200;
-    // Most vehicles followed along a train, as a guard against a broken save looping it round
+    /**
+     * @brief Most vehicles followed along a train, as a guard against a broken save looping it
+     *        round.
+     */
     private static final int MAX_TRAIN = 64;
 
     private final VehicleEntity vehicle;
-    // The entity id of the vehicle behind, for drawing the bar, and whether one's ahead
+    /** @brief The entity id of the vehicle behind, for drawing the bar. */
     private final EntityDataAccessor<Integer> towedData;
+    /** @brief Whether a vehicle is hitched ahead. */
     private final EntityDataAccessor<Boolean> hitchedData;
     private final Link ahead = new Link();
     private final Link behind = new Link();
 
-    // One end of the vehicle: the partner hitched there, and how long it's been missing
+    /** @brief One end of the vehicle: the partner hitched there, and how long it's been missing. */
     private static final class Link {
         private @Nullable UUID partner;
         private int missingTicks;
@@ -85,7 +94,7 @@ public final class LinkedTransport {
         }
     }
 
-    // Why a pair can't be linked one way round, from the least to the most telling
+    /** @brief Why a pair can't be linked one way round, from the least to the most telling. */
     private enum Refusal {
         NEEDS_LEADER("needs_locomotive", "needs_motorboat"),
         ALREADY_LINKED("already_linked", "already_linked"),
@@ -116,12 +125,20 @@ public final class LinkedTransport {
         return id.equals(ahead.partner) || id.equals(behind.partner);
     }
 
-    // Client side as well: the entity id of the vehicle this one tows, or NONE
+    /**
+     * @brief Client side as well: the entity id of the vehicle this one tows, or NONE.
+     *
+     * @return The entity id, or NONE.
+     */
     public int towedId() {
         return vehicle.getEntityData().get(towedData);
     }
 
-    // Client side as well: whether it's hitched behind another vehicle
+    /**
+     * @brief Whether it's hitched behind another vehicle. Works on the client as well.
+     *
+     * @return True if It's hitched behind another vehicle. Works on the client as well.
+     */
     public boolean isHitched() {
         return vehicle.getEntityData().get(hitchedData);
     }
@@ -134,12 +151,23 @@ public final class LinkedTransport {
         vehicle.getEntityData().set(hitchedData, hitched);
     }
 
-    // Half a vehicle's length, from its centre to the end the bar hitches to
+    /**
+     * @brief Half a vehicle's length, from its centre to the end the bar hitches to.
+     *
+     * @param vehicle The vehicle.
+     * @return The length, in blocks.
+     */
     public static double halfLength(Entity vehicle) {
         return vehicle instanceof AbstractBoat ? BOAT_HALF_LENGTH : CART_HALF_LENGTH;
     }
 
-    // How far apart, centre to centre, a link holds two vehicles
+    /**
+     * @brief How far apart, centre to centre, a link holds two vehicles.
+     *
+     * @param a One vehicle.
+     * @param b The other vehicle.
+     * @return The distance, in blocks.
+     */
     public static double spacing(Entity a, Entity b) {
         return halfLength(a) + halfLength(b) + BAR_GAP;
     }
@@ -152,7 +180,11 @@ public final class LinkedTransport {
         return (a instanceof AbstractMinecart) == (b instanceof AbstractMinecart);
     }
 
-    // Run by the vehicle at the start of each server tick, before it moves
+    /**
+     * @brief Run by the vehicle at the start of each server tick, before it moves.
+     *
+     * @param level The level to work in.
+     */
     public void tick(ServerLevel level) {
         find(level, ahead, false);
         setHitched(ahead.partner != null);
@@ -173,8 +205,17 @@ public final class LinkedTransport {
         }
     }
 
-    // The partner at one end, if it's loaded and still linked back. Forgets one that's been missing
-    // too long, or that's no longer linked back (e.g. unhitched while this vehicle was unloaded).
+    /**
+     * @brief The partner at one end, if it's loaded and still linked back.
+     *
+     * Forgets one that's been missing too long, or that's no longer linked back (e.g. unhitched
+     * while this vehicle was unloaded).
+     *
+     * @param level The level to work in.
+     * @param link The end to look at.
+     * @param isBehind Whether that end is the one behind.
+     * @return The partner, or null if there isn't one to find.
+     */
     private @Nullable VehicleEntity find(ServerLevel level, Link link, boolean isBehind) {
         if (link.partner == null) {
             return null;
@@ -195,8 +236,12 @@ public final class LinkedTransport {
         return other;
     }
 
-    // The spring and damper between this vehicle and the one it tows, along the line between them (on
-    // the level, so a slope doesn't lift or press down on either)
+    /**
+     * @brief The spring and damper between this vehicle and the one it tows, along the line between
+     *        them (on the level, so a slope doesn't lift or press down on either).
+     *
+     * @param towed The vehicle being towed.
+     */
     private void pull(VehicleEntity towed) {
         Vec3 offset = towed.position().subtract(vehicle.position()).horizontal();
         double distance = offset.length();
@@ -211,8 +256,15 @@ public final class LinkedTransport {
         towed.setDeltaMovement(towed.getDeltaMovement().subtract(change));
     }
 
-    // How fast a vehicle's going. A boat a player steers is moved on their client, so the server
-    // only knows how far it's come since last tick.
+    /**
+     * @brief How fast a vehicle's going.
+     *
+     * A boat a player steers is moved on their client, so the server only knows how far it's come
+     * since last tick.
+     *
+     * @param vehicle The vehicle.
+     * @return The motion, per tick.
+     */
     private static Vec3 motion(VehicleEntity vehicle) {
         if (vehicle instanceof AbstractBoat && !vehicle.isLocalInstanceAuthoritative()) {
             return vehicle.position().subtract(vehicle.xo, vehicle.yo, vehicle.zo);
@@ -220,7 +272,12 @@ public final class LinkedTransport {
         return vehicle.getDeltaMovement();
     }
 
-    // Swings a towed boat's bow round toward the boat ahead, a little each tick
+    /**
+     * @brief Swings a towed boat's bow round toward the boat ahead, a little each tick.
+     *
+     * @param boat The boat being towed.
+     * @param leader The position of the boat ahead.
+     */
     private static void turnToward(AbstractBoat boat, Vec3 leader) {
         Vec3 toLeader = leader.subtract(boat.position()).horizontal();
         if (toLeader.lengthSqr() < 1.0E-4) {
@@ -232,9 +289,16 @@ public final class LinkedTransport {
         boat.setYRot(boat.getYRot() + turn);
     }
 
-    // A linking bar: shift-use unhitches; otherwise the first vehicle used is remembered on the bar,
-    // and the second is hitched to it. PASS for anything else, so the vehicle carries on with its own
-    // interaction.
+    /**
+     * @brief A linking bar: shift-use unhitches; otherwise the first vehicle used is remembered on
+     *        the bar, and the second is hitched to it.
+     *
+     * PASS for anything else, so the vehicle carries on with its own interaction.
+     *
+     * @param player The player.
+     * @param hand The hand being used.
+     * @return PASS for anything else, so the vehicle carries on with its own interaction.
+     */
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.is(TransportItems.LINKING_BAR.get())) {
@@ -325,8 +389,17 @@ public final class LinkedTransport {
         return InteractionResult.SUCCESS;
     }
 
-    // Why the follower can't be hitched behind the leader, or null if it can: the leader's train must
-    // be led by a vehicle that tows, with room for the follower and every vehicle behind it
+    /**
+     * @brief Why the follower can't be hitched behind the leader, or null if it can.
+     *
+     * The leader's train must be led by a vehicle that tows, with room for the follower and every
+     * vehicle behind it.
+     *
+     * @param level The level to work in.
+     * @param leader The vehicle that would be in front.
+     * @param follower The vehicle that would be behind.
+     * @return The reason, or null if it can be hitched.
+     */
     private static @Nullable Refusal refusal(ServerLevel level, VehicleEntity leader, VehicleEntity follower) {
         if (of(leader).behind.partner != null || of(follower).ahead.partner != null) {
             return Refusal.ALREADY_LINKED;
@@ -352,7 +425,13 @@ public final class LinkedTransport {
         return ahead + added > maxTowed ? Refusal.TOO_LONG : null;
     }
 
-    // The most vehicles the one at the head of this one's train can tow, for messages
+    /**
+     * @brief The most vehicles the one at the head of this one's train can tow, for messages.
+     *
+     * @param level The level to work in.
+     * @param vehicle The vehicle.
+     * @return The limit.
+     */
     private static int maxTowed(ServerLevel level, VehicleEntity vehicle) {
         VehicleEntity head = vehicle;
         VehicleEntity next;
@@ -362,7 +441,14 @@ public final class LinkedTransport {
         return ((LinkableTransport) head).maxTowed();
     }
 
-    // The loaded vehicle linked ahead of or behind this one, if any
+    /**
+     * @brief The loaded vehicle linked ahead of or behind this one, if any.
+     *
+     * @param level The level to work in.
+     * @param vehicle The vehicle.
+     * @param isBehind Whether to look behind rather than ahead.
+     * @return The vehicle, or null if there's none.
+     */
     private static @Nullable VehicleEntity next(ServerLevel level, VehicleEntity vehicle, boolean isBehind) {
         UUID id = (isBehind ? of(vehicle).behind : of(vehicle).ahead).partner;
         return id != null && level.getEntity(id) instanceof VehicleEntity next && next instanceof LinkableTransport ? next : null;
@@ -379,7 +465,12 @@ public final class LinkedTransport {
         back.setHitched(true);
     }
 
-    // Unhitches this vehicle from the partner at one end, and the partner from it
+    /**
+     * @brief Unhitches this vehicle from the partner at one end, and the partner from it.
+     *
+     * @param link The end to unhitch.
+     * @param other The partner at that end.
+     */
     private void unlink(Link link, VehicleEntity other) {
         if (other instanceof LinkableTransport linkable) {
             LinkedTransport partner = linkable.transport();
@@ -407,9 +498,14 @@ public final class LinkedTransport {
         }
     }
 
-    // Run when the vehicle leaves the level. Broken or killed, it unhitches the vehicles either side
-    // and drops a bar for each link; just unloaded with its chunk, it keeps its links for when it
-    // comes back.
+    /**
+     * @brief Run when the vehicle leaves the level.
+     *
+     * Broken or killed, it unhitches the vehicles either side and drops a bar for each link; just
+     * unloaded with its chunk, it keeps its links for when it comes back.
+     *
+     * @param reason Why it's leaving the level.
+     */
     public void onRemove(Entity.RemovalReason reason) {
         if (!isLinked() || !(vehicle.level() instanceof ServerLevel level)
                 || reason == Entity.RemovalReason.UNLOADED_TO_CHUNK || reason == Entity.RemovalReason.UNLOADED_WITH_PLAYER) {

@@ -34,12 +34,16 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
 
-// A minecart carrying a jukebox. Right-click with a music disc to put it in, and right-click again
-// to take it out. It plays the disc while it's rolling, the music following the cart along the
-// track (see JukeboxPlayback); with a sculk sensor upgrade, only while a player is within earshot.
-// Like a jukebox, it holds its disc as a one-slot container, so
-// hoppers (and hopper minecarts) can load and unload it, and a detector rail's comparator signal
-// shows whether it has a disc. Can be hitched into a locomotive's train with a linking bar (see LinkedTransport).
+/**
+ * @brief A minecart carrying a jukebox, which plays its disc while it's rolling.
+ *
+ * Right-click with a music disc to put it in, and right-click again to take it out. The music
+ * follows the cart along the track. Like a jukebox, it holds its disc as a one-slot container, so
+ * hoppers can load and unload it. It can be hitched into a train with a linking bar.
+ *
+ * @see transport.train.JukeboxPlayback
+ * @see transport.train.LinkedTransport
+ */
 public class JingleCart extends AbstractMinecart implements UpgradableCart, LinkableTransport, JukeboxVehicle, ContainerSingleItem {
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(JingleCart.class, EntityDataSerializers.INT);
@@ -95,7 +99,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
         return getDisc();
     }
 
-    // Hands over the disc itself rather than splitting the synced stack in place
+    /** @brief Hands over the disc itself rather than splitting the synced stack in place. */
     @Override
     public ItemStack splitTheItem(int count) {
         ItemStack disc = getDisc();
@@ -118,8 +122,10 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
         return JukeboxSong.fromStack(stack).isPresent() && getDisc().isEmpty();
     }
 
-    // Only lets a hopper take the disc when it has room for it, so a full hopper doesn't keep pulling
-    // the disc out and putting it back
+    /**
+     * @brief Only lets a hopper take the disc when it has room for it, so a full hopper doesn't
+     *        keep pulling the disc out and putting it back.
+     */
     @Override
     public boolean canTakeItem(Container into, int slot, ItemStack stack) {
         return into.hasAnyMatching(ItemStack::isEmpty);
@@ -153,7 +159,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
         }
     }
 
-    // The linking bar and upgrades first; then a disc goes in, or the disc comes out
+    /** @brief The linking bar and upgrades first; then a disc goes in, or the disc comes out. */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult result = transport.interact(player, hand);
@@ -211,7 +217,7 @@ public class JingleCart extends AbstractMinecart implements UpgradableCart, Link
         upgrades.dropAll(level);
     }
 
-    // A jukebox, showing the disc when there's one in
+    /** @brief A jukebox, showing the disc when there's one in. */
     @Override
     public BlockState getDefaultDisplayBlockState() {
         return Blocks.JUKEBOX.defaultBlockState().setValue(JukeboxBlock.HAS_RECORD, !getDisc().isEmpty());

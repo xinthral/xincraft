@@ -5,9 +5,13 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-// Tunable mod values. Forge writes these, with their comments and allowed ranges, to
-// config/xincraft-common.toml on first launch, and reloads them when that file is edited
-// while the game is running. Add new values to the section for the feature they belong to.
+/**
+ * @brief Tunable mod values.
+ *
+ * Forge writes these, with their comments and allowed ranges, to config/xincraft-common.toml on
+ * first launch, and reloads them when that file is edited while the game is running. Add new values
+ * to the section for the feature they belong to.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -177,8 +181,14 @@ public class Config {
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
-    // Cached copies of the values above, refreshed whenever the config loads or reloads.
-    // Initialized to the same defaults so they're usable before the config has loaded.
+    /**
+     * @name Cached config values
+     *
+     * Cached copies of the values above, refreshed whenever the config loads or reloads.
+     *
+     * Initialized to the same defaults so they're usable before the config has loaded.
+     * @{
+     */
     public static boolean generateTinOre = true;
     public static boolean generateSilverOre = true;
     public static float paddedRailVolume = 0.2F;
@@ -208,13 +218,18 @@ public class Config {
     public static int enderRailCooldownTicks = 60;
     public static int enderRailMaxTeleportsPerSecond = 20;
     public static boolean enderRailAllowAnyMinecart = false;
+    /** @} */
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent.Loading event) {
         refresh();
     }
 
-    // Fired when the file is edited while the game is running
+    /**
+     * @brief Fired when the file is edited while the game is running.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     static void onReload(final ModConfigEvent.Reloading event) {
         refresh();

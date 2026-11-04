@@ -8,8 +8,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import org.jspecify.annotations.Nullable;
 
-// The recipes the server sent for the compendium (compendium.CompendiumRecipesPacket), by recipe id.
-// Empty until the first sync, so pages showing recipes say so.
+/**
+ * @brief The recipes the server sent for the compendium, by recipe id.
+ *
+ * Empty until the first sync, so pages showing recipes say so.
+ *
+ * @see compendium.CompendiumRecipesPacket
+ */
 public final class CompendiumRecipes {
     private static Map<Identifier, RecipeDisplay> byId = Map.of();
 

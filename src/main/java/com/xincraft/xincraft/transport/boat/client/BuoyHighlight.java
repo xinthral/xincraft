@@ -22,18 +22,24 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// While the player wears or holds rose-tinted glasses, the links between buoys (transport.boat.BuoyBlock)
-// around them are traced in dust over the water: yellow, like glowstone, along a path that makes a
-// complete loop (every buoy linked to two others), and red, like powered redstone, along one that
-// doesn't (it has an end, or a link to a buoy that isn't loaded).
+/**
+ * @brief While the player wears or holds rose-tinted glasses, the links between buoys around them
+ *        are traced in dust over the water.
+ *
+ * Yellow, like glowstone, along a path that makes a complete loop (every buoy linked to two
+ * others), and red, like powered redstone, along one that doesn't (it has an end, or a link to a
+ * buoy that isn't loaded).
+ *
+ * @see transport.boat.BuoyBlock
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class BuoyHighlight {
-    // How far around the player buoys are found
+    /** @brief How far around the player buoys are found. */
     private static final double RANGE = 48.0;
     private static final int RESCAN_TICKS = 10;
-    // Dust specks put along each leg each tick, per 8 blocks of its length
+    /** @brief Dust specks put along each leg each tick, per 8 blocks of its length. */
     private static final double BLOCKS_PER_SPECK = 8.0;
-    // Height above the water the line is drawn at
+    /** @brief Height above the water the line is drawn at. */
     private static final double HEIGHT = 0.3;
     private static final DustParticleOptions LOOP = new DustParticleOptions(0xFFD84A, 0.9F);
     private static final DustParticleOptions BROKEN = new DustParticleOptions(0xFF2A1A, 0.9F);
@@ -73,7 +79,13 @@ public final class BuoyHighlight {
         }
     }
 
-    // The legs between the buoys around center, each once, marked as part of a loop or not
+    /**
+     * @brief The legs between the buoys around center, each once, marked as part of a loop or not.
+     *
+     * @param level The level to work in.
+     * @param center Where to search around.
+     * @return The legs found.
+     */
     private static List<Leg> scan(Level level, Vec3 center) {
         Map<BlockPos, List<BlockPos>> links = new HashMap<>();
         for (BuoyBlockEntity buoy : BuoyPath.nearby(level, center, RANGE)) {
@@ -97,7 +109,15 @@ public final class BuoyHighlight {
         return found;
     }
 
-    // Follows the whole path start is on, marking every buoy as part of a complete loop or not
+    /**
+     * @brief Follows the whole path start is on, marking every buoy as part of a complete loop or
+     *        not.
+     *
+     * @param level The level to work in.
+     * @param start The buoy to start from.
+     * @param known The buoys found so far, with their links.
+     * @param inLoop Filled in with whether each buoy is part of a complete loop.
+     */
     private static void markPath(Level level, BlockPos start, Map<BlockPos, List<BlockPos>> known, Map<BlockPos, Boolean> inLoop) {
         Set<BlockPos> path = new HashSet<>();
         ArrayDeque<BlockPos> queue = new ArrayDeque<>();

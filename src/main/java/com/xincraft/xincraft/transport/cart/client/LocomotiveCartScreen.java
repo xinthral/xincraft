@@ -16,18 +16,28 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-// The locomotive cart's inventory screen: the furnace screen's fuel slot and flame, plus one
-// storage slot, and an energy bar when the energy upgrade is fitted
+/**
+ * @brief The locomotive cart's inventory screen.
+ *
+ * The furnace screen's fuel slot and flame, plus one storage slot, and an energy bar when the
+ * energy upgrade is fitted.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class LocomotiveCartScreen extends AbstractContainerScreen<LocomotiveCartMenu> {
     private static final Identifier TEXTURE =
         Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/gui/container/locomotive_cart.png");
     private static final Identifier LIT_PROGRESS_SPRITE = Identifier.withDefaultNamespace("container/furnace/lit_progress");
-    // Energy bar, inside its border
+    /**
+     * @name Energy bar
+     *
+     * Energy bar, inside its border.
+     * @{
+     */
     private static final int BAR_X = 30;
     private static final int BAR_Y = 18;
     private static final int BAR_WIDTH = 8;
     private static final int BAR_HEIGHT = 50;
+    /** @} */
 
     public LocomotiveCartScreen(LocomotiveCartMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -44,7 +54,7 @@ public class LocomotiveCartScreen extends AbstractContainerScreen<LocomotiveCart
         titleLabelX = (imageWidth - font.width(title)) / 2;
     }
 
-    // Drawn the same way as the furnace's background and flame (AbstractFurnaceScreen)
+    /** @brief Draws the background and flame, the same way as the furnace's. */
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);

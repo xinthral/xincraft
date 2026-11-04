@@ -17,10 +17,15 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
-// Where energy enters a power network. A turbine or other energy block right beside it feeds it once
-// connected with a linking bar (see transport.train.LinkingBarItem): each tick it draws from those
-// (turbines also push into it, as can cables), then passes what it holds on to the substations on its
-// network. Energy only goes in: nothing can draw it back out but charging rails in range.
+/**
+ * @brief Where energy enters a power network.
+ *
+ * A turbine or other energy block right beside it feeds it once connected with a linking bar. Each
+ * tick it draws from those, then passes what it holds on to the substations on its network. Energy
+ * only goes in: nothing can draw it back out but charging rails in range.
+ *
+ * @see transport.train.LinkingBarItem
+ */
 public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
     public static final int CAPACITY = 2_000;
     public static final int TRANSFER = 1_000;
@@ -68,15 +73,28 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         return true;
     }
 
-    // Whether the block at pos could be connected to a station: it has energy, and isn't part of the
-    // network itself. side is the side of it facing the station.
+    /**
+     * @brief Whether the block at pos could be connected to a station: it has energy, and isn't
+     *        part of the network itself.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @param side The side of it facing the station.
+     * @return True if The block at pos could be connected to a station.
+     */
     public static boolean isSource(Level level, BlockPos pos, Direction side) {
         BlockEntity block = level.getBlockEntity(pos);
         return block != null && !(block instanceof ChargingRailBlockEntity) && !(block instanceof PowerNodeBlockEntity)
             && block.getCapability(ForgeCapabilities.ENERGY, side).isPresent();
     }
 
-    // Connects the energy block on that side; the caller has checked there is one, and the side is free
+    /**
+     * @brief Connects the energy block on one side.
+     *
+     * The caller has checked there is one, and that the side is free.
+     *
+     * @param side The side it's on.
+     */
     public void connect(Direction side) {
         setConnected(side, true);
     }
@@ -87,8 +105,13 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         }
     }
 
-    // An energy block that's gone takes its connection with it, leaving the bar behind. Sides in
-    // unloaded chunks are left alone, as what's there can't be checked.
+    /**
+     * @brief An energy block that's gone takes its connection with it, leaving the bar behind.
+     *
+     * Sides in unloaded chunks are left alone, as what's there can't be checked.
+     *
+     * @param level The level to work in.
+     */
     private void dropMissingSources(Level level) {
         for (Direction side : ChargingStationBlock.CONNECTED.keySet()) {
             BlockPos neighbour = worldPosition.relative(side);
@@ -99,7 +122,11 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         }
     }
 
-    // Pulls from connected sources that don't push energy in themselves
+    /**
+     * @brief Pulls from connected sources that don't push energy in themselves.
+     *
+     * @param level The level to work in.
+     */
     private void drawFromSources(Level level) {
         for (Direction side : ChargingStationBlock.CONNECTED.keySet()) {
             int space = Math.min(TRANSFER, capacity() - energy());
@@ -120,8 +147,11 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         }
     }
 
-    // Unlinking also lets go of its sources, each of which took a bar. While the block is being
-    // removed, its state is left alone.
+    /**
+     * @brief Unlinking also lets go of its sources, each of which took a bar.
+     *
+     * While the block is being removed, its state is left alone.
+     */
     @Override
     public int unlinkAll() {
         int count = super.unlinkAll();
@@ -142,7 +172,10 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         super.preRemoveSideEffects(pos, state);
     }
 
-    // Only a connected side takes energy, so a turbine beside the station feeds it only once linked
+    /**
+     * @brief Only a connected side takes energy, so a turbine beside the station feeds it only once
+     *        linked.
+     */
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
         if (capability == ForgeCapabilities.ENERGY) {
@@ -163,7 +196,7 @@ public class ChargingStationBlockEntity extends PowerNodeBlockEntity {
         energyCap = LazyOptional.of(Input::new).cast();
     }
 
-    // What cables and generators see: energy goes in, up to TRANSFER at a time
+    /** @brief What cables and generators see: energy goes in, up to TRANSFER at a time. */
     private class Input implements IEnergyStorage {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {

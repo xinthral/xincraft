@@ -14,8 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-// The locomotive cart's fuel slot (with the furnace flame above it) and single storage slot,
-// laid out like the furnace screen (see transport.cart.client.LocomotiveCartScreen)
+/**
+ * @brief The locomotive cart's fuel slot (with the furnace flame above it) and single storage slot,
+ *        laid out like the furnace screen.
+ *
+ * @see transport.cart.client.LocomotiveCartScreen
+ */
 public class LocomotiveCartMenu extends AbstractContainerMenu {
     private static final int CART_SLOTS_END = LocomotiveCart.SLOT_COUNT;
     private static final int INVENTORY_SLOTS_END = CART_SLOTS_END + 36;
@@ -24,7 +28,12 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Level level;
 
-    // Client side: the real slots and burn data are filled in by syncing from the server
+    /**
+     * @brief Client side: the real slots and burn data are filled in by syncing from the server.
+     *
+     * @param containerId The menu's sync id.
+     * @param inventory The player's inventory.
+     */
     public LocomotiveCartMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, new SimpleContainer(LocomotiveCart.SLOT_COUNT), new SimpleContainerData(LocomotiveCart.DATA_COUNT));
     }
@@ -44,7 +53,11 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    // Fraction of the current fuel item left to burn, for the flame
+    /**
+     * @brief Fraction of the current fuel item left to burn, for the flame.
+     *
+     * @return The fraction left, from 0 to 1.
+     */
     public float getLitProgress() {
         return Mth.clamp(data.get(0) / 1000.0F, 0.0F, 1.0F);
     }
@@ -53,7 +66,11 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
         return data.get(0) > 0;
     }
 
-    // Whether the cart has the energy upgrade, so the screen shows its energy bar
+    /**
+     * @brief Whether the cart has the energy upgrade, so the screen shows its energy bar.
+     *
+     * @return True if The cart has the energy upgrade, so the screen shows its energy bar.
+     */
     public boolean hasEnergyUpgrade() {
         return data.get(5) != 0;
     }
@@ -70,8 +87,12 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
         return level.fuelValues().isFuel(stack);
     }
 
-    // Shift-click: cart slots go to the player's inventory; from the inventory, fuel goes to
-    // the fuel slot (overflowing into storage) and everything else to the storage slot
+    /**
+     * @brief Shift-click: cart slots go to the player's inventory.
+     *
+     * From the inventory, fuel goes to the fuel slot (overflowing into storage) and everything else
+     * to the storage slot.
+     */
     @Override
     public ItemStack quickMoveStack(Player player, int slotIndex) {
         Slot slot = slots.get(slotIndex);
@@ -112,7 +133,7 @@ public class LocomotiveCartMenu extends AbstractContainerMenu {
         container.stopOpen(player);
     }
 
-    // Takes fuel, plus the empty bucket a burnt-out lava bucket leaves behind
+    /** @brief Takes fuel, plus the empty bucket a burnt-out lava bucket leaves behind. */
     private class FuelSlot extends Slot {
         FuelSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);

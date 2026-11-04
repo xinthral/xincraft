@@ -39,13 +39,18 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
-// A marker buoy, two blocks tall: a float sitting in a still water source, and a pole with a lamp
-// above it. Buoys are linked together with a linking bar (transport.train.LinkingBarItem, holding the links in
-// BuoyBlockEntity, on the lower half) into paths that motorboats with the RC upgrade follow
-// (transport.boat.Motorboat). It has no collision, so boats and swimmers pass straight through it.
-// Right-clicking either half switches its lamp off, and again back on: a boat coming to an unlit
-// buoy stops short of it and waits, engine off, until it's lit again. Both halves carry LIT. Links
-// reach linkRange() blocks; the advanced buoy (AdvancedBuoyBlock) reaches further.
+/**
+ * @brief A two-block marker buoy: a float in a still water source, and a pole with a lamp above it.
+ *
+ * Linking bars join buoys into paths that motorboats with the RC upgrade follow. Boats and swimmers
+ * pass straight through it. Right-clicking switches its lamp off or on, and a boat coming to an
+ * unlit buoy stops short of it and waits until it's lit again.
+ *
+ * @see transport.train.LinkingBarItem
+ * @see BuoyBlockEntity
+ * @see Motorboat
+ * @see AdvancedBuoyBlock
+ */
 public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBlock, LinkableBlock {
     public static final MapCodec<BuoyBlock> CODEC = simpleCodec(BuoyBlock::new);
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
@@ -67,13 +72,18 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
         return CODEC;
     }
 
-    // A buoy links by its lower half, whichever half the bar was used on
+    /** @brief A buoy links by its lower half, whichever half the bar was used on. */
     @Override
     public BlockPos linkPos(BlockState state, BlockPos clicked) {
         return lowerPos(state, clicked);
     }
 
-    // Furthest this buoy links to another; a link reaches only as far as the shorter of its two buoys
+    /**
+     * @brief Furthest this buoy links to another; a link reaches only as far as the shorter of its
+     *        two buoys.
+     *
+     * @return The range, in blocks.
+     */
     public double linkRange() {
         return BuoyBlockEntity.LINK_RANGE;
     }
@@ -83,32 +93,54 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
         builder.add(HALF, WATERLOGGED, LIT);
     }
 
-    // The lower half of the buoy at pos, where its links are kept
+    /**
+     * @brief The lower half of the buoy at pos, where its links are kept.
+     *
+     * @param state The block's state.
+     * @param pos The block's position.
+     * @return The position of its lower half.
+     */
     public static BlockPos lowerPos(BlockState state, BlockPos pos) {
         return state.getValue(HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos;
     }
 
-    // Whether the buoy at pos (either half) is a lit buoy; false for anything else
+    /**
+     * @brief Whether the buoy at pos (either half) is a lit buoy; false for anything else.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @return True if The buoy at pos (either half) is a lit buoy.
+     */
     public static boolean isLit(BlockGetter level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         return state.getBlock() instanceof BuoyBlock && state.getValue(LIT);
     }
 
-    // Whether there's an unlit buoy at pos, where boats stop
+    /**
+     * @brief Whether there's an unlit buoy at pos, where boats stop.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @return True if There's an unlit buoy at pos, where boats stop.
+     */
     public static boolean isUnlit(BlockGetter level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         return state.getBlock() instanceof BuoyBlock && !state.getValue(LIT);
     }
 
-    // A linking bar links or unlinks it (transport.train.LinkingBarItem) rather than switching it; anything
-    // else, or an empty hand, switches it
+    /**
+     * @brief A linking bar links or unlinks it rather than switching it; anything else, or an empty
+     *        hand, switches it.
+     *
+     * @see transport.train.LinkingBarItem
+     */
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
             InteractionHand hand, BlockHitResult hit) {
         return stack.is(TransportItems.LINKING_BAR.get()) ? InteractionResult.PASS : InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
-    // Switches the lamp off, or back on, on both halves
+    /** @brief Switches the lamp off, or back on, on both halves. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide()) {
@@ -126,7 +158,11 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
         return InteractionResult.SUCCESS;
     }
 
-    // Placed in a still water source (the clicked water, see transport.boat.BuoyItem) with room above it
+    /**
+     * @brief Placed in a still water source (the clicked water) with room above it.
+     *
+     * @see BuoyItem
+     */
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
@@ -153,7 +189,7 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
         return below.is(this) && below.getValue(HALF) == DoubleBlockHalf.LOWER;
     }
 
-    // Each half goes with the other, the float leaving its water behind
+    /** @brief Each half goes with the other, the float leaving its water behind. */
     @Override
     protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos,
             Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
@@ -172,8 +208,14 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
         return state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
     }
 
-    // Broken from either half, it drops once (from the lower half's loot table), as tall flowers do.
-    // Broken in creative, it drops nothing, not even the bars of its links (BuoyBlockEntity).
+    /**
+     * @brief Broken from either half, it drops once (from the lower half's loot table), as tall
+     *        flowers do.
+     *
+     * Broken in creative, it drops nothing, not even the bars of its links.
+     *
+     * @see BuoyBlockEntity
+     */
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide()) {
@@ -201,7 +243,7 @@ public class BuoyBlock extends Block implements EntityBlock, SimpleWaterloggedBl
         super.playerDestroy(level, player, pos, Blocks.AIR.defaultBlockState(), blockEntity, tool);
     }
 
-    // The water stays in the float: buckets can't scoop it out
+    /** @brief The water stays in the float: buckets can't scoop it out. */
     @Override
     public ItemStack pickupBlock(@Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state) {
         return ItemStack.EMPTY;

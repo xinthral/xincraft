@@ -20,10 +20,16 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
-// A block joined to others of its kind with a linking bar (see LinkingBarItem): up to maxLinks, each
-// no further than both blocks reach. Both blocks hold the link. Synced to clients. Removed, it
-// unlinks its loaded partners and drops a bar per link; a link to a block that's gone, or doesn't
-// link back, is ignored and dropped (see links).
+/**
+ * @brief A block joined to others of its kind with a linking bar: up to maxLinks, each no further
+ *        than both blocks reach.
+ *
+ * Both blocks hold the link. Synced to clients. Removed, it unlinks its loaded partners and drops a
+ * bar per link; a link to a block that's gone, or doesn't link back, is ignored and dropped (see
+ * links).
+ *
+ * @see LinkingBarItem
+ */
 public abstract class LinkedBlockEntity extends BlockEntity {
     private final List<BlockPos> links = new ArrayList<>();
 
@@ -33,36 +39,73 @@ public abstract class LinkedBlockEntity extends BlockEntity {
 
     public abstract int maxLinks();
 
-    // How far this block's links reach
+    /**
+     * @brief How far this block's links reach.
+     *
+     * @return The range, in blocks.
+     */
     public abstract double linkRange();
 
-    // Whether this block can link to that one
+    /**
+     * @brief Whether this block can link to that one.
+     *
+     * @param other The block to link to.
+     * @return True if This block can link to that one.
+     */
     public abstract boolean accepts(LinkedBlockEntity other);
 
-    // Whether a linking bar can also connect it to an energy block beside it, which takes no link
+    /**
+     * @brief Whether a linking bar can also connect it to an energy block beside it, which takes no
+     *        link.
+     *
+     * @return True if A linking bar can also connect it to an energy block beside it, which takes
+     *     no link.
+     */
     public boolean connectsSources() {
         return false;
     }
 
-    // Names this kind of block's linking bar messages: message.xincraft.linking_bar.<key>_started and so on
+    /**
+     * @brief Names this kind of block's linking bar messages.
+     *
+     * @return The key used in the message names.
+     */
     protected abstract String messageKey();
 
     public Component message(String suffix, Object... args) {
         return Component.translatable("message.xincraft.linking_bar." + messageKey() + "_" + suffix, args);
     }
 
-    // The linked block at pos, if it's loaded
+    /**
+     * @brief The linked block at pos, if it's loaded.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @return The block, or null if it isn't loaded.
+     */
     public static @Nullable LinkedBlockEntity linkedAt(Level level, BlockPos pos) {
         return level.isLoaded(pos) && level.getBlockEntity(pos) instanceof LinkedBlockEntity linked ? linked : null;
     }
 
-    // How far apart two linked blocks are
+    /**
+     * @brief How far apart two linked blocks are.
+     *
+     * @param a One block.
+     * @param b The other block.
+     * @return The distance, in blocks.
+     */
     public static double distance(BlockPos a, BlockPos b) {
         return Math.sqrt(a.distSqr(b));
     }
 
-    // The blocks this one links to. A loaded partner that no longer links back to this one is dropped
-    // (on the server, for good); one in an unloaded chunk is kept, as its links can't be checked.
+    /**
+     * @brief The blocks this one links to.
+     *
+     * A loaded partner that no longer links back is dropped, for good on the server. One in an
+     * unloaded chunk is kept, as its links can't be checked.
+     *
+     * @return The linked positions.
+     */
     public List<BlockPos> links() {
         if (level != null) {
             boolean dropped = links.removeIf(pos -> level.isLoaded(pos)
@@ -82,7 +125,12 @@ public abstract class LinkedBlockEntity extends BlockEntity {
         return links().size() >= maxLinks();
     }
 
-    // Joins two blocks, both of which have room; the caller checks range and room
+    /**
+     * @brief Joins two blocks, both of which have room; the caller checks range and room.
+     *
+     * @param a One block.
+     * @param b The other block.
+     */
     public static void link(LinkedBlockEntity a, LinkedBlockEntity b) {
         a.links.add(b.worldPosition);
         b.links.add(a.worldPosition);
@@ -90,7 +138,11 @@ public abstract class LinkedBlockEntity extends BlockEntity {
         b.changed();
     }
 
-    // Removes all of this block's links, from both ends, and returns how many there were
+    /**
+     * @brief Removes all of this block's links, from both ends, and returns how many there were.
+     *
+     * @return How many links there were.
+     */
     public int unlinkAll() {
         int count = links.size();
         if (level != null) {
@@ -113,7 +165,9 @@ public abstract class LinkedBlockEntity extends BlockEntity {
         }
     }
 
-    // Broken (or washed away), it unlinks from the blocks around it and drops their bars
+    /**
+     * @brief Broken (or washed away), it unlinks from the blocks around it and drops their bars.
+     */
     @Override
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);

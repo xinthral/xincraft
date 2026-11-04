@@ -61,70 +61,82 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
-// A boat with a propeller and an engine. Press forward to set it cruising: it keeps going under
-// power, burning fuel, while you steer, until you press back, it runs out of fuel, or it runs into
-// something. The engine only pushes in water. It has the locomotive cart's fuel slot (fuel lasting
-// Config.motorboatFuelMultiplier times as long as in a furnace) and storage slot, opened with the
-// inventory key while riding or by shift-right-clicking. Takes upgrades (see CartUpgrades): shrieker,
-// energy (a Forge Energy battery that fuel charges, and energy blocks on the shore top up), ice
-// breaker and speed.
-//
-// With the RC upgrade, a cruising motorboat that comes across a buoy path (transport.boat.BuoyBlock, see
-// BuoyPath) steers itself from buoy to buoy along it, slowing for sharp turns, and keeps cruising
-// with nobody aboard until the path ends or it runs aground. Heading for a buoy that's switched off,
-// it cuts its engine, stops short of the buoy and waits there, burning no fuel, until the buoy is
-// switched back on. Rose-tinted glasses start and stop one on a path with nobody steering.
-//
-// Leads a train of up to MAX_TOWED boats hitched behind it with linking bars, as a locomotive does
-// carts (see LinkedTransport). A motorboat hitched behind another is towed like any boat: nobody
-// can steer it, and its engine and RC upgrade stay idle.
-//
-// A player steering a boat moves it on their own client, so the server decides whether it's
-// cruising (from the rider's keys and its fuel) and syncs that, and the steering client pushes it.
+/**
+ * @brief A boat with a propeller and an engine, which keeps cruising under power once started.
+ *
+ * Press forward to set it cruising, and it burns fuel while you steer, until you press back, it
+ * runs out of fuel, or it runs into something. It has a fuel slot and a storage slot, and takes
+ * upgrades.
+ *
+ * With the RC upgrade, it steers itself along a buoy path, and waits at any buoy that's switched
+ * off.
+ *
+ * It can lead a train of up to MAX_TOWED boats, as a locomotive does carts. A motorboat hitched
+ * behind another is towed like any boat, with its engine idle.
+ *
+ * @see transport.train.CartUpgrades
+ * @see BuoyPath
+ * @see transport.train.LinkedTransport
+ */
 public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableTransport, HasCustomInventoryScreen, ContainerEntity {
     public static final int FUEL_SLOT = 0;
     public static final int STORAGE_SLOT = 1;
-    // Most boats it tows in a train behind it
+    /** @brief Most boats it tows in a train behind it. */
     public static final int MAX_TOWED = 3;
 
     private static final EntityDataAccessor<Integer> DATA_UPGRADES = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_CRUISING = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_LIT = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
-    // Waiting at a switched-off buoy, engine idle: the propeller stops and the exhaust clears
+    /**
+     * @brief Waiting at a switched-off buoy, engine idle: the propeller stops and the exhaust
+     *        clears.
+     */
     private static final EntityDataAccessor<Boolean> DATA_WAITING = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_TOWED = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_HITCHED = SynchedEntityData.defineId(Motorboat.class, EntityDataSerializers.BOOLEAN);
 
-    // The engine's push each tick: twice a paddler's 0.04, so about twice paddling speed, and half
-    // as much again with the speed upgrade
+    /**
+     * @brief The engine's push each tick: twice a paddler's 0.04, so about twice paddling speed.
+     */
     private static final float THRUST = 0.08F;
+    /** @brief The engine's push each tick with the speed upgrade: half as much again. */
     private static final float SPEED_UPGRADE_THRUST = 1.5F;
-    // Cruising this slowly for this long means it's run into something, so the engine cuts out
+    /**
+     * @brief Cruising slower than this for STUCK_TICKS means it's run into something, so the engine
+     *        cuts out.
+     */
     private static final double STUCK_SPEED = 0.02;
+    /** @brief How long it has to be below STUCK_SPEED, in ticks. */
     private static final int STUCK_TICKS = 20;
-    // Most Forge Energy taken in per tick, from the shore or anything else
+    /** @brief Most Forge Energy taken in per tick, from the shore or anything else. */
     private static final int MAX_ENERGY_RECEIVE = 1_000;
-    // Following a buoy path: most degrees it turns each tick, and how much of its sideways drift is kept
+    /** @brief Following a buoy path: most degrees it turns each tick. */
     private static final float PATH_TURN = 20.0F;
+    /** @brief Following a buoy path: how much of its sideways drift is kept. */
     private static final double PATH_DRIFT = 0.5;
-    // How close to a buoy it gets before heading for the next one, which also rounds off the corner
+    /**
+     * @brief How close to a buoy it gets before heading for the next one, which also rounds off the
+     *        corner.
+     */
     private static final double ARRIVE_DISTANCE = 2.5;
-    // Turns sharper than this are taken slower: from FAST_CORNER_SPEED for a slight turn down to
-    // SLOW_CORNER_SPEED for a hairpin (or the end of the path), in blocks a tick
+    /** @brief Turns sharper than this are taken slower. */
     private static final double SLOW_TURN_DEGREES = 30.0;
+    /** @brief Speed for a slight turn, in blocks a tick. */
     private static final double FAST_CORNER_SPEED = 0.5;
+    /** @brief Speed for a hairpin or the end of the path, in blocks a tick. */
     private static final double SLOW_CORNER_SPEED = 0.15;
-    // Share of its speed kept each tick while braking for a turn, and how many blocks (per block a
-    // tick of speed) before the turn it starts braking, never less than MIN_BRAKE_DISTANCE
+    /** @brief Share of its speed kept each tick while braking for a turn. */
     private static final double CORNER_BRAKE = 0.6;
+    /** @brief How many blocks before the turn it starts braking, per block a tick of speed. */
     private static final double BRAKE_DISTANCE_PER_SPEED = 3.0;
+    /** @brief The least distance before a turn at which it starts braking. */
     private static final double MIN_BRAKE_DISTANCE = 2.0;
     private static final int JOIN_INTERVAL_TICKS = 10;
-    // Heading for a buoy that's switched off: within HOLD_DISTANCE the engine cuts out and it slows
-    // to stop STOP_DISTANCE short of the buoy, allowed HOLD_SLOWING blocks a tick of speed for each
-    // block it still has to go
+    /** @brief Heading for a switched-off buoy: how close it gets before the engine cuts out. */
     private static final double HOLD_DISTANCE = 6.0;
+    /** @brief How far short of a switched-off buoy it stops. */
     private static final double STOP_DISTANCE = 2.0;
+    /** @brief Speed allowed, in blocks a tick, for each block it still has to go to stop. */
     private static final double HOLD_SLOWING = 0.25;
 
     private final CartUpgrades upgrades = new CartUpgrades(this, DATA_UPGRADES);
@@ -136,16 +148,24 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
     private int energy;
     private int slowTicks;
     private @Nullable Vec3 lastPos;
-    // Set by rose-tinted glasses, for the next server tick
+    /** @brief Set by rose-tinted glasses to start it on the next server tick. */
     private boolean startRequested;
+    /** @brief Set by rose-tinted glasses to stop it on the next server tick. */
     private boolean stopRequested;
-    // The buoy path it's following: the buoy it's heading for, and the one it came from
+    /** @brief The buoy it's heading for on the path it's following. */
     private @Nullable BlockPos pathTarget;
+    /** @brief The buoy it came from on the path it's following. */
     private @Nullable BlockPos pathPrevious;
     private LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> new Battery());
 
-    // The locomotive screen's data (LocomotiveCartMenu): burn left, stored energy and capacity
-    // (split in two for 16-bit menu data), and whether the energy upgrade is fitted
+    /**
+     * @brief The locomotive screen's data.
+     *
+     * Burn left, stored energy and capacity (split in two for 16-bit menu data), and whether the
+     * energy upgrade is fitted.
+     *
+     * @see transport.cart.LocomotiveCartMenu
+     */
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
@@ -205,7 +225,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return MAX_TOWED;
     }
 
-    // Hitched behind another boat, it's towed, and nobody aboard steers
+    /** @brief Hitched behind another boat, it's towed, and nobody aboard steers. */
     @Override
     public @Nullable LivingEntity getControllingPassenger() {
         return transport.isHitched() ? null : super.getControllingPassenger();
@@ -301,7 +321,13 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         onServerTick(level, motion);
     }
 
-    // For subclasses: run at the end of each server tick, with how far the boat moved this tick
+    /**
+     * @brief For subclasses: run at the end of each server tick, with how far the boat moved this
+     *        tick.
+     *
+     * @param level The level to work in.
+     * @param motion How far the boat moved this tick.
+     */
     protected void onServerTick(ServerLevel level, Vec3 motion) {}
 
     private Vec3 heading() {
@@ -309,7 +335,11 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
     }
 
-    // Joins the buoy path it's on, if any; returns whether it did
+    /**
+     * @brief Joins the buoy path it's on, if any; returns whether it did.
+     *
+     * @return True if it joined one.
+     */
     private boolean tryJoinPath() {
         BuoyPath.Join join = BuoyPath.join(level(), position(), heading(), legReach());
         if (join == null) {
@@ -320,7 +350,11 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return true;
     }
 
-    // The longest leg between buoys it can follow: further with the advanced antenna
+    /**
+     * @brief The longest leg between buoys it can follow: further with the advanced antenna.
+     *
+     * @return The length, in blocks.
+     */
     private double legReach() {
         return upgrades.has(CartUpgrade.ANTENNA) ? BuoyBlockEntity.ADVANCED_LINK_RANGE : BuoyBlockEntity.LINK_RANGE;
     }
@@ -330,9 +364,14 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         pathPrevious = null;
     }
 
-    // With the RC upgrade, steers along the buoy path: toward the buoy ahead, moving on to the next
-    // as it comes up, and slowing for a sharp turn there. Without a path, it looks for one now and
-    // then. Returns whether it's braking for a turn, when the engine shouldn't push.
+    /**
+     * @brief With the RC upgrade, steers along the buoy path, slowing for a sharp turn at the buoy
+     *        ahead.
+     *
+     * Without a path, it looks for one now and then.
+     *
+     * @return True if it's braking for a turn, when the engine shouldn't push.
+     */
     private boolean followPath() {
         if (!updatePath()) {
             return false;
@@ -372,9 +411,14 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return braking;
     }
 
-    // Keeps track of where it is on a buoy path (with the RC upgrade): looks for one to join now and
-    // then if it isn't on one, and moves on to the next buoy as it comes up, but not past a buoy
-    // that's switched off. Returns whether it's on a path.
+    /**
+     * @brief Keeps track of where it is on a buoy path, with the RC upgrade.
+     *
+     * It looks for a path to join now and then if it isn't on one, and moves on to the next buoy as
+     * it comes up, but not past a buoy that's switched off.
+     *
+     * @return True if it's on a path.
+     */
     private boolean updatePath() {
         if (!upgrades.has(CartUpgrade.RC) || transport.isHitched()) {
             clearPath();
@@ -403,14 +447,26 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return true;
     }
 
-    // Whether it's waiting at (or pulling up to) a buoy that's switched off
+    /**
+     * @brief Whether it's waiting at (or pulling up to) a buoy that's switched off.
+     *
+     * @return True if It's waiting at (or pulling up to) a buoy that's switched off.
+     */
     private boolean isHeld() {
         return pathTarget != null && BuoyBlock.isUnlit(level(), pathTarget)
             && BuoyPath.point(pathTarget).subtract(position()).horizontalDistance() < HOLD_DISTANCE;
     }
 
-    // How fast it can take the turn at the buoy ahead: full speed for a slight one, slower the
-    // sharper it is, and slowest at the end of the path
+    /**
+     * @brief How fast it can take the turn at the buoy ahead.
+     *
+     * Full speed for a slight one, slower the sharper it is, and slowest at the end of the path.
+     *
+     * @param level The level to work in.
+     * @param here The boat's position.
+     * @param target The buoy ahead.
+     * @return The speed to take the turn at, in blocks a tick.
+     */
     private double cornerSpeed(Level level, Vec3 here, Vec3 target) {
         BlockPos after = BuoyPath.next(level, pathTarget, pathPrevious, legReach());
         if (after == null) {
@@ -429,9 +485,17 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return Mth.lerp(sharpness, FAST_CORNER_SPEED, SLOW_CORNER_SPEED);
     }
 
-    // Forward sets it cruising and back stops it, as do rose-tinted glasses with nobody aboard. With
-    // nobody steering it only keeps going along a buoy path, and it stops once it's been stuck
-    // against something for a second (but not while it's waiting at a switched-off buoy).
+    /**
+     * @brief Forward sets it cruising and back stops it, as do rose-tinted glasses with nobody
+     *        aboard.
+     *
+     * With nobody steering it only keeps going along a buoy path, and it stops once it's been stuck
+     * against something for a second (but not while it's waiting at a switched-off buoy).
+     *
+     * @param motion How far the boat moved this tick.
+     * @param held Whether it's waiting at a switched-off buoy.
+     * @return True if it's cruising.
+     */
     private boolean updateCruising(Vec3 motion, boolean held) {
         boolean cruising = (isCruising() || startRequested) && !stopRequested;
         if (startRequested) {
@@ -460,7 +524,11 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return cruising;
     }
 
-    // Lights the next fuel item, the same way a furnace does, but burning longer
+    /**
+     * @brief Lights the next fuel item, the same way a furnace does, but burning longer.
+     *
+     * @param level The level to work in.
+     */
     private void burnFuel(ServerLevel level) {
         ItemStack fuel = items.get(FUEL_SLOT);
         int duration = (int) Math.round(level.fuelValues().burnDuration(fuel) * Config.motorboatFuelMultiplier);
@@ -478,8 +546,14 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         }
     }
 
-    // With the energy upgrade, burning fuel charges the battery, moving or not. Each tick of burn
-    // stores as much energy as a tick of cruising uses. Lights new fuel only while there's room.
+    /**
+     * @brief With the energy upgrade, burning fuel charges the battery, moving or not.
+     *
+     * Each tick of burn stores as much energy as a tick of cruising uses. Lights new fuel only
+     * while there's room.
+     *
+     * @param level The level to work in.
+     */
     private void chargeFromFuel(ServerLevel level) {
         if (energy >= energyCapacity()) {
             return;
@@ -492,8 +566,12 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         }
     }
 
-    // Draws energy from energy blocks right next to the boat, such as a turbine or charging block on
-    // a dock
+    /**
+     * @brief Draws energy from energy blocks right next to the boat, such as a turbine or charging
+     *        block on a dock.
+     *
+     * @param level The level to work in.
+     */
     private void chargeFromShore(ServerLevel level) {
         int space = Math.min(MAX_ENERGY_RECEIVE, energyCapacity() - energy);
         if (space <= 0) {
@@ -516,7 +594,12 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         }
     }
 
-    // Turns ice just ahead of the boat, at the water's surface, back into water
+    /**
+     * @brief Turns ice just ahead of the boat, at the water's surface, back into water.
+     *
+     * @param level The level to work in.
+     * @param motion How far the boat moved this tick.
+     */
     private void breakIceAhead(ServerLevel level, Vec3 motion) {
         float yaw = getYRot() * Mth.DEG_TO_RAD;
         Vec3 ahead = new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
@@ -556,9 +639,13 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         }
     }
 
-    // The linking bar first. Rose-tinted glasses start or stop a boat with the RC upgrade and nobody
-    // steering it that's on a buoy path. Then upgrades; then shift-right-click opens the fuel and
-    // storage slots, and right-click rides.
+    /**
+     * @brief The linking bar first.
+     *
+     * Rose-tinted glasses start or stop a boat with the RC upgrade and nobody steering it that's on
+     * a buoy path. Then upgrades; then shift-right-click opens the fuel and storage slots, and
+     * right-click rides.
+     */
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         InteractionResult linked = transport.interact(player, hand);
@@ -594,7 +681,7 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return super.interact(player, hand, location);
     }
 
-    // Opened by the inventory key while riding
+    /** @brief Opened by the inventory key while riding. */
     @Override
     public void openCustomInventoryScreen(Player player) {
         player.openMenu(this);
@@ -650,7 +737,11 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         energyCap = LazyOptional.of(() -> new Battery());
     }
 
-    // Takes energy in only; nothing can draw it back out. Takes nothing once the upgrade is removed.
+    /**
+     * @brief Takes energy in only; nothing can draw it back out.
+     *
+     * Takes nothing once the upgrade is removed.
+     */
     private class Battery implements IEnergyStorage {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -735,13 +826,15 @@ public class Motorboat extends AbstractBoat implements UpgradableCart, LinkableT
         return isChestVehicleStillValid(player);
     }
 
-    // Hoppers (and anything else inserting) can only put burnable items in the fuel slot
+    /**
+     * @brief Hoppers (and anything else inserting) can only put burnable items in the fuel slot.
+     */
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return slot != FUEL_SLOT || level().fuelValues().isFuel(stack);
     }
 
-    // Like a furnace, only empty buckets can be pulled back out of the fuel slot
+    /** @brief Like a furnace, only empty buckets can be pulled back out of the fuel slot. */
     @Override
     public boolean canTakeItem(Container into, int slot, ItemStack stack) {
         return slot != FUEL_SLOT || stack.is(Items.BUCKET);

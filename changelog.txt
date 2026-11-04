@@ -1,6 +1,10 @@
 Xincraft Changelog
 ==================
 
+1.21.1
+ - Code documentation: docstrings now use Doxygen's style, and `./gradlew doxygen` generates the
+   documentation, with the version taken from gradle.properties. No changes to gameplay
+
 1.21.0
  - Power networks: Charging Stations take in energy from turbines beside them, connected with the
    linking bar, and Substations store it, joined with the linking bar up to 64 blocks apart.

@@ -5,8 +5,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import org.jspecify.annotations.Nullable;
 
-// Grinds flowers and vines into elemental powders (magic.ElementPowderItem) in the crafting grid. It
-// isn't used up: it stays in the grid, a little more worn each time, until its durability runs out.
+/**
+ * @brief Grinds flowers and vines into elemental powders in the crafting grid.
+ *
+ * It isn't used up: it stays in the grid, a little more worn each time, until its durability runs
+ * out.
+ *
+ * @see ElementPowderItem
+ */
 public class MortarAndPestleItem extends Item {
     public MortarAndPestleItem(Item.Properties properties) {
         super(properties);

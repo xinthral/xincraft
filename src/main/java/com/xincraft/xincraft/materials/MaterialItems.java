@@ -15,8 +15,16 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MaterialItems {
-    // Fireproof like netherite. Vanilla's purple glint is off, even when enchanted: the piece has its
-    // own red shimmer instead.
+    /**
+     * @brief Properties for a lonsdaleite armor piece.
+     *
+     * Fireproof like netherite. Vanilla's purple glint is off, even when enchanted, as the piece
+     * has its own red shimmer.
+     *
+     * @param type The kind of piece.
+     * @param attributes The piece's attribute modifiers.
+     * @return The properties.
+     */
     private static Item.Properties lonsdaleiteArmor(ArmorType type, ItemAttributeModifiers attributes) {
         return new Item.Properties().humanoidArmor(ModArmorMaterials.LONSDALEITE, type).attributes(attributes).fireResistant()
             .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
@@ -34,14 +42,20 @@ public final class MaterialItems {
     public static final RegistryObject<Item> SILVER_INGOT =
         Registers.registerItem("silver_ingot", Item::new, Item.Properties::new);
 
-    // Bronze: 3 raw copper and 1 raw tin craft into 4 raw bronze, which smelts into bronze ingots
+    /**
+     * @brief Bronze: 3 raw copper and 1 raw tin craft into 4 raw bronze, which smelts into bronze
+     *        ingots.
+     */
     public static final RegistryObject<Item> RAW_BRONZE =
         Registers.registerItem("raw_bronze", Item::new, Item.Properties::new);
 
     public static final RegistryObject<Item> BRONZE_INGOT =
         Registers.registerItem("bronze_ingot", Item::new, Item.Properties::new);
 
-    // Electrum: raw gold and raw silver craft into 2 raw electrum, which smelts into electrum ingots
+    /**
+     * @brief Electrum: raw gold and raw silver craft into 2 raw electrum, which smelts into
+     *        electrum ingots.
+     */
     public static final RegistryObject<Item> RAW_ELECTRUM =
         Registers.registerItem("raw_electrum", Item::new, Item.Properties::new);
 
@@ -57,21 +71,29 @@ public final class MaterialItems {
     public static final RegistryObject<Item> BRONZE_BOOTS = Registers.registerItem("bronze_boots", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.BRONZE, ArmorType.BOOTS));
 
-    // Transmuted from a diamond at the apothecary altar; upgrades bronze armor there, and repairs the result
+    /**
+     * @brief Transmuted from a diamond at the apothecary altar; upgrades bronze armor there, and
+     *        repairs the result.
+     */
     public static final RegistryObject<Item> LONSDALEITE_SHARD =
         Registers.registerItem("lonsdaleite_shard", Item::new, Item.Properties::new);
 
-    // Bronze armor upgraded at the apothecary altar (materials.LonsdaleiteArmorItem)
+    /**
+     * @brief Bronze helmet upgraded at the apothecary altar.
+     *
+     * @see LonsdaleiteArmorItem
+     */
     public static final RegistryObject<Item> LONSDALEITE_HELMET = Registers.registerItem("lonsdaleite_helmet", LonsdaleiteArmorItem::new,
         () -> lonsdaleiteArmor(ArmorType.HELMET, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.HELMET)));
+    /** @brief Bronze chestplate upgraded at the apothecary altar. */
     public static final RegistryObject<Item> LONSDALEITE_CHESTPLATE = Registers.registerItem("lonsdaleite_chestplate", LonsdaleiteArmorItem::new,
         () -> lonsdaleiteArmor(ArmorType.CHESTPLATE, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.CHESTPLATE)));
-    // Walks straight up full-block steps, from a step height of 0.6 to 1.0
+    /** @brief Walks straight up full-block steps, from a step height of 0.6 to 1.0. */
     public static final RegistryObject<Item> LONSDALEITE_LEGGINGS = Registers.registerItem("lonsdaleite_leggings", LonsdaleiteArmorItem::new,
         () -> lonsdaleiteArmor(ArmorType.LEGGINGS, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.LEGGINGS).withModifierAdded(
             Attributes.STEP_HEIGHT, new AttributeModifier(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_leggings_step_height"),
                 0.4, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.LEGS)));
-    // The same 20% as Speed I
+    /** @brief The same 20% as Speed I. */
     public static final RegistryObject<Item> LONSDALEITE_BOOTS = Registers.registerItem("lonsdaleite_boots", LonsdaleiteArmorItem::new,
         () -> lonsdaleiteArmor(ArmorType.BOOTS, ModArmorMaterials.LONSDALEITE.createAttributes(ArmorType.BOOTS).withModifierAdded(
             Attributes.MOVEMENT_SPEED, new AttributeModifier(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "lonsdaleite_boots_speed"),
@@ -86,13 +108,16 @@ public final class MaterialItems {
     public static final RegistryObject<Item> TIN_BOOTS = Registers.registerItem("tin_boots", Item::new,
         () -> new Item.Properties().humanoidArmor(ModArmorMaterials.TIN, ArmorType.BOOTS));
 
-    // Applies the reinforced armor trim (data/xincraft/trim_pattern/reinforced.json); found in
-    // mineshaft chests (materials.ReinforcedTrimLoot)
+    /**
+     * @brief Applies the reinforced armor trim, and is found in mineshaft chests.
+     *
+     * @see ReinforcedTrimLoot
+     */
     public static final RegistryObject<Item> REINFORCED_ARMOR_TRIM_SMITHING_TEMPLATE = Registers.registerItem(
         "reinforced_armor_trim_smithing_template", SmithingTemplateItem::createArmorTrimTemplate,
         () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private MaterialItems() {}

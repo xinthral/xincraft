@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
-// Remembers which ender rail (in the same dimension) this one is linked to
+/** @brief Remembers which ender rail (in the same dimension) this one is linked to. */
 public class EnderRailBlockEntity extends BlockEntity {
     private @Nullable BlockPos link;
 
@@ -41,8 +41,12 @@ public class EnderRailBlockEntity extends BlockEntity {
         output.storeNullable("link", BlockPos.CODEC, link);
     }
 
-    // The placing item's link and glint are handled by EnderRailBlock#setPlacedBy; reading them
-    // here marks them as consumed so they aren't copied into this block entity's saved components
+    /**
+     * @brief Marks the placing item's link and glint as consumed, so they aren't copied into this
+     *        block entity's saved components.
+     *
+     * @see EnderRailBlock#setPlacedBy
+     */
     @Override
     protected void applyImplicitComponents(DataComponentGetter components) {
         super.applyImplicitComponents(components);
@@ -51,7 +55,7 @@ public class EnderRailBlockEntity extends BlockEntity {
         components.get(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
     }
 
-    // Breaking one end of a link leaves the other end unlinked
+    /** @brief Breaking one end of a link leaves the other end unlinked. */
     @Override
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);

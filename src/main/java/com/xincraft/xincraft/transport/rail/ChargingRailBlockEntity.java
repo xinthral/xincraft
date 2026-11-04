@@ -29,21 +29,30 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
-// A charging rail's link to the power network (see transport.power.PowerNodeBlockEntity), its only
-// source. Carts on it draw through it from the network, up to its transfer rate (TRANSFER here; see
-// ElectrumChargingRailBlockEntity for the faster rail), and it keeps a small reserve. Generators and
-// cables can't put energy into it, but anything can draw energy out.
+/**
+ * @brief A charging rail's link to the power network, its only source.
+ *
+ * Carts on it draw through it from the network, up to its transfer rate (TRANSFER here; see
+ * ElectrumChargingRailBlockEntity for the faster rail), and it keeps a small reserve. Generators
+ * and cables can't put energy into it, but anything can draw energy out.
+ *
+ * @see transport.power.PowerNodeBlockEntity
+ */
 public class ChargingRailBlockEntity extends BlockEntity {
     public static final int CAPACITY = 500;
-    // Most charge passed to each neighbouring rail per tick, by rails that pass charge
+    /** @brief Most charge passed to each neighbouring rail per tick, by rails that pass charge. */
     private static final int PASS_RATE = 500;
     public static final int TRANSFER = 1_000;
-    // How many chunks away, on each axis, it can draw from a power network
+    /** @brief How many chunks away, on each axis, it can draw from a power network. */
     public static final int CHUNK_RANGE = 2;
-    // How often it looks again for the charging stations and substations in range, in ticks
+    /**
+     * @brief How often it looks again for the charging stations and substations in range, in ticks.
+     */
     private static final int NODE_SEARCH_TICKS = 40;
     private static final int SYNC_TICKS = 100;
-    // How often it decides whether it counts as charged, in ticks, so it doesn't flicker
+    /**
+     * @brief How often it decides whether it counts as charged, in ticks, so it doesn't flicker.
+     */
     private static final int CHARGED_CHECK_TICKS = 10;
 
     private final int transfer;
@@ -78,13 +87,22 @@ public class ChargingRailBlockEntity extends BlockEntity {
         updateCharged(level);
     }
 
-    // Whether it's holding charge, or has been getting some: the rail is powered while it is
+    /**
+     * @brief Whether it's holding charge, or has been getting some: the rail is powered while it
+     *        is.
+     *
+     * @return True if It's holding charge, or has been getting some.
+     */
     public boolean isCharged() {
         return charged;
     }
 
-    // Holding nothing doesn't mean it's cut off, as a cart can be drawing straight through it from the
-    // network, so what it's received lately counts too
+    /**
+     * @brief Holding nothing doesn't mean it's cut off, as a cart can be drawing straight through
+     *        it from the network, so what it's received lately counts too.
+     *
+     * @param level The level to work in.
+     */
     private void updateCharged(Level level) {
         if (--chargedCheckIn > 0) {
             return;
@@ -115,7 +133,12 @@ public class ChargingRailBlockEntity extends BlockEntity {
         return chunkRange;
     }
 
-    // Lets clients know a changed amount, for rose-tinted glasses, at most once every 5 seconds
+    /**
+     * @brief Lets clients know a changed amount, for rose-tinted glasses, at most once every 5
+     *        seconds.
+     *
+     * @param level The level to work in.
+     */
     private void syncEnergy(Level level) {
         long now = level.getGameTime();
         if (energyChanged && now >= nextSync) {
@@ -125,7 +148,11 @@ public class ChargingRailBlockEntity extends BlockEntity {
         }
     }
 
-    // Tops up from the network, as a small reserve
+    /**
+     * @brief Tops up from the network, as a small reserve.
+     *
+     * @param level The level to work in.
+     */
     private void drawFromNetwork(Level level) {
         int space = buffer.receiveEnergy(transfer, true);
         if (space > 0) {
@@ -133,8 +160,15 @@ public class ChargingRailBlockEntity extends BlockEntity {
         }
     }
 
-    // Takes energy from the nearest charging station or substation in range, moving on to the next if
-    // that one's network has run dry, so overlapping stations cover for each other
+    /**
+     * @brief Takes energy from the nearest charging station or substation in range, moving on to
+     *        the next if that one's network has run dry, so overlapping stations cover for each
+     *        other.
+     *
+     * @param level The level to work in.
+     * @param amount The most to take.
+     * @return How much it took.
+     */
     private int drawFromNodes(Level level, int amount) {
         long now = level.getGameTime();
         if (now >= nextNodeSearch) {
@@ -153,8 +187,14 @@ public class ChargingRailBlockEntity extends BlockEntity {
         return drawn;
     }
 
-    // Evens out charge with the rails this one is joined to along the track, so a line of them carries
-    // power past the range of any node. Charge flows downhill, so the far end of a long line fills slowly.
+    /**
+     * @brief Evens out charge with the rails this one is joined to along the track, so a line of
+     *        them carries power past the range of any node.
+     *
+     * Charge flows downhill, so the far end of a long line fills slowly.
+     *
+     * @param level The level to work in.
+     */
     private void passCharge(Level level) {
         if (!passesCharge()) {
             return;
@@ -167,19 +207,35 @@ public class ChargingRailBlockEntity extends BlockEntity {
         }
     }
 
-    // Whether this rail passes charge to others of its kind
+    /**
+     * @brief Whether this rail passes charge to others of its kind.
+     *
+     * @return True if This rail passes charge to others of its kind.
+     */
     public boolean passesCharge() {
         return false;
     }
 
-    // Whether a rail it's joined to along the track has charge to pass along
+    /**
+     * @brief Whether a rail it's joined to along the track has charge to pass along.
+     *
+     * @param level The level to work in.
+     * @return True if A rail it's joined to along the track has charge to pass along.
+     */
     public boolean hasChargedNeighbour(Level level) {
         return passesCharge() && connectedRails(level).stream().anyMatch(other -> other.energy() > 0);
     }
 
-    // The rails of its kind joined to this one along the track. Going by each rail's shape, two lines
-    // running side by side aren't joined. Shapes are read from the level, as a block entity's own copy
-    // of its state can lag behind when a rail changes shape.
+    /**
+     * @brief The rails of its kind joined to this one along the track.
+     *
+     * This goes by each rail's shape, so two lines running side by side aren't joined. Shapes are
+     * read from the level, as a block entity's own copy of its state can lag behind when a rail
+     * changes shape.
+     *
+     * @param level The level to work in.
+     * @return The joined rails.
+     */
     private List<ChargingRailBlockEntity> connectedRails(Level level) {
         RailShape shape = shape(level.getBlockState(worldPosition));
         if (shape == null) {
@@ -204,7 +260,12 @@ public class ChargingRailBlockEntity extends BlockEntity {
         return state.getBlock() instanceof BaseRailBlock rail ? state.getValue(rail.getShapeProperty()) : null;
     }
 
-    // Which sides a rail of this shape leads out of
+    /**
+     * @brief Which sides a rail of this shape leads out of.
+     *
+     * @param shape The rail's shape.
+     * @return The sides.
+     */
     private static List<Direction> exits(RailShape shape) {
         return switch (shape) {
             case NORTH_SOUTH, ASCENDING_NORTH, ASCENDING_SOUTH -> List.of(Direction.NORTH, Direction.SOUTH);
@@ -216,7 +277,12 @@ public class ChargingRailBlockEntity extends BlockEntity {
         };
     }
 
-    // Which way a sloped rail rises
+    /**
+     * @brief Which way a sloped rail rises.
+     *
+     * @param shape The rail's shape.
+     * @return The side it rises toward, or null if it's flat.
+     */
     private static @Nullable Direction rises(RailShape shape) {
         return switch (shape) {
             case ASCENDING_EAST -> Direction.EAST;
@@ -227,17 +293,32 @@ public class ChargingRailBlockEntity extends BlockEntity {
         };
     }
 
-    // Whether two rails rise blocks apart in height along exit actually meet: a step up needs this
-    // rail to slope up to it, a step down needs the other to slope up to this one, and on the level
-    // neither may slope away over the join
+    /**
+     * @brief Whether two rails rise blocks apart in height along exit actually meet.
+     *
+     * A step up needs this rail to slope up to it, a step down needs the other to slope up to this
+     * one, and on the level neither may slope away over the join.
+     *
+     * @param shape This rail's shape.
+     * @param otherShape The other rail's shape.
+     * @param exit The side this rail leads out of.
+     * @param rise How far above this rail the other one is.
+     * @return True if Two rails rise blocks apart in height along exit actually meet.
+     */
     private static boolean meets(RailShape shape, RailShape otherShape, Direction exit, int rise) {
         boolean climbs = rises(shape) == exit;
         boolean otherClimbs = rises(otherShape) == exit.getOpposite();
         return rise == 1 ? climbs : rise == -1 ? otherClimbs : !climbs && !otherClimbs;
     }
 
-    // Hands energy to any cart on the rail that takes it, up to the rail's transfer rate: from its
-    // reserve, and then straight from the network, so the small buffer doesn't hold charging back
+    /**
+     * @brief Hands energy to any cart on the rail that takes it, up to the rail's transfer rate.
+     *
+     * From its reserve, and then straight from the network, so the small buffer doesn't hold
+     * charging back.
+     *
+     * @param level The level to work in.
+     */
     private void chargeCarts(Level level) {
         for (AbstractMinecart cart : level.getEntitiesOfClass(AbstractMinecart.class, new AABB(worldPosition))) {
             cart.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(target -> {
@@ -298,7 +379,9 @@ public class ChargingRailBlockEntity extends BlockEntity {
         output.putInt("Energy", buffer.getEnergyStored());
     }
 
-    // What generators, cables and machines see: energy can be drawn out, but none put in
+    /**
+     * @brief What generators, cables and machines see: energy can be drawn out, but none put in.
+     */
     private class Output implements IEnergyStorage {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -331,7 +414,7 @@ public class ChargingRailBlockEntity extends BlockEntity {
         }
     }
 
-    // Marks the block entity for saving whenever its energy changes
+    /** @brief Marks the block entity for saving whenever its energy changes. */
     private class Buffer extends EnergyStorage {
         Buffer(int capacity) {
             super(capacity, transfer, transfer);

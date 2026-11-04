@@ -17,21 +17,37 @@ public final class ModRecipes {
     public static final DeferredRegister<RecipeBookCategory> RECIPE_BOOK_CATEGORIES =
         DeferredRegister.create(Registries.RECIPE_BOOK_CATEGORY, XincraftMod.MODID);
 
-    // The apothecary crucible's mob inscriptions (magic.CrucibleRecipe)
+    /**
+     * @name Crucible recipes
+     *
+     * The apothecary crucible's mob inscriptions.
+     *
+     * @see CrucibleRecipe
+     * @{
+     */
     public static final RegistryObject<RecipeType<CrucibleRecipe>> CRUCIBLE = RECIPE_TYPES.register("crucible",
         () -> RecipeType.simple(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "crucible")));
     public static final RegistryObject<RecipeSerializer<CrucibleRecipe>> CRUCIBLE_SERIALIZER = RECIPE_SERIALIZERS.register("crucible",
         () -> new RecipeSerializer<>(CrucibleRecipe.MAP_CODEC, CrucibleRecipe.STREAM_CODEC));
     public static final RegistryObject<RecipeBookCategory> CRUCIBLE_BOOK_CATEGORY = RECIPE_BOOK_CATEGORIES.register("crucible",
         RecipeBookCategory::new);
+    /** @} */
 
-    // The apothecary altar's transmutations (magic.AltarRecipe)
+    /**
+     * @name Altar recipes
+     *
+     * The apothecary altar's transmutations.
+     *
+     * @see AltarRecipe
+     * @{
+     */
     public static final RegistryObject<RecipeType<AltarRecipe>> ALTAR_TRANSMUTATION = RECIPE_TYPES.register("altar_transmutation",
         () -> RecipeType.simple(Identifier.fromNamespaceAndPath(XincraftMod.MODID, "altar_transmutation")));
     public static final RegistryObject<RecipeSerializer<AltarRecipe>> ALTAR_TRANSMUTATION_SERIALIZER = RECIPE_SERIALIZERS.register("altar_transmutation",
         () -> new RecipeSerializer<>(AltarRecipe.MAP_CODEC, AltarRecipe.STREAM_CODEC));
     public static final RegistryObject<RecipeBookCategory> ALTAR_TRANSMUTATION_BOOK_CATEGORY = RECIPE_BOOK_CATEGORIES.register("altar_transmutation",
         RecipeBookCategory::new);
+    /** @} */
 
     private ModRecipes() {}
 }

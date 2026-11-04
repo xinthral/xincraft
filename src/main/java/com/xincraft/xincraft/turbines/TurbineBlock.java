@@ -26,9 +26,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fluids.FluidUtil;
 import org.jspecify.annotations.Nullable;
 
-// The heat and steam turbines (see TurbineBlockEntity). Built on the furnace block for its facing,
-// lit state, placement and comparator output; right-click opens it, and right-clicking with a
-// bucket fills (or empties) a turbine with a water tank.
+/**
+ * @brief The heat and steam turbines.
+ *
+ * Built on the furnace block for its facing, lit state, placement and comparator output;
+ * right-click opens it, and right-clicking with a bucket fills (or empties) a turbine with a water
+ * tank.
+ *
+ * @see TurbineBlockEntity
+ */
 public class TurbineBlock extends AbstractFurnaceBlock {
     private final Supplier<? extends BlockEntityType<? extends TurbineBlockEntity>> type;
     private final BiFunction<BlockPos, BlockState, ? extends TurbineBlockEntity> factory;
@@ -50,8 +56,12 @@ public class TurbineBlock extends AbstractFurnaceBlock {
         return new TurbineBlock(properties, TurbineBlockEntities.STEAM_TURBINE, SteamTurbineBlockEntity::new, true);
     }
 
-    // Each turbine has its own codec, since which one it is isn't stored in its properties
+    /**
+     * @brief The heat turbine's codec. Each turbine has its own, since which one it is isn't stored
+     *        in its properties.
+     */
     public static final MapCodec<TurbineBlock> HEAT_CODEC = simpleCodec(TurbineBlock::heat);
+    /** @brief The steam turbine's codec. */
     public static final MapCodec<TurbineBlock> STEAM_CODEC = simpleCodec(TurbineBlock::steam);
 
     @Override
@@ -81,7 +91,10 @@ public class TurbineBlock extends AbstractFurnaceBlock {
         }
     }
 
-    // A bucket (or anything else holding fluid) fills or empties the steam turbine's water tank
+    /**
+     * @brief A bucket (or anything else holding fluid) fills or empties the steam turbine's water
+     *        tank.
+     */
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
             InteractionHand hand, BlockHitResult hitResult) {
@@ -91,7 +104,7 @@ public class TurbineBlock extends AbstractFurnaceBlock {
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
-    // Furnace flames and crackle, plus steam from the steam turbine
+    /** @brief Furnace flames and crackle, plus steam from the steam turbine. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (!state.getValue(LIT)) {

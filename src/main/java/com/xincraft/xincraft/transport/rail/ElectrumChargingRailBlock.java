@@ -9,8 +9,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-// A charging rail made of electrum, which moves energy faster, reaches further for power, and passes
-// charge along a line of its kind (see ElectrumChargingRailBlockEntity). Otherwise the same as ChargingRailBlock.
+/**
+ * @brief A charging rail made of electrum, which moves energy faster, reaches further for power,
+ *        and passes charge along a line of its kind.
+ *
+ * Otherwise the same as ChargingRailBlock.
+ *
+ * @see ElectrumChargingRailBlockEntity
+ */
 public class ElectrumChargingRailBlock extends ChargingRailBlock {
     public static final MapCodec<PoweredRailBlock> CODEC = simpleCodec(ElectrumChargingRailBlock::new);
 

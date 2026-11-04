@@ -20,38 +20,62 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// Vanilla's default minecart physics, plus the mod's special rails:
-// - tin rails raise the speed cap on straight track (slopes included), easing back to normal for
-//   corners;
-// - honey rails hold carts at a reduced speed;
-// - powered bouncy rails launch carts into the air.
-// It also runs the shrieker upgrade (see CartUpgrades).
-// Forge's per-rail speed hook (BaseRailBlock#getRailMaxSpeed) isn't consulted by the default
-// physics in this version, so the cap is changed here instead. Every kind of cart (furnace
-// minecarts included) scales from vanilla's own cap, so their relative speeds hold.
+/**
+ * @brief Vanilla's default minecart physics, plus the mod's special rails.
+ *
+ * - Tin rails raise the speed cap on straight track (slopes included), easing back to normal for
+ *   corners.
+ * - Honey rails hold carts at a reduced speed.
+ * - Powered bouncy rails launch carts into the air.
+ *
+ * It also runs the shrieker upgrade. Every kind of cart scales from vanilla's own cap, so their
+ * relative speeds hold.
+ *
+ * @see transport.train.CartUpgrades
+ */
 public class XincraftMinecartBehavior extends OldMinecartBehavior {
-    // Speed a honey rail adds each tick to a cart below its target speed (same as a powered rail)
+    /**
+     * @brief Speed a honey rail adds each tick to a cart below its target speed (same as a powered
+     *        rail).
+     */
     private static final double HONEY_RAIL_BOOST = 0.06;
-    // Below this a cart counts as stopped, with no direction to push it in (same as a powered rail)
+    /**
+     * @brief Below this a cart counts as stopped, with no direction to push it in (same as a
+     *        powered rail).
+     */
     private static final double STOPPED_SPEED = 0.01;
-    // Longest single move a cart makes along the track: vanilla's normal speed cap, which its rail
-    // following is built around (see moveMinecartOnRail)
+    /**
+     * @brief Longest single move a cart makes along the track.
+     *
+     * This is vanilla's normal speed cap, which its rail following is built around.
+     *
+     * @see moveMinecartOnRail
+     */
     private static final double MAX_STEP = 0.4;
-    // A flying minecart's gravity and the share of its speed it keeps each tick (vanilla's and
-    // Forge's defaults), used to work out how hard to launch a cart to reach a given height
+    /**
+     * @brief A flying minecart's gravity, used to work out how hard to launch a cart to reach a
+     *        given height.
+     */
     private static final double GRAVITY = 0.04;
+    /** @brief The share of its speed a flying minecart keeps each tick. */
     private static final double AIR_DRAG = 0.95;
 
-    // Horizontal speed the cart had when a bouncy rail launched it, so the air speed cap doesn't
-    // cut it down mid-flight (e.g. off a tin rail); 0 when the cart isn't in a bounce
+    /**
+     * @brief Horizontal speed the cart had when a bouncy rail launched it, so the air speed cap
+     *        doesn't cut it down mid-flight (e.g. off a tin rail).
+     *
+     * 0 when the cart isn't in a bounce.
+     */
     private double launchSpeed = 0.0;
 
     public XincraftMinecartBehavior(AbstractMinecart minecart) {
         super(minecart);
     }
 
-    // Swaps this in for vanilla's default physics on every minecart, leaving the experimental
-    // physics and any other mod's replacement physics alone
+    /**
+     * @brief Swaps this in for vanilla's default physics on every minecart, leaving the
+     *        experimental physics and any other mod's replacement physics alone.
+     */
     public static void install() {
         var previous = AbstractMinecart.getBehaviorFactory();
         AbstractMinecart.setBehaviorFactory((cart, level) -> {
@@ -69,11 +93,17 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         return Math.max(max, launchSpeed);
     }
 
-    // Tin speed only applies on straight track. Even split into steps (see moveMinecartOnRail), a
-    // fast cart moves in straight lines, and through a curve that can cut across into the diagonal
-    // block, which has no rail, so the cart flies off. So carts move at the normal cap from one
-    // block before a curve until they're past it. Their velocity isn't reduced, only how far they
-    // move each tick, so they're back up to tin speed on the next straight.
+    /**
+     * @brief Whether the cart can go at tin speed, which only applies on straight track.
+     *
+     * Through a curve, a fast cart can cut across into the diagonal block, which has no rail, and
+     * fly off. So carts move at the normal cap from one block before a curve until they're past it.
+     * Only how far they move each tick is reduced, so they're back up to tin speed on the next
+     * straight.
+     *
+     * @param level The level to work in.
+     * @return True if the cart can go at tin speed.
+     */
     private boolean canGoTinSpeed(ServerLevel level) {
         BlockPos pos = minecart.getCurrentBlockPosOrRailBelow();
         BlockState state = level.getBlockState(pos);
@@ -92,12 +122,13 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         return shape != null && shape != RailShape.NORTH_SOUTH && shape != RailShape.EAST_WEST && !shape.isSlope();
     }
 
-    // Vanilla moves the cart in one straight step per tick, at the height of the rail it started the
-    // tick on (for a slope, the top of the slope's block). Any longer than the normal cap and that
-    // step can reach two blocks ahead on a climb, into the solid block holding up a later slope rail,
-    // and the collision stops the cart dead. So longer moves are split into steps of at most
-    // MAX_STEP, and whenever the cart crosses into the next block it's moved to the height vanilla
-    // would have used had it started the tick on the rail there.
+    /**
+     * @brief Moves the cart along the rail, splitting long moves into steps of at most MAX_STEP.
+     *
+     * A single long step can reach into the solid block holding up a later slope rail, which stops
+     * the cart dead. So whenever the cart crosses into the next block, it's moved to the height it
+     * would have had starting from the rail there.
+     */
     @Override
     protected void moveMinecartOnRail(ServerLevel level) {
         if (getMaxSpeed(level) <= MAX_STEP) {
@@ -145,8 +176,16 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         }
     }
 
-    // The rail in the given column at the cart's height or up to two blocks below (the next rail
-    // down a descent is two below the height a cart on a slope moves at)
+    /**
+     * @brief The rail in the given column at the cart's height or up to two blocks below (the next
+     *        rail down a descent is two below the height a cart on a slope moves at).
+     *
+     * @param level The level to work in.
+     * @param x The x position.
+     * @param y The y position.
+     * @param z The z position.
+     * @return The rail's position, or null if there's none.
+     */
     private static @Nullable BlockPos findRail(ServerLevel level, int x, int y, int z) {
         for (int dy = 0; dy >= -2; dy--) {
             BlockPos pos = new BlockPos(x, y + dy, z);
@@ -157,8 +196,14 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         return null;
     }
 
-    // The next block in the direction of travel, or the block below it when that's where the rail
-    // is (as AbstractMinecart#getCurrentBlockPosOrRailBelow does); null if the cart isn't moving
+    /**
+     * @brief The next block in the direction of travel, or the block below it when that's where the
+     *        rail is.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @return The position, or null if the cart isn't moving.
+     */
     private @Nullable BlockPos railAhead(ServerLevel level, BlockPos pos) {
         Vec3 movement = getDeltaMovement();
         if (movement.horizontalDistance() < STOPPED_SPEED) {
@@ -170,8 +215,11 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         return level.getBlockState(ahead.below()).is(BlockTags.RAILS) ? ahead.below() : ahead;
     }
 
-    // A cart with a shrieker upgrade clears the track ahead instead of picking up whatever it hits,
-    // and is never slowed by anything but other minecarts, which it still bumps as vanilla does
+    /**
+     * @brief A cart with a shrieker upgrade clears the track ahead instead of picking up whatever
+     *        it hits, and is never slowed by anything but other minecarts, which it still bumps as
+     *        vanilla does.
+     */
     @Override
     public boolean pushAndPickupEntities() {
         if (!(minecart instanceof UpgradableCart cart) || !cart.upgrades().has(CartUpgrade.SHRIEKER)
@@ -220,8 +268,14 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         }
     }
 
-    // Brings the cart to the honey rail's speed: a faster cart is cut straight down to it and a
-    // slower one is pushed up toward it. A stopped cart is left where it is.
+    /**
+     * @brief Brings the cart to the honey rail's speed: a faster cart is cut straight down to it
+     *        and a slower one is pushed up toward it.
+     *
+     * A stopped cart is left where it is.
+     *
+     * @param level The level to work in.
+     */
     private void applyHoneyRail(ServerLevel level) {
         double target = super.getMaxSpeed(level) * Config.honeyRailSpeedMultiplier;
         Vec3 movement = getDeltaMovement();
@@ -233,9 +287,16 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
         setDeltaMovement(movement.multiply(newSpeed / speed, 1.0, newSpeed / speed));
     }
 
-    // Throws the cart upward hard enough to rise about (power / 15) of the configured maximum
-    // height, keeping the forward speed it was moving at. A stopped cart isn't launched, or it
-    // would bounce in place forever.
+    /**
+     * @brief Throws the cart upward hard enough to rise about (power / 15) of the configured
+     *        maximum height.
+     *
+     * It keeps the forward speed it was moving at. A stopped cart isn't launched, or it would
+     * bounce in place forever.
+     *
+     * @param level The level to work in.
+     * @param power The redstone signal strength.
+     */
     private void launch(ServerLevel level, int power) {
         Vec3 movement = getDeltaMovement();
         if (movement.horizontalDistance() < STOPPED_SPEED) {
@@ -260,8 +321,13 @@ public class XincraftMinecartBehavior extends OldMinecartBehavior {
             SoundEvents.SLIME_JUMP, SoundSource.NEUTRAL, 1.0F, 1.0F);
     }
 
-    // The upward speed that carries a flying cart to the given height, found by bisection over
-    // the same gravity-then-drag steps the cart takes each tick in the air
+    /**
+     * @brief The upward speed that carries a flying cart to the given height, found by bisection
+     *        over the same gravity-then-drag steps the cart takes each tick in the air.
+     *
+     * @param height The height to reach, in blocks.
+     * @return The upward speed.
+     */
     private static double launchVelocity(double height) {
         double low = 0.0;
         double high = 4.0;

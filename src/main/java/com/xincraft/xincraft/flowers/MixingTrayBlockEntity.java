@@ -17,11 +17,17 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 
-// Remembers which flowers have gone into a mixing tray's mash, so each one has to be different. How
-// full the tray is lives in its block state (MixingTrayBlock.LEVEL), which is what shows the mash.
-// Also notices honeycomb thrown onto a full tray, which turns the mash into pollen.
+/**
+ * @brief Remembers which flowers have gone into a mixing tray's mash, so each one has to be
+ *        different.
+ *
+ * How full the tray is lives in its block state, which is what shows the mash. Also notices
+ * honeycomb thrown onto a full tray, which turns the mash into pollen.
+ *
+ * @see MixingTrayBlock.LEVEL
+ */
 public class MixingTrayBlockEntity extends BlockEntity {
-    // How often a full tray looks for thrown honeycomb
+    /** @brief How often a full tray looks for thrown honeycomb. */
     private static final int HONEYCOMB_CHECK_TICKS = 4;
 
     private final List<Item> flowers = new ArrayList<>();
@@ -34,7 +40,12 @@ public class MixingTrayBlockEntity extends BlockEntity {
         return stack.is(FlowerTags.SMALL_FLOWERS);
     }
 
-    // Whether this flower can go in: it's a small flower that isn't in the mash already
+    /**
+     * @brief Whether this flower can go in: it's a small flower that isn't in the mash already.
+     *
+     * @param stack The item stack.
+     * @return True if This flower can go in.
+     */
     boolean accepts(ItemStack stack) {
         return isMixable(stack) && !flowers.contains(stack.getItem());
     }
@@ -49,7 +60,12 @@ public class MixingTrayBlockEntity extends BlockEntity {
         setChanged();
     }
 
-    // A full tray turns honeycomb thrown onto it into pollen, one honeycomb per batch
+    /**
+     * @brief A full tray turns honeycomb thrown onto it into pollen, one honeycomb per batch.
+     *
+     * @param level The level to work in.
+     * @param state The block's state.
+     */
     void serverTick(ServerLevel level, BlockState state) {
         if (state.getValue(MixingTrayBlock.LEVEL) != MixingTrayBlock.FULL
                 || Math.floorMod(level.getGameTime() + worldPosition.asLong(), HONEYCOMB_CHECK_TICKS) != 0) {
@@ -66,7 +82,10 @@ public class MixingTrayBlockEntity extends BlockEntity {
         }
     }
 
-    // Breaking a tray of finished pollen drops the pollen; a half-made mash is lost, like compost
+    /**
+     * @brief Breaking a tray of finished pollen drops the pollen; a half-made mash is lost, like
+     *        compost.
+     */
     @Override
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);

@@ -34,41 +34,61 @@ import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-// Draws the cell upgrade (transport.train.MobCell) as a low cage of iron bars standing on all four sides of a
-// carriage or ferry. Each side is tiled with panels of vanilla's iron bars, stretched to fit evenly.
-// The reinforced cage is an obsidian frame instead, with a glass window filling each side. A mob in
-// the cell is shown by its spawn egg, spinning where it sits, rather than as itself (see CagedMobs);
-// one without a spawn egg is drawn as usual, and stands out of the cage. Through rose-tinted glasses,
-// worn or held, each egg is labelled with the mob's name, as a name tag would show it.
+/**
+ * @brief Draws the cell upgrade as a low cage standing on all four sides of a carriage or ferry.
+ *
+ * The cage is tiled with panels of iron bars, or for the reinforced cage, an obsidian frame with a
+ * glass window on each side. A caged mob is shown by its spawn egg, spinning where it sits. Through
+ * rose-tinted glasses, each egg is labelled with the mob's name.
+ *
+ * @see transport.train.MobCell
+ * @see CagedMobs
+ */
 public final class CellCage {
-    // Iron bars and glass panes joined left and right, making a flat panel through the middle of the
-    // block, one running along x and one along z
+    /**
+     * @name Flat panels
+     *
+     * Iron bars and glass panes joined left and right, making a flat panel through the middle of
+     * the block, one running along x and one along z.
+     * @{
+     */
     private static final BlockState BARS_X = alongX(Blocks.IRON_BARS);
     private static final BlockState BARS_Z = alongZ(Blocks.IRON_BARS);
     private static final BlockState GLASS_X = alongX(Blocks.GLASS_PANE);
     private static final BlockState GLASS_Z = alongZ(Blocks.GLASS_PANE);
-    // Roughly how big each panel is, before it's stretched to fit; and how deep it's drawn
+    /** @} */
+    /** @brief Roughly how big each panel is, before it's stretched to fit. */
     private static final float PANEL = 0.6F;
+    /** @brief How deep each panel is drawn. */
     private static final float DEPTH = 0.5F;
-    // How thick the reinforced cage's obsidian posts and rails are, and how far (two pixels) the frame
-    // rises above the glass, so the top of the glass doesn't flicker against the top rail
+    /** @brief How thick the reinforced cage's obsidian posts and rails are. */
     private static final float FRAME = 0.1F;
+    /**
+     * @brief How far the frame rises above the glass, so the top of the glass doesn't flicker
+     *        against the top rail.
+     */
     private static final float FRAME_RISE = 2.0F / 16.0F;
-    // A caged mob's spawn egg: how high above the mob's feet it's drawn, how big, and how many
-    // degrees it turns each tick
+    /** @brief How high above the mob's feet its spawn egg is drawn. */
     private static final float EGG_HEIGHT = 0.5F;
+    /** @brief How big a caged mob's spawn egg is drawn. */
     private static final float EGG_SCALE = 2.0F;
+    /** @brief How many degrees a caged mob's spawn egg turns each tick. */
     private static final float EGG_SPIN = 3.0F;
-    // How far above a caged mob's feet its label hangs (vanilla raises it half a block more), and how
-    // far off it can be read, as far as vanilla shows name tags
+    /**
+     * @brief How far above a caged mob's feet its label hangs. Vanilla raises it half a block more.
+     */
     private static final float LABEL_HEIGHT = EGG_HEIGHT + 0.3F;
+    /** @brief How far off a label can be read, as far as vanilla shows name tags. */
     private static final double LABEL_RANGE = 64.0;
-    // Each mob type's spawn egg, looked up once. Vanilla finds it by searching the items for one that
-    // spawns the type, so mobs added later, and other mods' mobs, find theirs too. The registry is
-    // fixed once the game's loaded.
+    /**
+     * @brief Each mob type's spawn egg, looked up once.
+     *
+     * Vanilla finds it by searching the items for one that spawns the type, so mobs added later,
+     * and other mods' mobs, find theirs too. The registry is fixed once the game's loaded.
+     */
     private static final Map<EntityType<?>, Optional<Holder<Item>>> EGGS = new ConcurrentHashMap<>();
 
-    // A renderer's models of the cage's parts, kept in its render state
+    /** @brief A renderer's models of the cage's parts, kept in its render state. */
     public static final class Models {
         final BlockModelRenderState barsX = new BlockModelRenderState();
         final BlockModelRenderState barsZ = new BlockModelRenderState();
@@ -77,10 +97,11 @@ public final class CellCage {
         final BlockModelRenderState obsidian = new BlockModelRenderState();
         boolean shown;
         boolean reinforced;
-        // The spawn eggs of the mobs inside, and where each is drawn, relative to the vehicle
+        /** @brief The spawn eggs of the mobs inside. */
         final List<ItemStackRenderState> eggs = new ArrayList<>();
+        /** @brief Where each spawn egg is drawn, relative to the vehicle. */
         final List<Vec3> eggSpots = new ArrayList<>();
-        // The mobs' names, when they're labelled
+        /** @brief The mobs' names, when they're labelled. */
         final List<Component> labels = new ArrayList<>();
         boolean labelled;
         int eggCount;
@@ -108,8 +129,16 @@ public final class CellCage {
         return block.defaultBlockState().setValue(IronBarsBlock.NORTH, true).setValue(IronBarsBlock.SOUTH, true);
     }
 
-    // The spawn eggs of the mobs in the cage, standing in for the mobs, which are hidden; origin is
-    // where the vehicle is drawn
+    /**
+     * @brief The spawn eggs of the mobs in the cage, standing in for the mobs, which are hidden;
+     *        origin is where the vehicle is drawn.
+     *
+     * @param resolver Resolves the spawn eggs' item models.
+     * @param models The render state to fill in.
+     * @param vehicle The vehicle.
+     * @param origin Where the vehicle is drawn.
+     * @param partialTicks How far through the current tick this frame is.
+     */
     public static void extractEggs(ItemModelResolver resolver, Models models, Entity vehicle, Vec3 origin, float partialTicks) {
         models.eggCount = 0;
         if (!models.shown) {
@@ -144,7 +173,16 @@ public final class CellCage {
         models.spin = (vehicle.tickCount + partialTicks) * EGG_SPIN;
     }
 
-    // Draws the spawn eggs, and their labels, from where the vehicle is drawn
+    /**
+     * @brief Draws the spawn eggs, and their labels, from where the vehicle is drawn.
+     *
+     * @param models The cage's render state.
+     * @param poseStack The current transform.
+     * @param collector Collects what gets drawn.
+     * @param light The packed light level.
+     * @param outlineColor The outline colour, or 0 for none.
+     * @param camera The camera, for facing the labels.
+     */
     public static void submitEggs(Models models, PoseStack poseStack, SubmitNodeCollector collector, int light, int outlineColor,
             CameraRenderState camera) {
         for (int i = 0; i < models.eggCount; i++) {
@@ -161,8 +199,20 @@ public final class CellCage {
         }
     }
 
-    // The cage's walls run along the edges of a box halfX by halfZ either side of the origin, from
-    // bottom up to bottom + height, in the vehicle's own frame (y up)
+    /**
+     * @brief The cage's walls run along the edges of a box halfX by halfZ either side of the
+     *        origin, from bottom up to bottom + height, in the vehicle's own frame (y up).
+     *
+     * @param models The cage's render state.
+     * @param halfX Half the box's size along x.
+     * @param halfZ Half the box's size along z.
+     * @param bottom Where the walls start.
+     * @param height How tall the walls are.
+     * @param poseStack The current transform.
+     * @param collector Collects what gets drawn.
+     * @param light The packed light level.
+     * @param outlineColor The outline colour, or 0 for none.
+     */
     public static void submit(Models models, float halfX, float halfZ, float bottom, float height, PoseStack poseStack,
             SubmitNodeCollector collector, int light, int outlineColor) {
         if (!models.shown) {
@@ -195,8 +245,22 @@ public final class CellCage {
         }
     }
 
-    // The reinforced cage: a glass window filling each side, framed in obsidian, with a post at each
-    // corner and a rail along the top and bottom of each side
+    /**
+     * @brief The reinforced cage.
+     *
+     * A glass window filling each side, framed in obsidian, with a post at each corner and a rail
+     * along the top and bottom of each side.
+     *
+     * @param models The cage's render state.
+     * @param halfX Half the box's size along x.
+     * @param halfZ Half the box's size along z.
+     * @param bottom Where the walls start.
+     * @param height How tall the walls are.
+     * @param poseStack The current transform.
+     * @param collector Collects what gets drawn.
+     * @param light The packed light level.
+     * @param outlineColor The outline colour, or 0 for none.
+     */
     private static void submitReinforced(Models models, float halfX, float halfZ, float bottom, float height,
             PoseStack poseStack, SubmitNodeCollector collector, int light, int outlineColor) {
         for (float side : new float[] {-halfZ, halfZ}) {

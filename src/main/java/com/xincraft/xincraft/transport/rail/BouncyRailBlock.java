@@ -16,9 +16,16 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 
-// A straight rail that launches minecarts into the air, higher the stronger the redstone signal
-// it receives (0 = an ordinary rail). The block only tracks that signal strength in POWER; the
-// launch itself lives in transport.rail.XincraftMinecartBehavior, keyed off TransportTags.BOUNCY_RAILS.
+/**
+ * @brief A straight rail that launches minecarts into the air, higher the stronger its redstone
+ *        signal.
+ *
+ * A signal of 0 makes it an ordinary rail. The block only tracks the signal strength; the launch
+ * itself happens in the minecart physics.
+ *
+ * @see XincraftMinecartBehavior
+ * @see transport.TransportTags#BOUNCY_RAILS
+ */
 public class BouncyRailBlock extends BaseRailBlock {
     public static final MapCodec<BouncyRailBlock> CODEC = simpleCodec(BouncyRailBlock::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
@@ -37,8 +44,12 @@ public class BouncyRailBlock extends BaseRailBlock {
         return CODEC;
     }
 
-    // Called by BaseRailBlock when the rail is placed and whenever a neighbour changes. Unlike a
-    // powered rail, power doesn't pass along a line of these; each one reads its own signal.
+    /**
+     * @brief Called by BaseRailBlock when the rail is placed and whenever a neighbour changes.
+     *
+     * Unlike a powered rail, power doesn't pass along a line of these; each one reads its own
+     * signal.
+     */
     @Override
     protected void updateState(BlockState state, Level level, BlockPos pos, Block block) {
         int signal = level.getBestNeighborSignal(pos);

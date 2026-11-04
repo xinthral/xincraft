@@ -20,17 +20,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-// A charging station or substation: a small energy store linked to others with a linking bar into a
-// network. Charging rails draw from the nodes in range of them (see inRange), and what a node doesn't
-// hold it finds elsewhere on its network. Only nodes in loaded chunks take part, so a network with
-// several stations keeps working when some of it is out of range of the player.
+/**
+ * @brief A charging station or substation: a small energy store linked to others into a network.
+ *
+ * Charging rails draw from the nodes in range of them, and what a node doesn't hold it finds
+ * elsewhere on its network. Only nodes in loaded chunks take part, so a network with several
+ * stations keeps working when some of it is out of range of the player.
+ *
+ * @see inRange
+ */
 public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
     public static final int MAX_LINKS = 4;
     public static final double LINK_RANGE = 64.0;
     private static final int MAX_NETWORK_SIZE = 256;
     private static final int NETWORK_REFRESH_TICKS = 20;
     private static final int SYNC_TICKS = 100;
-    // Per level, and so per thread: in single player the client and server run side by side
+    /**
+     * @brief Per level, and so per thread: in single player the client and server run side by side.
+     */
     private static final Map<Level, Set<PowerNodeBlockEntity>> LOADED = Collections.synchronizedMap(new WeakHashMap<>());
 
     private final int capacity;
@@ -45,7 +52,15 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         this.capacity = capacity;
     }
 
-    // The loaded nodes within chunkRange chunks of pos (counting chunks on each axis), nearest first
+    /**
+     * @brief The loaded nodes within chunkRange chunks of pos (counting chunks on each axis),
+     *        nearest first.
+     *
+     * @param level The level to work in.
+     * @param pos The block's position.
+     * @param chunkRange How many chunks away to look, on each axis.
+     * @return The nodes found, nearest first.
+     */
     public static List<PowerNodeBlockEntity> inRange(Level level, BlockPos pos, int chunkRange) {
         Set<PowerNodeBlockEntity> loaded = LOADED.get(level);
         if (loaded == null) {
@@ -105,7 +120,12 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         return capacity;
     }
 
-    // Adds energy up to what fits, returning how much did
+    /**
+     * @brief Adds energy, up to what fits.
+     *
+     * @param amount The most to add.
+     * @return How much it added.
+     */
     protected int fill(int amount) {
         int added = Math.max(0, Math.min(amount, capacity - energy));
         if (added > 0) {
@@ -116,7 +136,12 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         return added;
     }
 
-    // Takes energy up to what's held, returning how much was
+    /**
+     * @brief Takes energy, up to what's held.
+     *
+     * @param amount The most to take.
+     * @return How much it took.
+     */
     protected int drain(int amount) {
         int taken = Math.max(0, Math.min(amount, energy));
         if (taken > 0) {
@@ -127,7 +152,12 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         return taken;
     }
 
-    // Lets clients know a changed amount, for rose-tinted glasses, at most once every 5 seconds
+    /**
+     * @brief Lets clients know a changed amount, for rose-tinted glasses, at most once every 5
+     *        seconds.
+     *
+     * @param level The level to work in.
+     */
     protected void serverTick(Level level) {
         long now = level.getGameTime();
         if (energyChanged && now >= nextSync) {
@@ -137,17 +167,32 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         }
     }
 
-    // Whether power enters the network here, which only a charging station with something connected does
+    /**
+     * @brief Whether power enters the network here, which only a charging station with something
+     *        connected does.
+     *
+     * @return True if Power enters the network here, which only a charging station with something
+     *     connected does.
+     */
     public boolean hasSource() {
         return false;
     }
 
-    // Whether anything on this node's network has a power source connected
+    /**
+     * @brief Whether anything on this node's network has a power source connected.
+     *
+     * @return True if Anything on this node's network has a power source connected.
+     */
     public boolean networkHasSource() {
         return network().stream().anyMatch(node -> !node.isRemoved() && node.hasSource());
     }
 
-    // What this node's network holds between its nodes, and could hold
+    /**
+     * @brief What this node's network holds between its nodes.
+     *
+     * @return The energy held.
+     * @see networkCapacity
+     */
     public int networkEnergy() {
         return network().stream().filter(node -> !node.isRemoved()).mapToInt(PowerNodeBlockEntity::energy).sum();
     }
@@ -156,7 +201,12 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         return network().stream().filter(node -> !node.isRemoved()).mapToInt(PowerNodeBlockEntity::capacity).sum();
     }
 
-    // Takes energy from this node, then the rest of its network
+    /**
+     * @brief Takes energy from this node, then the rest of its network.
+     *
+     * @param amount The most to take.
+     * @return How much it took.
+     */
     public int drawFromNetwork(int amount) {
         int drawn = 0;
         for (PowerNodeBlockEntity node : network()) {
@@ -170,8 +220,13 @@ public abstract class PowerNodeBlockEntity extends LinkedBlockEntity {
         return drawn;
     }
 
-    // This node and the loaded nodes linked to it, nearest in links first. Rebuilt about once a second,
-    // so a change to the links takes up to that long to count.
+    /**
+     * @brief This node and the loaded nodes linked to it, nearest in links first.
+     *
+     * Rebuilt about once a second, so a change to the links takes up to that long to count.
+     *
+     * @return The network's nodes.
+     */
     protected List<PowerNodeBlockEntity> network() {
         if (level == null) {
             return List.of(this);

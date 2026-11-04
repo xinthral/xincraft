@@ -17,9 +17,18 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
-// A packed-up bronze golem, or combat golem with its sword in the xincraft:golem_sword component;
-// a golem shift + right-clicked with an empty hand (golems.BronzeGolem) becomes one, and using it on
-// a block puts the golem back. The altar arms one (magic.AltarRecipe).
+/**
+ * @brief A packed-up bronze golem, or combat golem with its sword in the xincraft:golem_sword
+ *        component.
+ *
+ * A golem shift + right-clicked with an empty hand becomes one, and using it on a block puts the
+ * golem back.
+ *
+ * The altar arms one.
+ *
+ * @see BronzeGolem
+ * @see magic.AltarRecipe
+ */
 public class BronzeGolemItem extends Item {
     public BronzeGolemItem(Item.Properties properties) {
         super(properties);
@@ -49,7 +58,7 @@ public class BronzeGolemItem extends Item {
         return InteractionResult.SUCCESS_SERVER;
     }
 
-    // What it does, and for a combat golem, the state of its sword
+    /** @brief What it does, and for a combat golem, the state of its sword. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

@@ -6,11 +6,14 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
-// Lines of text under the crosshair on a dark backdrop, for what rose-tinted glasses reveal about the
-// block the player is looking at
+/**
+ * @brief Lines of text under the crosshair on a dark backdrop, for what rose-tinted glasses reveal
+ *        about the block the player is looking at.
+ */
 public final class CrosshairReadout {
-    // Gap between the crosshair and the readout, and padding around its text
+    /** @brief Gap between the crosshair and the readout. */
     private static final int OFFSET_Y = 12;
+    /** @brief Padding around the readout's text. */
     private static final int PADDING = 3;
     private static final int BACKDROP = 0x90000000;
 

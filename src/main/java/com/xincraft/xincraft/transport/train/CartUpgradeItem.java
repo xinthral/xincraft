@@ -8,7 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
-// An upgrade for the mod's minecarts: used on a cart, it's fitted to it (see transport.train.CartUpgrades)
+/**
+ * @brief An upgrade for the mod's minecarts: used on a cart, it's fitted to it.
+ *
+ * @see CartUpgrades
+ */
 public class CartUpgradeItem extends Item {
     private final CartUpgrade upgrade;
 
@@ -21,7 +25,7 @@ public class CartUpgradeItem extends Item {
         return upgrade;
     }
 
-    // What it does, from item.xincraft.<name>.desc
+    /** @brief Adds what it does to the tooltip. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

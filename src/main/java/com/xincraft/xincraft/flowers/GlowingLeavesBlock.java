@@ -13,10 +13,16 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Leaves dusted with exotic pollen (flowers.ExoticPollenItem): a copy of one kind of vanilla leaves that
-// gives off a faint light, like glow lichen. Everything else comes from the original leaves: its
-// look and tint (models and colours point at the original's), name, drops, decay, sounds and falling
-// leaf particles. Pick-block gives the original leaves.
+/**
+ * @brief Leaves dusted with exotic pollen: a copy of one kind of vanilla leaves that gives off a
+ *        faint light, like glow lichen.
+ *
+ * Everything else comes from the original leaves: its look and tint (models and colours point at
+ * the original's), name, drops, decay, sounds and falling leaf particles. Pick-block gives the
+ * original leaves.
+ *
+ * @see ExoticPollenItem
+ */
 public class GlowingLeavesBlock extends LeavesBlock {
     public static final int LIGHT = 7;
     public static final MapCodec<GlowingLeavesBlock> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
@@ -32,7 +38,12 @@ public class GlowingLeavesBlock extends LeavesBlock {
         this.source = source;
     }
 
-    // The original leaves' properties, with the light added and its name and drops kept
+    /**
+     * @brief The original leaves' properties, with the light added and its name and drops kept.
+     *
+     * @param source The original leaves.
+     * @return The properties to build the glowing copy with.
+     */
     public static BlockBehaviour.Properties propertiesOf(Block source) {
         return BlockBehaviour.Properties.ofFullCopy(source)
             .lightLevel(state -> LIGHT)
@@ -49,7 +60,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
         return CODEC;
     }
 
-    // Rain drips and falling leaves, exactly as the original leaves make them
+    /** @brief Rain drips and falling leaves, exactly as the original leaves make them. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         source.animateTick(source.withPropertiesOf(state), level, pos, random);

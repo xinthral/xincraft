@@ -10,28 +10,45 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 
 public final class TransportTags {
-    // xincraft:padded_rails - every colour of padded rail and padded powered rail; minecart
-    // sounds are muffled on these (see transport.rail.client.PaddedRailSounds)
+    /**
+     * @brief Every colour of padded rail and padded powered rail, which muffle minecart sounds.
+     *
+     * @see transport.rail.client.PaddedRailSounds
+     */
     public static final TagKey<Block> PADDED_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "padded_rails"));
 
-    // xincraft:tin_rails - rails on which minecarts can go faster (see transport.rail.XincraftMinecartBehavior)
+    /**
+     * @brief Rails on which minecarts can go faster.
+     *
+     * @see transport.rail.XincraftMinecartBehavior
+     */
     public static final TagKey<Block> TIN_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "tin_rails"));
 
-    // xincraft:honey_rails - rails that hold minecarts at a reduced, steady speed
-    // (see transport.rail.XincraftMinecartBehavior)
+    /**
+     * @brief Rails that hold minecarts at a reduced, steady speed.
+     *
+     * @see transport.rail.XincraftMinecartBehavior
+     */
     public static final TagKey<Block> HONEY_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "honey_rails"));
 
-    // xincraft:bouncy_rails - rails that launch minecarts upward when powered
-    // (see transport.rail.XincraftMinecartBehavior)
+    /**
+     * @brief Rails that launch minecarts upward when powered.
+     *
+     * @see transport.rail.XincraftMinecartBehavior
+     */
     public static final TagKey<Block> BOUNCY_RAILS =
         TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(XincraftMod.MODID, "bouncy_rails"));
 
-    // xincraft:inspector_rail_signal/1 to /15 - minecart entity types and the redstone signal the
-    // inspector rail gives for them (see transport.rail.InspectorRailBlock). Add a new cart type by listing
-    // it in the tag for its signal strength.
+    /**
+     * @brief Minecart entity types and the redstone signal the inspector rail gives for them.
+     *
+     * Add a new cart type by listing it in the tag for its signal strength.
+     *
+     * @see transport.rail.InspectorRailBlock
+     */
     private static final List<TagKey<EntityType<?>>> INSPECTOR_RAIL_SIGNALS = IntStream.rangeClosed(0, 15)
         .mapToObj(signal -> TagKey.create(Registries.ENTITY_TYPE,
             Identifier.fromNamespaceAndPath(XincraftMod.MODID, "inspector_rail_signal/" + signal)))

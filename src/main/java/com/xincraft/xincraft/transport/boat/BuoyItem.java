@@ -11,8 +11,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-// Places a buoy (transport.boat.BuoyBlock) in the still water you're looking at: the float goes in the water
-// source and the lamp above it. Like a lily pad, it's aimed at the water itself, not a block.
+/**
+ * @brief Places a buoy in the still water you're looking at: the float goes in the water source and
+ *        the lamp above it.
+ *
+ * Like a lily pad, it's aimed at the water itself, not a block.
+ *
+ * @see BuoyBlock
+ */
 public class BuoyItem extends BlockItem {
     public BuoyItem(Block block, Properties properties) {
         super(block, properties);

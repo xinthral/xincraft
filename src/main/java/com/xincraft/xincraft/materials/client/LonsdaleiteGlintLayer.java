@@ -32,10 +32,14 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// The red shimmer on worn lonsdaleite armor (materials.LonsdaleiteArmorItem): vanilla's armor glint, drawn
-// the same way over the same models, with a red texture. Vanilla has no hook for the glint's colour,
-// so its own is off for these items and this layer draws theirs, on players, mannequins and armor
-// stands.
+/**
+ * @brief The red shimmer on worn lonsdaleite armor, drawn on players, mannequins and armor stands.
+ *
+ * Vanilla has no hook for the glint's colour, so its own is off for these items and this layer
+ * draws theirs the same way, with a red texture.
+ *
+ * @see materials.LonsdaleiteArmorItem
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class LonsdaleiteGlintLayer<S extends HumanoidRenderState, M extends HumanoidModel<S>, A extends HumanoidModel<S>>
         extends RenderLayer<S, M> {
@@ -46,7 +50,7 @@ public final class LonsdaleiteGlintLayer<S extends HumanoidRenderState, M extend
             .setTextureTransform(TextureTransform.ARMOR_ENTITY_GLINT_TEXTURING)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
             .createRenderSetup());
-    // Drawn after the armor and any trim on it, whose orders start at 1
+    /** @brief Drawn after the armor and any trim on it, whose orders start at 1. */
     private static final int ORDER = 8;
 
     private final ArmorModelSet<A> models;

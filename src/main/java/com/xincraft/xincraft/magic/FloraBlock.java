@@ -18,13 +18,22 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-// An elemental flora: a flower changed by an element's powder (magic.ElementPowderItem) into a living
-// store of that element's essence (FloraBlockEntity), for rituals to draw from. More of the same
-// powder tops it up. It has no item and drops nothing: broken, it's gone, along with its essence.
-// An empty hand shows how much it holds.
+/**
+ * @brief An elemental flora.
+ *
+ * A flower changed by an element's powder into a living store of that element's essence, for
+ * rituals to draw from.
+ *
+ * More of the same powder tops it up. It has no item and drops nothing: broken, it's gone, along
+ * with its essence. An empty hand shows how much it holds.
+ *
+ * @see ElementPowderItem
+ * @see FloraBlockEntity
+ */
 public class FloraBlock extends FlowerBlock implements EntityBlock {
-    // How full it is, in quarters (0 to 4), which sets how much it glows and sparkles
+    /** @brief The highest value of FILL. */
     public static final int MAX_FILL = 4;
+    /** @brief How full it is, in quarters, which sets how much it glows and sparkles. */
     public static final IntegerProperty FILL = IntegerProperty.create("fill", 0, MAX_FILL);
 
     private final Element element;
@@ -41,7 +50,13 @@ public class FloraBlock extends FlowerBlock implements EntityBlock {
         return element;
     }
 
-    // Light level for a fill level, used in the block properties (magic.MagicBlocks)
+    /**
+     * @brief The light level for a fill level, used in the block properties.
+     *
+     * @param state The block's state.
+     * @return The light level.
+     * @see MagicBlocks
+     */
     public static int lightLevel(BlockState state) {
         return state.getValue(FILL) * 2;
     }
@@ -61,7 +76,7 @@ public class FloraBlock extends FlowerBlock implements EntityBlock {
         return new FloraBlockEntity(pos, state);
     }
 
-    // An empty hand shows how much essence it holds, e.g. "Flora Ignis: 32/64 essence"
+    /** @brief An empty hand shows how much essence it holds, e.g. "Flora Ignis: 32/64 essence". */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof FloraBlockEntity flora)) {
@@ -74,7 +89,7 @@ public class FloraBlock extends FlowerBlock implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    // Sparkles in its element's colour, more the fuller it is
+    /** @brief Sparkles in its element's colour, more the fuller it is. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         int fill = state.getValue(FILL);

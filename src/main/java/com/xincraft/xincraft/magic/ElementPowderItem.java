@@ -21,10 +21,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-// An element's powder, ground from flowers and vines with the mortar and pestle. Used on a small
-// flower, it turns it into that element's flora (magic.FloraBlock), holding Config.floraInitialEssence;
-// used on a flora of the same element, it adds Config.floraEssencePerPowder. The mod's exotic flowers
-// are left alone.
+/**
+ * @brief An element's powder, ground from flowers and vines with the mortar and pestle.
+ *
+ * Used on a small flower, it turns it into that element's flora, holding
+ * Config.floraInitialEssence; used on a flora of the same element, it adds
+ * Config.floraEssencePerPowder. The mod's exotic flowers are left alone.
+ *
+ * @see FloraBlock
+ */
 public class ElementPowderItem extends Item {
     private final Element element;
 
@@ -79,7 +84,13 @@ public class ElementPowderItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    // Any small flower, vanilla or from other mods, except this mod's own special flowers
+    /**
+     * @brief Whether the block is a small flower, vanilla or from other mods, except this mod's
+     *        special flowers.
+     *
+     * @param state The block's state.
+     * @return True if the powder can turn it into a flora.
+     */
     private static boolean isConvertible(BlockState state) {
         Block block = state.getBlock();
         return state.is(BlockTags.SMALL_FLOWERS)
@@ -91,7 +102,7 @@ public class ElementPowderItem extends Item {
             count, 0.3, 0.3, 0.3, 0.0);
     }
 
-    // What it does, from item.xincraft.element_powder.desc
+    /** @brief Adds what it does to the tooltip. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

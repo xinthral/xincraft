@@ -21,10 +21,19 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
-// Sends the compendium (compendium.client.CompendiumScreen) the recipes it shows, since 26.x doesn't
-// send recipes to clients: how to make each of the mod's items (as the recipe book would show it),
-// and every apothecary crucible and altar recipe. Sent on login and /reload, so data packs that change them
-// show in the book.
+/**
+ * @brief Sends the compendium the recipes it shows, since 26.x doesn't send recipes to clients.
+ *
+ * How to make each of the mod's items (as the recipe book would show it), and every apothecary
+ * crucible and altar recipe.
+ *
+ * Sent on login and /reload, so data packs that change them show in the book.
+ *
+ * @param recipes How to make each of the mod's items.
+ * @param crucible Every apothecary crucible recipe.
+ * @param altar Every apothecary altar recipe.
+ * @see compendium.client.CompendiumScreen
+ */
 public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> crucible, List<ShownAltar> altar) {
     public static final StreamCodec<RegistryFriendlyByteBuf, CompendiumRecipesPacket> STREAM_CODEC = StreamCodec.composite(
         Shown.STREAM_CODEC.apply(ByteBufCodecs.list()), CompendiumRecipesPacket::recipes,
@@ -32,7 +41,12 @@ public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> 
         ShownAltar.STREAM_CODEC.apply(ByteBufCodecs.list()), CompendiumRecipesPacket::altar,
         CompendiumRecipesPacket::new);
 
-    // A recipe as the recipe book would show it
+    /**
+     * @brief A recipe as the recipe book would show it.
+     *
+     * @param id The recipe's id.
+     * @param display How the recipe book would show it.
+     */
     public record Shown(Identifier id, RecipeDisplay display) {
         public static final StreamCodec<RegistryFriendlyByteBuf, Shown> STREAM_CODEC = StreamCodec.composite(
             Identifier.STREAM_CODEC, Shown::id,
@@ -40,7 +54,12 @@ public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> 
             Shown::new);
     }
 
-    // An altar transmutation, with the id the book's pages name it by
+    /**
+     * @brief An altar transmutation, with the id the book's pages name it by.
+     *
+     * @param id The id the book's pages name it by.
+     * @param recipe The recipe.
+     */
     public record ShownAltar(Identifier id, AltarRecipe recipe) {
         public static final StreamCodec<RegistryFriendlyByteBuf, ShownAltar> STREAM_CODEC = StreamCodec.composite(
             Identifier.STREAM_CODEC, ShownAltar::id,
@@ -48,7 +67,12 @@ public record CompendiumRecipesPacket(List<Shown> recipes, List<CrucibleRecipe> 
             ShownAltar::new);
     }
 
-    // The mod's own recipes, and any recipe that makes one of its items
+    /**
+     * @brief Gathers the mod's own recipes, and any recipe that makes one of its items.
+     *
+     * @param level The level to work in.
+     * @return The packet to send.
+     */
     public static CompendiumRecipesPacket collect(ServerLevel level) {
         List<Shown> recipes = new ArrayList<>();
         List<CrucibleRecipe> crucible = new ArrayList<>();

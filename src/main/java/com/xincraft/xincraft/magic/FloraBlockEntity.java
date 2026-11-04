@@ -15,12 +15,21 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
-// The essence an elemental flora holds (see FloraBlock), up to Config.floraCapacity. The block
-// state's FILL shows roughly how full it is; the amount and capacity are also synced to clients, for
-// rose-tinted glasses to read (magic.client.EssenceReadout).
+/**
+ * @brief The essence an elemental flora holds, up to Config.floraCapacity.
+ *
+ * The block state's FILL shows roughly how full it is; the amount and capacity are also synced to
+ * clients, for rose-tinted glasses to read.
+ *
+ * @see FloraBlock
+ * @see magic.client.EssenceReadout
+ */
 public class FloraBlockEntity extends BlockEntity implements EssenceReservoir {
     private int essence;
-    // On the client, the server's capacity, which may be configured differently from the client's
+    /**
+     * @brief On the client, the server's capacity, which may be configured differently from the
+     *        client's.
+     */
     private int syncedCapacity = Config.floraCapacity;
 
     public FloraBlockEntity(BlockPos pos, BlockState state) {
@@ -75,7 +84,14 @@ public class FloraBlockEntity extends BlockEntity implements EssenceReservoir {
         }
     }
 
-    // Any essence at all shows as at least the first quarter
+    /**
+     * @brief Works out the fill level, where any essence at all shows as at least the first
+     *        quarter.
+     *
+     * @param essence The essence held.
+     * @param capacity The most it can hold.
+     * @return The fill level.
+     */
     private static int fillFor(int essence, int capacity) {
         if (essence <= 0) {
             return 0;
@@ -96,7 +112,10 @@ public class FloraBlockEntity extends BlockEntity implements EssenceReservoir {
         output.putInt("Essence", essence);
     }
 
-    // Sent to clients when the chunk loads, and with each change: the amount, plus the capacity
+    /**
+     * @brief Sent to clients when the chunk loads, and with each change: the amount, plus the
+     *        capacity.
+     */
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = saveCustomOnly(registries);

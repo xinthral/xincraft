@@ -13,8 +13,13 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MagicBlocks {
-    // Elemental flora, one per element (magic.FloraBlock), made by using an element's powder on a
-    // small flower. No items, and they drop nothing when broken.
+    /**
+     * @brief Elemental flora, one per element, made by using an element's powder on a small flower.
+     *
+     * No items, and they drop nothing when broken.
+     *
+     * @see FloraBlock
+     */
     public static final Map<Element, RegistryObject<Block>> FLORA = registerFlora();
 
     private static Map<Element, RegistryObject<Block>> registerFlora() {
@@ -26,7 +31,11 @@ public final class MagicBlocks {
         return Collections.unmodifiableMap(blocks);
     }
 
-    // Burns plants into elemental essence for the flora around it (magic.ApothecaryAltarBlockEntity)
+    /**
+     * @brief Burns plants into elemental essence for the flora around it.
+     *
+     * @see ApothecaryAltarBlockEntity
+     */
     public static final RegistryObject<Block> APOTHECARY_ALTAR = Registers.registerBlock(
         "apothecary_altar",
         ApothecaryAltarBlock::new,
@@ -39,7 +48,11 @@ public final class MagicBlocks {
         true
     );
 
-    // Sits on the altar; inscribes mobs onto mob filters (magic.ApothecaryCrucibleBlock)
+    /**
+     * @brief Sits on the altar; inscribes mobs onto mob filters.
+     *
+     * @see ApothecaryCrucibleBlock
+     */
     public static final RegistryObject<Block> APOTHECARY_CRUCIBLE = Registers.registerBlock(
         "apothecary_crucible",
         ApothecaryCrucibleBlock::new,
@@ -52,7 +65,7 @@ public final class MagicBlocks {
         true
     );
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private MagicBlocks() {}

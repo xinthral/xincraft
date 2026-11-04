@@ -19,7 +19,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class TransportEntityTypes {
-    // Same dimensions and tracking as the vanilla minecart
+    /** @brief Same dimensions and tracking as the vanilla minecart. */
     public static final RegistryObject<EntityType<EnderMinecart>> ENDER_MINECART = Registers.ENTITY_TYPES.register("ender_minecart",
         () -> EntityType.Builder.<EnderMinecart>of(EnderMinecart::new, MobCategory.MISC)
             .noLootTable()
@@ -60,7 +60,11 @@ public final class TransportEntityTypes {
             .clientTrackingRange(8)
             .build(Registers.ENTITY_TYPES.key("freight_cart")));
 
-    // A motorboat for each kind of boat (transport.boat.MotorboatType), sized and tracked like vanilla boats
+    /**
+     * @brief A motorboat for each kind of boat, sized and tracked like vanilla boats.
+     *
+     * @see transport.boat.MotorboatType
+     */
     public static final Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> MOTORBOATS = registerMotorboats();
 
     private static Map<MotorboatType, RegistryObject<EntityType<Motorboat>>> registerMotorboats() {
@@ -78,7 +82,11 @@ public final class TransportEntityTypes {
         return Collections.unmodifiableMap(types);
     }
 
-    // A motorboat with a jukebox, built on the oak boat (transport.boat.PartyBoat)
+    /**
+     * @brief A motorboat with a jukebox, built on the oak boat.
+     *
+     * @see transport.boat.PartyBoat
+     */
     public static final RegistryObject<EntityType<PartyBoat>> PARTY_BOAT = Registers.ENTITY_TYPES.register("party_boat",
         () -> EntityType.Builder.<PartyBoat>of(
                 (type, level) -> new PartyBoat(type, level, () -> TransportItems.PARTY_BOAT.get()), MobCategory.MISC)
@@ -88,7 +96,12 @@ public final class TransportEntityTypes {
             .clientTrackingRange(10)
             .build(Registers.ENTITY_TYPES.key("party_boat")));
 
-    // The carriage's and freight cart's boats, both built on the oak boat (transport.boat.Ferry, transport.boat.Barge)
+    /**
+     * @brief The carriage's and freight cart's boats, both built on the oak boat.
+     *
+     * @see transport.boat.Ferry
+     * @see transport.boat.Barge
+     */
     public static final RegistryObject<EntityType<Ferry>> FERRY = Registers.ENTITY_TYPES.register("ferry",
         () -> EntityType.Builder.<Ferry>of(
                 (type, level) -> new Ferry(type, level, () -> TransportItems.FERRY.get()), MobCategory.MISC)
@@ -107,7 +120,7 @@ public final class TransportEntityTypes {
             .clientTrackingRange(10)
             .build(Registers.ENTITY_TYPES.key("barge")));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private TransportEntityTypes() {}

@@ -10,10 +10,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-// An aura flower's effect (see AuraFlowerBlock): every couple of seconds it gives its effect to
-// players within its range (a 16-block cube by default), and to mobs that aren't hostile if the
-// flower includes them, the way a beacon refreshes its effect. Several flowers don't add up; they
-// just keep it topped up.
+/**
+ * @brief An aura flower's effect.
+ *
+ * Every couple of seconds it gives its effect to players within its range (a 16-block cube by
+ * default), and to mobs that aren't hostile if the flower includes them, the way a beacon refreshes
+ * its effect.
+ *
+ * Several flowers don't add up; they just keep it topped up.
+ *
+ * @see AuraFlowerBlock
+ */
 public class AuraFlowerBlockEntity extends BlockEntity {
     private static final int INTERVAL_TICKS = 40;
 

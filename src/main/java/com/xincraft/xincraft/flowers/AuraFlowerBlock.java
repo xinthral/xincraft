@@ -25,28 +25,43 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-// An exotic flower that, like a small beacon, keeps giving a status effect to what's around it
-// (AuraFlowerBlockEntity). Grown with exotic pollen (flowers.ExoticPollenItem):
-// - the mending lilac (from lily of the valley): Regeneration for players and peaceful mobs
-// - the moonlit dandelion (from golden dandelion): Night Vision for players
-// - the shimmer lily (from wither rose): Invisibility for players
+/**
+ * @brief An exotic flower that, like a small beacon, keeps giving a status effect to what's around
+ *        it.
+ *
+ * Grown with exotic pollen:
+ *
+ * - the mending lilac (from lily of the valley): Regeneration for players and peaceful mobs.
+ * - the moonlit dandelion (from golden dandelion): Night Vision for players.
+ * - the shimmer lily (from wither rose): Invisibility for players.
+ *
+ * @see AuraFlowerBlockEntity
+ * @see ExoticPollenItem
+ */
 public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
     public static final MapCodec<AuraFlowerBlock> MENDING_LILAC_CODEC = simpleCodec(AuraFlowerBlock::mendingLilac);
     public static final MapCodec<AuraFlowerBlock> MOONLIT_DANDELION_CODEC = simpleCodec(AuraFlowerBlock::moonlitDandelion);
     public static final MapCodec<AuraFlowerBlock> SHIMMER_LILY_CODEC = simpleCodec(AuraFlowerBlock::shimmerLily);
-    // The shimmer upgrade's pink glint (transport.train.CartUpgrades)
+    /**
+     * @brief The shimmer upgrade's pink glint.
+     *
+     * @see transport.train.CartUpgrades
+     */
     private static final DustParticleOptions SHIMMER = new DustParticleOptions(0xFF7FC8, 1.0F);
 
     private final Holder<MobEffect> aura;
-    // How long each refresh of the effect lasts
+    /** @brief How long each refresh of the effect lasts. */
     private final int effectTicks;
-    // Whether mobs that aren't hostile get the effect too, or only players
+    /** @brief Whether mobs that aren't hostile get the effect too, or only players. */
     private final boolean includesMobs;
     private final IntSupplier range;
-    // Whether the effect shows its swirling particles on whoever has it (not for invisibility)
+    /**
+     * @brief Whether the effect shows its swirling particles on whoever has it (not for
+     *        invisibility).
+     */
     private final boolean effectParticles;
     private final ParticleOptions particle;
-    // Whether it also grows where a wither rose can (soul sand, soul soil, netherrack)
+    /** @brief Whether it also grows where a wither rose can (soul sand, soul soil, netherrack). */
     private final boolean witherRoseSoil;
     private final Supplier<? extends BlockEntityType<AuraFlowerBlockEntity>> type;
     private final MapCodec<AuraFlowerBlock> codec;
@@ -72,14 +87,29 @@ public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
             () -> Config.mendingLilacRange, ParticleTypes.HAPPY_VILLAGER, false, FlowerBlockEntities.MENDING_LILAC, MENDING_LILAC_CODEC);
     }
 
-    // Night Vision makes the screen flicker in its last 10 seconds, so each refresh lasts longer than that
+    /**
+     * @brief Makes a moonlit dandelion.
+     *
+     * Night Vision makes the screen flicker in its last 10 seconds, so each refresh lasts longer
+     * than that.
+     *
+     * @param properties The block's properties.
+     * @return The new block.
+     */
     public static AuraFlowerBlock moonlitDandelion(BlockBehaviour.Properties properties) {
         return new AuraFlowerBlock(properties, MobEffects.NIGHT_VISION, 5.0F, MobEffects.NIGHT_VISION, 300, false, true,
             () -> Config.moonlitDandelionRange, ParticleTypes.END_ROD, false, FlowerBlockEntities.MOONLIT_DANDELION, MOONLIT_DANDELION_CODEC);
     }
 
-    // Like the shimmer upgrade: no effect swirl to give players away, just the odd pink glint at the
-    // flower. Grows wherever the wither rose it came from could.
+    /**
+     * @brief Makes a shimmer lily.
+     *
+     * Like the shimmer upgrade, it has no effect swirl to give players away, just the odd pink
+     * glint at the flower. It grows wherever the wither rose it came from could.
+     *
+     * @param properties The block's properties.
+     * @return The new block.
+     */
     public static AuraFlowerBlock shimmerLily(BlockBehaviour.Properties properties) {
         return new AuraFlowerBlock(properties, MobEffects.INVISIBILITY, 8.0F, MobEffects.INVISIBILITY, 100, false, false,
             () -> Config.shimmerLilyRange, SHIMMER, true, FlowerBlockEntities.SHIMMER_LILY, SHIMMER_LILY_CODEC);
@@ -134,7 +164,7 @@ public class AuraFlowerBlock extends FlowerBlock implements EntityBlock {
             (tickLevel, pos, tickState, flower) -> flower.serverTick(serverLevel);
     }
 
-    // The odd sparkle
+    /** @brief The odd sparkle. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(5) == 0) {

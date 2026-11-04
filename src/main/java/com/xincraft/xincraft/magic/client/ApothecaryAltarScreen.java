@@ -18,12 +18,13 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-// The apothecary altar's screen, laid out like a furnace: the plant slot over the flame and fuel
-// slot, then the burn progress arrow pointing at a row of element pips. A pip is dark with no flora
-// of its element in range, dim when they're all full, and bright when one has room; it's outlined
-// when the plant in the slot gives that element. Hovering a pip says which. Below is the
-// transmutation: base and material, an arrow, and the result. A pip is outlined amber when the
-// transmutation needs that element and red when the flora are short of it.
+/**
+ * @brief The apothecary altar's screen, laid out like a furnace with a row of element pips.
+ *
+ * A pip is dark with no flora of its element in range, dim when they're all full, and bright when
+ * one has room. It's outlined when the plant in the slot gives that element, amber when the
+ * transmutation needs it, and red when the flora are short of it. Hovering a pip says which.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class ApothecaryAltarScreen extends AbstractContainerScreen<ApothecaryAltarMenu> {
     private static final Identifier TEXTURE =

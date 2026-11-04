@@ -8,8 +8,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
 
-// A chest screen for more rows than vanilla's texture has, repeating its first row as many times as
-// needed; used for the double bronze chest's eight
+/**
+ * @brief A chest screen for more rows than vanilla's texture has, repeating its first row as many
+ *        times as needed.
+ *
+ * Used for the double bronze chest's eight.
+ */
 public class TallChestScreen extends AbstractContainerScreen<ChestMenu> {
     private static final Identifier TEXTURE = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
     private static final int TOP = 17;

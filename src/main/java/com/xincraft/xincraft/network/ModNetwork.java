@@ -12,8 +12,14 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
 
-// The mod's network channel. So far it only carries the compendium's recipes to clients
-// (CompendiumRecipesPacket), sent whenever the server's data packs sync: on login and on /reload.
+/**
+ * @brief The mod's network channel.
+ *
+ * So far it only carries the compendium's recipes to clients, sent whenever the server's data packs
+ * sync: on login and on /reload.
+ *
+ * @see compendium.CompendiumRecipesPacket
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public final class ModNetwork {
     private static final int PROTOCOL_VERSION = 1;
@@ -31,7 +37,7 @@ public final class ModNetwork {
 
     private ModNetwork() {}
 
-    // Loads the class, creating the channel; called from common setup
+    /** @brief Loads the class, creating the channel; called from common setup. */
     public static void register() {}
 
     @SubscribeEvent

@@ -19,10 +19,17 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-// A mob filter, fitted to a carriage or ferry so it only takes aboard the mobs inscribed on it (see
-// transport.train.CartUpgrades and transport.train.MobCell). Mobs are inscribed in the apothecary crucible
-// (magic.ApothecaryCrucibleBlock), up to the filter's capacity; washing it in a water cauldron wipes
-// it clean. A strict filter tells babies from adults and a mob from its kin; a fuzzy one doesn't.
+/**
+ * @brief A mob filter, which limits a carriage or ferry to the mobs inscribed on it.
+ *
+ * Mobs are inscribed in the apothecary crucible, up to the filter's capacity, and washing it in a
+ * water cauldron wipes it clean. A strict filter tells babies from adults and a mob from its kin; a
+ * fuzzy one doesn't.
+ *
+ * @see transport.train.CartUpgrades
+ * @see transport.train.MobCell
+ * @see magic.ApothecaryCrucibleBlock
+ */
 public class MobFilterItem extends Item {
     private final int capacity;
     private final boolean fuzzy;
@@ -49,18 +56,35 @@ public class MobFilterItem extends Item {
         return stack.getItem() instanceof MobFilterItem filter && contents(stack).size() >= filter.capacity;
     }
 
-    // The entry inscribing this mob would add: a fuzzy filter pays no heed to age, so it always
-    // records the adult
+    /**
+     * @brief Works out the entry that inscribing this mob would add.
+     *
+     * A fuzzy filter ignores age, so it always records the adult.
+     *
+     * @param stack The mob filter.
+     * @param type The mob's type.
+     * @param baby Whether the mob is a baby.
+     * @return The entry to inscribe.
+     */
     public static MobFilterContents.Entry entryFor(ItemStack stack, EntityType<?> type, boolean baby) {
         return new MobFilterContents.Entry(type, baby && !(stack.getItem() instanceof MobFilterItem filter && filter.fuzzy));
     }
 
-    // Whether a vehicle with this filter fitted takes the mob aboard
+    /**
+     * @brief Whether a vehicle with this filter fitted takes the mob aboard.
+     *
+     * @param stack The mob filter.
+     * @param mob The mob trying to board.
+     * @return True if A vehicle with this filter fitted takes the mob aboard.
+     */
     public static boolean allows(ItemStack stack, Mob mob) {
         return stack.getItem() instanceof MobFilterItem filter && contents(stack).matches(mob, filter.fuzzy);
     }
 
-    // Washed in a water cauldron, an inscribed filter is wiped clean, using up a level of water
+    /**
+     * @brief Washed in a water cauldron, an inscribed filter is wiped clean, using up a level of
+     *        water.
+     */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
@@ -78,7 +102,10 @@ public class MobFilterItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    // What it does, then the mobs inscribed on it and how many more it takes
+    /**
+     * @brief Adds what it does, then the mobs inscribed on it and how many more it takes, to the
+     *        tooltip.
+     */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
             Consumer<Component> tooltip, TooltipFlag flag) {

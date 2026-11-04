@@ -988,10 +988,15 @@ Requires a JDK 25. Gradle downloads everything else.
 | `./gradlew runClient` | Starts the game with the mod loaded (uses the `run/` folder) |
 | `./gradlew runServer` | Starts a dedicated server with the mod loaded |
 | `./gradlew runGameTestServer` | Starts a headless server, runs the game tests, and exits; a quick way to check that the mod loads cleanly |
+| `./gradlew doxygen` | Generates the code documentation into `build/docs/doxygen/html/` (open `index.html`); needs [Doxygen](https://www.doxygen.nl/) on your `PATH` |
 
 On Windows, use `gradlew.bat` in place of `./gradlew`.
 
-The version is set in one place, `gradle.properties`, and the jar is named `xincraft-<minecraft_version>-<mod_version>.jar`, for example `xincraft-26.2-1.21.0.jar`. The build also fills `mod_version` into `mods.toml`, so change them there only.
+The version is set in one place, `gradle.properties`, and the jar is named `xincraft-<minecraft_version>-<mod_version>.jar`, for example `xincraft-26.2-1.21.1.jar`. The build also fills `mod_version` into `mods.toml`, and the `doxygen` task passes the full version to `doxygen.ini`, so change them there only.
+
+### Code documentation
+
+Docstrings use Doxygen's style, with `@brief`, `@param`, `@return` and `@see`, and `doxygen.ini` holds the settings. Records don't get pages of their own in the generated documentation, so read their docstrings in the source.
 
 ### Project layout
 

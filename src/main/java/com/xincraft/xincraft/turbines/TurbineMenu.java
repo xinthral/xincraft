@@ -13,9 +13,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-// A turbine's fuel slot (with the furnace flame above it), plus the energy and water readouts
-// (see turbines.client.TurbineScreen). Shared by the heat and steam turbines; the heat turbine reports a
-// water tank of size 0, so the screen leaves the water gauge out.
+/**
+ * @brief A turbine's fuel slot (with the furnace flame above it), plus the energy and water
+ *        readouts.
+ *
+ * Shared by the heat and steam turbines; the heat turbine reports a water tank of size 0, so the
+ * screen leaves the water gauge out.
+ *
+ * @see turbines.client.TurbineScreen
+ */
 public class TurbineMenu extends AbstractContainerMenu {
     private static final int TURBINE_SLOTS_END = 1;
     private static final int INVENTORY_SLOTS_END = TURBINE_SLOTS_END + 36;
@@ -24,7 +30,12 @@ public class TurbineMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Level level;
 
-    // Client side: the real slot and data are filled in by syncing from the server
+    /**
+     * @brief Client side: the real slot and data are filled in by syncing from the server.
+     *
+     * @param containerId The menu's sync id.
+     * @param inventory The player's inventory.
+     */
     public TurbineMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, new SimpleContainer(1), new SimpleContainerData(TurbineBlockEntity.DATA_COUNT));
     }
@@ -43,7 +54,11 @@ public class TurbineMenu extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    // Fraction of the current fuel item left to burn, for the flame
+    /**
+     * @brief Fraction of the current fuel item left to burn, for the flame.
+     *
+     * @return The fraction left, from 0 to 1.
+     */
     public float getLitProgress() {
         return Mth.clamp(data.get(0) / 1000.0F, 0.0F, 1.0F);
     }
@@ -76,7 +91,10 @@ public class TurbineMenu extends AbstractContainerMenu {
         return level.fuelValues().isFuel(stack);
     }
 
-    // Shift-click: the fuel slot goes to the player's inventory, and fuel from the inventory goes in
+    /**
+     * @brief Shift-click: the fuel slot goes to the player's inventory, and fuel from the inventory
+     *        goes in.
+     */
     @Override
     public ItemStack quickMoveStack(Player player, int slotIndex) {
         Slot slot = slots.get(slotIndex);
@@ -112,7 +130,7 @@ public class TurbineMenu extends AbstractContainerMenu {
         container.stopOpen(player);
     }
 
-    // Takes fuel, plus the empty bucket a burnt-out lava bucket leaves behind
+    /** @brief Takes fuel, plus the empty bucket a burnt-out lava bucket leaves behind. */
     private class FuelSlot extends Slot {
         FuelSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);

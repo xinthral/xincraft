@@ -13,8 +13,10 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// While the player holds an ender rail and looks at a placed one, that rail lights up with
-// purple portal sparkles to show it can be right-clicked to attune the held rail to it
+/**
+ * @brief While the player holds an ender rail and looks at a placed one, that rail lights up with
+ *        purple portal sparkles to show it can be right-clicked to attune the held rail to it.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class EnderRailHighlight {
     @SubscribeEvent

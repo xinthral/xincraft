@@ -14,8 +14,12 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class FlowerBlocks {
-    // Exotic flowers, grown from vanilla flowers with exotic pollen (flowers.ExoticPollenItem), made on
-    // the mixing tray. Same properties as vanilla's small flowers.
+    /**
+     * @brief The tray that exotic pollen is made on.
+     *
+     * @see MixingTrayBlock
+     * @see ExoticPollenItem
+     */
     public static final RegistryObject<Block> MIXING_TRAY = Registers.registerBlock(
         "mixing_tray",
         MixingTrayBlock::new,
@@ -26,6 +30,10 @@ public final class FlowerBlocks {
         true
     );
 
+    /**
+     * @brief Exotic flowers, grown from vanilla flowers with exotic pollen. Same properties as
+     *        vanilla's small flowers.
+     */
     public static final RegistryObject<Block> MENDING_LILAC = Registers.registerBlock(
         "mending_lilac",
         AuraFlowerBlock::mendingLilac,
@@ -54,9 +62,14 @@ public final class FlowerBlocks {
         true
     );
 
-    // Glowing copies of each kind of vanilla leaves, made by using exotic pollen on them
-    // (flowers.GlowingLeavesBlock), keyed by the leaves they came from. No items: they drop and
-    // pick-block as the original leaves.
+    /**
+     * @brief Glowing copies of each kind of vanilla leaves, made by using exotic pollen on them,
+     *        keyed by the leaves they came from.
+     *
+     * No items: they drop and pick-block as the original leaves.
+     *
+     * @see GlowingLeavesBlock
+     */
     public static final Map<Block, RegistryObject<Block>> GLOWING_LEAVES = registerGlowingLeaves(
             Blocks.OAK_LEAVES,
             Blocks.SPRUCE_LEAVES,
@@ -90,7 +103,7 @@ public final class FlowerBlocks {
             .pushReaction(PushReaction.DESTROY);
     }
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private FlowerBlocks() {}

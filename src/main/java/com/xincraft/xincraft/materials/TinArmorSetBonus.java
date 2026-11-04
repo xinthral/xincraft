@@ -10,14 +10,20 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Wearing the full set of tin armor gives Fire Resistance for 5 seconds, renewed every 5
-// seconds for as long as all four pieces stay on
+/**
+ * @brief Wearing the full set of tin armor gives Fire Resistance for 5 seconds, renewed every 5
+ *        seconds for as long as all four pieces stay on.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public final class TinArmorSetBonus {
     private static final int DURATION_TICKS = 5 * 20;
 
-    // Runs at the start of the player's tick so a renewal lands before the old effect would
-    // expire, leaving no tick without fire resistance
+    /**
+     * @brief Runs at the start of the player's tick so a renewal lands before the old effect would
+     *        expire, leaving no tick without fire resistance.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent.Pre event) {
         if (!(event.player() instanceof ServerPlayer player) || !isWearingFullSet(player)) {

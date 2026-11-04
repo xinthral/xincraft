@@ -24,8 +24,12 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-// Draws the bronze chest (golems.BronzeChestBlock) like vanilla's chests, with its own textures:
-// vanilla picks a chest's texture from a fixed list
+/**
+ * @brief Draws the bronze chest like vanilla's chests, with its own textures: vanilla picks a
+ *        chest's texture from a fixed list.
+ *
+ * @see golems.BronzeChestBlock
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class BronzeChestRenderer extends ChestRenderer<BronzeChestBlockEntity> {
     private static final MultiblockChestResources<SpriteId> TEXTURES = new MultiblockChestResources<>(

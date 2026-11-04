@@ -30,19 +30,24 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// While the player wears or holds rose-tinted glasses, the links of the power networks around them are
-// traced in dust: cyan where a network has energy, amber where its power source has run dry, and red
-// where it has no power source connected. Looking at a charging station or substation shows what it
-// holds and what its network holds. Looking at a charging rail shows what it holds and traces a line
-// to the station or substation it's drawing from, or warns that there isn't one. Amounts are synced from the server at most once every 5 seconds, and the client only knows
-// the parts of a network within its view distance.
+/**
+ * @brief Traces the power networks around a player wearing or holding rose-tinted glasses.
+ *
+ * Links show in cyan where a network has energy, amber where its power source has run dry, and red
+ * where it has none. Looking at a node or charging rail shows what it holds. Amounts are synced at
+ * most once every 5 seconds, and the client only knows the parts of a network within its view
+ * distance.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class PowerNetworkView {
     private static final Identifier LAYER = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "power_readout");
-    // How many chunks around the player networks are traced: at least the 48 blocks buoys are
+    /**
+     * @brief How many chunks around the player networks are traced: at least the 48 blocks buoys
+     *        are.
+     */
     private static final int CHUNK_RANGE = 3;
     private static final int RESCAN_TICKS = 10;
-    // Dust specks put along each link each tick, per 8 blocks of its length
+    /** @brief Dust specks put along each link each tick, per 8 blocks of its length. */
     private static final double BLOCKS_PER_SPECK = 8.0;
     private static final DustParticleOptions LIVE = new DustParticleOptions(0x4AD8FF, 0.9F);
     private static final DustParticleOptions DRY = new DustParticleOptions(0xFFB020, 0.9F);
@@ -108,7 +113,13 @@ public final class PowerNetworkView {
         }
     }
 
-    // The links between the nodes around center, each once
+    /**
+     * @brief The links between the nodes around center, each once.
+     *
+     * @param level The level to work in.
+     * @param center Where to search around.
+     * @return The links found.
+     */
     private static List<Trace> scan(Level level, BlockPos center) {
         List<Trace> found = new ArrayList<>();
         List<PowerNodeBlockEntity> nearby = PowerNodeBlockEntity.inRange(level, center, CHUNK_RANGE);
@@ -190,7 +201,12 @@ public final class PowerNetworkView {
         return found;
     }
 
-    // Where a link meets a node: the tip of its antenna
+    /**
+     * @brief Where a link meets a node: the tip of its antenna.
+     *
+     * @param pos The node's position.
+     * @return The point.
+     */
     private static Vec3 top(BlockPos pos) {
         return Vec3.atBottomCenterOf(pos).add(0.0, 1.0, 0.0);
     }

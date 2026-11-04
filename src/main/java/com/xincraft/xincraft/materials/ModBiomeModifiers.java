@@ -7,7 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-// Biome modifier types, used as the "type" in data/xincraft/forge/biome_modifier/*.json
+/** @brief Biome modifier types, for the biome modifier data files to use. */
 public final class ModBiomeModifiers {
     public static final DeferredRegister<MapCodec<? extends BiomeModifier>> SERIALIZERS =
         DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, XincraftMod.MODID);

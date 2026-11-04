@@ -8,8 +8,13 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class TurbineBlocks {
-    // Generators that burn fuel into Forge Energy for charging rails (turbines.TurbineBlockEntity): the
-    // tin heat turbine, and the bronze steam turbine, which also uses water
+    /**
+     * @brief Generators that burn fuel into Forge Energy for charging rails.
+     *
+     * The tin heat turbine, and the bronze steam turbine, which also uses water.
+     *
+     * @see TurbineBlockEntity
+     */
     public static final RegistryObject<Block> HEAT_TURBINE = Registers.registerBlock(
         "heat_turbine",
         TurbineBlock::heat,
@@ -34,7 +39,7 @@ public final class TurbineBlocks {
         true
     );
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private TurbineBlocks() {}

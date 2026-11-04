@@ -6,7 +6,7 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 
 public final class ModArmorMaterials {
-    // Positioned between Copper (durability 11) and Iron (durability 15)
+    /** @brief Positioned between Copper (durability 11) and Iron (durability 15). */
     public static final ArmorMaterial TIN = new ArmorMaterial(
         13,
         Map.of(
@@ -24,7 +24,10 @@ public final class ModArmorMaterials {
         ModEquipmentAssets.TIN
     );
 
-    // Iron's protection with more durability (iron is 15) and better enchantability (iron is 9)
+    /**
+     * @brief Iron's protection with more durability (iron is 15) and better enchantability (iron is
+     *        9).
+     */
     public static final ArmorMaterial BRONZE = new ArmorMaterial(
         17,
         Map.of(
@@ -42,7 +45,7 @@ public final class ModArmorMaterials {
         ModEquipmentAssets.BRONZE
     );
 
-    // Netherite's values throughout
+    /** @brief Netherite's values throughout. */
     public static final ArmorMaterial LONSDALEITE = new ArmorMaterial(
         37,
         Map.of(

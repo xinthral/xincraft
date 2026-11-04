@@ -15,11 +15,21 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Made on a mixing tray (flowers.MixingTrayBlockEntity). Used on certain vanilla flowers, it turns them
-// into the mod's exotic flowers; used on leaves, it makes them glow faintly (flowers.GlowingLeavesBlock).
-// On anything else it does nothing.
+/**
+ * @brief Made on a mixing tray.
+ *
+ * Used on certain vanilla flowers, it turns them into the mod's exotic flowers; used on leaves, it
+ * makes them glow faintly. On anything else it does nothing.
+ *
+ * @see MixingTrayBlockEntity
+ * @see GlowingLeavesBlock
+ */
 public class ExoticPollenItem extends Item {
-    // Which flower turns into which. Add new exotic flowers here.
+    /**
+     * @brief Which flower turns into which.
+     *
+     * Add new exotic flowers here.
+     */
     private static final Map<Block, Supplier<Block>> CONVERSIONS = Map.of(
         Blocks.LILY_OF_THE_VALLEY, FlowerBlocks.MENDING_LILAC,
         Blocks.DANDELION, FlowerBlocks.FIREFLY_PETUNIA,

@@ -12,7 +12,7 @@ public final class TurbineBlockEntities {
     public static final RegistryObject<BlockEntityType<SteamTurbineBlockEntity>> STEAM_TURBINE = Registers.BLOCK_ENTITIES.register("steam_turbine",
         () -> new BlockEntityType<>(SteamTurbineBlockEntity::new, Set.of(TurbineBlocks.STEAM_TURBINE.get())));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private TurbineBlockEntities() {}

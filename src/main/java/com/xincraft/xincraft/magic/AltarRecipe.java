@@ -23,16 +23,22 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-// An apothecary altar transmutation (data/<namespace>/recipe/altar/*.json): the altar burns its fuel
-// for time ticks, then draws the essence from the flora in range, uses up the material, and turns the
-// base into the result. The base's components (enchantments, trims, name, damage) carry over, as with
-// a netherite upgrade. A base belongs to one recipe, which the material then has to match; a recipe
-// with no material ignores that slot. With store_material, the material goes into the result's
-// xincraft:golem_sword component as it is, enchantments and wear included.
-//
-//   {"type": "xincraft:altar_transmutation", "base": "xincraft:bronze_boots",
-//    "material": "xincraft:lonsdaleite_shard", "material_count": 4,
-//    "essence": {"aer": 24, "vita": 24}, "time": 400, "result": "xincraft:lonsdaleite_boots"}
+/**
+ * @brief An apothecary altar transmutation, which turns a base item into the result.
+ *
+ * The altar burns its fuel for the recipe's time, then draws the essence from the flora in range
+ * and uses up the material. The base's components (enchantments, trims, name, damage) carry over,
+ * as with a netherite upgrade. A base belongs to one recipe.
+ *
+ * @param base The item being changed.
+ * @param material The material it needs, if any.
+ * @param materialCount How much of the material it uses.
+ * @param essence The essence it draws, by element.
+ * @param time How long it takes, in ticks.
+ * @param result The item it makes.
+ * @param storeMaterial Whether the material is stored in the result's golem_sword component, as it
+ *     is.
+ */
 public record AltarRecipe(Ingredient base, Optional<Ingredient> material, int materialCount, Map<Element, Integer> essence,
         int time, Item result, boolean storeMaterial) implements Recipe<AltarInput> {
     public static final MapCodec<AltarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
@@ -57,7 +63,10 @@ public record AltarRecipe(Ingredient base, Optional<Ingredient> material, int ma
         ByteBufCodecs.BOOL, AltarRecipe::storeMaterial,
         AltarRecipe::new);
 
-    // Only the base: it says which recipe the altar is working on, even before the material's in
+    /**
+     * @brief Only the base: it says which recipe the altar is working on, even before the
+     *        material's in.
+     */
     @Override
     public boolean matches(AltarInput input, Level level) {
         return base.test(input.base());

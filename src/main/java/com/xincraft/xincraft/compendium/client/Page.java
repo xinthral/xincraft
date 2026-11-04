@@ -35,20 +35,13 @@ import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
 import org.jspecify.annotations.Nullable;
 
-// A page of the compendium. Entries are written as specs (Spec, from the entry's JSON), which are laid
-// out into pages of the book's size when opened (layout): long text runs on over as many pages as it
-// needs. A laid-out page draws itself and reports what's under the mouse (an item, for its tooltip
-// and to open its entry, or a link) through the Context.
-//
-// Page types, by "type":
-//   text       {"text"}
-//   spotlight  {"items": [items], "text"}: the items in a row, then text
-//   recipe     {"recipe": recipe id, "text"}: a crafting or smelting recipe, as the recipe book shows it
-//   crucible   {"mob": entity id, "text"}: the mob's apothecary crucible recipe
-//   crucible_index {}: every crucible recipe, over as many pages as it takes
-//   links      {"title", "entries": [entry ids]}: a list of entries
-//   image      {"texture", "width", "height", "text"}: a picture (up to the page's width), then text
-// Text can use **bold**, [[entry]] or [[entry|label]] links, and a blank line between paragraphs.
+/**
+ * @brief A page of the compendium.
+ *
+ * Entries are written as specs, which are laid out into pages of the book's size when opened, so
+ * long text runs on over as many pages as it needs. A laid-out page draws itself and reports what's
+ * under the mouse through the Context.
+ */
 public interface Page {
     int WIDTH = 116;
     int HEIGHT = 150;
@@ -61,7 +54,7 @@ public interface Page {
 
     void render(Context context, int x, int y);
 
-    // What's under the mouse this frame, gathered while drawing
+    /** @brief What's under the mouse this frame, gathered while drawing. */
     final class Context {
         public final GuiGraphicsExtractor graphics;
         public final Font font;
@@ -85,7 +78,15 @@ public interface Page {
             return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
         }
 
-        // An item in a slot frame; hovering it shows its tooltip, clicking it opens its entry
+        /**
+         * @brief An item in a slot frame; hovering it shows its tooltip, clicking it opens its
+         *        entry.
+         *
+         * @param stack The item stack.
+         * @param x The x position.
+         * @param y The y position.
+         * @param frame Whether to draw a slot frame behind it.
+         */
         void item(ItemStack stack, int x, int y, boolean frame) {
             if (frame) {
                 slot(x, y);
@@ -106,7 +107,13 @@ public interface Page {
             graphics.fill(x, y, x + 16, y + 16, 0xFFC9B99B);
         }
 
-        // One of the slot's items, changing every second when there are several (e.g. a tag)
+        /**
+         * @brief One of the slot's items, changing every second when there are several (e.g. a
+         *        tag).
+         *
+         * @param display The slot to show.
+         * @return The item to show now.
+         */
         ItemStack cycle(SlotDisplay display) {
             List<ItemStack> stacks = display.resolveForStacks(slots);
             return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get((int) (time / 1000 % stacks.size()));
@@ -116,7 +123,13 @@ public interface Page {
             graphics.text(font, text, x + (WIDTH - font.width(text)) / 2, y, color, false);
         }
 
-        // A line of text, noting any link under the mouse
+        /**
+         * @brief A line of text, noting any link under the mouse.
+         *
+         * @param line The line to draw.
+         * @param x The x position.
+         * @param y The y position.
+         */
         void line(FormattedText line, int x, int y) {
             graphics.text(font, Language.getInstance().getVisualOrder(line), x, y, TEXT_COLOR, false);
             if (mouseY >= y - 1 && mouseY < y + LINE - 1 && mouseX >= x) {
@@ -143,7 +156,11 @@ public interface Page {
     // ---- Specs, as written in the entry files ----
 
     sealed interface Spec {
-        // The entries this page links to, for checking
+        /**
+         * @brief The entries this page links to, for checking.
+         *
+         * @return The linked entries' ids.
+         */
         List<String> links();
 
         static Spec parse(JsonObject json, String where) {
@@ -247,7 +264,12 @@ public interface Page {
         return links;
     }
 
-    // One paragraph's markup as styled text
+    /**
+     * @brief One paragraph's markup as styled text.
+     *
+     * @param text The markup.
+     * @return The styled text.
+     */
     private static Component parse(String text) {
         MutableComponent out = Component.empty();
         Matcher matcher = MARKUP.matcher(text);
@@ -269,7 +291,13 @@ public interface Page {
         return out;
     }
 
-    // Text wrapped to the page, a null line for each gap between paragraphs
+    /**
+     * @brief Text wrapped to the page, a null line for each gap between paragraphs.
+     *
+     * @param font The font to measure text with.
+     * @param text The markup.
+     * @return The wrapped lines.
+     */
     static List<@Nullable FormattedText> wrap(Font font, String text) {
         List<@Nullable FormattedText> lines = new ArrayList<>();
         if (text.isBlank()) {
@@ -289,8 +317,17 @@ public interface Page {
 
     // ---- Laying out ----
 
-    // Lays the spec out onto the end of pages; the first page of an entry has its title on top. A
-    // text page carries on from the last page if that has room, so text flows on without gaps.
+    /**
+     * @brief Lays the spec out onto the end of pages; the first page of an entry has its title on
+     *        top.
+     *
+     * A text page carries on from the last page if that has room, so text flows on without gaps.
+     *
+     * @param pages The pages so far, which the new ones are added to.
+     * @param spec The spec to lay out.
+     * @param font The font to measure text with.
+     * @param title The entry's title, for its first page, or null.
+     */
     static void layout(List<Page> pages, Spec spec, Font font, @Nullable Component title) {
         int top = title != null ? 16 : 0;
         switch (spec) {
@@ -315,13 +352,13 @@ public interface Page {
         }
     }
 
-    // Something drawn above a page's text
+    /** @brief Something drawn above a page's text. */
     @FunctionalInterface
     interface Header {
         void render(Context context, int x, int y);
     }
 
-    // A page of text, under an optional title and header
+    /** @brief A page of text, under an optional title and header. */
     final class TextPage implements Page {
         private final @Nullable Component title;
         private final @Nullable Header header;
@@ -356,8 +393,18 @@ public interface Page {
         }
     }
 
-    // Text after a header (and the entry's title), running on over more pages. Plain text carries on
-    // from the last page when it has a few lines to spare.
+    /**
+     * @brief Text after a header (and the entry's title), running on over more pages.
+     *
+     * Plain text carries on from the last page when it has a few lines to spare.
+     *
+     * @param pages The pages so far, which the new ones are added to.
+     * @param font The font to measure text with.
+     * @param title The entry's title, or null.
+     * @param top How far down the first page the text starts.
+     * @param text The text to add.
+     * @param header What's drawn above the text, or null.
+     */
     private static void addText(List<Page> pages, Font font, @Nullable Component title, int top, String text, @Nullable Header header) {
         List<@Nullable FormattedText> lines = wrap(font, text);
         TextPage page;
@@ -382,7 +429,14 @@ public interface Page {
         }
     }
 
-    // A page's title, in bold if it fits and plain if not, cut short as a last resort
+    /**
+     * @brief A page's title, in bold if it fits and plain if not, cut short as a last resort.
+     *
+     * @param context The page's drawing context.
+     * @param x The x position.
+     * @param y The y position.
+     * @param title The title to draw.
+     */
     static void drawTitle(Context context, int x, int y, Component title) {
         Component bold = title.copy().withStyle(style -> style.withBold(true));
         Component shown = context.font.width(bold) <= WIDTH + 6 ? bold : clip(context, title, WIDTH + 6);
@@ -398,7 +452,14 @@ public interface Page {
         }
     }
 
-    // A 3×3 grid (or a furnace) with an arrow to the result, as the recipe book shows it
+    /**
+     * @brief A 3×3 grid (or a furnace) with an arrow to the result, as the recipe book shows it.
+     *
+     * @param context The page's drawing context.
+     * @param x The x position.
+     * @param y The y position.
+     * @param id The recipe's id.
+     */
     private static void drawRecipe(Context context, int x, int y, Identifier id) {
         RecipeDisplay display = CompendiumRecipes.get(id);
         if (display == null) {
@@ -458,7 +519,15 @@ public interface Page {
             24, 16, 0, 0, x, y, 24, 16);
     }
 
-    // The crucible's layout: a powder in each top corner, the catalyst between, and the mob below
+    /**
+     * @brief The crucible's layout: a powder in each top corner, the catalyst between, and the mob
+     *        below.
+     *
+     * @param context The page's drawing context.
+     * @param x The x position.
+     * @param y The y position.
+     * @param mob The mob, or null if there's no recipe to show.
+     */
     private static void drawCrucible(Context context, int x, int y, @Nullable EntityType<?> mob) {
         CrucibleRecipe recipe = mob == null ? null : MagicRecipes.crucible(mob);
         if (recipe == null) {
@@ -476,7 +545,15 @@ public interface Page {
         }
     }
 
-    // An altar transmutation: base and material, an arrow to the result, and the essence it draws
+    /**
+     * @brief An altar transmutation: base and material, an arrow to the result, and the essence it
+     *        draws.
+     *
+     * @param context The page's drawing context.
+     * @param x The x position.
+     * @param y The y position.
+     * @param id The recipe's id.
+     */
     private static void drawAltar(Context context, int x, int y, Identifier id) {
         AltarRecipe recipe = MagicRecipes.altar(id);
         if (recipe == null) {
@@ -511,7 +588,13 @@ public interface Page {
 
     // ---- Lists ----
 
-    // A row in a list: an icon and a name, opening an entry or category when clicked
+    /**
+     * @brief A row in a list: an icon and a name, opening an entry or category when clicked.
+     *
+     * @param icon The item shown as its icon.
+     * @param name The name to show.
+     * @param target The entry or category it opens.
+     */
     record Row(ItemStack icon, Component name, String target) {
         static Row of(CompendiumData.Entry entry) {
             return new Row(entry.icon(), Component.literal(entry.title()), entry.id());
@@ -567,7 +650,15 @@ public interface Page {
         }
     }
 
-    // The text cut short with an ellipsis to fit the width, or the text itself if it already fits
+    /**
+     * @brief The text cut short with an ellipsis to fit the width, or the text itself if it already
+     *        fits.
+     *
+     * @param context The page's drawing context.
+     * @param text The text to fit.
+     * @param width The width available.
+     * @return The text, shortened if needed.
+     */
     static Component clip(Context context, Component text, int width) {
         if (context.font.width(text) <= width) {
             return text;
@@ -576,7 +667,12 @@ public interface Page {
         return Component.literal(clipped.stripTrailing() + "\u2026").withStyle(text.getStyle());
     }
 
-    // Every crucible recipe, a row each: its powders, catalyst and mob
+    /**
+     * @brief Every crucible recipe, a row each: its powders, catalyst and mob.
+     *
+     * @param pages The pages so far, which the new ones are added to.
+     * @param title The entry's title, for its first page, or null.
+     */
     private static void addCrucibleIndex(List<Page> pages, @Nullable Component title) {
         List<CrucibleRecipe> recipes = MagicRecipes.crucible();
         if (recipes.isEmpty()) {

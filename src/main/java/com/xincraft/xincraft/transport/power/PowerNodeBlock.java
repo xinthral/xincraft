@@ -16,8 +16,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
-// A charging station or substation: a squat cabinet with a little antenna on top, which is left out
-// of its shape so it doesn't snag anything. See PowerNodeBlockEntity.
+/**
+ * @brief A charging station or substation.
+ *
+ * A squat cabinet with a little antenna on top, which is left out of its shape so it doesn't snag
+ * anything.
+ *
+ * @see PowerNodeBlockEntity
+ */
 public abstract class PowerNodeBlock extends BaseEntityBlock implements LinkableBlock {
     private static final VoxelShape SHAPE = Block.column(12.0, 0.0, 11.0);
 
@@ -27,7 +33,7 @@ public abstract class PowerNodeBlock extends BaseEntityBlock implements Linkable
 
     protected abstract BlockEntityType<? extends PowerNodeBlockEntity> blockEntityType();
 
-    // Only the server moves energy
+    /** @brief Only the server moves energy. */
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {

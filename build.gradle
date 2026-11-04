@@ -64,6 +64,18 @@ tasks.named('processResources', ProcessResources) {
     }
 }
 
+// Build the docs from doxygen.ini, with the same version as the jar
+tasks.register('doxygen', Exec) {
+    group = 'documentation'
+    description = 'Generates the Doxygen docs, versioned from gradle.properties'
+    commandLine 'doxygen', 'doxygen.ini'
+    environment 'PROJECT_NUMBER', project.version.toString()
+
+    // Doxygen only creates the last folder of its OUTPUT_DIRECTORY, so make the whole path first
+    def outputDir = layout.buildDirectory.dir('docs/doxygen').get().asFile
+    doFirst { outputDir.mkdirs() }
+}
+
 tasks.withType(JavaCompile).configureEach {
     // Use the UTF-8 charset for Java compilation
     // This is done by default in Java 18+, but this ensures it no matter the Java or Gradle version

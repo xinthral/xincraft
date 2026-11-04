@@ -22,12 +22,16 @@ import net.minecraft.util.context.ContextMap;
 import org.jspecify.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-// The compendium: a two-page book. The home spread lists the categories, with a search box, and the
-// guide entries (or search results). A category lists its sub-categories and entries after its
-// overview; an entry's pages run over as many spreads as they need. Arrows (or the arrow keys, or
-// scrolling) turn the pages, the back button (or backspace) retraces your steps, and the house goes
-// home. Clicking an item opens its entry. An entry's ribbon button bookmarks it, and bookmarks hang
-// as tabs off the book's right edge. The book reopens where it was left.
+/**
+ * @brief The compendium: a two-page book.
+ *
+ * The home spread lists the categories, with a search box, and the guide entries (or search
+ * results). A category lists its sub-categories and entries after its overview; an entry's pages
+ * run over as many spreads as they need. Arrows (or the arrow keys, or scrolling) turn the pages,
+ * the back button (or backspace) retraces your steps, and the house goes home. Clicking an item
+ * opens its entry. An entry's ribbon button bookmarks it, and bookmarks hang as tabs off the book's
+ * right edge. The book reopens where it was left.
+ */
 public class CompendiumScreen extends Screen {
     public static final String CATEGORY_PREFIX = "category:";
     private static final String ENTRY_PREFIX = "entry:";
@@ -42,7 +46,12 @@ public class CompendiumScreen extends Screen {
     private static final int PAGE_Y = 14;
     private static final int SEARCH_Y = 16;
 
-    // Where the book is open: home, a category or an entry, and the spread
+    /**
+     * @brief Where the book is open: home, a category or an entry, and the spread.
+     *
+     * @param view The view key.
+     * @param spread The spread it's open at.
+     */
     private record Place(String view, int spread) {}
 
     private String view;
@@ -53,10 +62,16 @@ public class CompendiumScreen extends Screen {
     private int top;
     private @Nullable EditBox search;
     private String query = "";
-    // What the mouse was over last frame, for clicks
+    /**
+     * @name Hover state
+     *
+     * What the mouse was over last frame, for clicks.
+     * @{
+     */
     private @Nullable String hoveredLink;
     private ItemStack hoveredStack = ItemStack.EMPTY;
     private @Nullable Runnable hoveredButton;
+    /** @} */
 
     private CompendiumScreen(String view, int spread) {
         super(Component.translatable("item.xincraft.compendium"));
@@ -64,7 +79,7 @@ public class CompendiumScreen extends Screen {
         this.spread = spread;
     }
 
-    // Opens the book where it was left
+    /** @brief Opens the book where it was left. */
     public static void open() {
         String last = Bookmarks.lastView();
         boolean valid = last.equals(HOME) || last.startsWith(ENTRY_PREFIX) && CompendiumData.entry(last.substring(ENTRY_PREFIX.length())) != null
@@ -72,7 +87,11 @@ public class CompendiumScreen extends Screen {
         Minecraft.getInstance().gui.setScreen(new CompendiumScreen(valid ? last : HOME, valid ? Bookmarks.lastSpread() : 0));
     }
 
-    // Opens the book at an entry, as the look-up key does
+    /**
+     * @brief Opens the book at an entry, as the look-up key does.
+     *
+     * @param entry The entry to open.
+     */
     public static void openEntry(String entry) {
         Minecraft.getInstance().gui.setScreen(new CompendiumScreen(ENTRY_PREFIX + entry, 0));
     }
@@ -94,7 +113,7 @@ public class CompendiumScreen extends Screen {
         rebuild();
     }
 
-    // Lays the current view's pages out afresh
+    /** @brief Lays the current view's pages out afresh. */
     private void rebuild() {
         List<Page> laid = new ArrayList<>();
         if (view.startsWith(ENTRY_PREFIX)) {
@@ -137,14 +156,18 @@ public class CompendiumScreen extends Screen {
         showSearch();
     }
 
-    // The search box is on the home spread's first page only
+    /** @brief The search box is on the home spread's first page only. */
     private void showSearch() {
         if (search != null) {
             search.setVisible(view.equals(HOME) && spread == 0);
         }
     }
 
-    // The categories, each with its sub-categories under it
+    /**
+     * @brief The categories, each with its sub-categories under it.
+     *
+     * @return The page to show.
+     */
     private Page homeLeft() {
         List<Page.Row> rows = new ArrayList<>();
         for (CompendiumData.Category category : CompendiumData.children(null)) {
@@ -160,7 +183,13 @@ public class CompendiumScreen extends Screen {
         };
     }
 
-    // The search results, or the guide entries
+    /**
+     * @brief The search results, or the guide entries.
+     *
+     * @param rows The rows to list.
+     * @param found How many results the search found.
+     * @return The page to show.
+     */
     private Page homeRight(List<Page.Row> rows, int found) {
         Component heading = query.isBlank() ? Component.translatable("compendium.xincraft.guide")
             : Component.translatable("compendium.xincraft.results", found);
@@ -245,7 +274,21 @@ public class CompendiumScreen extends Screen {
         }
     }
 
-    // A button from the book texture, darkened when hovered
+    /**
+     * @brief A button from the book texture, darkened when hovered.
+     *
+     * @param graphics The graphics context to draw to.
+     * @param mouseX The mouse's x position.
+     * @param mouseY The mouse's y position.
+     * @param x The x position.
+     * @param y The y position.
+     * @param u The button's x position in the book texture.
+     * @param v The button's y position in the book texture.
+     * @param width The button's width.
+     * @param height The button's height.
+     * @param tooltip The tooltip shown when hovered.
+     * @param action What clicking it does.
+     */
     private void button(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int x, int y, int u, int v, int width, int height,
             Component tooltip, Runnable action) {
         boolean hovered = mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
@@ -282,7 +325,11 @@ public class CompendiumScreen extends Screen {
         }
     }
 
-    // The bookmarks, as ribbon tabs down the book's right edge
+    /**
+     * @brief The bookmarks, as ribbon tabs down the book's right edge.
+     *
+     * @param context The page's drawing context.
+     */
     private void drawBookmarks(Page.Context context) {
         List<String> bookmarks = Bookmarks.all();
         for (int i = 0; i < bookmarks.size(); i++) {

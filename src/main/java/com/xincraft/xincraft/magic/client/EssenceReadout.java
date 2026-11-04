@@ -27,17 +27,22 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// While the player wears or holds rose-tinted glasses, looking at an elemental flora shows how much
-// essence it holds out of its capacity, and looking at an apothecary altar shows the flora in its
-// range, element by element: how many, and their essence and capacity between them. Drawn under the
-// crosshair; the flora's amounts are synced from the server (FloraBlockEntity's update tag).
+/**
+ * @brief Shows what rose-tinted glasses read from flora and altars, under the crosshair.
+ *
+ * Looking at an elemental flora shows how much essence it holds out of its capacity. Looking at an
+ * apothecary altar shows the flora in its range, element by element: how many, and their essence
+ * and capacity between them.
+ *
+ * @see magic.FloraBlockEntity
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class EssenceReadout {
     private static final Identifier LAYER = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "essence_readout");
     private static final int HEADER_COLOR = 0xFFFFFFFF;
     private static final int NONE_COLOR = 0xFFAAAAAA;
 
-    // Rebuilt every client tick from what the player is looking at
+    /** @brief Rebuilt every client tick from what the player is looking at. */
     private static List<Line> lines = List.of();
 
     @SubscribeEvent
@@ -89,7 +94,14 @@ public final class EssenceReadout {
         return Component.translatable("block." + XincraftMod.MODID + "." + element.floraId());
     }
 
-    // Opaque, as text needs; the darker elements are lifted a little to read against the backdrop
+    /**
+     * @brief The element's text colour.
+     *
+     * Opaque, as text needs. The darker elements are lifted a little to read against the backdrop.
+     *
+     * @param element The element.
+     * @return The colour.
+     */
     private static int textColor(Element element) {
         int rgb = element.color();
         int r = Math.max((rgb >> 16) & 0xFF, 0x70);

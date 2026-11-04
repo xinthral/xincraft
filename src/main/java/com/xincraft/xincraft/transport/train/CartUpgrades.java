@@ -27,34 +27,51 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-// The upgrades fitted to one minecart, and what they do. Upgrades are fitted by using the upgrade
-// item on the cart and snipped off one at a time with shears, most recently fitted first; each can
-// be fitted once, and the cart drops them when broken. The installed set is synced to clients (as flags in an int the cart
-// defines) so they can show the upgrades on the cart.
-//
-// A carriage or ferry also takes a mob filter (common.MobFilterItem), kept apart from the upgrades
-// since it carries the mobs inscribed on it. Using another filter swaps them; shears snip the filter
-// off before any upgrade. Only the server needs it, to choose what comes aboard (see MobCell).
+/**
+ * @brief The upgrades fitted to one vehicle, and what they do.
+ *
+ * Upgrades are fitted by using the upgrade item on the vehicle and snipped off one at a time with
+ * shears, most recently fitted first. Each can be fitted once, and the vehicle drops them when
+ * broken. The installed set is synced to clients so they can show the upgrades.
+ *
+ * A carriage or ferry also takes a mob filter, kept apart from the upgrades since it carries the
+ * mobs inscribed on it. Shears snip the filter off before any upgrade.
+ *
+ * @see common.MobFilterItem
+ * @see MobCell
+ */
 public final class CartUpgrades {
-    // How far ahead of the cart a shrieker clears the track, plus a little more the faster it goes
+    /** @brief How far ahead of the cart a shrieker clears the track. */
     private static final double SHRIEKER_REACH = 3.0;
+    /** @brief How much further a shrieker reaches, the faster the cart goes. */
     private static final double SHRIEKER_REACH_PER_SPEED = 4.0;
-    // Sideways shove and hop given to anything in the way: enough to land it clear of the cart
+    /**
+     * @brief Sideways shove given to anything in the way: enough, with HOP, to land it clear of the
+     *        cart.
+     */
     private static final double SHOVE = 0.5;
+    /** @brief Hop given to anything in the way. */
     private static final double HOP = 0.3;
     private static final int SHRIEK_COOLDOWN_TICKS = 40;
-    // The shimmer upgrade refreshes its riders' invisibility this often, each dose outlasting the
-    // gap; and now and then gives them away with a pink glint (on average every few seconds)
+    /** @brief How often the shimmer upgrade refreshes its riders' invisibility. */
     private static final int SHIMMER_INTERVAL_TICKS = 20;
+    /** @brief How long each dose lasts, outlasting the gap. */
     private static final int SHIMMER_EFFECT_TICKS = 60;
+    /**
+     * @brief One tick in this many gives riders away with a pink glint: on average, every few
+     *        seconds.
+     */
     private static final int GLINT_CHANCE = 80;
     private static final DustParticleOptions GLINT = new DustParticleOptions(0xFF7FC8, 1.0F);
-    // Below this horizontal speed the cart has no direction to clear in
+    /** @brief Below this horizontal speed the cart has no direction to clear in. */
     private static final double MOVING_SPEED = 0.05;
 
     private final VehicleEntity cart;
     private final EntityDataAccessor<Integer> data;
-    // Server side: the fitted upgrades in the order they went on, so shears take off the newest
+    /**
+     * @brief Server side: the fitted upgrades in the order they went on, so shears take off the
+     *        newest.
+     */
     private final List<CartUpgrade> fitOrder = new ArrayList<>();
     private int shriekCooldown;
     private ItemStack filter = ItemStack.EMPTY;
@@ -72,7 +89,11 @@ public final class CartUpgrades {
         return Arrays.stream(CartUpgrade.values()).filter(this::has).toList();
     }
 
-    // The fitted mob filter, if any
+    /**
+     * @brief The fitted mob filter, if any.
+     *
+     * @return The filter, or null if there's none.
+     */
     public @Nullable ItemStack filter() {
         return filter.isEmpty() ? null : filter;
     }
@@ -85,8 +106,15 @@ public final class CartUpgrades {
         cart.getEntityData().set(data, bits);
     }
 
-    // Fits an upgrade item, or snips the most recently fitted upgrade off with shears, handing it
-    // back. PASS for anything else, so the cart can carry on with its own interaction.
+    /**
+     * @brief Fits an upgrade item, or snips the most recently fitted upgrade off with shears,
+     *        handing it back.
+     *
+     * @param owner The vehicle these upgrades are on.
+     * @param player The player.
+     * @param hand The hand being used.
+     * @return PASS for anything else, so the vehicle can carry on with its own interaction.
+     */
     public InteractionResult interact(UpgradableCart owner, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean server = !cart.level().isClientSide();
@@ -153,14 +181,23 @@ public final class CartUpgrades {
         return InteractionResult.PASS;
     }
 
-    // Into the player's inventory, or dropped at the cart if there's no room
+    /**
+     * @brief Into the player's inventory, or dropped at the cart if there's no room.
+     *
+     * @param player The player.
+     * @param stack The item stack.
+     */
     private void giveBack(Player player, ItemStack stack) {
         if (!player.getInventory().add(stack) && cart.level() instanceof ServerLevel level) {
             cart.spawnAtLocation(level, stack);
         }
     }
 
-    // The most recently fitted upgrade still on the cart
+    /**
+     * @brief The most recently fitted upgrade still on the cart.
+     *
+     * @return The upgrade.
+     */
     private CartUpgrade newest() {
         fitOrder.removeIf(upgrade -> !has(upgrade));
         for (CartUpgrade upgrade : installed()) {
@@ -171,8 +208,13 @@ public final class CartUpgrades {
         return fitOrder.get(fitOrder.size() - 1);
     }
 
-    // The shimmer upgrade's job, run each tick: keeps whoever's riding invisible, the effect
-    // wearing off a few seconds after they get out
+    /**
+     * @brief The shimmer upgrade's job, run each tick.
+     *
+     * Keeps whoever's riding invisible, the effect wearing off a few seconds after they get out.
+     *
+     * @param level The level to work in.
+     */
     public void tickShimmer(ServerLevel level) {
         if (!has(CartUpgrade.SHIMMER) || !cart.isVehicle()) {
             return;
@@ -191,7 +233,11 @@ public final class CartUpgrades {
         }
     }
 
-    // Called when the cart is broken
+    /**
+     * @brief Called when the cart is broken.
+     *
+     * @param level The level to work in.
+     */
     public void dropAll(ServerLevel level) {
         for (CartUpgrade upgrade : installed()) {
             cart.spawnAtLocation(level, new ItemStack(upgrade.item()));
@@ -227,8 +273,13 @@ public final class CartUpgrades {
         filter = input.read("Filter", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
-    // With a shrieker, only other vehicles (minecarts, boats) can push this one: anything else bumping
-    // into it is shoved aside instead, so it never slows it down. Returns whether it handled the push.
+    /**
+     * @brief With a shrieker, only other vehicles can push this one, and anything else bumping into
+     *        it is shoved aside.
+     *
+     * @param entity The entity bumping into it.
+     * @return True if it handled the push.
+     */
     public boolean pushAside(Entity entity) {
         if (!has(CartUpgrade.SHRIEKER) || entity instanceof VehicleEntity || cart.hasPassenger(entity)) {
             return false;
@@ -241,11 +292,18 @@ public final class CartUpgrades {
         return true;
     }
 
-    // The shrieker's job, run each tick (for carts, in place of vanilla's pick-up-and-push; see
-    // XincraftMinecartBehavior#pushAndPickupEntities): anything living in the vehicle's path is shoved
-    // off to whichever side it's already nearer, with a hop, before the vehicle reaches it. Only
-    // shoves something not already moving clear, so each is shoved once. Takes the vehicle's
-    // motion, since a boat steered by a player only moves on that player's client.
+    /**
+     * @brief The shrieker's job, run each tick: shoves anything living in the vehicle's path off to
+     *        the nearer side, with a hop.
+     *
+     * Only something not already moving clear gets shoved, so each is shoved once. For carts, this
+     * runs in place of vanilla's pick-up-and-push.
+     *
+     * @param level The level to work in.
+     * @param vehicleMotion The vehicle's motion, since a boat steered by a player only moves on
+     *     that player's client.
+     * @see transport.rail.XincraftMinecartBehavior#pushAndPickupEntities
+     */
     public void clearTrackAhead(ServerLevel level, Vec3 vehicleMotion) {
         if (shriekCooldown > 0) {
             shriekCooldown--;

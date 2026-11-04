@@ -25,23 +25,31 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jspecify.annotations.Nullable;
 
-// A generator: burns furnace fuel from its one slot into Forge Energy, held in an internal buffer and
-// pushed out to whatever's next to it that takes energy (a connected charging station, or another mod's cables and
-// machines). New fuel is only lit while there's room in the buffer, so a full turbine doesn't eat
-// its fuel; an item already burning burns out regardless. Hoppers fill the fuel slot. HeatTurbineBlockEntity and SteamTurbineBlockEntity set
-// how fast it burns and how much energy each tick of burning makes.
+/**
+ * @brief A generator: burns furnace fuel into Forge Energy, and pushes it to whatever's next to it.
+ *
+ * New fuel is only lit while there's room in the buffer, so a full turbine doesn't eat its fuel.
+ * Subclasses set how fast it burns and how much energy each tick of burning makes.
+ *
+ * @see HeatTurbineBlockEntity
+ * @see SteamTurbineBlockEntity
+ */
 public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
     public static final int FUEL_SLOT = 0;
-    // Most energy pushed to each neighbour per tick
+    /** @brief Most energy pushed to each neighbour per tick. */
     public static final int OUTPUT_PER_SIDE = 1_000;
-    // Menu data entries: burn left, stored energy and capacity (each split in two, as menu data
-    // travels as 16-bit numbers), then water stored and the tank's size (0 with no tank)
+    /**
+     * @brief Menu data entries.
+     *
+     * Burn left, stored energy and capacity (each split in two, as menu data travels as 16-bit
+     * numbers), then water stored and the tank's size (0 with no tank).
+     */
     public static final int DATA_COUNT = 7;
 
     private static final int[] SLOTS = {FUEL_SLOT};
 
     private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
-    // Burn time left in the current fuel item, in the fuel's own (furnace) ticks
+    /** @brief Burn time left in the current fuel item, in the fuel's own (furnace) ticks. */
     private int litTime;
     private int litDuration;
     private int energy;
@@ -76,20 +84,34 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
 
     protected abstract int energyCapacity();
 
-    // Energy made per tick while burning
+    /**
+     * @brief Energy made per tick while burning.
+     *
+     * @return The energy, in FE.
+     */
     protected abstract int energyPerTick();
 
-    // How many ticks of the fuel's burn time are used up each tick
+    /**
+     * @brief How many ticks of the fuel's burn time are used up each tick.
+     *
+     * @return The number of ticks.
+     */
     protected int burnSpeed() {
         return 1;
     }
 
-    // Whether everything besides fuel is there to run this tick (the steam turbine needs water)
+    /**
+     * @brief Whether everything besides fuel is there to run this tick (the steam turbine needs
+     *        water).
+     *
+     * @return True if Everything besides fuel is there to run this tick (the steam turbine needs
+     *     water).
+     */
     protected boolean canRun() {
         return true;
     }
 
-    // Called each tick the turbine runs, to use up anything besides fuel
+    /** @brief Called each tick the turbine runs, to use up anything besides fuel. */
     protected void onRun() {}
 
     protected int waterAmount() {
@@ -113,9 +135,15 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         }
     }
 
-    // Burns fuel into energy; returns whether anything changed. New fuel is only lit while there's
-    // room in the buffer, but fuel that's already burning burns out like in a furnace, its energy
-    // going to waste once the buffer is full.
+    /**
+     * @brief Burns fuel into energy.
+     *
+     * Fuel that's already burning burns out like in a furnace, its energy going to waste once the
+     * buffer is full.
+     *
+     * @param level The level to work in.
+     * @return True if anything changed.
+     */
     private boolean burn(ServerLevel level) {
         if (!canRun()) {
             return false;
@@ -136,7 +164,12 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         return changed;
     }
 
-    // Lights the next fuel item, the same way a furnace does
+    /**
+     * @brief Lights the next fuel item, the same way a furnace does.
+     *
+     * @param level The level to work in.
+     * @return True if it lit one.
+     */
     private boolean lightFuel(ServerLevel level) {
         ItemStack fuel = items.get(FUEL_SLOT);
         int duration = level.fuelValues().burnDuration(fuel);
@@ -155,7 +188,11 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         return true;
     }
 
-    // Hands energy to every neighbour that takes it, such as a connected charging station
+    /**
+     * @brief Hands energy to every neighbour that takes it, such as a connected charging station.
+     *
+     * @param level The level to work in.
+     */
     private void pushEnergy(ServerLevel level) {
         for (Direction direction : Direction.values()) {
             if (energy <= 0) {
@@ -193,7 +230,7 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         energyCap = LazyOptional.of(() -> new Output());
     }
 
-    // Lets other mods' cables and machines draw the stored energy out; takes none in
+    /** @brief Lets other mods' cables and machines draw the stored energy out; takes none in. */
     private class Output implements IEnergyStorage {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -248,7 +285,7 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         this.items = items;
     }
 
-    // Hoppers (and anything else inserting) can only put in fuel
+    /** @brief Hoppers (and anything else inserting) can only put in fuel. */
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return level != null && level.fuelValues().isFuel(stack);
@@ -264,7 +301,7 @@ public abstract class TurbineBlockEntity extends SidedContainerBlockEntity {
         return canPlaceItem(slot, stack);
     }
 
-    // Like a furnace, only empty buckets can be pulled back out
+    /** @brief Like a furnace, only empty buckets can be pulled back out. */
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
         return stack.is(Items.BUCKET);

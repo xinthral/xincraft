@@ -14,11 +14,17 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-// Feeds a power network from the turbines and other energy blocks connected to it with a linking bar
-// (see ChargingStationBlockEntity). An arm reaches out towards each one, as a fence does to its neighbours.
+/**
+ * @brief Feeds a power network from the turbines and other energy blocks connected to it with a
+ *        linking bar.
+ *
+ * An arm reaches out towards each one, as a fence does to its neighbours.
+ *
+ * @see ChargingStationBlockEntity
+ */
 public class ChargingStationBlock extends PowerNodeBlock {
     public static final MapCodec<ChargingStationBlock> CODEC = simpleCodec(ChargingStationBlock::new);
-    // Which sides have a power source connected
+    /** @brief Which sides have a power source connected. */
     public static final Map<Direction, BooleanProperty> CONNECTED = Map.of(
         Direction.NORTH, BlockStateProperties.NORTH,
         Direction.EAST, BlockStateProperties.EAST,

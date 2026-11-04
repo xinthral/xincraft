@@ -16,20 +16,32 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-// A turbine's screen: the fuel slot and furnace flame in the middle, the energy bar on the right,
-// and (on the steam turbine) the water gauge on the left. Hovering a bar shows the exact amount.
+/**
+ * @brief A turbine's screen.
+ *
+ * The fuel slot and furnace flame in the middle, the energy bar on the right, and (on the steam
+ * turbine) the water gauge on the left.
+ *
+ * Hovering a bar shows the exact amount.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public class TurbineScreen extends AbstractContainerScreen<TurbineMenu> {
     private static final Identifier TEXTURE =
         Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/gui/container/turbine.png");
     private static final Identifier LIT_PROGRESS_SPRITE = Identifier.withDefaultNamespace("container/furnace/lit_progress");
-    // Gauges, inside their borders
+    /**
+     * @name Gauges
+     *
+     * Gauges, inside their borders.
+     * @{
+     */
     private static final int GAUGE_Y = 18;
     private static final int GAUGE_HEIGHT = 52;
     private static final int ENERGY_X = 140;
     private static final int ENERGY_WIDTH = 12;
     private static final int WATER_X = 24;
     private static final int WATER_WIDTH = 16;
+    /** @} */
 
     public TurbineScreen(TurbineMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -63,7 +75,18 @@ public class TurbineScreen extends AbstractContainerScreen<TurbineMenu> {
         }
     }
 
-    // A slot-style bevelled bar, filled from the bottom
+    /**
+     * @brief A slot-style bevelled bar, filled from the bottom.
+     *
+     * @param graphics The graphics context to draw to.
+     * @param x The x position.
+     * @param y The y position.
+     * @param width The bar's width.
+     * @param amount How much is stored.
+     * @param capacity The most it can store.
+     * @param empty The colour of the empty part.
+     * @param full The colour of the filled part.
+     */
     private static void gauge(GuiGraphicsExtractor graphics, int x, int y, int width, int amount, int capacity, int empty, int full) {
         graphics.fill(x - 1, y - 1, x + width, y + GAUGE_HEIGHT, 0xFF373737);
         graphics.fill(x, y, x + width + 1, y + GAUGE_HEIGHT + 1, 0xFFFFFFFF);

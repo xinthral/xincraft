@@ -33,23 +33,29 @@ import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
-// The compendium's contents, loaded from the client resources under assets/<namespace>/compendium/
-// <language>/: categories/<id>.json and entries/<any folders>/<id>.json, falling back to en_us for
-// any file a language lacks. Reloaded with the resource packs (F3+T). Mistakes (bad JSON, unknown
-// items, categories or links) are logged rather than failing.
-//
-// A category: {"title", "icon": item, "parent": category or absent, "sort": int, "description"}.
-// An entry: {"title", "icon": item, "category", "also": [categories], "sort": int, "items": [items
-// it's the page for, used by the look-up key and search], "blocks": [blocks without items it's the
-// page for, for the look-up key], "pages": [pages; see Page.Spec]}. An entry with no category is
-// listed on the book's home page.
+/**
+ * @brief The compendium's contents, loaded from the client resources.
+ *
+ * Each language falls back to en_us for any file it lacks. Contents reload with the resource packs
+ * (F3+T). Mistakes such as bad JSON or unknown items are logged rather than failing.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class CompendiumData implements ResourceManagerReloadListener {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String ROOT = "compendium";
     private static final String FALLBACK = "en_us";
 
-    // Icons are kept as items, since stacks can't be made before a world's components are bound
+    /**
+     * @brief Icons are kept as items, since stacks can't be made before a world's components are
+     *        bound.
+     *
+     * @param id The category's id.
+     * @param title The category's title.
+     * @param iconItem The item shown as its icon.
+     * @param parent The parent category, or null at the top level.
+     * @param sort Its position among its siblings.
+     * @param description The overview text.
+     */
     public record Category(String id, String title, Item iconItem, @Nullable String parent, int sort, String description) {
         public ItemStack icon() {
             return new ItemStack(iconItem);
@@ -96,7 +102,12 @@ public final class CompendiumData implements ResourceManagerReloadListener {
         return entry != null ? entry : byItem.get(block.asItem());
     }
 
-    // The categories under the given one (null for the top level), in order
+    /**
+     * @brief The categories under the given one (null for the top level), in order.
+     *
+     * @param parent The parent category, or null for the top level.
+     * @return The categories, in order.
+     */
     public static List<Category> children(@Nullable String parent) {
         return categories.values().stream()
             .filter(category -> parent == null ? category.parent() == null : parent.equals(category.parent()))
@@ -104,7 +115,12 @@ public final class CompendiumData implements ResourceManagerReloadListener {
             .toList();
     }
 
-    // The entries in a category ("" for the home page), in order
+    /**
+     * @brief The entries in a category ("" for the home page), in order.
+     *
+     * @param category The category, or "" for the home page.
+     * @return The entries, in order.
+     */
     public static List<Entry> entriesIn(String category) {
         return entries.values().stream()
             .filter(entry -> entry.isIn(category))
@@ -112,7 +128,12 @@ public final class CompendiumData implements ResourceManagerReloadListener {
             .toList();
     }
 
-    // Entries whose title, or the name of one of whose items, contains the query
+    /**
+     * @brief Searches the entries by title and item name.
+     *
+     * @param query The text to look for.
+     * @return The entries whose title, or one of whose items' names, contains the query.
+     */
     public static List<Entry> search(String query) {
         String needle = query.trim().toLowerCase();
         if (needle.isEmpty()) {
@@ -206,7 +227,14 @@ public final class CompendiumData implements ResourceManagerReloadListener {
 
     private record JsonFile(String id, Identifier location, JsonObject json) {}
 
-    // Every <kind> file for the language, filling in any missing ones from en_us; ids are file names
+    /**
+     * @brief Loads every file of one kind for a language, filling in any missing ones from en_us.
+     *
+     * @param manager The resource manager to read from.
+     * @param kind The kind of file: categories or entries.
+     * @param language The language code.
+     * @return The loaded files, with ids taken from their file names.
+     */
     private static List<JsonFile> load(ResourceManager manager, String kind, String language) {
         Map<String, JsonFile> files = new LinkedHashMap<>();
         for (String lang : language.equals(FALLBACK) ? List.of(FALLBACK) : List.of(language, FALLBACK)) {
@@ -231,7 +259,13 @@ public final class CompendiumData implements ResourceManagerReloadListener {
         return item(GsonHelper.getAsString(json, "icon", "minecraft:book"), file.location().toString()).orElse(Items.BOOK);
     }
 
-    // The item with this id, logging it if there isn't one
+    /**
+     * @brief Looks up an item by id, logging it if there isn't one.
+     *
+     * @param id The item's id.
+     * @param where Where the id came from, for the log.
+     * @return The item, if it exists.
+     */
     static Optional<Item> item(String id, String where) {
         Identifier key = Identifier.tryParse(id);
         Optional<Item> item = key == null ? Optional.empty()

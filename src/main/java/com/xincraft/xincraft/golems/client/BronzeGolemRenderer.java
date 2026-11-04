@@ -21,9 +21,15 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Draws the bronze golem (golems.BronzeGolem) with vanilla's copper golem model and animations, in
-// its own texture. What it holds shows in its hands: the sword, whatever it's carrying, and the copper
-// nugget it offers iron golems, which isn't a real item in its hand.
+/**
+ * @brief Draws the bronze golem with vanilla's copper golem model and animations, in its own
+ *        texture.
+ *
+ * What it holds shows in its hands: the sword, whatever it's carrying, and the copper nugget it
+ * offers iron golems, which isn't a real item in its hand.
+ *
+ * @see golems.BronzeGolem
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID, value = Dist.CLIENT)
 public final class BronzeGolemRenderer extends MobRenderer<BronzeGolem, CopperGolemRenderState, CopperGolemModel> {
     private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(XincraftMod.MODID, "textures/entity/bronze_golem/bronze_golem.png");

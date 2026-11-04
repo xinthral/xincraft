@@ -14,10 +14,13 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jspecify.annotations.Nullable;
 
-// The bronze turbine: boils water into steam. It burns fuel twice as fast as the heat turbine but
-// makes Config.steamTurbineEnergyPerTick FE per tick, so each fuel item yields more energy overall.
-// It uses Config.steamTurbineWaterPerTick mB of water per tick from its tank, filled with water
-// buckets or by other mods' pipes from any side, and stops (without using fuel) when the tank's dry.
+/**
+ * @brief The bronze turbine, which boils water into steam for more energy per fuel item.
+ *
+ * It burns fuel twice as fast as the heat turbine, but makes Config.steamTurbineEnergyPerTick FE
+ * per tick. It uses water from its tank, filled with buckets or other mods' pipes, and stops
+ * without using fuel when the tank's dry.
+ */
 public class SteamTurbineBlockEntity extends TurbineBlockEntity {
     public static final int CAPACITY = 100_000;
     public static final int TANK_CAPACITY = 8_000;

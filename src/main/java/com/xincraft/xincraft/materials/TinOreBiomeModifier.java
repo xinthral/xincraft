@@ -8,10 +8,16 @@ import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers.AddFeaturesBiomeModifier;
 import net.minecraftforge.common.world.ModifiableBiomeInfo.BiomeInfo;
 
-// Forge's add_features biome modifier (same JSON fields), except that it does nothing when tin
-// ore generation is turned off in the config, e.g. in a modpack where another mod already
-// generates tin. Biome modifiers run as a world loads, so a change applies from the next load,
-// and only to chunks generated after that.
+/**
+ * @brief Forge's add_features biome modifier (same JSON fields), except that it does nothing when
+ *        tin ore generation is turned off in the config, e.g. in a modpack where another mod
+ *        already generates tin.
+ *
+ * Biome modifiers run as a world loads, so a change applies from the next load, and only to chunks
+ * generated after that.
+ *
+ * @param features The plain biome modifier to run when generation is on.
+ */
 public record TinOreBiomeModifier(AddFeaturesBiomeModifier features) implements BiomeModifier {
     public static final MapCodec<TinOreBiomeModifier> CODEC =
         AddFeaturesBiomeModifier.CODEC.xmap(TinOreBiomeModifier::new, TinOreBiomeModifier::features);

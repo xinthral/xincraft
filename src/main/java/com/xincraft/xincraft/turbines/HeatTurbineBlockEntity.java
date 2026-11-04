@@ -4,7 +4,10 @@ import com.xincraft.xincraft.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
-// The tin turbine: burns fuel at furnace speed into Config.heatTurbineEnergyPerTick FE per tick
+/**
+ * @brief The tin turbine: burns fuel at furnace speed into Config.heatTurbineEnergyPerTick FE per
+ *        tick.
+ */
 public class HeatTurbineBlockEntity extends TurbineBlockEntity {
     public static final int CAPACITY = 50_000;
 

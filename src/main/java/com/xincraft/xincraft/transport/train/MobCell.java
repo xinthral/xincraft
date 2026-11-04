@@ -31,28 +31,29 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jspecify.annotations.Nullable;
 
-// The cell upgrade's job: a mob riding a carriage or ferry with a cell has its AI switched off, so it
-// can't attack, shoot, swell or wander, and hostile mobs can be carried safely. The bars shade it,
-// so undead don't burn in sunlight, and hold it, so an enderman can't teleport out. Right-clicking
-// the vehicle lets it out, and it gets its AI back RELEASE_TICKS after it's out of the cell, however
-// it got out (released, an activator rail, the vehicle broken or the cell snipped off), giving time
-// to step away. Mobs that already had no AI (e.g. summoned that way) are left alone.
-//
-// With the reinforced cage fitted over the cell, it holds any mob at all but the ender dragon (a boss
-// built of several parts, which caging would break): it hauls aboard anything it touches, even mobs
-// that won't ride (withers, wardens, iron golems), so long as it's empty. Whatever's caged, any
-// damage it would do is stopped, as slimes and magma cubes hurt by touch even without AI.
-//
-// A lead used on the vehicle, or on the mob itself, is tied ready for when it comes out: leashing
-// would pull it out of its seat, so the lead is kept until then, and the mob comes out on it, held by
-// whoever tied it. Only mobs that can be leashed at all (not hostile ones) take a lead.
+/**
+ * @brief The cell upgrade's job: a mob riding a carriage or ferry with a cell has its AI switched
+ *        off.
+ *
+ * It can't attack, shoot, swell or wander, undead don't burn in sunlight, and endermen can't
+ * teleport out. Right-clicking the vehicle lets it out, and it gets its AI back RELEASE_TICKS after
+ * it's out of the cell, however it got out.
+ *
+ * With the reinforced cage, it holds any mob at all but the ender dragon, and hauls aboard anything
+ * it touches. A lead used on the vehicle or the mob is tied ready for when it comes out.
+ */
 @Mod.EventBusSubscriber(modid = XincraftMod.MODID)
 public final class MobCell {
     public static final int RELEASE_TICKS = 30;
-    // Marks a mob whose AI the cell switched off; scoreboard tags are cheap to check and saved with the mob
+    /**
+     * @brief Marks a mob whose AI the cell switched off; scoreboard tags are cheap to check and
+     *        saved with the mob.
+     */
     private static final String CAGED_TAG = XincraftMod.MODID + ".caged";
-    // Ticks left until a released mob wakes, and who tied a lead on it, kept in its Forge data so they
-    // survive a reload
+    /**
+     * @brief Ticks left until a released mob wakes, and who tied a lead on it, kept in its Forge
+     *        data so they survive a reload.
+     */
     private static final String RELEASE_KEY = XincraftMod.MODID + ":CellRelease";
     private static final String LEAD_KEY = XincraftMod.MODID + ":CellLead";
 
@@ -66,9 +67,16 @@ public final class MobCell {
         return holds(vehicle) && ((UpgradableCart) vehicle).upgrades().has(CartUpgrade.REINFORCED_CAGE);
     }
 
-    // Whether a carriage or ferry takes a passenger: hostile mobs only into a cell, the ender dragon
-    // never, and with a mob filter fitted, only the mobs on it (players and other riders aren't
-    // filtered)
+    /**
+     * @brief Whether a carriage or ferry takes a passenger.
+     *
+     * Hostile mobs only into a cell, the ender dragon never, and with a mob filter fitted, only the
+     * mobs on it (players and other riders aren't filtered).
+     *
+     * @param vehicle The vehicle.
+     * @param passenger Who's trying to board.
+     * @return True if A carriage or ferry takes a passenger.
+     */
     public static boolean canCarry(VehicleEntity vehicle, Entity passenger) {
         if (passenger instanceof EnderDragon) {
             return false;
@@ -82,12 +90,21 @@ public final class MobCell {
         return !(passenger instanceof Enemy) || holds(vehicle);
     }
 
-    // Whether the mob is sitting in a cell, on either side
+    /**
+     * @brief Whether the mob is sitting in a cell, on either side.
+     *
+     * @param entity The entity.
+     * @return True if The mob is sitting in a cell, on either side.
+     */
     public static boolean isCaged(Entity entity) {
         return MobHolder.isCaged(entity);
     }
 
-    // Run by a carriage or ferry with a cell each server tick
+    /**
+     * @brief Run by a carriage or ferry with a cell each server tick.
+     *
+     * @param carriage The vehicle.
+     */
     public static void tick(VehicleEntity carriage) {
         if (isReinforced(carriage) && !carriage.isVehicle()) {
             haulAboard(carriage);
@@ -105,8 +122,14 @@ public final class MobCell {
         }
     }
 
-    // The reinforced cage takes in whatever mob it touches, forcing aboard any that won't ride. It
-    // passes over mobs just let out (still waking), on a lead, or carrying riders of their own.
+    /**
+     * @brief The reinforced cage takes in whatever mob it touches, forcing aboard any that won't
+     *        ride.
+     *
+     * It passes over mobs just let out (still waking), on a lead, or carrying riders of their own.
+     *
+     * @param carriage The vehicle.
+     */
     private static void haulAboard(VehicleEntity carriage) {
         for (Mob mob : carriage.level().getEntitiesOfClass(Mob.class, carriage.getBoundingBox().inflate(0.2))) {
             if (mob.isAlive() && !mob.isPassenger() && !mob.isVehicle() && !mob.isLeashed()
@@ -117,8 +140,17 @@ public final class MobCell {
         }
     }
 
-    // Right-clicking a vehicle with a cell: with a lead, ties it ready on the mob inside; otherwise
-    // lets the mob out. PASS if there's no mob in the cell.
+    /**
+     * @brief Right-clicking a vehicle with a cell: with a lead, ties it ready on the mob inside;
+     *        otherwise lets the mob out.
+     *
+     * PASS if there's no mob in the cell.
+     *
+     * @param carriage The vehicle.
+     * @param player The player.
+     * @param hand The hand being used.
+     * @return PASS if there's no mob in the cell.
+     */
     public static InteractionResult interact(VehicleEntity carriage, Player player, InteractionHand hand) {
         if (!(carriage.getFirstPassenger() instanceof Mob mob)) {
             return InteractionResult.PASS;
@@ -134,7 +166,14 @@ public final class MobCell {
         return InteractionResult.SUCCESS;
     }
 
-    // Keeps a lead ready on a caged mob, for when it comes out
+    /**
+     * @brief Keeps a lead ready on a caged mob, for when it comes out.
+     *
+     * @param player The player.
+     * @param mob The caged mob.
+     * @param stack The lead.
+     * @return The result of the interaction.
+     */
     private static InteractionResult tieLead(Player player, Mob mob, ItemStack stack) {
         if (mob.level().isClientSide()) {
             return InteractionResult.SUCCESS;
@@ -155,8 +194,16 @@ public final class MobCell {
         return InteractionResult.SUCCESS;
     }
 
-    // Puts a mob that's just come out of its cell on the lead tied ready for it, held by whoever tied
-    // it; if they've gone, or are too far away to hold it, the lead drops instead
+    /**
+     * @brief Puts a mob that's just come out of its cell on the lead tied ready for it, held by
+     *        whoever tied it.
+     *
+     * If they've gone, or are too far away to hold it, the lead drops instead.
+     *
+     * @param level The level to work in.
+     * @param mob The mob.
+     * @param data The mob's saved Forge data.
+     */
     private static void attachLead(ServerLevel level, Mob mob, CompoundTag data) {
         UUID holderId = data.read(LEAD_KEY, UUIDUtil.CODEC).orElse(null);
         data.remove(LEAD_KEY);
@@ -177,8 +224,14 @@ public final class MobCell {
         }
     }
 
-    // In its cell, a caged mob is shaded from the sun. Out of it, it's put on any lead tied ready, then
-    // counted down and given its AI back when time's up.
+    /**
+     * @brief In its cell, a caged mob is shaded from the sun.
+     *
+     * Out of it, it's put on any lead tied ready, then counted down and given its AI back when
+     * time's up.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
         if (!(event.getEntity() instanceof Mob mob) || !(mob.level() instanceof ServerLevel level)
@@ -208,7 +261,13 @@ public final class MobCell {
         mob.setNoAi(false);
     }
 
-    // Nothing in a cell does any harm, whether it hits, shoots, or (like a slime) just touches
+    /**
+     * @brief Nothing in a cell does any harm, whether it hits, shoots, or (like a slime) just
+     *        touches.
+     *
+     * @param event The event.
+     * @return True if the attacker is caged, which cancels the attack.
+     */
     @SubscribeEvent
     public static boolean onAttack(LivingAttackEvent event) {
         Entity attacker = event.getSource().getEntity();
@@ -216,13 +275,24 @@ public final class MobCell {
         return attacker != null && isCaged(attacker) || direct != null && isCaged(direct);
     }
 
-    // The bars hold an enderman in, however it's hurt
+    /**
+     * @brief The bars hold an enderman in, however it's hurt.
+     *
+     * @param event The event.
+     * @return True if the enderman is caged, which cancels the teleport.
+     */
     @SubscribeEvent
     public static boolean onEnderTeleport(EntityTeleportEvent.EnderEntity event) {
         return isCaged(event.getEntity());
     }
 
-    // A lead used on a caged mob itself is tied ready rather than pulling it out of its seat
+    /**
+     * @brief A lead used on a caged mob itself is tied ready rather than pulling it out of its
+     *        seat.
+     *
+     * @param event The event.
+     * @return True if a lead was tied, which cancels the interaction.
+     */
     @SubscribeEvent
     public static boolean onInteractEntity(PlayerInteractEvent.EntityInteractSpecific event) {
         if (!isCaged(event.getTarget()) || !event.getItemStack().is(Items.LEAD)) {
@@ -232,7 +302,11 @@ public final class MobCell {
         return true;
     }
 
-    // A caged mob that dies with a lead tied ready drops it
+    /**
+     * @brief A caged mob that dies with a lead tied ready drops it.
+     *
+     * @param event The event.
+     */
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof Mob mob && mob.level() instanceof ServerLevel level

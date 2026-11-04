@@ -9,10 +9,15 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 
-// The music of a vehicle carrying a jukebox (the jingle cart and the party boat): the disc's song,
-// played like a jukebox (same volume, falloff and volume slider) but following the vehicle as it
-// moves. It stops when that play-through ends on the server (the vehicle stopped, the disc came out,
-// or the song finished) or the vehicle goes away.
+/**
+ * @brief The music of a vehicle carrying a jukebox (the jingle cart and the party boat).
+ *
+ * The disc's song, played like a jukebox (same volume, falloff and volume slider) but following the
+ * vehicle as it moves.
+ *
+ * It stops when that play-through ends on the server (the vehicle stopped, the disc came out, or
+ * the song finished) or the vehicle goes away.
+ */
 public class JukeboxVehicleSound extends AbstractTickableSoundInstance {
     private final Entity vehicle;
     private final JukeboxPlayback jukebox;
@@ -28,9 +33,16 @@ public class JukeboxVehicleSound extends AbstractTickableSoundInstance {
         moveToVehicle();
     }
 
-    // Run on each client tick of the vehicle: starts the song when the server starts a new
-    // play-through. A play-through already under way when this client first sees the vehicle is
-    // left alone, since a song can't start partway; it's heard from its next one.
+    /**
+     * @brief Run on each client tick of the vehicle: starts the song when the server starts a new
+     *        play-through.
+     *
+     * A play-through already under way when this client first sees the vehicle is left alone, since
+     * a song can't start partway; it's heard from its next one.
+     *
+     * @tparam T The vehicle's class.
+     * @param vehicle The vehicle.
+     */
     public static <T extends Entity & JukeboxVehicle> void update(T vehicle) {
         JukeboxPlayback jukebox = vehicle.jukebox();
         int session = jukebox.getSession();

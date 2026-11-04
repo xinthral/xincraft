@@ -9,7 +9,7 @@ public final class GolemBlockEntities {
     public static final RegistryObject<BlockEntityType<BronzeChestBlockEntity>> BRONZE_CHEST = Registers.BLOCK_ENTITIES.register("bronze_chest",
         () -> new BlockEntityType<>(BronzeChestBlockEntity::new, Set.of(GolemBlocks.BRONZE_CHEST.get())));
 
-    // Loading this class is what registers everything above
+    /** @brief Loading this class is what registers everything above. */
     static void init() {}
 
     private GolemBlockEntities() {}
